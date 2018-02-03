@@ -1,0 +1,94 @@
+{
+  "name": "skimp",
+  "private": true,
+  "description": "A skimpy React GraphQL client.",
+  "license": "MIT",
+  "author": {
+    "name": "Jayden Seric",
+    "email": "me@jaydenseric.com",
+    "url": "http://jaydenseric.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaydenseric/skimp.git"
+  },
+  "homepage": "https://github.com/jaydenseric/skimp#readme",
+  "bugs": "https://github.com/jaydenseric/skimp/issues",
+  "keywords": [
+    "graphql",
+    "react",
+    "upload"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib",
+  "module": "lib/index.mjs",
+  "engines": {
+    "node": ">=6.10"
+  },
+  "browserslist": ">1%",
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.39"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.39",
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.39",
+    "@babel/preset-env": "^7.0.0-beta.39",
+    "eslint": "^4.16.0",
+    "eslint-plugin-prettier": "^2.5.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "prettier": "^1.10.2",
+    "rimraf": "^2.6.2"
+  },
+  "scripts": {
+    "build": "rimraf lib && npm run build:js && npm run build:mjs && prettier --write 'lib/**/*.{js,mjs}'",
+    "build:js": "babel src --out-dir lib",
+    "build:mjs": "MODULE=true babel src --out-dir lib --keep-file-extension",
+    "lint": "eslint . --ext js,mjs",
+    "fix": "npm run lint -- --fix && prettier --write '**/*.md'",
+    "precommit": "lint-staged",
+    "prepublishOnly": "npm run lint && npm run build"
+  },
+  "lint-staged": {
+    "*.mjs": "eslint"
+  },
+  "eslintIgnore": [
+    "!.*",
+    "lib"
+  ],
+  "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2017,
+      "ecmaFeatures": {
+        "experimentalObjectRestSpread": true
+      }
+    },
+    "env": {
+      "es6": true,
+      "node": true,
+      "browser": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "curly": [
+        "error",
+        "multi"
+      ],
+      "prettier/prettier": "error"
+    }
+  },
+  "prettier": {
+    "proseWrap": "never",
+    "semi": false,
+    "singleQuote": true
+  }
+}
