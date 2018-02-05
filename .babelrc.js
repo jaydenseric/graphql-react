@@ -6,22 +6,17 @@ module.exports = {
     [
       '@babel/env',
       {
-        targets: {
-          node: node.substring(2) // Strip `>=`
-        },
+        useBuiltIns: 'usage',
         shippedProposals: true,
         modules: process.env.MODULE ? false : 'commonjs',
-        useBuiltIns: 'usage'
+        targets: {
+          node: node.substring(2) // Strip `>=`
+        }
       }
     ]
   ],
   plugins: [
-    [
-      '@babel/transform-runtime',
-      {
-        polyfill: false,
-        regenerator: false
-      }
-    ]
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/transform-runtime', { polyfill: false, regenerator: false }]
   ]
 }
