@@ -14,15 +14,8 @@
   },
   "homepage": "https://github.com/jaydenseric/skimp#readme",
   "bugs": "https://github.com/jaydenseric/skimp/issues",
-  "keywords": [
-    "graphql",
-    "react",
-    "upload"
-  ],
-  "files": [
-    "lib",
-    "!lib/test.*"
-  ],
+  "keywords": ["graphql", "react", "upload"],
+  "files": ["lib", "!lib/test.*"],
   "main": "lib",
   "module": "lib/index.mjs",
   "engines": {
@@ -53,28 +46,36 @@
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "lint-staged": "^6.1.0",
+    "npm-run-all": "^4.1.2",
     "prettier": "^1.10.2",
     "rimraf": "^2.6.2"
   },
   "scripts": {
-    "build": "rimraf lib && npm run build:js && npm run build:mjs && prettier --write 'lib/**/*.{js,mjs}'",
-    "build:js": "babel src --out-dir lib",
-    "build:mjs": "MODULE=true babel src --out-dir lib --keep-file-extension",
-    "lint": "eslint . --ext js,mjs",
-    "fix": "npm run lint -- --fix && prettier --write '**/*.md'",
-    "pretest": "npm run lint && npm run build",
-    "test": "ava lib/test.js --serial --verbose",
+    "clean": "rimraf lib",
+    "prebuild": "npm run clean",
+    "build": "run-p build:*",
+    "build:js": "babel src -d lib -s",
+    "build:mjs": "MODULE=true babel src -d lib -s --keep-file-extension",
+    "prewatch": "npm run build",
+    "watch": "run-p watch:*",
+    "watch:build": "run-p 'build:* -- --skip-initial-build --watch'",
+    "watch:test": "ava lib/test.js -vw",
+    "lint": "run-p lint:*",
+    "lint:eslint": "eslint . --ext js,mjs",
+    "lint:prettier": "prettier -l '**/*.{json,md}'",
+    "fix": "run-p fix:*",
+    "fix:eslint": "eslint . --ext js,mjs --fix",
+    "fix:prettier": "prettier --write '**/*.{json,md}'",
+    "pretest": "npm run build",
+    "test": "ava lib/test.js",
     "precommit": "lint-staged",
-    "prepublishOnly": "npm run test"
+    "prepublishOnly": "run-s lint test"
   },
   "lint-staged": {
-    "*.{js,mjs}": "eslint"
+    "*.{js,mjs}": "eslint",
+    "*.{json,md}": "prettier -l"
   },
-  "eslintIgnore": [
-    "!.*",
-    "node_modules",
-    "lib"
-  ],
+  "eslintIgnore": ["!.*", "node_modules", "lib"],
   "eslintConfig": {
     "parser": "babel-eslint",
     "parserOptions": {
@@ -89,17 +90,11 @@
       "node": true,
       "browser": true
     },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "plugins": [
-      "prettier"
-    ],
+    "extends": ["eslint:recommended"],
+    "plugins": ["prettier"],
     "rules": {
-      "curly": [
-        "error",
-        "multi"
-      ],
+      "no-console": 0,
+      "curly": ["error", "multi"],
       "prettier/prettier": "error"
     }
   },
@@ -107,5 +102,9 @@
     "proseWrap": "never",
     "semi": false,
     "singleQuote": true
+  },
+  "ava": {
+    "babel": false,
+    "compileEnhancements": false
   }
 }
