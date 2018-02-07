@@ -68,7 +68,7 @@
     "prepublishOnly": "npm run test"
   },
   "lint-staged": {
-    "*.mjs": "eslint"
+    "*.{js,mjs}": "eslint"
   },
   "eslintIgnore": [
     "!.*",
