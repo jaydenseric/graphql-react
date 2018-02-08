@@ -6,7 +6,9 @@ import koaBody from 'koa-bodyparser'
 import { apolloUploadKoa, GraphQLUpload } from 'apollo-upload-server'
 import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
-import { Skimp } from '.'
+import React from 'react'
+import render from 'react-test-renderer'
+import { Skimp, Query } from '../lib'
 
 let port
 let server
@@ -141,6 +143,11 @@ test('Cache export, clear and import.', async t => {
   const repopulatedExport = skimp.exportCache()
 
   t.is(populatedExport, repopulatedExport)
+})
+
+test('Render query', t => {
+  const tree = render.create(<Query />).toJSON()
+  t.snapshot(tree)
 })
 
 test.after(() =>

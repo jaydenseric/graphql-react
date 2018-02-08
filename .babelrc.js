@@ -13,7 +13,8 @@ module.exports = {
           node: node.substring(2) // Strip `>=`
         }
       }
-    ]
+    ],
+    '@babel/preset-react'
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],

@@ -1,4 +1,5 @@
 import fnv1a from 'fnv1a'
+import React, { Component } from 'react'
 
 const objectHash = object => fnv1a(JSON.stringify(object)).toString(36)
 
@@ -64,5 +65,11 @@ export class Skimp {
 
     // Return the cached query result
     return this.cache[requestOptionsHash]
+  }
+}
+
+export class Query extends Component {
+  render() {
+    return <div>Hello</div>
   }
 }
