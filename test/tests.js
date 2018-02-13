@@ -8,7 +8,7 @@ import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import render from 'react-test-renderer'
-import { Skimp, Query } from '../lib'
+import { Client, Query } from '../lib'
 
 let port
 let server
@@ -61,9 +61,9 @@ test.before(async () => {
 })
 
 test('Valid query result.', async t => {
-  const skimp = new Skimp({
-    request: requestOptions => {
-      requestOptions.url = `http://localhost:${port}`
+  const client = new Client({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
     }
   })
 
@@ -71,7 +71,7 @@ test('Valid query result.', async t => {
     // eslint-disable-next-line no-unused-vars
     request,
     ...result
-  } = await skimp.query({
+  } = await client.query({
     variables: { date: '2018-06-16' },
     query: `
       query($date: String!){
@@ -80,15 +80,15 @@ test('Valid query result.', async t => {
         }
       }
     `
-  })
+  }).request
 
   t.deepEqual(result, { data: { date: { day: 16 } } })
 })
 
 test('Invalid query result.', async t => {
-  const skimp = new Skimp({
-    request: requestOptions => {
-      requestOptions.url = `http://localhost:${port}`
+  const client = new Client({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
     }
   })
 
@@ -96,10 +96,10 @@ test('Invalid query result.', async t => {
     // eslint-disable-next-line no-unused-vars
     request,
     ...result
-  } = await skimp.query({
+  } = await client.query({
     variables: { date: '2018-01-01' },
     query: 'x'
-  })
+  }).request
 
   t.deepEqual(result, {
     httpError: { status: 400, statusText: 'Bad Request' },
@@ -113,13 +113,13 @@ test('Invalid query result.', async t => {
 })
 
 test('Cache export, clear and import.', async t => {
-  const skimp = new Skimp({
-    request: requestOptions => {
-      requestOptions.url = `http://localhost:${port}`
+  const client = new Client({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
     }
   })
 
-  await skimp.query({
+  await client.query({
     variables: { date: '2018-06-16' },
     query: `
       query($date: String!){
@@ -128,25 +128,47 @@ test('Cache export, clear and import.', async t => {
         }
       }
     `
-  })
+  }).request
 
-  const populatedExport = skimp.exportCache()
+  const populatedExport = client.exportCache()
 
-  skimp.clearCache()
+  client.clearCache()
 
-  const clearedExport = skimp.exportCache()
+  const clearedExport = client.exportCache()
 
   t.is(clearedExport, '{}')
 
-  skimp.importCache(populatedExport)
+  client.importCache(populatedExport)
 
-  const repopulatedExport = skimp.exportCache()
+  const repopulatedExport = client.exportCache()
 
   t.is(populatedExport, repopulatedExport)
 })
 
 test('Render query', t => {
-  const tree = render.create(<Query />).toJSON()
+  const client = new Client({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
+    }
+  })
+
+  const tree = render
+    .create(
+      <Query
+        client={client}
+        variables={{ date: '2018-06-16' }}
+        query={`
+          query($date: String!){
+            date(isoDate: $date) {
+              day
+            }
+          }
+        `}
+      >
+        {result => <div>{JSON.stringify(result)}</div>}
+      </Query>
+    )
+    .toJSON()
   t.snapshot(tree)
 })
 
