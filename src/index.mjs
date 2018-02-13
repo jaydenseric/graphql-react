@@ -1,2 +1,2 @@
 export * from './client'
-export * from './component'
+export * from './components'

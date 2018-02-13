@@ -1,5 +1,4 @@
-import { Fragment } from 'react'
-import { Client } from '../../lib'
+import { GraphQLProvider, Client } from '../../lib'
 import PokemonViewer from '../components/pokemon-viewer'
 
 const client = new Client({
@@ -9,10 +8,10 @@ const client = new Client({
 })
 
 const HomePage = () => (
-  <Fragment>
+  <GraphQLProvider client={client}>
     <h1>Pokemon viewer</h1>
-    <PokemonViewer client={client} />
-  </Fragment>
+    <PokemonViewer />
+  </GraphQLProvider>
 )
 
 export default HomePage

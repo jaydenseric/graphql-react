@@ -1,11 +1,10 @@
 import { Fragment } from 'react'
-import { string, instanceOf } from 'prop-types'
-import { Client, Query } from '../../lib'
+import { string } from 'prop-types'
+import { GraphQL } from '../../lib'
 import Loader from './loader'
 
-const PokemonInfo = ({ client, pokemonId }) => (
-  <Query
-    client={client}
+const PokemonInfo = ({ pokemonId }) => (
+  <GraphQL
     variables={{ pokemonId }}
     query={`
       query($pokemonId: String!){
@@ -29,11 +28,10 @@ const PokemonInfo = ({ client, pokemonId }) => (
         {loading ? <Loader /> : <button onClick={reload}>Reload</button>}
       </article>
     )}
-  </Query>
+  </GraphQL>
 )
 
 PokemonInfo.propTypes = {
-  client: instanceOf(Client).isRequired,
   pokemonId: string.isRequired
 }
 

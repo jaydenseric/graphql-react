@@ -1,6 +1,17 @@
-import { Component } from 'react'
-import { string, object, func, instanceOf } from 'prop-types'
+import React, { Component, createContext } from 'react'
+import { string, object, func, instanceOf, node } from 'prop-types'
 import { Client } from './client'
+
+const { Provider, Consumer } = createContext()
+
+export const GraphQLProvider = ({ client, children }) => (
+  <Provider value={client}>{children}</Provider>
+)
+
+GraphQLProvider.propTypes = {
+  client: instanceOf(Client).isRequired,
+  children: node.isRequired
+}
 
 export class Query extends Component {
   static propTypes = {
@@ -36,3 +47,7 @@ export class Query extends Component {
     return this.props.children({ reload: this.load, ...this.state })
   }
 }
+
+export const GraphQL = props => (
+  <Consumer>{client => <Query client={client} {...props} />}</Consumer>
+)

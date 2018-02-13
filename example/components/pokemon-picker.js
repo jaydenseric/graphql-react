@@ -1,11 +1,10 @@
 import { Component } from 'react'
-import { func, instanceOf } from 'prop-types'
-import { Client, Query } from '../../lib'
+import { func } from 'prop-types'
+import { GraphQL } from '../../lib'
 import Loader from './loader'
 
 export default class PokemonPicker extends Component {
   static propTypes = {
-    client: instanceOf(Client).isRequired,
     onPokemonPicked: func.isRequired
   }
 
@@ -18,8 +17,7 @@ export default class PokemonPicker extends Component {
 
   render() {
     return (
-      <Query
-        client={this.props.client}
+      <GraphQL
         query={`
           {
             pokemons(first: 151) {
@@ -49,7 +47,7 @@ export default class PokemonPicker extends Component {
             </select>
           )
         }
-      </Query>
+      </GraphQL>
     )
   }
 }
