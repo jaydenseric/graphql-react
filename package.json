@@ -57,7 +57,8 @@
     "prettier": "^1.10.2",
     "react": "^16.3.0-alpha.1",
     "react-test-renderer": "^16.2.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "size-limit": "^0.14.1"
   },
   "scripts": {
     "clean": "rimraf lib",
@@ -76,10 +77,12 @@
     "fix": "run-p fix:*",
     "fix:eslint": "eslint . --ext js,mjs --fix",
     "fix:prettier": "prettier **/*.{json,md} --write --ignore-path .gitignore",
+    "presize": "npm run build",
+    "size": "size-limit",
     "pretest": "npm run build",
     "test": "ava --no-cache",
     "precommit": "lint-staged",
-    "prepublishOnly": "run-s lint test"
+    "prepublishOnly": "run-p lint size test"
   },
   "lint-staged": {
     "*.{js,mjs}": "eslint",
@@ -112,5 +115,17 @@
     "proseWrap": "never",
     "semi": false,
     "singleQuote": true
-  }
+  },
+  "size-limit": [
+    {
+      "name": "CJS",
+      "path": "lib/index.js",
+      "limit": "8 KB"
+    },
+    {
+      "name": "ESM",
+      "path": "lib/index.mjs",
+      "limit": "8 KB"
+    }
+  ]
 }
