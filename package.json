@@ -23,7 +23,7 @@
   },
   "browserslist": ">3%",
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.3.0-alpha.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.40",
@@ -55,7 +55,7 @@
     "lint-staged": "^6.1.0",
     "npm-run-all": "^4.1.2",
     "prettier": "^1.10.2",
-    "react": "^16.2.0",
+    "react": "^16.3.0-alpha.1",
     "react-test-renderer": "^16.2.0",
     "rimraf": "^2.6.2"
   },
