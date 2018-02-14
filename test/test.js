@@ -112,7 +112,7 @@ test('Invalid query result.', async t => {
   })
 })
 
-test('Cache export, clear and import.', async t => {
+test('Import, export and clear.', async t => {
   const client = new Client({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
@@ -130,17 +130,17 @@ test('Cache export, clear and import.', async t => {
     `
   }).request
 
-  const populatedExport = client.exportCache()
+  const populatedExport = client.export()
 
-  client.clearCache()
+  client.reset()
 
-  const clearedExport = client.exportCache()
+  const resetExport = client.export()
 
-  t.is(clearedExport, '{}')
+  t.is(resetExport, '{}')
 
-  client.importCache(populatedExport)
+  client.import(populatedExport)
 
-  const repopulatedExport = client.exportCache()
+  const repopulatedExport = client.export()
 
   t.is(populatedExport, repopulatedExport)
 })

@@ -10,16 +10,38 @@ export class Client {
 
   cache = {}
   requests = {}
+  listeners = {}
 
-  clearCache = () => {
-    this.cache = {}
+  on = (event, callback) => {
+    const queue = this.listeners[event] || (this.listeners[event] = [])
+    queue.push(callback)
+    return this
   }
 
-  importCache = json => {
+  off = (event, callback) => {
+    if (this.listeners[event])
+      this.listeners[event] = this.listeners[event].filter(
+        listenerCallback => listenerCallback != callback
+      )
+    return this
+  }
+
+  emit = (event, ...args) => {
+    if (this.listeners[event])
+      this.listeners[event].forEach(callback => callback.apply(this, args))
+    return this
+  }
+
+  reset = () => {
+    this.cache = {}
+    this.emit('reset')
+  }
+
+  import = json => {
     this.cache = JSON.parse(json)
   }
 
-  exportCache = () => JSON.stringify(this.cache)
+  export = () => JSON.stringify(this.cache)
 
   getRequestOptions(operation) {
     // Defaults
