@@ -112,7 +112,7 @@ test('Invalid query result.', async t => {
   })
 })
 
-test('Import, export and clear.', async t => {
+test('Export, reset and import.', async t => {
   const client = new Client({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
