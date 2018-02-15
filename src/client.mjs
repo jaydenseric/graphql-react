@@ -66,31 +66,31 @@ export class GraphQLClient {
     // Send the request.
     this.requests[hash] = fetch(url, options)
 
-    // Get the request cache.
-    const requestCache = {}
+    // Make the request.
     const response = await this.requests[hash]
+    const cache = {}
 
     if (!response.ok)
-      requestCache.httpError = {
+      cache.httpError = {
         status: response.status,
         statusText: response.statusText
       }
 
     try {
       const { data, errors } = await response.json()
-      if (data) requestCache.data = data
-      if (errors) requestCache.graphQLErrors = errors
+      if (data) cache.data = data
+      if (errors) cache.graphQLErrors = errors
     } catch (error) {
-      requestCache.parseError = error.message
+      cache.parseError = error.message
     }
 
     // Clear the done request.
     delete this.requests[hash]
 
-    // Store the request cache.
-    this.cache[hash] = requestCache
+    // Cache the request.
+    this.cache[hash] = cache
 
-    return requestCache
+    return cache
   }
 
   query = operation => {
