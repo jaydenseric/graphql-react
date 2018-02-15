@@ -44,11 +44,13 @@ export class Query extends Component {
   }
 
   componentDidUpdate({ query, variables }) {
-    // Update cache, if it exists.
     if (
+      // Cache exists.
       this.state.cache &&
+      // Props that would effect the cache have changed.
       (variables !== this.props.variables || query !== this.props.query)
     )
+      // Reload the cache.
       this.load()
   }
 
