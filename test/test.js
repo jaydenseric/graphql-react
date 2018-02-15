@@ -8,13 +8,13 @@ import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import render from 'react-test-renderer'
-import { Client, Query } from '../lib'
+import { GraphQLClient, Query } from '../lib'
 
 let port
 let server
 
 test.before(async () => {
-  // Setup the test GraphQL server
+  // Setup the test GraphQL server.
 
   const typeDefs = `
     type Query {
@@ -61,7 +61,7 @@ test.before(async () => {
 })
 
 test('Valid query result.', async t => {
-  const client = new Client({
+  const client = new GraphQLClient({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -86,7 +86,7 @@ test('Valid query result.', async t => {
 })
 
 test('Invalid query result.', async t => {
-  const client = new Client({
+  const client = new GraphQLClient({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -113,7 +113,7 @@ test('Invalid query result.', async t => {
 })
 
 test('Export, reset and import.', async t => {
-  const client = new Client({
+  const client = new GraphQLClient({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -146,7 +146,7 @@ test('Export, reset and import.', async t => {
 })
 
 test('Render query', t => {
-  const client = new Client({
+  const client = new GraphQLClient({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -173,6 +173,6 @@ test('Render query', t => {
 })
 
 test.after(() =>
-  // Close the test GraphQL server
+  // Close the test GraphQL server.
   server.close()
 )

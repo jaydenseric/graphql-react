@@ -2,7 +2,7 @@ import fnv1a from 'fnv1a'
 
 const objectHash = object => fnv1a(JSON.stringify(object)).toString(36)
 
-export class Client {
+export class GraphQLClient {
   constructor({ requestOptions } = {}) {
     if (typeof requestOptions === 'function')
       this.requestOptions = requestOptions
@@ -44,7 +44,7 @@ export class Client {
   export = () => JSON.stringify(this.cache)
 
   getRequestOptions(operation) {
-    // Defaults
+    // Defaults.
     const options = {
       url: '/graphql',
       method: 'POST',
@@ -56,41 +56,41 @@ export class Client {
     }
 
     if (this.requestOptions)
-      // Customize defaults
+      // Customize defaults.
       this.requestOptions(options, operation)
 
     return options
   }
 
   request = async ({ url, ...options }, hash) => {
-    // Send the request
+    // Send the request.
     this.requests[hash] = fetch(url, options)
 
-    // Get the result
-    const result = {}
+    // Get the request cache.
+    const requestCache = {}
     const response = await this.requests[hash]
 
     if (!response.ok)
-      result.httpError = {
+      requestCache.httpError = {
         status: response.status,
         statusText: response.statusText
       }
 
     try {
       const { data, errors } = await response.json()
-      if (data) result.data = data
-      if (errors) result.graphQLErrors = errors
+      if (data) requestCache.data = data
+      if (errors) requestCache.graphQLErrors = errors
     } catch (error) {
-      result.parseError = error.message
+      requestCache.parseError = error.message
     }
 
-    // Clear the done request
+    // Clear the done request.
     delete this.requests[hash]
 
-    // Cache the result
-    this.cache[hash] = result
+    // Store the request cache.
+    this.cache[hash] = requestCache
 
-    return result
+    return requestCache
   }
 
   query = operation => {
@@ -99,9 +99,9 @@ export class Client {
     return {
       cache: this.cache[hash],
       request:
-        // Existing request
+        // Existing request.
         this.requests[hash] ||
-        // Fresh request
+        // Fresh request.
         this.request(options, hash)
     }
   }

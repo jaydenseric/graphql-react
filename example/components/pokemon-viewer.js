@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react'
+import { Component } from 'react'
 import PokemonPicker from './pokemon-picker'
 import PokemonInfo from './pokemon-info'
 
@@ -9,12 +9,12 @@ export default class PokemonViewer extends Component {
 
   render() {
     return (
-      <Fragment>
+      <div>
         <PokemonPicker onPokemonPicked={this.handlePokemonPicked} />
         {this.state.pokemonId && (
           <PokemonInfo pokemonId={this.state.pokemonId} />
         )}
-      </Fragment>
+      </div>
     )
   }
 }

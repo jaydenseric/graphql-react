@@ -5,6 +5,7 @@ import Loader from './loader'
 
 const PokemonInfo = ({ pokemonId }) => (
   <GraphQL
+    autoload={false}
     variables={{ pokemonId }}
     query={`
       query($pokemonId: String!){
@@ -16,7 +17,7 @@ const PokemonInfo = ({ pokemonId }) => (
       }
     `}
   >
-    {({ loading, data, reload }) => (
+    {({ loading, data, load }) => (
       <article>
         {data && (
           <Fragment>
@@ -25,7 +26,7 @@ const PokemonInfo = ({ pokemonId }) => (
             </h1>
           </Fragment>
         )}
-        {loading ? <Loader /> : <button onClick={reload}>Reload</button>}
+        {loading ? <Loader /> : <button onClick={load}>Load</button>}
       </article>
     )}
   </GraphQL>

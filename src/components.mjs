@@ -1,28 +1,33 @@
 import React, { Component, createContext } from 'react'
-import { string, object, func, instanceOf, node } from 'prop-types'
-import { Client } from './client'
+import { string, bool, object, func, instanceOf } from 'prop-types'
+import { GraphQLClient } from './client'
 
-const { Provider, Consumer } = createContext()
-
-export const GraphQLProvider = ({ client, children }) => (
-  <Provider value={client}>{children}</Provider>
-)
-
-GraphQLProvider.propTypes = {
-  client: instanceOf(Client).isRequired,
-  children: node.isRequired
-}
+export const {
+  Provider: GraphQLClientProvider,
+  Consumer: GraphQLClientConsumer
+} = createContext()
 
 export class Query extends Component {
   static propTypes = {
-    client: instanceOf(Client).isRequired,
+    client: instanceOf(GraphQLClient).isRequired,
     variables: object,
     query: string.isRequired,
+    autoload: bool,
     children: func.isRequired
   }
 
-  state = {
-    loading: true
+  static defaultProps = {
+    autoload: true
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loading: this.props.autoload
+    }
+
+    props.client.on('reset', this.load)
   }
 
   load = () => {
@@ -30,24 +35,38 @@ export class Query extends Component {
       variables: this.props.variables,
       query: this.props.query
     })
-    this.setState({ loading: true, ...cache })
-    request.then(result => this.setState({ loading: false, ...result }))
+    this.setState({ loading: true, cache })
+    request.then(cache => this.setState({ loading: false, cache }))
   }
 
   componentDidMount() {
-    this.load()
+    if (this.props.autoload) this.load()
   }
 
   componentDidUpdate({ query, variables }) {
-    if (variables !== this.props.variables || query !== this.props.query)
+    // Update cache, if it exists.
+    if (
+      this.state.cache &&
+      (variables !== this.props.variables || query !== this.props.query)
+    )
       this.load()
   }
 
+  componentWillUnmount() {
+    this.props.client.off('reset', this.load)
+  }
+
   render() {
-    return this.props.children({ reload: this.load, ...this.state })
+    return this.props.children({
+      load: this.load,
+      loading: this.state.loading,
+      ...this.state.cache
+    })
   }
 }
 
 export const GraphQL = props => (
-  <Consumer>{client => <Query client={client} {...props} />}</Consumer>
+  <GraphQLClientConsumer>
+    {client => <Query client={client} {...props} />}
+  </GraphQLClientConsumer>
 )

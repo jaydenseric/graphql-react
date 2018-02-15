@@ -8,12 +8,14 @@ export default class PokemonPicker extends Component {
     onPokemonPicked: func.isRequired
   }
 
-  state = {}
+  state = {
+    pokemonId: ''
+  }
 
   handleChange = ({ target: { value } }) =>
-    this.setState({ pokemonId: value }, () =>
-      this.props.onPokemonPicked(this.state.pokemonId)
-    )
+    this.setState({ pokemonId: value }, () => {
+      if (value !== '') this.props.onPokemonPicked(this.state.pokemonId)
+    })
 
   render() {
     return (
@@ -31,11 +33,7 @@ export default class PokemonPicker extends Component {
           loading ? (
             <Loader />
           ) : (
-            <select
-              defaultValue=""
-              value={this.state.pokemonId}
-              onChange={this.handleChange}
-            >
+            <select value={this.state.pokemonId} onChange={this.handleChange}>
               <option value="" disabled>
                 Choose a Pokemon
               </option>
