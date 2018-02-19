@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.40",
+    "fast-deep-equal": "^1.0.0",
     "fnv1a": "^1.0.1",
     "prop-types": "^15.6.0"
   },

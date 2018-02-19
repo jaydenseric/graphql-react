@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react'
 import { string, bool, object, func, instanceOf } from 'prop-types'
+import equal from 'fast-deep-equal'
 import { GraphQLClient } from './client'
 
 export const {
@@ -35,8 +36,9 @@ export class Query extends Component {
       variables: this.props.variables,
       query: this.props.query
     })
-    this.setState({ loading: true, cache })
-    request.then(cache => this.setState({ loading: false, cache }))
+    this.setState({ loading: true, cache }, () =>
+      request.then(cache => this.setState({ loading: false, cache }))
+    )
   }
 
   componentDidMount() {
@@ -48,7 +50,7 @@ export class Query extends Component {
       // Cache exists.
       this.state.cache &&
       // Props that would effect the cache have changed.
-      (variables !== this.props.variables || query !== this.props.query)
+      (query !== this.props.query || !equal(variables, this.props.variables))
     )
       // Reload the cache.
       this.load()
