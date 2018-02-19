@@ -1,18 +1,20 @@
 import { GraphQLClient, GraphQLClientProvider } from '../../lib'
 import CacheResetter from '../components/cache-resetter'
-import PokemonViewer from '../components/pokemon-viewer'
+import CreateTimer from '../components/create-timer'
+import Timers from '../components/timers'
 
 const client = new GraphQLClient({
   requestOptions: options => {
-    options.url = 'https://graphql-pokemon.now.sh/graphql'
+    options.url = 'http://localhost:3000/graphql'
   }
 })
 
 const HomePage = () => (
   <GraphQLClientProvider value={client}>
-    <h1>Pokemon viewer</h1>
+    <h1>Example Next.js app &amp; GraphQL API</h1>
+    <Timers />
+    <CreateTimer />
     <CacheResetter />
-    <PokemonViewer />
   </GraphQLClientProvider>
 )
 
