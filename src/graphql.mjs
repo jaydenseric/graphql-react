@@ -3,9 +3,7 @@ import fnv1a from 'fnv1a'
 export class GraphQL {
   constructor({ cache = {}, requestOptions } = {}) {
     this.cache = cache
-
-    if (typeof requestOptions === 'function')
-      this.requestOptions = requestOptions
+    this.requestOptions = requestOptions
   }
 
   requests = {}
