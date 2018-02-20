@@ -27,13 +27,8 @@ export class Query extends Component {
 
   constructor(props) {
     super(props)
-
     this.validateProps()
-
     this.state = { loading: props.loadOnMount }
-
-    // Start listening for cache updates.
-    props.graphql.on('cacheupdate', this.handleCacheUpdate)
   }
 
   validateProps = () => {
@@ -41,45 +36,50 @@ export class Query extends Component {
       throw new Error('Conflicting “loadOnReset” and “resetOnLoad” props.')
   }
 
-  handleCacheUpdate = (requestHash, requestCache) => {
+  handleCacheUpdate = requestCache => {
     if (
-      // Cache updated for this component’s request.
-      requestHash === this.state.requestHash
+      // Cache has been reset and…
+      !requestCache &&
+      // …the component is to load on reset cache.
+      this.props.loadOnReset
     )
-      if (
-        // Cache has been reset and
-        !requestCache &&
-        // the component is to load on reset cache…
-        this.props.loadOnReset
-      )
-        // Load and get fresh cache.
-        this.load()
-      else
-        // Upldate the cache.
-        this.setState({ requestCache })
+      this.load()
+    else this.setState({ requestCache })
   }
 
   load = () => {
-    const { oldRequestCache, requestHash, request } = this.props.graphql.query({
-      variables: this.props.variables,
-      query: this.props.query
-    })
+    const { pastRequestCache, requestHash, request } = this.props.graphql.query(
+      { variables: this.props.variables, query: this.props.query }
+    )
 
-    const stateUpdate = {
-      // Store request hash for listening to cache updates.
-      requestHash,
-      loading: true
+    if (
+      // Either it’s the initial load or a past request has changed.
+      this.state.requestHash !== requestHash
+    ) {
+      if (
+        // A past request has changed.
+        this.state.requestHash
+      )
+        // Remove the redundant request cache listener.
+        this.props.graphql.offCacheUpdate(
+          this.state.requestHash,
+          this.handleCacheUpdate
+        )
+
+      // Listen for changes to the request cache.
+      this.props.graphql.onCacheUpdate(requestHash, this.handleCacheUpdate)
     }
 
-    if (oldRequestCache)
-      // If present, use existing cache during load. It might not already be in
-      // the local state if the same request was cached via another component.
-      stateUpdate.requestCache = oldRequestCache
+    const stateUpdate = { requestHash, loading: true }
+
+    if (pastRequestCache)
+      // Use past cache for this request during load. It might not already
+      // be in state if the request was cached via another component.
+      stateUpdate.requestCache = pastRequestCache
 
     this.setState(stateUpdate, () =>
       request.then(() => {
-        // Request done. Elsewhere a global cache listener updates the local
-        // state cache.
+        // Request done. Elsewhere a cache listener updates the state cache.
         this.setState({ loading: false }, () => {
           if (this.props.resetOnLoad) this.props.graphql.reset()
         })
@@ -92,23 +92,25 @@ export class Query extends Component {
   }
 
   componentDidUpdate({ query, variables }) {
-    // Revalidate potentially conflicting props.
     this.validateProps()
 
     if (
-      // Load on cache reset enabled and
+      // Load on cache reset enabled and…
       this.props.loadOnReset &&
-      // a load has happened before and
+      // …a load has happened before and…
       this.state.requestHash &&
-      // props that may affect the cache have changed…
+      // …props that may affect the cache have changed.
       (query !== this.props.query || !equal(variables, this.props.variables))
     )
-      // Reload.
       this.load()
   }
 
   componentWillUnmount() {
-    this.props.graphql.off('cacheupdate', this.handleCache)
+    if (this.state.requestHash)
+      this.props.graphql.offCacheUpdate(
+        this.state.requestHash,
+        this.handleCacheUpdate
+      )
   }
 
   render() {

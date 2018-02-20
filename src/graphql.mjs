@@ -9,30 +9,30 @@ export class GraphQL {
   requests = {}
   listeners = {}
 
-  static hashRequestOptions = requestOptions =>
-    fnv1a(JSON.stringify(requestOptions)).toString(36)
+  onCacheUpdate = (requestHash, callback) =>
+    (this.listeners[requestHash] || (this.listeners[requestHash] = [])).push(
+      callback
+    )
 
-  on = (event, callback) => {
-    const queue = this.listeners[event] || (this.listeners[event] = [])
-    queue.push(callback)
-  }
-
-  off = (event, callback) => {
-    if (this.listeners[event])
-      this.listeners[event] = this.listeners[event].filter(
-        listenerCallback => listenerCallback != callback
+  offCacheUpdate = (requestHash, callback) => {
+    if (this.listeners[requestHash]) {
+      this.listeners[requestHash] = this.listeners[requestHash].filter(
+        listenerCallback => listenerCallback !== callback
       )
+      if (!this.listeners[requestHash].length)
+        delete this.listeners[requestHash]
+    }
   }
 
-  emit = (event, ...args) => {
-    if (this.listeners[event])
-      this.listeners[event].forEach(callback => callback.apply(this, args))
+  emitCacheUpdate = (requestHash, requestCache) => {
+    if (this.listeners[requestHash])
+      this.listeners[requestHash].forEach(callback => callback(requestCache))
   }
 
   reset = () => {
     const requestHashes = Object.keys(this.cache)
     this.cache = {}
-    requestHashes.forEach(requestHash => this.emit('cacheupdate', requestHash))
+    requestHashes.forEach(requestHash => this.emitCacheUpdate(requestHash))
   }
 
   getRequestOptions(operation) {
@@ -54,6 +54,9 @@ export class GraphQL {
     return options
   }
 
+  static hashRequestOptions = requestOptions =>
+    fnv1a(JSON.stringify(requestOptions)).toString(36)
+
   request = ({ url, ...options }, requestHash) => {
     const requestCache = {}
     return (this.requests[requestHash] = fetch(url, options))
@@ -67,7 +70,7 @@ export class GraphQL {
         return response.json()
       })
       .catch(({ message }) => {
-        // Failed to parse JSON.
+        // Failed to parse the response as JSON.
         requestCache.parseError = message
       })
       .then(({ errors, data }) => {
@@ -79,7 +82,7 @@ export class GraphQL {
 
         // Cache the request.
         this.cache[requestHash] = requestCache
-        this.emit('cacheupdate', requestHash, requestCache)
+        this.emitCacheUpdate(requestHash, requestCache)
 
         return requestCache
       })
@@ -89,12 +92,12 @@ export class GraphQL {
     const requestOptions = this.getRequestOptions(operation)
     const requestHash = this.constructor.hashRequestOptions(requestOptions)
     return {
-      oldRequestCache: this.cache[requestHash],
+      pastRequestCache: this.cache[requestHash],
       requestHash,
       request:
-        // Existing request or
+        // Existing request or…
         this.requests[requestHash] ||
-        // a fresh request.
+        // …a fresh request.
         this.request(requestOptions, requestHash)
     }
   }
