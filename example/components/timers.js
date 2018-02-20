@@ -1,6 +1,7 @@
 import { GraphQLQuery } from '../../lib'
 import Loader from './loader'
 import HTTPError from './http-error'
+import ParseError from './parse-error'
 import GraphQLErrors from './graphql-errors'
 
 const Timer = ({ id, milliseconds }) => (
@@ -17,13 +18,15 @@ const Timer = ({ id, milliseconds }) => (
       }
     `}
   >
-    {({ load, loading, httpError, graphQLErrors, data }) => (
+    {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
       <tr>
         <td>
           <button disabled={loading} onClick={load}>
             Load
           </button>
-          {(httpError || graphQLErrors) && <strong>Error!</strong>}
+          {(httpError || parseError || graphQLErrors) && (
+            <strong>Error!</strong>
+          )}
         </td>
         <td>{id}</td>
         <td>{data ? data.timer.milliseconds : milliseconds}</td>
@@ -43,7 +46,7 @@ const Timers = () => (
       }
     `}
   >
-    {({ loading, httpError, graphQLErrors, data }) => (
+    {({ loading, httpError, parseError, graphQLErrors, data }) => (
       <section>
         {data &&
           (data.timers.length ? (
@@ -64,6 +67,7 @@ const Timers = () => (
           ))}
         {loading && <Loader />}
         {httpError && <HTTPError error={httpError} />}
+        {parseError && <ParseError error={parseError} />}
         {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
       </section>
     )}
