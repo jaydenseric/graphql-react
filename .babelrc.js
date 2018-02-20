@@ -9,6 +9,7 @@ module.exports = {
         useBuiltIns: 'usage',
         shippedProposals: true,
         modules: process.env.MODULE ? false : 'commonjs',
+        loose: true,
         targets: {
           node: node.substring(2) // Strip `>=`
         }

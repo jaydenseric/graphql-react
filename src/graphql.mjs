@@ -1,12 +1,13 @@
 import fnv1a from 'fnv1a'
 
 export class GraphQL {
-  constructor({ requestOptions } = {}) {
+  constructor({ cache = {}, requestOptions } = {}) {
+    this.cache = cache
+
     if (typeof requestOptions === 'function')
       this.requestOptions = requestOptions
   }
 
-  cache = {}
   requests = {}
   listeners = {}
 
@@ -33,16 +34,8 @@ export class GraphQL {
   reset = () => {
     const requestHashes = Object.keys(this.cache)
     this.cache = {}
-    requestHashes.forEach(requestHash =>
-      this.emit('cacheupdate', { requestHash })
-    )
+    requestHashes.forEach(requestHash => this.emit('cacheupdate', requestHash))
   }
-
-  import = json => {
-    this.cache = JSON.parse(json)
-  }
-
-  export = () => JSON.stringify(this.cache)
 
   getRequestOptions(operation) {
     // Defaults.
@@ -63,36 +56,35 @@ export class GraphQL {
     return options
   }
 
-  request = async ({ url, ...options }, requestHash) => {
-    // Send the request.
-    this.requests[requestHash] = fetch(url, options)
+  request = ({ url, ...options }, requestHash) => {
+    const requestCache = {}
+    return (this.requests[requestHash] = fetch(url, options))
+      .then(response => {
+        if (!response.ok)
+          requestCache.httpError = {
+            status: response.status,
+            statusText: response.statusText
+          }
 
-    // Make the request.
-    const response = await this.requests[requestHash]
-    const cache = {}
+        return response.json()
+      })
+      .catch(({ message }) => {
+        // Failed to parse JSON.
+        requestCache.parseError = message
+      })
+      .then(({ errors, data }) => {
+        if (errors) requestCache.graphQLErrors = errors
+        if (data) requestCache.data = data
 
-    if (!response.ok)
-      cache.httpError = {
-        status: response.status,
-        statusText: response.statusText
-      }
+        // Clear the done request.
+        delete this.requests[requestHash]
 
-    try {
-      const { data, errors } = await response.json()
-      if (data) cache.data = data
-      if (errors) cache.graphQLErrors = errors
-    } catch (error) {
-      cache.parseError = error.message
-    }
+        // Cache the request.
+        this.cache[requestHash] = requestCache
+        this.emit('cacheupdate', requestHash, requestCache)
 
-    // Clear the done request.
-    delete this.requests[requestHash]
-
-    // Cache the request.
-    this.cache[requestHash] = cache
-    this.emit('cacheupdate', { requestHash, cache })
-
-    return cache
+        return requestCache
+      })
   }
 
   query = operation => {

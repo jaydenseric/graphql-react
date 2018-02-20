@@ -82,7 +82,7 @@ test('Valid query result.', async t => {
     `
   }).request
 
-  t.deepEqual(result, { data: { date: { day: 16 } } })
+  t.snapshot(result)
 })
 
 test('Invalid query result.', async t => {
@@ -101,25 +101,17 @@ test('Invalid query result.', async t => {
     query: 'x'
   }).request
 
-  t.deepEqual(result, {
-    httpError: { status: 400, statusText: 'Bad Request' },
-    graphQLErrors: [
-      {
-        message: 'Syntax Error: Unexpected Name "x"',
-        locations: [{ line: 1, column: 1 }]
-      }
-    ]
-  })
+  t.snapshot(result)
 })
 
-test('Export, reset and import.', async t => {
-  const graphql = new GraphQL({
+test('Export and import.', async t => {
+  const graphql1 = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
   })
 
-  await graphql.query({
+  await graphql1.query({
     variables: { date: '2018-06-16' },
     query: `
       query($date: String!){
@@ -130,19 +122,9 @@ test('Export, reset and import.', async t => {
     `
   }).request
 
-  const populatedExport = graphql.export()
+  const graphql2 = new GraphQL({ cache: graphql1.cache })
 
-  graphql.reset()
-
-  const resetExport = graphql.export()
-
-  t.is(resetExport, '{}')
-
-  graphql.import(populatedExport)
-
-  const repopulatedExport = graphql.export()
-
-  t.is(populatedExport, repopulatedExport)
+  t.is(graphql1.cache, graphql2.cache)
 })
 
 test('Render query', t => {

@@ -41,14 +41,14 @@ export class Query extends Component {
       throw new Error('Conflicting “loadOnReset” and “resetOnLoad” props.')
   }
 
-  handleCacheUpdate = ({ requestHash, cache }) => {
+  handleCacheUpdate = (requestHash, requestCache) => {
     if (
       // Cache updated for this component’s request.
       requestHash === this.state.requestHash
     )
       if (
         // Cache has been reset and
-        !cache &&
+        !requestCache &&
         // the component is to load on reset cache…
         this.props.loadOnReset
       )
@@ -56,8 +56,7 @@ export class Query extends Component {
         this.load()
       else
         // Upldate the cache.
-        this.setState({ cache })
-    }
+        this.setState({ requestCache })
   }
 
   load = () => {
@@ -75,7 +74,7 @@ export class Query extends Component {
     if (oldRequestCache)
       // If present, use existing cache during load. It might not already be in
       // the local state if the same request was cached via another component.
-      stateUpdate.cache = oldRequestCache
+      stateUpdate.requestCache = oldRequestCache
 
     this.setState(stateUpdate, () =>
       request.then(() => {
@@ -116,7 +115,7 @@ export class Query extends Component {
     return this.props.children({
       load: this.load,
       loading: this.state.loading,
-      ...this.state.cache
+      ...this.state.requestCache
     })
   }
 }
