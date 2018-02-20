@@ -8,7 +8,7 @@ import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import render from 'react-test-renderer'
-import { GraphQLClient, Query } from '../lib'
+import { GraphQL, Query } from '../lib'
 
 let port
 let server
@@ -61,7 +61,7 @@ test.before(async () => {
 })
 
 test('Valid query result.', async t => {
-  const client = new GraphQLClient({
+  const graphql = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -71,7 +71,7 @@ test('Valid query result.', async t => {
     // eslint-disable-next-line no-unused-vars
     request,
     ...result
-  } = await client.query({
+  } = await graphql.query({
     variables: { date: '2018-06-16' },
     query: `
       query($date: String!){
@@ -86,7 +86,7 @@ test('Valid query result.', async t => {
 })
 
 test('Invalid query result.', async t => {
-  const client = new GraphQLClient({
+  const graphql = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -96,7 +96,7 @@ test('Invalid query result.', async t => {
     // eslint-disable-next-line no-unused-vars
     request,
     ...result
-  } = await client.query({
+  } = await graphql.query({
     variables: { date: '2018-01-01' },
     query: 'x'
   }).request
@@ -113,13 +113,13 @@ test('Invalid query result.', async t => {
 })
 
 test('Export, reset and import.', async t => {
-  const client = new GraphQLClient({
+  const graphql = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
   })
 
-  await client.query({
+  await graphql.query({
     variables: { date: '2018-06-16' },
     query: `
       query($date: String!){
@@ -130,23 +130,23 @@ test('Export, reset and import.', async t => {
     `
   }).request
 
-  const populatedExport = client.export()
+  const populatedExport = graphql.export()
 
-  client.reset()
+  graphql.reset()
 
-  const resetExport = client.export()
+  const resetExport = graphql.export()
 
   t.is(resetExport, '{}')
 
-  client.import(populatedExport)
+  graphql.import(populatedExport)
 
-  const repopulatedExport = client.export()
+  const repopulatedExport = graphql.export()
 
   t.is(populatedExport, repopulatedExport)
 })
 
 test('Render query', t => {
-  const client = new GraphQLClient({
+  const graphql = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
     }
@@ -155,7 +155,7 @@ test('Render query', t => {
   const tree = render
     .create(
       <Query
-        client={client}
+        graphql={graphql}
         variables={{ date: '2018-06-16' }}
         query={`
           query($date: String!){

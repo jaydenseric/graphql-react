@@ -1,11 +1,12 @@
-import { GraphQL } from '../../lib'
+import { GraphQLQuery } from '../../lib'
 import Loader from './loader'
 import HTTPError from './http-error'
 import GraphQLErrors from './graphql-errors'
 
 const Timer = ({ id, milliseconds }) => (
-  <GraphQL
-    autoload={false}
+  <GraphQLQuery
+    loadOnMount={false}
+    loadOnReset={false}
     variables={{ id }}
     query={`
       query timer($id: ID!) {
@@ -18,19 +19,21 @@ const Timer = ({ id, milliseconds }) => (
   >
     {({ load, loading, httpError, graphQLErrors, data }) => (
       <tr>
-        <td>{id}</td>
-        <td>{data ? data.timer.milliseconds : milliseconds}</td>
         <td>
-          {loading ? <Loader /> : <button onClick={load}>Refresh</button>}
+          <button disabled={loading} onClick={load}>
+            Load
+          </button>
           {(httpError || graphQLErrors) && <strong>Error!</strong>}
         </td>
+        <td>{id}</td>
+        <td>{data ? data.timer.milliseconds : milliseconds}</td>
       </tr>
     )}
-  </GraphQL>
+  </GraphQLQuery>
 )
 
 const Timers = () => (
-  <GraphQL
+  <GraphQLQuery
     query={`
       {
         timers {
@@ -42,27 +45,29 @@ const Timers = () => (
   >
     {({ loading, httpError, graphQLErrors, data }) => (
       <section>
-        {loading && <Loader />}
-        {httpError && <HTTPError error={httpError} />}
-        {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
         {data &&
-          !!data.timers.length && (
+          (data.timers.length ? (
             <table>
               <thead>
                 <tr>
+                  <th>Load</th>
                   <th>Id</th>
                   <th>Milliseconds</th>
-                  <th>Load</th>
                 </tr>
               </thead>
               <tbody>
                 {data.timers.map(timer => <Timer key={timer.id} {...timer} />)}
               </tbody>
             </table>
-          )}
+          ) : (
+            <p>Create a first timer.</p>
+          ))}
+        {loading && <Loader />}
+        {httpError && <HTTPError error={httpError} />}
+        {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
       </section>
     )}
-  </GraphQL>
+  </GraphQLQuery>
 )
 
 export default Timers

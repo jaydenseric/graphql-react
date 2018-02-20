@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/skimp.svg)](https://npm.im/skimp) ![Licence](https://img.shields.io/npm/l/skimp.svg) [![Github issues](https://img.shields.io/github/issues/jaydenseric/skimp.svg)](https://github.com/jaydenseric/skimp/issues) [![Github stars](https://img.shields.io/github/stars/jaydenseric/skimp.svg)](https://github.com/jaydenseric/skimp/stargazers)
 
-A skimpy React GraphQL client.
+A skimpy GraphQL client and React components.
 
 ## Setup
 

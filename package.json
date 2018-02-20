@@ -1,7 +1,7 @@
 {
   "name": "skimp",
   "private": true,
-  "description": "A skimpy React GraphQL client.",
+  "description": "A skimpy GraphQL client and React components.",
   "license": "MIT",
   "author": {
     "name": "Jayden Seric",

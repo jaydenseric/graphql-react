@@ -1,8 +1,6 @@
 import fnv1a from 'fnv1a'
 
-const objectHash = object => fnv1a(JSON.stringify(object)).toString(36)
-
-export class GraphQLClient {
+export class GraphQL {
   constructor({ requestOptions } = {}) {
     if (typeof requestOptions === 'function')
       this.requestOptions = requestOptions
@@ -12,10 +10,12 @@ export class GraphQLClient {
   requests = {}
   listeners = {}
 
+  static hashRequestOptions = requestOptions =>
+    fnv1a(JSON.stringify(requestOptions)).toString(36)
+
   on = (event, callback) => {
     const queue = this.listeners[event] || (this.listeners[event] = [])
     queue.push(callback)
-    return this
   }
 
   off = (event, callback) => {
@@ -23,18 +23,19 @@ export class GraphQLClient {
       this.listeners[event] = this.listeners[event].filter(
         listenerCallback => listenerCallback != callback
       )
-    return this
   }
 
   emit = (event, ...args) => {
     if (this.listeners[event])
       this.listeners[event].forEach(callback => callback.apply(this, args))
-    return this
   }
 
   reset = () => {
+    const requestHashes = Object.keys(this.cache)
     this.cache = {}
-    this.emit('reset')
+    requestHashes.forEach(requestHash =>
+      this.emit('cacheupdate', { requestHash })
+    )
   }
 
   import = json => {
@@ -62,12 +63,12 @@ export class GraphQLClient {
     return options
   }
 
-  request = async ({ url, ...options }, hash) => {
+  request = async ({ url, ...options }, requestHash) => {
     // Send the request.
-    this.requests[hash] = fetch(url, options)
+    this.requests[requestHash] = fetch(url, options)
 
     // Make the request.
-    const response = await this.requests[hash]
+    const response = await this.requests[requestHash]
     const cache = {}
 
     if (!response.ok)
@@ -85,24 +86,26 @@ export class GraphQLClient {
     }
 
     // Clear the done request.
-    delete this.requests[hash]
+    delete this.requests[requestHash]
 
     // Cache the request.
-    this.cache[hash] = cache
+    this.cache[requestHash] = cache
+    this.emit('cacheupdate', { requestHash, cache })
 
     return cache
   }
 
   query = operation => {
-    const options = this.getRequestOptions(operation)
-    const hash = objectHash(options)
+    const requestOptions = this.getRequestOptions(operation)
+    const requestHash = this.constructor.hashRequestOptions(requestOptions)
     return {
-      cache: this.cache[hash],
+      oldRequestCache: this.cache[requestHash],
+      requestHash,
       request:
-        // Existing request.
-        this.requests[hash] ||
-        // Fresh request.
-        this.request(options, hash)
+        // Existing request or
+        this.requests[requestHash] ||
+        // a fresh request.
+        this.request(requestOptions, requestHash)
     }
   }
 }

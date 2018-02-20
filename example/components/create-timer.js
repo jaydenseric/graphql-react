@@ -1,9 +1,8 @@
-import { GraphQL } from '../../lib'
+import { GraphQLMutation } from '../../lib'
 import Loader from './loader'
 
 const CreateTimer = () => (
-  <GraphQL
-    autoload={false}
+  <GraphQLMutation
     query={`
       mutation createTimer {
         createTimer {
@@ -14,11 +13,11 @@ const CreateTimer = () => (
   >
     {({ loading, data, load }) => (
       <section>
-        {data && <p>Timer {data.createTimer.id} created.</p>}
+        {data && <p>Timer ID “{data.createTimer.id}” created.</p>}
         {loading ? <Loader /> : <button onClick={load}>Create timer</button>}
       </section>
     )}
-  </GraphQL>
+  </GraphQLMutation>
 )
 
 export default CreateTimer

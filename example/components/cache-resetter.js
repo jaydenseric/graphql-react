@@ -1,9 +1,9 @@
-import { GraphQLClientConsumer } from '../../lib'
+import { GraphQLConsumer } from '../../lib'
 
 const CacheResetter = () => (
-  <GraphQLClientConsumer>
-    {client => <button onClick={client.reset}>Reset cache</button>}
-  </GraphQLClientConsumer>
+  <GraphQLConsumer>
+    {graphql => <button onClick={graphql.reset}>Reset cache</button>}
+  </GraphQLConsumer>
 )
 
 export default CacheResetter
