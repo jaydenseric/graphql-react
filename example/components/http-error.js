@@ -1,4 +1,4 @@
-const HTTPError = ({ status, statusText }) => (
+const HTTPError = ({ error: { status, statusText } }) => (
   <aside>
     <h1>Error: {status}</h1>
     <p>{statusText}</p>
