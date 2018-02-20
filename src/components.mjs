@@ -45,8 +45,7 @@ export class Query extends Component {
     if (
       // Cache updated for this component’s request.
       requestHash === this.state.requestHash
-    ) {
-      if (requestHash == 'tia6n9') console.log(requestHash, cache)
+    )
       if (
         // Cache has been reset and
         !cache &&
