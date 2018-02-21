@@ -19,6 +19,7 @@ test.before(async () => {
   const typeDefs = `
     type Query {
       date(isoDate: String!): Date!
+      epoch: Date!
     }
 
     scalar Upload
@@ -32,7 +33,8 @@ test.before(async () => {
 
   const resolvers = {
     Query: {
-      date: (obj, { isoDate }) => new Date(isoDate)
+      date: (obj, { isoDate }) => new Date(isoDate),
+      epoch: () => new Date(0)
     },
     Upload: GraphQLUpload,
     Date: {
@@ -44,6 +46,17 @@ test.before(async () => {
 
   const app = new Koa()
     .use(koaBody())
+    .use(async (ctx, next) => {
+      if (ctx.query.bad === 'json') {
+        ctx.status = 200
+        ctx.type = 'txt'
+        ctx.body = 'Not JSON.'
+      } else if (ctx.query.bad === 'payload') {
+        ctx.status = 200
+        ctx.type = 'json'
+        ctx.body = '[{"bad": true}]'
+      } else await next()
+    })
     .use(apolloUploadKoa())
     .use(
       apolloServerKoa.graphqlKoa({
@@ -60,51 +73,7 @@ test.before(async () => {
   })
 })
 
-test('Valid query result.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
-
-  const {
-    // eslint-disable-next-line no-unused-vars
-    request,
-    ...result
-  } = await graphql.query({
-    variables: { date: '2018-06-16' },
-    query: `
-      query($date: String!){
-        date(isoDate: $date) {
-          day
-        }
-      }
-    `
-  }).request
-
-  t.snapshot(result)
-})
-
-test('Invalid query result.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
-
-  const {
-    // eslint-disable-next-line no-unused-vars
-    request,
-    ...result
-  } = await graphql.query({
-    variables: { date: '2018-01-01' },
-    query: 'x'
-  }).request
-
-  t.snapshot(result)
-})
-
-test('Export and import.', async t => {
+test('Cache export & import.', async t => {
   const graphql1 = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`
@@ -127,7 +96,84 @@ test('Export and import.', async t => {
   t.is(graphql1.cache, graphql2.cache)
 })
 
-test('Render query', t => {
+test('Request cache for valid query.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
+    }
+  })
+
+  const requestCache = await graphql.query({
+    variables: { date: '2018-06-16' },
+    query: `
+      query($date: String!){
+        date(isoDate: $date) {
+          day
+        }
+      }
+    `
+  }).request
+
+  t.snapshot(requestCache)
+})
+
+test('Request cache for invalid query.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
+    }
+  })
+
+  const requestCache = await graphql.query({
+    variables: { date: '2018-01-01' },
+    query: 'x'
+  }).request
+
+  t.snapshot(requestCache)
+})
+
+test('Request cache for response JSON invalid.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}?bad=json`
+    }
+  })
+
+  const { parseError, ...rest } = await graphql.query({
+    query: `
+      {
+        epoch {
+          year
+        }
+      }
+    `
+  }).request
+
+  t.is(typeof parseError, 'string')
+  t.deepEqual(rest, {})
+})
+
+test('Request cache for response payload malformed.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}?bad=payload`
+    }
+  })
+
+  const requestCache = await graphql.query({
+    query: `
+      {
+        epoch {
+          year
+        }
+      }
+    `
+  }).request
+
+  t.snapshot(requestCache)
+})
+
+test('Query render.', t => {
   const graphql = new GraphQL({
     requestOptions: options => {
       options.url = `http://localhost:${port}`

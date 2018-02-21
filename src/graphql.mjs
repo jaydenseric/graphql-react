@@ -69,20 +69,25 @@ export class GraphQL {
 
         return response.json()
       })
-      .catch(({ message }) => {
-        // Failed to parse the response as JSON.
-        requestCache.parseError = message
-      })
-      .then(({ errors, data }) => {
-        if (errors) requestCache.graphQLErrors = errors
-        if (data) requestCache.data = data
-
-        // Clear the done request.
-        delete this.requests[requestHash]
-
+      .then(
+        // JSON parse ok.
+        ({ errors, data }) => {
+          if (!errors && !data) requestCache.parseError = 'Malformed payload.'
+          if (errors) requestCache.graphQLErrors = errors
+          if (data) requestCache.data = data
+        },
+        // JSON parse error.
+        ({ message }) => {
+          requestCache.parseError = message
+        }
+      )
+      .then(() => {
         // Cache the request.
         this.cache[requestHash] = requestCache
         this.emitCacheUpdate(requestHash, requestCache)
+
+        // Clear the done request.
+        delete this.requests[requestHash]
 
         return requestCache
       })
