@@ -1,4 +1,5 @@
 import fnv1a from 'fnv1a'
+import extractFiles from 'extract-files'
 
 export class GraphQL {
   constructor({ cache = {}, requestOptions } = {}) {
@@ -36,19 +37,38 @@ export class GraphQL {
   }
 
   getRequestOptions(operation) {
-    // Defaults.
     const options = {
       url: '/graphql',
       method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        accept: 'application/json'
-      },
-      body: JSON.stringify(operation)
+      headers: { accept: 'application/json' }
+    }
+
+    const files = extractFiles(operation)
+
+    if (files.length) {
+      // GraphQL multipart request spec:
+      // https://github.com/jaydenseric/graphql-multipart-request-spec
+      options.body = new FormData()
+      options.body.append('operations', JSON.stringify(operation))
+      options.body.append(
+        'map',
+        JSON.stringify(
+          files.reduce((map, { path }, index) => {
+            map[`${index}`] = [path]
+            return map
+          }, {})
+        )
+      )
+      files.forEach(({ file }, index) =>
+        options.body.append(index, file, file.name)
+      )
+    } else {
+      options.headers['Content-Type'] = 'application/json'
+      options.body = JSON.stringify(operation)
     }
 
     if (this.requestOptions)
-      // Customize defaults.
+      // Customize request options.
       this.requestOptions(options, operation)
 
     return options
