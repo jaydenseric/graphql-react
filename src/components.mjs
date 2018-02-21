@@ -1,22 +1,22 @@
-import React, { Component, createContext } from 'react'
-import { string, bool, object, func, instanceOf } from 'prop-types'
+import React from 'react'
+import propTypes from 'prop-types'
 import equal from 'fast-deep-equal'
 import { GraphQL } from './graphql'
 
 export const {
   Provider: GraphQLProvider,
   Consumer: GraphQLConsumer
-} = createContext()
+} = React.createContext()
 
-export class Query extends Component {
+export class Query extends React.Component {
   static propTypes = {
-    graphql: instanceOf(GraphQL).isRequired,
-    variables: object,
-    query: string.isRequired,
-    loadOnMount: bool,
-    loadOnReset: bool,
-    resetOnLoad: bool,
-    children: func.isRequired
+    graphql: propTypes.instanceOf(GraphQL).isRequired,
+    variables: propTypes.object,
+    query: propTypes.string.isRequired,
+    loadOnMount: propTypes.bool,
+    loadOnReset: propTypes.bool,
+    resetOnLoad: propTypes.bool,
+    children: propTypes.func.isRequired
   }
 
   static defaultProps = {
