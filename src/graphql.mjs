@@ -69,6 +69,8 @@ export class GraphQL {
 
     if (this.requestOptions)
       // Customize request options.
+      // Options include `url` and fetch options:
+      // https://github.github.io/fetch/#options
       this.requestOptions(options, operation)
 
     return options

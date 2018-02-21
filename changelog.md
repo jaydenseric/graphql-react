@@ -1,4 +1,4 @@
-# skimp changelog
+# graphql-react changelog
 
 ## Next
 

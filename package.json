@@ -1,7 +1,7 @@
 {
-  "name": "skimp",
+  "name": "graphql-react",
   "private": true,
-  "description": "A skimpy GraphQL client and React components.",
+  "description": "A lightweight GraphQL client for React.",
   "license": "MIT",
   "author": {
     "name": "Jayden Seric",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaydenseric/skimp.git"
+    "url": "https://github.com/jaydenseric/graphql-react.git"
   },
-  "homepage": "https://github.com/jaydenseric/skimp#readme",
-  "bugs": "https://github.com/jaydenseric/skimp/issues",
+  "homepage": "https://github.com/jaydenseric/graphql-react#readme",
+  "bugs": "https://github.com/jaydenseric/graphql-react/issues",
   "keywords": ["graphql", "react", "upload"],
   "files": ["lib"],
   "main": "lib",

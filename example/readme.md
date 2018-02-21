@@ -1,9 +1,9 @@
 # Universal example
 
-This app uses [Next.js](https://npm.im/next) to demonstrate `Client` setup, `Query` components and Server Side Rendering (SSR).
+Example [Next.js](https://npm.im/next) app and GraphQL API.
 
 To get started, in Terminal run:
 
 ```shell
-git clone https://github.com/jaydenseric/skimp.git && cd example && npm install && npm run dev
+git clone https://github.com/jaydenseric/graphql-react.git && cd example && npm install && npm run dev
 ```
