@@ -44,6 +44,7 @@
     "ava": "^1.0.0-beta.2",
     "babel-eslint": "^8.2.2",
     "cross-env": "^5.1.3",
+    "documentation": "^5.4.0",
     "eslint": "^4.18.1",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-react": "^7.7.0",
@@ -69,6 +70,8 @@
     "build:js": "babel src -d lib",
     "build:mjs": "cross-env MODULE=true babel src -d lib --keep-file-extension",
     "postbuild": "prettier 'lib/**/*.{js,mjs}' --write",
+    "jsdoc": "documentation readme src --re mjs --pe mjs -s API -q",
+    "postjsdoc": "prettier readme.md --write",
     "prewatch": "npm run build",
     "watch": "run-p watch:*",
     "watch:build": "run-p 'build:* -- --skip-initial-build --watch'",
@@ -85,7 +88,7 @@
     "pretest": "npm run build",
     "test": "ava --no-cache",
     "precommit": "lint-staged",
-    "prepublishOnly": "run-p lint size test"
+    "prepublishOnly": "run-s jsdoc lint size test"
   },
   "lint-staged": {
     "*.{js,mjs}": "eslint",
@@ -109,7 +112,8 @@
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "plugins": ["react", "prettier"],
     "rules": {
-      "no-console": 0,
+      "require-jsdoc": "warn",
+      "valid-jsdoc": ["error", { "requireReturn": false }],
       "curly": ["error", "multi"],
       "prettier/prettier": "error"
     }
