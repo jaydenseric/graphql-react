@@ -1,3 +1,5 @@
+![Logo](https://cdn.rawgit.com/jaydenseric/graphql-react/master/graphql-react-logo-v1.svg)
+
 # graphql-react
 
 [![npm version](https://img.shields.io/npm/v/graphql-react.svg)](https://npm.im/graphql-react) ![Licence](https://img.shields.io/npm/l/graphql-react.svg) [![Github issues](https://img.shields.io/github/issues/jaydenseric/graphql-react.svg)](https://github.com/jaydenseric/graphql-react/issues) [![Github stars](https://img.shields.io/github/stars/jaydenseric/graphql-react.svg)](https://github.com/jaydenseric/graphql-react/stargazers)

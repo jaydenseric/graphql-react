@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+  <title>graphql-react logo</title>
+  <circle fill="#E10098" cx="75" cy="22.107" r="11.672" />
+  <circle fill="#E10098" cx="28.08" cy="101.393" r="11.672" />
+  <circle fill="#E10098" cx="121.92" cy="101.393" r="11.672" />
+  <circle fill="#E10098" cx="75" cy="127.821" r="11.672" />
+  <circle fill="#E10098" cx="28.08" cy="48.203" r="11.672" />
+  <circle fill="#E10098" cx="121.92" cy="48.537" r="11.672" />
+  <path fill="none" stroke="#E10098" stroke-width="5.336" d="M52.067 35.024L28.08 48.534m.003 26.427l-.003 26.432m23.58 13.281L75 127.819l23.196-13.067m23.724-13.365l-93.84.006 23.575-39.838m46.785.167l23.48 39.671V74.961m0-26.424L98.032 35.08" />
+  <circle fill="#61DAFB" cx="75" cy="74.967" r="9.723" />
+  <ellipse fill="none" stroke="#61DAFB" stroke-width="4.743" cx="75" cy="74.967" rx="52.174" ry="19.921" />
+  <ellipse fill="none" stroke="#61DAFB" stroke-width="4.743" cx="75" cy="74.967" rx="52.174" ry="19.921" transform="rotate(60 75 74.967)" />
+  <ellipse fill="none" stroke="#61DAFB" stroke-width="4.743" cx="75" cy="74.967" rx="52.174" ry="19.921" transform="rotate(120 75 74.967)" />
+  <path fill="none" stroke="#E10098" stroke-width="5.336" d="M98.032 35.08L75 22.108 52.067 35.024M28.08 48.534l.003 26.427m-.003 26.432l23.58 13.281m46.536.078l23.724-13.365-27.399.002m-39.624.002l-26.817.002m23.575-39.838L75 22.107l23.44 39.615m23.48 13.239V48.537" />
+</svg>
