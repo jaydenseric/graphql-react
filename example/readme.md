@@ -1,4 +1,4 @@
-# Universal example
+# graphql-react example
 
 Example [Next.js](https://npm.im/next) app and GraphQL API.
 
