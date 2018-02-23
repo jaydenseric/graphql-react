@@ -1,4 +1,4 @@
-import { GraphQLQuery } from '../../lib'
+import { GraphQLQuery } from 'graphql-react'
 import Loader from './loader'
 import HTTPError from './http-error'
 import ParseError from './parse-error'
