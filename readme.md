@@ -45,7 +45,7 @@ const graphql = new GraphQL()
 
 const Page = () => (
   <GraphQLProvider value={graphql}>
-    <!-- Now use Query or Mutation components -->
+    <!-- Now use GraphQLQuery or GraphQLMutation components -->
   </GraphQLProvider>
 )
 ```
