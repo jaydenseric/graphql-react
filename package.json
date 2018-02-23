@@ -1,6 +1,6 @@
 {
   "name": "graphql-react",
-  "private": true,
+  "version": "0.1.0",
   "description": "A lightweight GraphQL client for React.",
   "license": "MIT",
   "author": {
