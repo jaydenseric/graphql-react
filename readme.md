@@ -6,20 +6,27 @@
 
 A lightweight GraphQL client for React.
 
-* Adds ~ 4 KB to a typical bundle.
-* Native ESM in Node.js via `.mjs`.
-* Package `module` entry for tree shaking bundlers.
-* Simple child function components; no decorators.
-* Components use the new React v16.3 context API.
-* GraphQL client usable outside components.
+> ⚠️ SSR API coming soon.
+
+#### Easy 🤹
+
+* Simple components, no decorators.
+* Query components fetch on mount and when props change. While loading, cache from the last identical request is available to display.
+* Automatically fresh cache, even after mutations.
+* Use file input values as mutation arguments to upload files; compatible with [a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
+
+#### Smart 👨‍🔬
+
+* Adds ~ 4 KB to a typical min+gzip bundle.
+* [Native ESM in Node.js](https://nodejs.org/api/esm.html) via `.mjs`.
+* [Package `module` entry](https://github.com/rollup/rollup/wiki/pkg.module) for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers.
+* Components use the [React v16.3 context API](https://github.com/facebook/react/pull/11818).
 * All fetch options overridable per request.
-* File uploads implement the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
-* Automatic caching based on request hashes:
-  * Fresh data fetches when a query component mounts or props update. While loading, results from the last identical request are available to display.
-  * Network, parse, and GraphQL errors are cached alongside data; server side rendered errors will be possible.
-  * No query tampering.
-  * No complicated data denormalization.
+* Request hash based cache:
+  * No data denormalization and no need to query `id` fields.
+  * No tampering with queries or `__typename` insertion.
   * Query multiple GraphQL services without stitching data.
+  * Errors also cache, enabling error SSR.
 
 ## Setup
 
@@ -53,16 +60,109 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 
 #### Table of Contents
 
+* [GraphQLQuery](#graphqlquery)
+* [GraphQLMutation](#graphqlmutation)
 * [GraphQL](#graphql)
   * [reset](#reset)
   * [query](#query)
-* [CacheUpdateCallback](#cacheupdatecallback)
 * [RequestCache](#requestcache)
 * [RequestCachePromise](#requestcachepromise)
 * [ActiveQuery](#activequery)
 * [RequestOptionsOverride](#requestoptionsoverride)
+* [CacheUpdateCallback](#cacheupdatecallback)
 * [RequestOptions](#requestoptions)
 * [Operation](#operation)
+
+### GraphQLQuery
+
+A React component to manage a GraphQL query.
+
+**Parameters**
+
+* `props` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Component props.
+  * `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
+  * `props.query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
+  * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `true`)
+  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the GraphQL client cache is reset. (optional, default `true`)
+  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the GraphQL client cache reset when the query loads. (optional, default `false`)
+* `children` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Render function.
+
+**Examples**
+
+```javascript
+import { GraphQLQuery } from 'graphql-react'
+
+const Profile = ({ userId }) => (
+  <GraphQLQuery
+    variables={{ userId }}
+    query={`
+      query user($userId: ID!) {
+        user(userId: $id) {
+          name
+        }
+      }
+    `}
+  >
+    {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+      <article>
+        {loading && <span>Loading…</span>}
+        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+        {data && <h1>{data.user.name}</h1>}
+        <button onClick={load} disabled={loading}>
+          Reload
+        </button>
+      </article>
+    )}
+  </GraphQLQuery>
+)
+```
+
+Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTML.
+
+### GraphQLMutation
+
+A React component to manage a GraphQL mutation. The same as [GraphQLQuery](#graphqlquery) but with different default props.
+
+**Parameters**
+
+* `props` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Component props.
+  * `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
+  * `props.query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
+  * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
+  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the GraphQL client cache is reset. (optional, default `false`)
+  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the GraphQL client cache reset when the query loads. (optional, default `true`)
+* `children` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Render function.
+
+**Examples**
+
+```javascript
+import { GraphQLMutation } from 'graphql-react'
+
+const ClapArticleButton = ({ articleId }) => (
+  <GraphQLMutation
+    variables={{ articleId }}
+    query={`
+      mutation clapArticle($articleId: ID!) {
+        clapArticle(articleId: $id) {
+          clapCount
+        }
+      }
+    `}
+  >
+    {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+      <aside>
+        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+        {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
+        <button onClick={load} disabled={loading}>
+          Clap
+        </button>
+      </aside>
+    )}
+  </GraphQLMutation>
+)
+```
+
+Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTML.
 
 ### GraphQL
 
@@ -104,16 +204,6 @@ Queries a GraphQL server.
 * `operation` **[Operation](#operation)** GraphQL operation object.
 
 Returns **[ActiveQuery](#activequery)** In-flight query details.
-
-### CacheUpdateCallback
-
-A cache update listener callback.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `requestCache` **[RequestCache](#requestcache)** Request cache.
 
 ### RequestCache
 
@@ -165,6 +255,16 @@ options => {
 }
 ```
 
+### CacheUpdateCallback
+
+A cache update listener callback.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `requestCache` **[RequestCache](#requestcache)** Request cache.
+
 ### RequestOptions
 
 Options for a GraphQL fetch request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
@@ -191,5 +291,5 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ## Support
 
-* Node.js v6.10+, see `package.json` `engines`.
-* [Browsers >1% usage](http://browserl.ist/?q=%3E1%25), see `package.json` `browserslist`.
+* Node.js v6.10+.
+* Browsers [>1% usage](http://browserl.ist/?q=%3E1%25).
