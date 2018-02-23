@@ -1,4 +1,4 @@
-import { GraphQLMutation } from '../../lib'
+import { GraphQLMutation } from 'graphql-react'
 import Loader from './loader'
 
 const CreateTimer = () => (

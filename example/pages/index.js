@@ -1,4 +1,4 @@
-import { GraphQL, GraphQLProvider } from '../../lib'
+import { GraphQL, GraphQLProvider } from 'graphql-react'
 import CacheResetter from '../components/cache-resetter'
 import CreateTimer from '../components/create-timer'
 import Timers from '../components/timers'

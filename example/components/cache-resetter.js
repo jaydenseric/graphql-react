@@ -1,4 +1,4 @@
-import { GraphQLConsumer } from '../../lib'
+import { GraphQLConsumer } from 'graphql-react'
 
 const CacheResetter = () => (
   <GraphQLConsumer>
