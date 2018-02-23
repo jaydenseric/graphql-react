@@ -14,7 +14,16 @@
   },
   "homepage": "https://github.com/jaydenseric/graphql-react#readme",
   "bugs": "https://github.com/jaydenseric/graphql-react/issues",
-  "keywords": ["graphql", "react", "upload"],
+  "keywords": [
+    "graphql",
+    "react",
+    "client",
+    "query",
+    "mutation",
+    "file",
+    "upload",
+    "multipart"
+  ],
   "files": ["lib"],
   "main": "lib",
   "module": "lib/index.mjs",
