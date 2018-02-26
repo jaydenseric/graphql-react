@@ -28,7 +28,7 @@
   "main": "lib",
   "module": "lib/index.mjs",
   "engines": {
-    "node": ">=6.10"
+    "node": ">=7.6"
   },
   "browserslist": ">1%",
   "peerDependencies": {

@@ -330,5 +330,5 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ## Support
 
-* Node.js v6.10+.
+* Node.js v7.6+.
 * Browsers [>1% usage](http://browserl.ist/?q=%3E1%25).
