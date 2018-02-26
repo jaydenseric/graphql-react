@@ -4,6 +4,7 @@
 
 * Updated dependencies.
 * Fixed the example setup script and made `graphql-react` a published dependency, via [#1](https://github.com/jaydenseric/graphql-react/pull/1).
+* Configured [Travis](https://travis-ci.org/jaydenseric/graphql-react).
 
 ## 0.1.0
 
