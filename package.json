@@ -37,7 +37,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.40",
     "extract-files": "^3.1.0",
-    "fast-deep-equal": "^1.0.0",
+    "fast-deep-equal": "^1.1.0",
     "fnv1a": "^1.0.1",
     "prop-types": "^15.6.0"
   },
@@ -70,7 +70,7 @@
     "react": "^16.3.0-alpha.1",
     "react-test-renderer": "^16.2.0",
     "rimraf": "^2.6.2",
-    "size-limit": "^0.14.1"
+    "size-limit": "^0.15.1"
   },
   "scripts": {
     "clean": "rimraf lib",
