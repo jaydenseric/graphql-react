@@ -62,14 +62,16 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 
 * [GraphQLQuery](#graphqlquery)
 * [GraphQLMutation](#graphqlmutation)
+* [RenderQuery](#renderquery)
 * [GraphQL](#graphql)
   * [reset](#reset)
   * [query](#query)
 * [RequestCache](#requestcache)
+* [CacheUpdateCallback](#cacheupdatecallback)
 * [RequestCachePromise](#requestcachepromise)
 * [ActiveQuery](#activequery)
+* [HTTPError](#httperror)
 * [RequestOptionsOverride](#requestoptionsoverride)
-* [CacheUpdateCallback](#cacheupdatecallback)
 * [RequestOptions](#requestoptions)
 * [Operation](#operation)
 
@@ -85,7 +87,7 @@ A React component to manage a GraphQL query.
   * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `true`)
   * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the GraphQL client cache is reset. (optional, default `true`)
   * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the GraphQL client cache reset when the query loads. (optional, default `false`)
-* `children` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Render function.
+* `children` **[RenderQuery](#renderquery)** Render function.
 
 **Examples**
 
@@ -105,12 +107,10 @@ const Profile = ({ userId }) => (
   >
     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
       <article>
+        <button onClick={load}>Reload</button>
         {loading && <span>Loading…</span>}
         {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
         {data && <h1>{data.user.name}</h1>}
-        <button onClick={load} disabled={loading}>
-          Reload
-        </button>
       </article>
     )}
   </GraphQLQuery>
@@ -131,7 +131,7 @@ A React component to manage a GraphQL mutation. The same as [GraphQLQuery](#grap
   * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
   * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the GraphQL client cache is reset. (optional, default `false`)
   * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the GraphQL client cache reset when the query loads. (optional, default `true`)
-* `children` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Render function.
+* `children` **[RenderQuery](#renderquery)** Render function.
 
 **Examples**
 
@@ -151,14 +151,44 @@ const ClapArticleButton = ({ articleId }) => (
   >
     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
       <aside>
-        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
-        {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
         <button onClick={load} disabled={loading}>
           Clap
         </button>
+        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+        {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
       </aside>
     )}
   </GraphQLMutation>
+)
+```
+
+Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTML.
+
+### RenderQuery
+
+Renders the status of a query or mutation.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
+* `loading` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
+* `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
+* `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
+* `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
+* `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
+
+**Examples**
+
+```javascript
+;({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+  <aside>
+    <button onClick={load}>Reload</button>
+    {loading && <span>Loading…</span>}
+    {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+    {data && <h1>{data.user.name}</h1>}
+  </aside>
 )
 ```
 
@@ -213,12 +243,20 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `httpError` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP error.
-  * `httpError.status` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status code.
-  * `httpError.statusText` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
-* `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Parse error message.
-* `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** GraphQL response errors.
-* `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** GraphQL response data.
+* `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
+* `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
+* `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
+* `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
+
+### CacheUpdateCallback
+
+A cache update listener callback.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `requestCache` **[RequestCache](#requestcache)** Request cache.
 
 ### RequestCachePromise
 
@@ -235,6 +273,17 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 * `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
 * `requestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Request options hash.
 * `request` **[RequestCachePromise](#requestcachepromise)** Promise that resolves fresh request cache.
+
+### HTTPError
+
+Fetch HTTP error.
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `status` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
+* `statusText` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
 
 ### RequestOptionsOverride
 
@@ -254,16 +303,6 @@ options => {
   options.credentials = 'include'
 }
 ```
-
-### CacheUpdateCallback
-
-A cache update listener callback.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `requestCache` **[RequestCache](#requestcache)** Request cache.
 
 ### RequestOptions
 

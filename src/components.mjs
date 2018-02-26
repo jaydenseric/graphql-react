@@ -156,7 +156,7 @@ export class Query extends React.Component {
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
  * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
  * @param {Boolean} [props.resetOnLoad=true] Should the GraphQL client cache reset when the query loads.
- * @param {Function} children Render function.
+ * @param {RenderQuery} children Render function.
  */
 export class Mutation extends Query {
   static defaultProps = {
@@ -174,7 +174,7 @@ export class Mutation extends Query {
  * @param {Boolean} [props.loadOnMount=true] Should the query load when the component mounts.
  * @param {Boolean} [props.loadOnReset=true] Should the query load when the GraphQL client cache is reset.
  * @param {Boolean} [props.resetOnLoad=false] Should the GraphQL client cache reset when the query loads.
- * @param {Function} children Render function.
+ * @param {RenderQuery} children Render function.
  * @returns {String} HTML.
  * @example
  * import { GraphQLQuery } from 'graphql-react'
@@ -192,12 +192,10 @@ export class Mutation extends Query {
  *   >
  *     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
  *       <article>
+ *         <button onClick={load}>Reload</button>
  *         {loading && <span>Loading…</span>}
  *         {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
  *         {data && <h1>{data.user.name}</h1>}
- *         <button onClick={load} disabled={loading}>
- *           Reload
- *         </button>
  *       </article>
  *     )}
  *   </GraphQLQuery>
@@ -218,7 +216,7 @@ export const GraphQLQuery = props => (
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
  * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
  * @param {Boolean} [props.resetOnLoad=true] Should the GraphQL client cache reset when the query loads.
- * @param {Function} children Render function.
+ * @param {RenderQuery} children Render function.
  * @returns {String} HTML.
  * @example
  * import { GraphQLMutation } from 'graphql-react'
@@ -236,11 +234,9 @@ export const GraphQLQuery = props => (
  *   >
  *     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
  *       <aside>
+ *         <button onClick={load} disabled={loading}>Clap</button>
  *         {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
  *         {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
- *         <button onClick={load} disabled={loading}>
- *           Clap
- *         </button>
  *       </aside>
  *     )}
  *   </GraphQLMutation>
@@ -251,3 +247,24 @@ export const GraphQLMutation = props => (
     {graphql => <Mutation graphql={graphql} {...props} />}
   </GraphQLConsumer>
 )
+
+/**
+ * Renders the status of a query or mutation.
+ * @typedef {Function} RenderQuery
+ * @param {Function} load Loads the query on demand, updating cache.
+ * @param {Boolean} loading Is the query loading.
+ * @param {HTTPError} [httpError] Fetch HTTP error.
+ * @param {String} [parseError] Parse error message.
+ * @param {Object} [graphQLErrors] GraphQL response errors.
+ * @param {Object} [data] GraphQL response data.
+ * @returns {String} HTML.
+ * @example
+ * ({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+ *   <aside>
+ *     <button onClick={load}>Reload</button>
+ *     {loading && <span>Loading…</span>}
+ *     {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+ *     {data && <h1>{data.user.name}</h1>}
+ *   </aside>
+ * )
+ */

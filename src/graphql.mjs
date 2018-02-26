@@ -242,19 +242,24 @@ export class GraphQL {
  */
 
 /**
- * JSON serializable result of a request (including all errors and data) for
- * caching purposes.
- * @typedef {Object} RequestCache
- * @prop {Object} httpError HTTP error.
- * @prop {String} httpError.status HTTP status code.
- * @prop {String} httpError.statusText HTTP status text.
- * @prop {String} parseError Parse error message.
- * @prop {Object} graphQLErrors GraphQL response errors.
- * @prop {Object} data GraphQL response data.
- */
-
-/**
  * A cache update listener callback.
  * @callback CacheUpdateCallback
  * @param {RequestCache} requestCache Request cache.
+ */
+
+/**
+ * JSON serializable result of a request (including all errors and data) for
+ * caching purposes.
+ * @typedef {Object} RequestCache
+ * @prop {HTTPError} [httpError] Fetch HTTP error.
+ * @prop {String} [parseError] Parse error message.
+ * @prop {Object} [graphQLErrors] GraphQL response errors.
+ * @prop {Object} [data] GraphQL response data.
+ */
+
+/**
+ * Fetch HTTP error.
+ * @typedef {Object} HTTPError
+ * @prop {Number} status HTTP status code.
+ * @prop {String} statusText HTTP status text.
  */
