@@ -8,7 +8,7 @@ A lightweight GraphQL client for React.
 
 > ⚠️ SSR API coming soon.
 
-#### Easy 🍰
+#### Easy 🍺
 
 * Simple components, no decorators.
 * Query components fetch on mount and when props change. While loading, cache from the last identical request is available to display.
