@@ -4,23 +4,58 @@ import equal from 'fast-deep-equal'
 import { GraphQL } from './graphql'
 
 export const {
-  Provider: GraphQLProvider,
-  Consumer: GraphQLConsumer
+  /**
+   * A React component that puts a {@link GraphQL} client instance in context
+   * for nested {@link Consumer} components to use.
+   * @function
+   * @param {GraphQL} value A {@link GraphQL} client instance.
+   * @returns {ReactElement} React virtual DOM element.
+   * @example
+   * import { GraphQL, Provider } from 'graphql-react'
+   *
+   * const graphql = new GraphQL()
+   *
+   * const Page = () => (
+   *   <Provider value={graphql}>
+   *     <!-- Children… -->
+   *   </Provider>
+   * )
+   */
+  Provider,
+
+  /**
+   * A React component that gets the {@link GraphQL} client instance from
+   * context.
+   * @function
+   * @param {ConsumerRender} children Render function that receives a {@link GraphQL} client instance.
+   * @returns {ReactElement} React virtual DOM element.
+   * @example <caption>A button component that resets the {@link GraphQL} client cache.</caption>
+   * import { Consumer } from 'graphql-react'
+   *
+   * const ResetCacheButton = () => (
+   *   <Consumer>
+   *     {graphql => <button onClick={graphql.reset}>Reset cache</button>}
+   *   </Consumer>
+   * )
+   */
+  Consumer
 } = React.createContext()
 
 /**
- * A React component to manage a GraphQL query.
+ * A React component to manage a GraphQL query with a {@link GraphQL} client
+ * instance. See {@link Query}, which takes the client from context
+ * instead of a prop.
  * @ignore
  * @param {Object} props Component props.
  * @param {GraphQL} props.graphql GraphQL client instance.
  * @param {Object} [props.variables] GraphQL query variables.
  * @param {String} props.query GraphQL query.
- * @param {Boolean} [props.loadOnMount=true] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=true] Should the query load when the GraphQL client cache is reset.
+ * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
+ * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
  * @param {Boolean} [props.resetOnLoad=false] Should the GraphQL client cache reset when the query loads.
- * @param {Function} children Render function.
+ * @param {RenderQuery} children Renders the query status.
  */
-export class Query extends React.Component {
+class GraphQLQuery extends React.Component {
   constructor(props) {
     super(props)
     this.validateProps()
@@ -35,12 +70,6 @@ export class Query extends React.Component {
     loadOnReset: propTypes.bool,
     resetOnLoad: propTypes.bool,
     children: propTypes.func.isRequired
-  }
-
-  static defaultProps = {
-    loadOnMount: true,
-    loadOnReset: true,
-    resetOnLoad: false
   }
 
   /**
@@ -69,7 +98,7 @@ export class Query extends React.Component {
   }
 
   /**
-   * Loads the query.
+   * Loads the query, updating cache.
    */
   load = () => {
     const { pastRequestCache, requestHash, request } = this.props.graphql.query(
@@ -137,6 +166,10 @@ export class Query extends React.Component {
       )
   }
 
+  /**
+   * Renders the component.
+   * @returns {ReactElement} React virtual DOM element.
+   */
   render() {
     return this.props.children({
       load: this.load,
@@ -147,40 +180,22 @@ export class Query extends React.Component {
 }
 
 /**
- * A React component to manage a GraphQL mutation.
- * @ignore
+ * A React component to manage a GraphQL query or mutation.
  * @param {Object} props Component props.
- * @param {GraphQL} props.graphql GraphQL client instance.
  * @param {Object} [props.variables] GraphQL query variables.
  * @param {String} props.query GraphQL query.
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
  * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
- * @param {Boolean} [props.resetOnLoad=true] Should the GraphQL client cache reset when the query loads.
- * @param {RenderQuery} children Render function.
- */
-export class Mutation extends Query {
-  static defaultProps = {
-    loadOnMount: false,
-    loadOnReset: false,
-    resetOnLoad: true
-  }
-}
-
-/**
- * A React component to manage a GraphQL query.
- * @param {Object} props Component props.
- * @param {Object} [props.variables] GraphQL query variables.
- * @param {String} props.query GraphQL query.
- * @param {Boolean} [props.loadOnMount=true] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=true] Should the query load when the GraphQL client cache is reset.
  * @param {Boolean} [props.resetOnLoad=false] Should the GraphQL client cache reset when the query loads.
- * @param {RenderQuery} children Render function.
- * @returns {String} HTML.
- * @example
- * import { GraphQLQuery } from 'graphql-react'
+ * @param {QueryRender} children Renders the query status.
+ * @returns {ReactElement} React virtual DOM element.
+ * @example <caption>A query to display a user profile.</caption>
+ * import { Query } from 'graphql-react'
  *
  * const Profile = ({ userId }) => (
- *   <GraphQLQuery
+ *   <Query
+ *     loadOnMount
+ *     loadOnReset
  *     variables={{ userId }}
  *     query={`
  *       query user($userId: ID!) {
@@ -198,31 +213,14 @@ export class Mutation extends Query {
  *         {data && <h1>{data.user.name}</h1>}
  *       </article>
  *     )}
- *   </GraphQLQuery>
+ *   </Query>
  * )
- */
-export const GraphQLQuery = props => (
-  <GraphQLConsumer>
-    {graphql => <Query graphql={graphql} {...props} />}
-  </GraphQLConsumer>
-)
-
-/**
- * A React component to manage a GraphQL mutation. The same as
- * {@link GraphQLQuery} but with different default props.
- * @param {Object} props Component props.
- * @param {Object} [props.variables] GraphQL query variables.
- * @param {String} props.query GraphQL query.
- * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
- * @param {Boolean} [props.resetOnLoad=true] Should the GraphQL client cache reset when the query loads.
- * @param {RenderQuery} children Render function.
- * @returns {String} HTML.
- * @example
- * import { GraphQLMutation } from 'graphql-react'
+ * @example <caption>A mutation to clap an article.</caption>
+ * import { Query } from 'graphql-react'
  *
  * const ClapArticleButton = ({ articleId }) => (
- *   <GraphQLMutation
+ *   <Query
+ *     resetOnLoad
  *     variables={{ articleId }}
  *     query={`
  *       mutation clapArticle($articleId: ID!) {
@@ -239,25 +237,43 @@ export const GraphQLQuery = props => (
  *         {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
  *       </aside>
  *     )}
- *   </GraphQLMutation>
+ *   </Query>
  * )
  */
-export const GraphQLMutation = props => (
-  <GraphQLConsumer>
-    {graphql => <Mutation graphql={graphql} {...props} />}
-  </GraphQLConsumer>
+export const Query = props => (
+  <Consumer>
+    {graphql => <GraphQLQuery graphql={graphql} {...props} />}
+  </Consumer>
 )
+
+Query.propTypes = {
+  variables: propTypes.object,
+  query: propTypes.string.isRequired,
+  loadOnMount: propTypes.bool,
+  loadOnReset: propTypes.bool,
+  resetOnLoad: propTypes.bool,
+  children: propTypes.func.isRequired
+}
+
+/**
+ * Renders a {@link GraphQL} client consumer.
+ * @typedef {Function} ConsumerRender
+ * @param {GraphQL} graphql GraphQL client instance.
+ * @returns {ReactElement} React virtual DOM element.
+ * @example <caption>A button that resets the {@link GraphQL} client cache.</caption>
+ * graphql => <button onClick={graphql.reset}>Reset cache</button>
+ */
 
 /**
  * Renders the status of a query or mutation.
- * @typedef {Function} RenderQuery
+ * @typedef {Function} QueryRender
  * @param {Function} load Loads the query on demand, updating cache.
  * @param {Boolean} loading Is the query loading.
  * @param {HTTPError} [httpError] Fetch HTTP error.
  * @param {String} [parseError] Parse error message.
  * @param {Object} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
- * @returns {String} HTML.
+ * @returns {ReactElement} React virtual DOM element.
  * @example
  * ({ load, loading, httpError, parseError, graphQLErrors, data }) => (
  *   <aside>

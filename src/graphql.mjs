@@ -2,11 +2,13 @@ import fnv1a from 'fnv1a'
 import extractFiles from 'extract-files'
 
 /**
- * A lightweight GraphQL client with a request cache.
+ * A lightweight GraphQL client that caches requests.
  * @param {Object} [options={}] Options.
  * @param {Object} [options.cache={}] Cache to import; useful once a SSR API is available.
  * @param {RequestOptionsOverride} [options.requestOptions] A function that accepts and modifies generated options for every request.
  * @example
+ * import { GraphQL } from 'graphql-react'
+ *
  * const graphql = new GraphQL({
  *   requestOptions: options => {
  *     options.url = 'https://api.example.com/graphql'

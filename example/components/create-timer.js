@@ -1,8 +1,9 @@
-import { GraphQLMutation } from 'graphql-react'
+import { Query } from 'graphql-react'
 import Loader from './loader'
 
 const CreateTimer = () => (
-  <GraphQLMutation
+  <Query
+    resetOnLoad
     query={`
       mutation createTimer {
         createTimer {
@@ -17,7 +18,7 @@ const CreateTimer = () => (
         {loading ? <Loader /> : <button onClick={load}>Create timer</button>}
       </section>
     )}
-  </GraphQLMutation>
+  </Query>
 )
 
 export default CreateTimer

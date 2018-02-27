@@ -8,7 +8,7 @@ import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import render from 'react-test-renderer'
-import { GraphQL, Query } from '../lib'
+import { GraphQL, Provider, Query } from '../lib'
 
 let port
 let server
@@ -182,19 +182,21 @@ test('Query render.', t => {
 
   const tree = render
     .create(
-      <Query
-        graphql={graphql}
-        variables={{ date: '2018-06-16' }}
-        query={`
-          query($date: String!){
-            date(isoDate: $date) {
-              day
+      <Provider value={graphql}>
+        <Query
+          loadOnMount
+          variables={{ date: '2018-06-16' }}
+          query={`
+            query($date: String!){
+              date(isoDate: $date) {
+                day
+              }
             }
-          }
-        `}
-      >
-        {result => <div>{JSON.stringify(result)}</div>}
-      </Query>
+          `}
+        >
+          {result => <div>{JSON.stringify(result)}</div>}
+        </Query>
+      </Provider>
     )
     .toJSON()
   t.snapshot(tree)

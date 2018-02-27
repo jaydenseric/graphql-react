@@ -1,13 +1,11 @@
-import { GraphQLQuery } from 'graphql-react'
+import { Query } from 'graphql-react'
 import Loader from './loader'
 import HTTPError from './http-error'
 import ParseError from './parse-error'
 import GraphQLErrors from './graphql-errors'
 
 const Timer = ({ id, milliseconds }) => (
-  <GraphQLQuery
-    loadOnMount={false}
-    loadOnReset={false}
+  <Query
     variables={{ id }}
     query={`
       query timer($id: ID!) {
@@ -32,11 +30,13 @@ const Timer = ({ id, milliseconds }) => (
         <td>{data ? data.timer.milliseconds : milliseconds}</td>
       </tr>
     )}
-  </GraphQLQuery>
+  </Query>
 )
 
 const Timers = () => (
-  <GraphQLQuery
+  <Query
+    loadOnMount
+    loadOnReset
     query={`
       {
         timers {
@@ -71,7 +71,7 @@ const Timers = () => (
         {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
       </section>
     )}
-  </GraphQLQuery>
+  </Query>
 )
 
 export default Timers

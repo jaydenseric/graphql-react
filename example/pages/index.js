@@ -1,4 +1,4 @@
-import { GraphQL, GraphQLProvider } from 'graphql-react'
+import { GraphQL, Provider } from 'graphql-react'
 import CacheResetter from '../components/cache-resetter'
 import CreateTimer from '../components/create-timer'
 import Timers from '../components/timers'
@@ -10,12 +10,12 @@ const graphql = new GraphQL({
 })
 
 const HomePage = () => (
-  <GraphQLProvider value={graphql}>
+  <Provider value={graphql}>
     <h1>Example Next.js app &amp; GraphQL API</h1>
     <Timers />
     <CreateTimer />
     <CacheResetter />
-  </GraphQLProvider>
+  </Provider>
 )
 
 export default HomePage
