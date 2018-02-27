@@ -10,10 +10,13 @@ A lightweight GraphQL client for React.
 
 ### Easy 🍺
 
+* Add 1 dependency to get started with GraphQL in a React project.
+* No Webpack or Babel setup.
 * Simple components, no decorators.
 * Query components fetch on mount and when props change. While loading, cache from the last identical request is available to display.
 * Automatically fresh cache, even after mutations.
 * Use file input values as mutation arguments to upload files; compatible with [a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
+* [Template literal](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals) queries; no need for [`gql`](https://github.com/apollographql/graphql-tag#gql).
 
 ### Smart 💡
 
