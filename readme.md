@@ -84,11 +84,11 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 
 ### Provider
 
-A React component that puts a [GraphQL](#graphql) client instance in context for nested [Consumer](#consumer) components to use.
+A React component that puts a [GraphQL](#graphql) instance in context for nested [Consumer](#consumer) components to use.
 
 **Parameters**
 
-* `value` **[GraphQL](#graphql)** A [GraphQL](#graphql) client instance.
+* `value` **[GraphQL](#graphql)** A [GraphQL](#graphql) instance.
 
 **Examples**
 
@@ -108,15 +108,15 @@ Returns **ReactElement** React virtual DOM element.
 
 ### Consumer
 
-A React component that gets the [GraphQL](#graphql) client instance from context.
+A React component that gets the [GraphQL](#graphql) instance from context.
 
 **Parameters**
 
-* `children` **[ConsumerRender](#consumerrender)** Render function that receives a [GraphQL](#graphql) client instance.
+* `children` **[ConsumerRender](#consumerrender)** Render function that receives a [GraphQL](#graphql) instance.
 
 **Examples**
 
-_A button component that resets the [GraphQL](#graphql) client cache._
+_A button component that resets the [GraphQL](#graphql) cache._
 
 ```javascript
 import { Consumer } from 'graphql-react'
@@ -140,8 +140,8 @@ A React component to manage a GraphQL query or mutation.
   * `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
   * `props.query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
   * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
-  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the GraphQL client cache is reset. (optional, default `false`)
-  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the GraphQL client cache reset when the query loads. (optional, default `false`)
+  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the [GraphQL](#graphql) cache is reset. (optional, default `false`)
+  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL](#graphql) cache reset when the query loads. (optional, default `false`)
 * `children` **[QueryRender](#queryrender)** Renders the query status.
 
 **Examples**
@@ -210,17 +210,17 @@ Returns **ReactElement** React virtual DOM element.
 
 ### ConsumerRender
 
-Renders a [GraphQL](#graphql) client consumer.
+Renders a [GraphQL](#graphql) consumer.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
 **Parameters**
 
-* `graphql` **[GraphQL](#graphql)** GraphQL client instance.
+* `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
 
 **Examples**
 
-_A button that resets the [GraphQL](#graphql) client cache._
+_A button that resets the [GraphQL](#graphql) cache._
 
 ```javascript
 graphql => <button onClick={graphql.reset}>Reset cache</button>

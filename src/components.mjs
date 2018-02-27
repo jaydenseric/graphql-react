@@ -5,10 +5,10 @@ import { GraphQL } from './graphql'
 
 export const {
   /**
-   * A React component that puts a {@link GraphQL} client instance in context
-   * for nested {@link Consumer} components to use.
+   * A React component that puts a {@link GraphQL} instance in context for
+   * nested {@link Consumer} components to use.
    * @function
-   * @param {GraphQL} value A {@link GraphQL} client instance.
+   * @param {GraphQL} value A {@link GraphQL} instance.
    * @returns {ReactElement} React virtual DOM element.
    * @example
    * import { GraphQL, Provider } from 'graphql-react'
@@ -24,12 +24,11 @@ export const {
   Provider,
 
   /**
-   * A React component that gets the {@link GraphQL} client instance from
-   * context.
+   * A React component that gets the {@link GraphQL} instance from context.
    * @function
-   * @param {ConsumerRender} children Render function that receives a {@link GraphQL} client instance.
+   * @param {ConsumerRender} children Render function that receives a {@link GraphQL} instance.
    * @returns {ReactElement} React virtual DOM element.
-   * @example <caption>A button component that resets the {@link GraphQL} client cache.</caption>
+   * @example <caption>A button component that resets the {@link GraphQL} cache.</caption>
    * import { Consumer } from 'graphql-react'
    *
    * const ResetCacheButton = () => (
@@ -42,17 +41,17 @@ export const {
 } = React.createContext()
 
 /**
- * A React component to manage a GraphQL query with a {@link GraphQL} client
- * instance. See {@link Query}, which takes the client from context
+ * A React component to manage a GraphQL query with a {@link GraphQL} instance.
+ * See {@link Query}, which takes the {@link GraphQL} instance from context
  * instead of a prop.
  * @ignore
  * @param {Object} props Component props.
- * @param {GraphQL} props.graphql GraphQL client instance.
+ * @param {GraphQL} props.graphql {@link GraphQL} instance.
  * @param {Object} [props.variables] GraphQL query variables.
  * @param {String} props.query GraphQL query.
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
- * @param {Boolean} [props.resetOnLoad=false] Should the GraphQL client cache reset when the query loads.
+ * @param {Boolean} [props.loadOnReset=false] Should the query load when the {@link GraphQL} cache is reset.
+ * @param {Boolean} [props.resetOnLoad=false] Should the {@link GraphQL} cache reset when the query loads.
  * @param {RenderQuery} children Renders the query status.
  */
 class GraphQLQuery extends React.Component {
@@ -185,8 +184,8 @@ class GraphQLQuery extends React.Component {
  * @param {Object} [props.variables] GraphQL query variables.
  * @param {String} props.query GraphQL query.
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when the GraphQL client cache is reset.
- * @param {Boolean} [props.resetOnLoad=false] Should the GraphQL client cache reset when the query loads.
+ * @param {Boolean} [props.loadOnReset=false] Should the query load when the {@link GraphQL} cache is reset.
+ * @param {Boolean} [props.resetOnLoad=false] Should the {@link GraphQL} cache reset when the query loads.
  * @param {QueryRender} children Renders the query status.
  * @returns {ReactElement} React virtual DOM element.
  * @example <caption>A query to display a user profile.</caption>
@@ -256,11 +255,11 @@ Query.propTypes = {
 }
 
 /**
- * Renders a {@link GraphQL} client consumer.
+ * Renders a {@link GraphQL} consumer.
  * @typedef {Function} ConsumerRender
- * @param {GraphQL} graphql GraphQL client instance.
+ * @param {GraphQL} graphql {@link GraphQL} instance.
  * @returns {ReactElement} React virtual DOM element.
- * @example <caption>A button that resets the {@link GraphQL} client cache.</caption>
+ * @example <caption>A button that resets the {@link GraphQL} cache.</caption>
  * graphql => <button onClick={graphql.reset}>Reset cache</button>
  */
 
