@@ -8,14 +8,14 @@ A lightweight GraphQL client for React.
 
 > ⚠️ SSR API coming soon.
 
-#### Easy 🤹
+#### Easy 🍰
 
 * Simple components, no decorators.
 * Query components fetch on mount and when props change. While loading, cache from the last identical request is available to display.
 * Automatically fresh cache, even after mutations.
 * Use file input values as mutation arguments to upload files; compatible with [a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
 
-#### Smart 👨‍🔬
+#### Smart 💡
 
 * Adds ~ 4 KB to a typical min+gzip bundle.
 * [Native ESM in Node.js](https://nodejs.org/api/esm.html) via `.mjs`.
