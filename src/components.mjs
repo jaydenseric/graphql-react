@@ -9,6 +9,7 @@ export const {
    * nested {@link Consumer} components to use.
    * @function
    * @param {GraphQL} value A {@link GraphQL} instance.
+   * @param {ReactNode} children A React node.
    * @returns {ReactElement} React virtual DOM element.
    * @example
    * import { GraphQL, Provider } from 'graphql-react'

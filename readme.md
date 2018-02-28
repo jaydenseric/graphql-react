@@ -92,6 +92,7 @@ A React component that puts a [GraphQL](#graphql) instance in context for nested
 **Parameters**
 
 * `value` **[GraphQL](#graphql)** A [GraphQL](#graphql) instance.
+* `children` **ReactNode** A React node.
 
 **Examples**
 
