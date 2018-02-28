@@ -15,6 +15,7 @@
   * Opt-in is safer for mutations.
   * Removing `static defaultProps` reduces bundle size.
   * Nicer valueless boolean props (`<GraphQLQuery />` and `<GraphQLQuery loadOnReset />` vs `<GraphQLQuery loadOnReset={false} />` and `<GraphQLQuery loadOnReset={true} />`.
+* Commented GraphQL template literals for editor syntax highlighting.
 * Improved API documentation.
 
 ## 0.1.0

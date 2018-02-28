@@ -16,7 +16,7 @@ let server
 test.before(async () => {
   // Setup the test GraphQL server.
 
-  const typeDefs = `
+  const typeDefs = /* GraphQL */ `
     type Query {
       date(isoDate: String!): Date!
       epoch: Date!
@@ -82,7 +82,7 @@ test('Cache export & import.', async t => {
 
   await graphql1.query({
     variables: { date: '2018-06-16' },
-    query: `
+    query: /* GraphQL */ `
       query($date: String!){
         date(isoDate: $date) {
           day
@@ -105,7 +105,7 @@ test('Request cache for valid query.', async t => {
 
   const requestCache = await graphql.query({
     variables: { date: '2018-06-16' },
-    query: `
+    query: /* GraphQL */ `
       query($date: String!){
         date(isoDate: $date) {
           day
@@ -140,7 +140,7 @@ test('Request cache for response JSON invalid.', async t => {
   })
 
   const { parseError, ...rest } = await graphql.query({
-    query: `
+    query: /* GraphQL */ `
       {
         epoch {
           year
@@ -161,7 +161,7 @@ test('Request cache for response payload malformed.', async t => {
   })
 
   const requestCache = await graphql.query({
-    query: `
+    query: /* GraphQL */ `
       {
         epoch {
           year
@@ -186,13 +186,15 @@ test('Query render.', t => {
         <Query
           loadOnMount
           variables={{ date: '2018-06-16' }}
-          query={`
+          query={
+            /* GraphQL */ `
             query($date: String!){
               date(isoDate: $date) {
                 day
               }
             }
-          `}
+          `
+          }
         >
           {result => <div>{JSON.stringify(result)}</div>}
         </Query>

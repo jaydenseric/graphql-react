@@ -7,14 +7,16 @@ import GraphQLErrors from './graphql-errors'
 const Timer = ({ id, milliseconds }) => (
   <Query
     variables={{ id }}
-    query={`
+    query={
+      /* GraphQL */ `
       query timer($id: ID!) {
         timer(timerId: $id) {
           id
           milliseconds
         }
       }
-    `}
+    `
+    }
   >
     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
       <tr>
@@ -37,14 +39,16 @@ const Timers = () => (
   <Query
     loadOnMount
     loadOnReset
-    query={`
+    query={
+      /* GraphQL */ `
       {
         timers {
           id
           milliseconds
         }
       }
-    `}
+    `
+    }
   >
     {({ loading, httpError, parseError, graphQLErrors, data }) => (
       <section>

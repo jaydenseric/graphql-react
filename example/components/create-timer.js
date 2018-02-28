@@ -4,13 +4,15 @@ import Loader from './loader'
 const CreateTimer = () => (
   <Query
     resetOnLoad
-    query={`
+    query={
+      /* GraphQL */ `
       mutation createTimer {
         createTimer {
           id
         }
       }
-    `}
+    `
+    }
   >
     {({ loading, data, load }) => (
       <section>
