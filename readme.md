@@ -47,9 +47,7 @@ import { GraphQL, Provider } from 'graphql-react'
 const graphql = new GraphQL()
 
 const Page = () => (
-  <Provider value={graphql}>
-    <!-- Use Consumer or Query components -->
-  </Provider>
+  <Provider value={graphql}>Use Consumer or Query components…</Provider>
 )
 ```
 
@@ -71,21 +69,24 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 * [Provider](#provider)
 * [Consumer](#consumer)
 * [Query](#query)
-* [ConsumerRender](#consumerrender)
 * [QueryRender](#queryrender)
+* [ConsumerRender](#consumerrender)
+* [ActiveQuery](#activequery)
+* [HTTPError](#httperror)
+* [Operation](#operation)
+* [RequestOptions](#requestoptions)
+* [RequestOptionsOverride](#requestoptionsoverride)
 * [GraphQL](#graphql)
+  * [cache](#cache)
   * [reset](#reset)
   * [query](#query-1)
-* [RequestCache](#requestcache)
-* [CacheUpdateCallback](#cacheupdatecallback)
 * [RequestCachePromise](#requestcachepromise)
-* [HTTPError](#httperror)
-* [ActiveQuery](#activequery)
-* [RequestOptionsOverride](#requestoptionsoverride)
-* [RequestOptions](#requestoptions)
-* [Operation](#operation)
+* [CacheUpdateCallback](#cacheupdatecallback)
+* [RequestCache](#requestcache)
 
 ### Provider
+
+[src/components.mjs:23-23](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/components.mjs#L23-L23 'Source code on GitHub')
 
 A React component that puts a [GraphQL](#graphql) instance in context for nested [Consumer](#consumer) components to use.
 
@@ -102,15 +103,15 @@ import { GraphQL, Provider } from 'graphql-react'
 const graphql = new GraphQL()
 
 const Page = () => (
-  <Provider value={graphql}>
-    <!-- Children… -->
-  </Provider>
+  <Provider value={graphql}>Use Consumer or Query components…</Provider>
 )
 ```
 
 Returns **ReactElement** React virtual DOM element.
 
 ### Consumer
+
+[src/components.mjs:39-39](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/components.mjs#L39-L39 'Source code on GitHub')
 
 A React component that gets the [GraphQL](#graphql) instance from context.
 
@@ -135,6 +136,8 @@ const ResetCacheButton = () => (
 Returns **ReactElement** React virtual DOM element.
 
 ### Query
+
+[src/components.mjs:241-245](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/components.mjs#L241-L245 'Source code on GitHub')
 
 A React component to manage a GraphQL query or mutation.
 
@@ -212,27 +215,9 @@ const ClapArticleButton = ({ articleId }) => (
 
 Returns **ReactElement** React virtual DOM element.
 
-### ConsumerRender
-
-Renders a [GraphQL](#graphql) consumer.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
-
-**Examples**
-
-_A button that resets the [GraphQL](#graphql) cache._
-
-```javascript
-graphql => <button onClick={graphql.reset}>Reset cache</button>
-```
-
-Returns **ReactElement** React virtual DOM element.
-
 ### QueryRender
+
+[src/components.mjs:247-254](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/components.mjs#L247-L254 'Source code on GitHub')
 
 Renders the status of a query or mutation.
 
@@ -262,7 +247,105 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 
 Returns **ReactElement** React virtual DOM element.
 
+### ConsumerRender
+
+[src/components.mjs:247-254](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/components.mjs#L247-L254 'Source code on GitHub')
+
+Renders a [GraphQL](#graphql) consumer.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
+
+**Examples**
+
+_A button that resets the [GraphQL](#graphql) cache._
+
+```javascript
+graphql => <button onClick={graphql.reset}>Reset cache</button>
+```
+
+Returns **ReactElement** React virtual DOM element.
+
+### ActiveQuery
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
+* `requestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Request options hash.
+* `request` **[RequestCachePromise](#requestcachepromise)** Promise that resolves fresh request cache.
+
+### HTTPError
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+Fetch HTTP error.
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `status` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
+* `statusText` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
+
+### Operation
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
+* `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.
+
+### RequestOptions
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+Options for a GraphQL fetch request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `url` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
+* `body` **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
+* `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
+* `credentials` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
+
+### RequestOptionsOverride
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+A way to override request options generated for a fetch. Modify the provided options object directly; no return.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `requestOptions` **[RequestOptions](#requestoptions)**
+
+**Examples**
+
+```javascript
+options => {
+  options.url = 'https://api.example.com/graphql'
+  options.credentials = 'include'
+}
+```
+
 ### GraphQL
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
 
 A lightweight GraphQL client that caches requests.
 
@@ -285,7 +368,15 @@ const graphql = new GraphQL({
 })
 ```
 
+#### cache
+
+[src/graphql.mjs:25-25](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L25-L25 'Source code on GitHub')
+
+GraphQL request cache.
+
 #### reset
+
+[src/graphql.mjs:75-79](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L75-L79 'Source code on GitHub')
 
 Resets the cache. Useful when a user logs out.
 
@@ -297,6 +388,8 @@ graphql.reset()
 
 #### query
 
+[src/graphql.mjs:194-206](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L194-L206 'Source code on GitHub')
+
 Queries a GraphQL server.
 
 **Parameters**
@@ -305,7 +398,29 @@ Queries a GraphQL server.
 
 Returns **[ActiveQuery](#activequery)** In-flight query details.
 
+### RequestCachePromise
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+A promise for an in-flight query that resolves the request cache.
+
+Type: [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[RequestCache](#requestcache)>
+
+### CacheUpdateCallback
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
+
+A cache update listener callback.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `requestCache` **[RequestCache](#requestcache)** Request cache.
+
 ### RequestCache
+
+[src/graphql.mjs:19-207](https://github.com/jaydenseric/graphql-react/blob/f908346ed98ffff6e01b29c42236745bed87a7a8/src/graphql.mjs#L19-L207 'Source code on GitHub')
 
 JSON serializable result of a request (including all errors and data) for caching purposes.
 
@@ -317,83 +432,3 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 * `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 * `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 * `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
-
-### CacheUpdateCallback
-
-A cache update listener callback.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `requestCache` **[RequestCache](#requestcache)** Request cache.
-
-### RequestCachePromise
-
-A promise for an in-flight query that resolves the request cache.
-
-Type: [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[RequestCache](#requestcache)>
-
-### HTTPError
-
-Fetch HTTP error.
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-**Properties**
-
-* `status` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
-* `statusText` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
-
-### ActiveQuery
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-**Properties**
-
-* `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
-* `requestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Request options hash.
-* `request` **[RequestCachePromise](#requestcachepromise)** Promise that resolves fresh request cache.
-
-### RequestOptionsOverride
-
-A way to override request options generated for a fetch. Modify the provided options object directly; no return.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `requestOptions` **[RequestOptions](#requestoptions)**
-
-**Examples**
-
-```javascript
-options => {
-  options.url = 'https://api.example.com/graphql'
-  options.credentials = 'include'
-}
-```
-
-### RequestOptions
-
-Options for a GraphQL fetch request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-**Properties**
-
-* `url` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
-* `body` **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
-* `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
-* `credentials` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
-
-### Operation
-
-A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-**Properties**
-
-* `query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
-* `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.

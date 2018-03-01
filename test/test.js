@@ -83,7 +83,7 @@ test('Cache export & import.', async t => {
   await graphql1.query({
     variables: { date: '2018-06-16' },
     query: /* GraphQL */ `
-      query($date: String!){
+      query($date: String!) {
         date(isoDate: $date) {
           day
         }
@@ -106,7 +106,7 @@ test('Request cache for valid query.', async t => {
   const requestCache = await graphql.query({
     variables: { date: '2018-06-16' },
     query: /* GraphQL */ `
-      query($date: String!){
+      query($date: String!) {
         date(isoDate: $date) {
           day
         }
@@ -188,12 +188,12 @@ test('Query render.', t => {
           variables={{ date: '2018-06-16' }}
           query={
             /* GraphQL */ `
-            query($date: String!){
-              date(isoDate: $date) {
-                day
+              query($date: String!) {
+                date(isoDate: $date) {
+                  day
+                }
               }
-            }
-          `
+            `
           }
         >
           {result => <div>{JSON.stringify(result)}</div>}

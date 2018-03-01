@@ -18,6 +18,10 @@ import extractFiles from 'extract-files'
  */
 export class GraphQL {
   constructor({ cache = {}, requestOptions } = {}) {
+    /**
+     * GraphQL request cache.
+     * @type {Object.<String, RequestCache>}
+     */
     this.cache = cache
     this.requestOptions = requestOptions
   }

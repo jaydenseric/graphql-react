@@ -79,7 +79,7 @@
     "build:js": "babel src -d lib",
     "build:mjs": "cross-env MODULE=true babel src -d lib --keep-file-extension",
     "postbuild": "prettier 'lib/**/*.{js,mjs}' --write",
-    "jsdoc": "documentation readme src --re mjs --pe mjs -s API -q",
+    "jsdoc": "documentation readme src --re mjs --pe mjs -s API -q -g",
     "postjsdoc": "prettier readme.md --write",
     "prewatch": "npm run build",
     "watch": "run-p watch:*",

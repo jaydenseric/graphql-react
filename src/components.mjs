@@ -17,9 +17,7 @@ export const {
    * const graphql = new GraphQL()
    *
    * const Page = () => (
-   *   <Provider value={graphql}>
-   *     <!-- Children… -->
-   *   </Provider>
+   *   <Provider value={graphql}>Use Consumer or Query components…</Provider>
    * )
    */
   Provider,
