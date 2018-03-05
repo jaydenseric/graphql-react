@@ -17,6 +17,7 @@
   * Nicer valueless boolean props (`<GraphQLQuery />` and `<GraphQLQuery loadOnReset />` vs `<GraphQLQuery loadOnReset={false} />` and `<GraphQLQuery loadOnReset={true} />`.
 * Commented GraphQL template literals for editor syntax highlighting.
 * Improved API documentation.
+* Simplified the JSDoc script, now that [Documentation.js handles `.mjs`](https://github.com/documentationjs/documentation/pull/1023).
 
 ## 0.1.0
 
