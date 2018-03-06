@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import 'isomorphic-unfetch'
 import test from 'ava'
 import getPort from 'get-port'
@@ -9,6 +11,7 @@ import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import render from 'react-test-renderer'
 import { GraphQL, Provider, Query } from '../lib'
+import { recurseReactElement } from '../lib/server'
 
 let port
 let server
@@ -202,6 +205,54 @@ test('Query render.', t => {
     )
     .toJSON()
   t.snapshot(tree)
+})
+
+test('recurseReactElement recurses a complex ReactElement tree.', t => {
+  const { Provider, Consumer } = React.createContext()
+
+  class ClassComponent extends React.Component {
+    componentWillMount() {
+      this.setState({ string: 'a' })
+      this.setState((state, props) => ({ number: props.number }))
+    }
+
+    render() {
+      return (
+        <React.Fragment>
+          {this.state.string} {this.state.number}
+          <div>{this.props.children}</div>
+        </React.Fragment>
+      )
+    }
+  }
+
+  const FunctionComponent = ({ children }) => children
+
+  const tree = (
+    <Provider value={1}>
+      {[
+        <div key="1">
+          <Consumer>
+            {contextValue => (
+              <ClassComponent number={contextValue}>
+                <FunctionComponent>
+                  <div />
+                </FunctionComponent>
+              </ClassComponent>
+            )}
+          </Consumer>
+        </div>
+      ]}
+    </Provider>
+  )
+
+  let visitedElementCount = 0
+  recurseReactElement(tree, () => {
+    visitedElementCount++
+    return true
+  })
+
+  t.is(visitedElementCount, 10)
 })
 
 test.after(() =>
