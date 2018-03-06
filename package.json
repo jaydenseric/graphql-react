@@ -78,7 +78,7 @@
     "build": "run-p build:*",
     "build:js": "babel src -d lib",
     "build:mjs": "cross-env MODULE=true babel src -d lib --keep-file-extension",
-    "postbuild": "prettier 'lib/**/*.{js,mjs}' --write",
+    "postbuild": "prettier 'lib/**/*.{mjs,js}' --write",
     "jsdoc": "documentation readme src -s API -q",
     "postjsdoc": "prettier readme.md --write",
     "prewatch": "npm run build",
@@ -86,10 +86,10 @@
     "watch:build": "run-p 'build:* -- --skip-initial-build --watch'",
     "watch:test": "ava --no-cache -vw",
     "lint": "run-p lint:*",
-    "lint:eslint": "eslint . --ext js,mjs",
+    "lint:eslint": "eslint . --ext mjs,js",
     "lint:prettier": "prettier '**/*.{json,md}' -l --ignore-path .gitignore",
     "fix": "run-p fix:*",
-    "fix:eslint": "eslint . --ext js,mjs --fix",
+    "fix:eslint": "eslint . --ext mjs,js --fix",
     "fix:prettier":
       "prettier '**/*.{json,md}' --write --ignore-path .gitignore",
     "presize": "npm run build",
@@ -100,7 +100,7 @@
     "prepublishOnly": "run-s jsdoc lint size test"
   },
   "lint-staged": {
-    "*.{js,mjs}": "eslint",
+    "*.{mjs,js}": "eslint",
     "*.{json,md}": "prettier -l"
   },
   "eslintIgnore": ["!.*", "node_modules", ".next", "lib"],
