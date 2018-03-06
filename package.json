@@ -70,7 +70,7 @@
     "react": "^16.3.0-alpha.1",
     "react-test-renderer": "^16.3.0-alpha.1",
     "rimraf": "^2.6.2",
-    "size-limit": "^0.15.2"
+    "size-limit": "^0.16.1"
   },
   "scripts": {
     "clean": "rimraf lib",
