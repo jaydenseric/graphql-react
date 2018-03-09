@@ -68,6 +68,7 @@
     "npm-run-all": "^4.1.2",
     "prettier": "^1.11.1",
     "react": "^16.3.0-alpha.1",
+    "react-dom": "^16.3.0-alpha.1",
     "react-test-renderer": "^16.3.0-alpha.1",
     "rimraf": "^2.6.2",
     "size-limit": "^0.16.2"
@@ -122,7 +123,12 @@
     "plugins": ["react", "prettier"],
     "rules": {
       "require-jsdoc": "warn",
-      "valid-jsdoc": ["error", { "requireReturn": false }],
+      "valid-jsdoc": [
+        "error",
+        {
+          "requireReturn": false
+        }
+      ],
       "curly": ["error", "multi"],
       "prettier/prettier": "error"
     }

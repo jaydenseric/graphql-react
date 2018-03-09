@@ -9,9 +9,10 @@ import { apolloUploadKoa, GraphQLUpload } from 'apollo-upload-server'
 import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import render from 'react-test-renderer'
 import { GraphQL, Provider, Query } from '../lib'
-import { recurseReactElement } from '../lib/server'
+import { recurseReactElement, preload } from '../lib/server'
 
 let port
 let server
@@ -23,11 +24,13 @@ test.before(async () => {
     type Query {
       date(isoDate: String!): Date!
       epoch: Date!
+      daysSince(isoDate: String!): Int!
     }
 
     scalar Upload
 
     type Date {
+      iso: String!
       day: Int!
       month: Int!
       year: Int!
@@ -37,10 +40,13 @@ test.before(async () => {
   const resolvers = {
     Query: {
       date: (obj, { isoDate }) => new Date(isoDate),
-      epoch: () => new Date(0)
+      epoch: () => new Date(0),
+      daysSince: (obj, { isoDate }) =>
+        Math.floor((new Date() - new Date(isoDate)) / 86400000)
     },
     Upload: GraphQLUpload,
     Date: {
+      iso: date => date.toISOString(),
       day: date => date.getDate(),
       month: date => date.getMonth(),
       year: date => date.getFullYear()
@@ -253,6 +259,51 @@ test('recurseReactElement recurses a complex ReactElement tree.', t => {
   })
 
   t.is(visitedElementCount, 10)
+})
+
+test('Server side render nested queries.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
+    }
+  })
+
+  const tree = (
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        query={
+          /* GraphQL */ `
+            {
+              epoch {
+                iso
+              }
+            }
+          `
+        }
+      >
+        {({ data: { epoch: { iso } } }) => (
+          <Query
+            loadOnMount
+            variables={{ date: iso }}
+            query={
+              /* GraphQL */ `
+              query($date: String!) {
+                daysSince(isoDate: $date)
+              }
+            `
+            }
+          >
+            {result => JSON.stringify(result)}
+          </Query>
+        )}
+      </Query>
+    </Provider>
+  )
+
+  await preload(tree, graphql)
+
+  t.snapshot(ReactDOMServer.renderToString(tree))
 })
 
 test.after(() =>

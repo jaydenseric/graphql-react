@@ -2,7 +2,7 @@
  * Recurses a React element tree.
  * @ignore
  * @param {ReactElement} element Root React element.
- * @param {RecurseReactElementVisitor} visitor Visit function.
+ * @param {RecurseReactElementVisitor} visitor Visitor function.
  */
 export function recurseReactElement(element, visitor) {
   if (Array.isArray(element)) {
@@ -41,18 +41,16 @@ export function recurseReactElement(element, visitor) {
       // Match React API for default state.
       instance.state = instance.state || null
 
+      // Support setState.
+      instance.setState = newState => {
+        if (typeof newState === 'function')
+          newState = newState(instance.state, instance.props)
+        instance.state = { ...instance.state, ...newState }
+      }
+
       // Support for componentWillMount can be removed when it’s deprecated in
       // React: https://github.com/facebook/react/issues/12152
-      if (instance.componentWillMount) {
-        // Support setState in componentWillMount.
-        instance.setState = newState => {
-          if (typeof newState === 'function')
-            newState = newState(instance.state, instance.props)
-          instance.state = { ...instance.state, ...newState }
-        }
-
-        instance.componentWillMount()
-      }
+      if (instance.componentWillMount) instance.componentWillMount()
 
       if (visitor(element, instance)) children = instance.render()
     } else if (visitor(element))
@@ -72,8 +70,33 @@ export function recurseReactElement(element, visitor) {
 }
 
 /**
- * @ignore
+ * Preloads all queries that are intended to load on mount in a React component
+ * tree; usefull for SSR.
+ * @param {ReactElement} rootElement Root React element.
+ * @param {GraphQL} graphql {@link GraphQL} instance.
+ * @param {Boolean} skipRoot Should the root element be skipped.
+ * @returns {Promise<GraphQL#cache>} GraphQL cache.
+ */
+export function preload(rootElement, graphql, skipRoot) {
+  const loading = []
+  recurseReactElement(rootElement, (element, instance) => {
+    if (
+      instance &&
+      instance.constructor.name === 'GraphQLQuery' &&
+      element.props.loadOnMount &&
+      !(skipRoot && element === rootElement)
+    ) {
+      loading.push(instance.load().then(() => preload(element, graphql, true)))
+      return false
+    }
+    return true
+  })
+  return Promise.all(loading).then(() => graphql.cache)
+}
+
+/**
  * @callback RecurseReactElementVisitor
+ * @ignore
  * @param {ReactElement} element React element.
  * @param {Object} [instance] React component class extension instance.
  * @returns {Boolean} Should recursion continue.

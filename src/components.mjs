@@ -56,8 +56,23 @@ export const {
 class GraphQLQuery extends React.Component {
   constructor(props) {
     super(props)
+
     this.validateProps()
+
     this.state = { loading: props.loadOnMount }
+
+    if (props.loadOnMount) {
+      this.state.requestHash = props.graphql.constructor.hashRequestOptions(
+        props.graphql.getRequestOptions(this.operation())
+      )
+      this.state.requestCache = props.graphql.cache[this.state.requestHash]
+
+      // Listen for changes to the request cache.
+      this.props.graphql.onCacheUpdate(
+        this.state.requestHash,
+        this.handleCacheUpdate
+      )
+    }
   }
 
   static propTypes = {
@@ -96,32 +111,39 @@ class GraphQLQuery extends React.Component {
   }
 
   /**
+   * Derives the GraphQL operation.
+   * @returns {Operation} GraphQL operation object.
+   */
+  operation = () => ({
+    variables: this.props.variables,
+    query: this.props.query
+  })
+
+  /**
    * Loads the query, updating cache.
+   * @returns {RequestCachePromise} Promise that resolves the request cache.
    */
   load = () => {
+    const stateUpdate = { loading: true }
     const { pastRequestCache, requestHash, request } = this.props.graphql.query(
-      { variables: this.props.variables, query: this.props.query }
+      this.operation()
     )
 
     if (
-      // Either it’s the initial load or a past request has changed.
-      this.state.requestHash !== requestHash
+      // The request hash has changed…
+      requestHash !== this.state.requestHash
     ) {
-      if (
-        // A past request has changed.
-        this.state.requestHash
-      )
-        // Remove the redundant request cache listener.
-        this.props.graphql.offCacheUpdate(
-          this.state.requestHash,
-          this.handleCacheUpdate
-        )
+      stateUpdate.requestHash = requestHash
 
-      // Listen for changes to the request cache.
+      // Stop listening for the old request cache updates.
+      this.props.graphql.offCacheUpdate(
+        this.state.requestHash,
+        this.handleCacheUpdate
+      )
+
+      // Listen for the new request cache updates.
       this.props.graphql.onCacheUpdate(requestHash, this.handleCacheUpdate)
     }
-
-    const stateUpdate = { requestHash, loading: true }
 
     if (pastRequestCache)
       // Use past cache for this request during load. It might not already
@@ -136,6 +158,8 @@ class GraphQLQuery extends React.Component {
         })
       })
     )
+
+    return request
   }
 
   componentDidMount() {

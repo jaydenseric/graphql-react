@@ -15,6 +15,7 @@
   * Opt-in is safer for mutations.
   * Removing `static defaultProps` reduces bundle size.
   * Nicer valueless boolean props (`<GraphQLQuery />` and `<GraphQLQuery loadOnReset />` vs `<GraphQLQuery loadOnReset={false} />` and `<GraphQLQuery loadOnReset={true} />`.
+* New `preload` API for server side rendering.
 * Commented GraphQL template literals for editor syntax highlighting.
 * Improved API documentation.
 * Simplified the JSDoc script, now that [Documentation.js handles `.mjs`](https://github.com/documentationjs/documentation/pull/1023).
