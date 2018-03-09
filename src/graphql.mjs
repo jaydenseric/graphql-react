@@ -189,7 +189,7 @@ export class GraphQL {
   /**
    * Queries a GraphQL server.
    * @param {Operation} operation GraphQL operation object.
-   * @returns {ActiveQuery} In-flight query details.
+   * @returns {ActiveQuery} Loading query details.
    */
   query = operation => {
     const requestOptions = this.getRequestOptions(operation)
@@ -205,6 +205,13 @@ export class GraphQL {
     }
   }
 }
+
+/**
+ * A cache update listener callback.
+ * @private
+ * @callback CacheUpdateCallback
+ * @param {RequestCache} requestCache Request cache.
+ */
 
 /**
  * A GraphQL operation object. Additional properties may be used; all are sent
@@ -236,6 +243,7 @@ export class GraphQL {
  */
 
 /**
+ * Loading query details.
  * @typedef {Object} ActiveQuery
  * @prop {RequestCache} [pastRequestCache] Results from the last identical request.
  * @prop {String} requestHash Request options hash.
@@ -243,14 +251,8 @@ export class GraphQL {
  */
 
 /**
- * A promise for an in-flight query that resolves the request cache.
+ * A promise for a loading query that resolves the request cache.
  * @typedef {Promise<RequestCache>} RequestCachePromise
- */
-
-/**
- * A cache update listener callback.
- * @callback CacheUpdateCallback
- * @param {RequestCache} requestCache Request cache.
  */
 
 /**

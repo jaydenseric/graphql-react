@@ -9,10 +9,9 @@ import { apolloUploadKoa, GraphQLUpload } from 'apollo-upload-server'
 import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 import render from 'react-test-renderer'
-import { GraphQL, Provider, Query } from '../lib'
-import { recurseReactElement, preload } from '../lib/server'
+import { GraphQL, Provider, Query, preload } from '../lib'
 
 let port
 let server
@@ -213,54 +212,6 @@ test('Query render.', t => {
   t.snapshot(tree)
 })
 
-test('recurseReactElement recurses a complex ReactElement tree.', t => {
-  const { Provider, Consumer } = React.createContext()
-
-  class ClassComponent extends React.Component {
-    componentWillMount() {
-      this.setState({ string: 'a' })
-      this.setState((state, props) => ({ number: props.number }))
-    }
-
-    render() {
-      return (
-        <React.Fragment>
-          {this.state.string} {this.state.number}
-          <div>{this.props.children}</div>
-        </React.Fragment>
-      )
-    }
-  }
-
-  const FunctionComponent = ({ children }) => children
-
-  const tree = (
-    <Provider value={1}>
-      {[
-        <div key="1">
-          <Consumer>
-            {contextValue => (
-              <ClassComponent number={contextValue}>
-                <FunctionComponent>
-                  <div />
-                </FunctionComponent>
-              </ClassComponent>
-            )}
-          </Consumer>
-        </div>
-      ]}
-    </Provider>
-  )
-
-  let visitedElementCount = 0
-  recurseReactElement(tree, () => {
-    visitedElementCount++
-    return true
-  })
-
-  t.is(visitedElementCount, 10)
-})
-
 test('Server side render nested queries.', async t => {
   const graphql = new GraphQL({
     requestOptions: options => {
@@ -301,9 +252,9 @@ test('Server side render nested queries.', async t => {
     </Provider>
   )
 
-  await preload(tree, graphql)
+  await preload(tree)
 
-  t.snapshot(ReactDOMServer.renderToString(tree))
+  t.snapshot(renderToString(tree))
 })
 
 test.after(() =>
