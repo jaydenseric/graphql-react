@@ -27,6 +27,8 @@ export function preload(element) {
   const recursePreload = (rootElement, loadRoot = true) => {
     const loading = []
     const recurse = element => {
+      if (!element) return
+
       if (Array.isArray(element)) {
         element.forEach(item => recurse(item))
         return
