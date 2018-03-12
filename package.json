@@ -86,7 +86,7 @@
     "prewatch": "npm run build",
     "watch": "run-p watch:*",
     "watch:build": "run-p 'build:* -- --skip-initial-build --watch'",
-    "watch:test": "ava --no-cache -vw",
+    "watch:test": "ava -vw",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint . --ext mjs,js",
     "lint:prettier": "prettier '**/*.{json,md}' -l --ignore-path .gitignore",
@@ -97,7 +97,7 @@
     "presize": "npm run build",
     "size": "size-limit",
     "pretest": "npm run build",
-    "test": "ava --no-cache",
+    "test": "ava",
     "precommit": "lint-staged",
     "prepublishOnly": "run-s jsdoc lint size test"
   },
@@ -150,5 +150,9 @@
       "path": "lib/index.mjs",
       "limit": "11 KB"
     }
-  ]
+  ],
+  "ava": {
+    "cache": false,
+    "sources": ["!lib/**", "!example/**"]
+  }
 }

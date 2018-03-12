@@ -20,6 +20,7 @@
 * Commented GraphQL template literals for editor syntax highlighting.
 * Improved API documentation.
 * Simplified the JSDoc script, now that [Documentation.js handles `.mjs`](https://github.com/documentationjs/documentation/pull/1023).
+* Prevent lib or example updates from triggering tests in watch mode.
 
 ## 0.1.0
 
