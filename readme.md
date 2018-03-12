@@ -6,7 +6,7 @@
 
 A lightweight GraphQL client for React; the first Relay and Apollo alternative with server side rendering.
 
-### Easy 🍺
+### Easy 🔥
 
 * Add 1 dependency to get started with GraphQL in a React project.
 * No Webpack or Babel setup.
