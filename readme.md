@@ -312,7 +312,7 @@ Returns **ReactElement** React virtual DOM element.
 
 ### preload
 
-Recursively preloads [Query](#query) components that have the `loadOnMount` prop in a React element tree. Usefull for server side rendering (SSR) or to preload components for a better user experience when they mount.
+Recursively preloads [Query](#query) components that have the `loadOnMount` prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
 
 **Parameters**
 

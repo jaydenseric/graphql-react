@@ -1,6 +1,6 @@
 /**
  * Recursively preloads {@link Query} components that have the `loadOnMount`
- * prop in a React element tree. Usefull for server side rendering (SSR) or to preload components for a better user experience when they mount.
+ * prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
  * @param {ReactElement} element A React virtual DOM element.
  * @returns {Promise} Resolves once loading is done and cache is ready to be exported from the {@link GraphQL} instance. Cache can be imported when constructing new {@link GraphQL} instances.
  * @example <caption>An async SSR function that returns a HTML string and cache JSON for client hydration.</caption>
