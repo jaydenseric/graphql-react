@@ -23,7 +23,7 @@ test.before(async () => {
     type Query {
       date(isoDate: String!): Date!
       epoch: Date!
-      daysSince(isoDate: String!): Int!
+      daysBetween(isoDateFrom: String!, isoDateTo: String!): Int!
     }
 
     scalar Upload
@@ -40,8 +40,8 @@ test.before(async () => {
     Query: {
       date: (obj, { isoDate }) => new Date(isoDate),
       epoch: () => new Date(0),
-      daysSince: (obj, { isoDate }) =>
-        Math.floor((new Date() - new Date(isoDate)) / 86400000)
+      daysBetween: (obj, { isoDateFrom, isoDateTo }) =>
+        Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
     },
     Upload: GraphQLUpload,
     Date: {
@@ -236,11 +236,11 @@ test('Server side render nested queries.', async t => {
         {({ data: { epoch: { iso } } }) => (
           <Query
             loadOnMount
-            variables={{ date: iso }}
+            variables={{ isoDateFrom: iso }}
             query={
               /* GraphQL */ `
-              query($date: String!) {
-                daysSince(isoDate: $date)
+              query($isoDateFrom: String!) {
+                daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
               }
             `
             }
