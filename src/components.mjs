@@ -58,15 +58,13 @@ export const {
  * @param {Object} [props.variables] GraphQL query variables.
  * @param {String} props.query GraphQL query.
  * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when the {@link GraphQL} cache is reset.
- * @param {Boolean} [props.resetOnLoad=false] Should the {@link GraphQL} cache reset when the query loads.
+ * @param {Boolean} [props.loadOnReset=false] Should the query load when its {@link GraphQL} cache entry is reset.
+ * @param {Boolean} [props.resetOnLoad=false] Should all other {@link GraphQL} cache reset when the query loads.
  * @param {RenderQuery} children Renders the query status.
  */
 class GraphQLQuery extends React.Component {
   constructor(props) {
     super(props)
-
-    this.validateProps()
 
     this.state = { loading: props.loadOnMount }
 
@@ -92,15 +90,6 @@ class GraphQLQuery extends React.Component {
     loadOnReset: propTypes.bool,
     resetOnLoad: propTypes.bool,
     children: propTypes.func.isRequired
-  }
-
-  /**
-   * Validates the props for conflicts.
-   * @private
-   */
-  validateProps = () => {
-    if (this.props.loadOnReset && this.props.resetOnLoad)
-      throw new Error('Conflicting “loadOnReset” and “resetOnLoad” props.')
   }
 
   /**
@@ -134,7 +123,7 @@ class GraphQLQuery extends React.Component {
    */
   load = () => {
     const stateUpdate = { loading: true }
-    const { pastRequestCache, requestHash, request } = this.props.graphql.query(
+    const { requestHash, pastRequestCache, request } = this.props.graphql.query(
       this.operation()
     )
 
@@ -163,7 +152,7 @@ class GraphQLQuery extends React.Component {
       request.then(() => {
         // Request done. Elsewhere a cache listener updates the state cache.
         this.setState({ loading: false }, () => {
-          if (this.props.resetOnLoad) this.props.graphql.reset()
+          if (this.props.resetOnLoad) this.props.graphql.reset(requestHash)
         })
       })
     )
@@ -176,8 +165,6 @@ class GraphQLQuery extends React.Component {
   }
 
   componentDidUpdate({ query, variables }) {
-    this.validateProps()
-
     if (
       // Load on cache reset enabled and…
       this.props.loadOnReset &&

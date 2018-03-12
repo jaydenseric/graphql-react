@@ -127,6 +127,10 @@ Returns **[ActiveQuery](#activequery)** Loading query details.
 
 Resets the cache. Useful when a user logs out.
 
+**Parameters**
+
+* `exceptRequestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A request hash to exempt cache from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+
 **Examples**
 
 ```javascript
@@ -351,8 +355,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
 * `requestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Request options hash.
+* `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
 * `request` **[RequestCachePromise](#requestcachepromise)** Promise that resolves fresh request cache.
 
 ### HTTPError

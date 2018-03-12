@@ -89,7 +89,7 @@ test('Cache export & import.', async t => {
   })
 
   await graphql1.query({
-    variables: { date: '2018-06-16' },
+    variables: { date: '2018-01-01' },
     query: /* GraphQL */ `
       query($date: String!) {
         date(isoDate: $date) {
@@ -104,6 +104,56 @@ test('Cache export & import.', async t => {
   t.is(graphql1.cache, graphql2.cache)
 })
 
+test('Cache reset.', async t => {
+  const graphql = new GraphQL({
+    requestOptions: options => {
+      options.url = `http://localhost:${port}`
+    }
+  })
+
+  const { requestHash: requestHash1, request: request1 } = await graphql.query({
+    variables: { date: '2018-01-01' },
+    query: /* GraphQL */ `
+      query($date: String!) {
+        date(isoDate: $date) {
+          day
+        }
+      }
+    `
+  })
+
+  await request1
+
+  const cacheBefore = JSON.stringify(graphql.cache)
+
+  const { requestHash: requestHash2, request: request2 } = graphql.query({
+    variables: { date: '2018-01-02' },
+    query: /* GraphQL */ `
+      query($date: String!) {
+        date(isoDate: $date) {
+          year
+        }
+      }
+    `
+  })
+
+  await request2
+
+  graphql.onCacheUpdate(requestHash1, () => t.fail())
+
+  const request2CacheListener = new Promise(resolve => {
+    graphql.onCacheUpdate(requestHash2, resolve)
+  })
+
+  graphql.reset(requestHash1)
+
+  const cacheAfter = JSON.stringify(graphql.cache)
+
+  t.falsy(await request2CacheListener)
+
+  t.is(cacheAfter, cacheBefore)
+})
+
 test('Request cache for valid query.', async t => {
   const graphql = new GraphQL({
     requestOptions: options => {
@@ -112,7 +162,7 @@ test('Request cache for valid query.', async t => {
   })
 
   const requestCache = await graphql.query({
-    variables: { date: '2018-06-16' },
+    variables: { date: '2018-01-01' },
     query: /* GraphQL */ `
       query($date: String!) {
         date(isoDate: $date) {
@@ -193,7 +243,7 @@ test('Query render.', t => {
       <Provider value={graphql}>
         <Query
           loadOnMount
-          variables={{ date: '2018-06-16' }}
+          variables={{ date: '2018-01-01' }}
           query={
             /* GraphQL */ `
               query($date: String!) {

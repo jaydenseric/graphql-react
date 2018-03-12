@@ -15,6 +15,7 @@
   * Opt-in is safer for mutations.
   * Removing `static defaultProps` reduces bundle size.
   * Nicer valueless boolean props (`<GraphQLQuery />` and `<GraphQLQuery loadOnReset />` vs `<GraphQLQuery loadOnReset={false} />` and `<GraphQLQuery loadOnReset={true} />`.
+* The `Query` component `resetOnLoad` prop doesn’t cause cache for the request that triggered a reset to delete, allowing simultaneous use with `loadOnReset`. Fixes [#3](https://github.com/jaydenseric/graphql-react/issues/3).
 * New `preload` API for server side rendering.
 * Commented GraphQL template literals for editor syntax highlighting.
 * Improved API documentation.

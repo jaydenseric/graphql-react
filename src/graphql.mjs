@@ -69,12 +69,20 @@ export class GraphQL {
 
   /**
    * Resets the cache. Useful when a user logs out.
+   * @param {String} [exceptRequestHash] A request hash to exempt cache from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example
    * graphql.reset()
    */
-  reset = () => {
-    const requestHashes = Object.keys(this.cache)
-    this.cache = {}
+  reset = exceptRequestHash => {
+    let requestHashes = Object.keys(this.cache)
+
+    if (exceptRequestHash)
+      requestHashes = requestHashes.filter(hash => hash !== exceptRequestHash)
+
+    requestHashes.forEach(requestHash => delete this.cache[requestHash])
+
+    // Emit cache updates after the entire cache has been updated, so logic in
+    // listeners can assume cache for all requests is fresh and stable.
     requestHashes.forEach(requestHash => this.emitCacheUpdate(requestHash))
   }
 
@@ -195,8 +203,8 @@ export class GraphQL {
     const requestOptions = this.getRequestOptions(operation)
     const requestHash = this.constructor.hashRequestOptions(requestOptions)
     return {
-      pastRequestCache: this.cache[requestHash],
       requestHash,
+      pastRequestCache: this.cache[requestHash],
       request:
         // Existing request or…
         this.requests[requestHash] ||
@@ -245,8 +253,8 @@ export class GraphQL {
 /**
  * Loading query details.
  * @typedef {Object} ActiveQuery
- * @prop {RequestCache} [pastRequestCache] Results from the last identical request.
  * @prop {String} requestHash Request options hash.
+ * @prop {RequestCache} [pastRequestCache] Results from the last identical request.
  * @prop {RequestCachePromise} request Promise that resolves fresh request cache.
  */
 
