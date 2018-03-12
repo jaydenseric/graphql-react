@@ -129,7 +129,7 @@ Resets the cache. Useful when a user logs out.
 
 **Parameters**
 
-* `exceptRequestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A request hash to exempt cache from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+* `exceptRequestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A request hash to exempt from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
 
 **Examples**
 

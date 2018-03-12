@@ -69,7 +69,7 @@ export class GraphQL {
 
   /**
    * Resets the cache. Useful when a user logs out.
-   * @param {String} [exceptRequestHash] A request hash to exempt cache from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * @param {String} [exceptRequestHash] A request hash to exempt from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example
    * graphql.reset()
    */
