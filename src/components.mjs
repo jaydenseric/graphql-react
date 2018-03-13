@@ -64,6 +64,17 @@ export const {
  * @param {RenderQuery} props.children Renders the query status.
  */
 class GraphQLQuery extends React.Component {
+  static propTypes = {
+    graphql: propTypes.instanceOf(GraphQL).isRequired,
+    fetchOptionsOverride: propTypes.func,
+    variables: propTypes.object,
+    query: propTypes.string.isRequired,
+    loadOnMount: propTypes.bool,
+    loadOnReset: propTypes.bool,
+    resetOnLoad: propTypes.bool,
+    children: propTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props)
 
@@ -88,17 +99,6 @@ class GraphQLQuery extends React.Component {
         this.handleCacheUpdate
       )
     }
-  }
-
-  static propTypes = {
-    graphql: propTypes.instanceOf(GraphQL).isRequired,
-    fetchOptionsOverride: propTypes.func,
-    variables: propTypes.object,
-    query: propTypes.string.isRequired,
-    loadOnMount: propTypes.bool,
-    loadOnReset: propTypes.bool,
-    resetOnLoad: propTypes.bool,
-    children: propTypes.func.isRequired
   }
 
   /**
