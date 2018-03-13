@@ -89,6 +89,7 @@
     "lint": "run-p lint:*",
     "lint:eslint": "eslint . --ext mjs,js",
     "lint:prettier": "prettier '**/*.{json,md}' -l --ignore-path .gitignore",
+    "lint:jsdoc": "documentation lint src",
     "fix": "run-p fix:*",
     "fix:eslint": "eslint . --ext mjs,js --fix",
     "fix:prettier":
