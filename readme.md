@@ -235,6 +235,9 @@ const Profile = ({ userId }) => (
   <Query
     loadOnMount
     loadOnReset
+    fetchOptionsOverride={options => {
+      options.url = 'https://api.example.com/graphql'
+    }}
     variables={{ userId }}
     query={`
       query user($userId: ID!) {
@@ -264,6 +267,9 @@ import { Query } from 'graphql-react'
 const ClapArticleButton = ({ articleId }) => (
   <Query
     resetOnLoad
+    fetchOptionsOverride={options => {
+      options.url = 'https://api.example.com/graphql'
+    }}
     variables={{ articleId }}
     query={`
       mutation clapArticle($articleId: ID!) {

@@ -228,6 +228,9 @@ class GraphQLQuery extends React.Component {
  *   <Query
  *     loadOnMount
  *     loadOnReset
+ *     fetchOptionsOverride={options => {
+ *      options.url = 'https://api.example.com/graphql'
+ *     }}
  *     variables={{ userId }}
  *     query={`
  *       query user($userId: ID!) {
@@ -253,6 +256,9 @@ class GraphQLQuery extends React.Component {
  * const ClapArticleButton = ({ articleId }) => (
  *   <Query
  *     resetOnLoad
+ *     fetchOptionsOverride={options => {
+ *      options.url = 'https://api.example.com/graphql'
+ *     }}
  *     variables={{ articleId }}
  *     query={`
  *       mutation clapArticle($articleId: ID!) {
