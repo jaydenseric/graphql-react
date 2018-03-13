@@ -105,7 +105,7 @@ const graphql = new GraphQL()
 
 GraphQL [request cache](#requestcache) map, keyed by [fetch options](#fetchoptions) hashes.
 
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [RequestCache](#requestcache)>
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [RequestCache](#requestcache)>
 
 **Examples**
 
@@ -124,7 +124,7 @@ Queries a GraphQL server.
 * `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options.
   * `options.operation` **[Operation](#operation)** GraphQL operation object.
   * `options.fetchOptionsOverride` **[FetchOptionsOverride](#fetchoptionsoverride)?** Overrides default GraphQL request [fetch options](#fetchoptions).
-  * `options.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
+  * `options.resetOnLoad` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
 
 Returns **[ActiveQuery](#activequery)** Loading query details.
 
@@ -134,7 +134,7 @@ Resets the [GraphQL cache](#graphqlcache). Useful when a user logs out.
 
 **Parameters**
 
-* `exceptFetchOptionsHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A [fetch options](#fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+* `exceptFetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A [fetch options](#fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
 
 **Examples**
 
@@ -217,12 +217,12 @@ A React component to manage a GraphQL query or mutation.
 
 * `props` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Component props.
   * `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
-  * `props.query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
+  * `props.query` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
   * `props.fetchOptionsOverride` **[FetchOptionsOverride](#fetchoptionsoverride)?** Overrides default GraphQL request [fetch options](#fetchoptions).
-  * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
-  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the [GraphQL cache](#graphqlcache) is reset. (optional, default `false`)
-  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
-* `children` **[QueryRender](#queryrender)** Renders the query status.
+  * `props.loadOnMount` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
+  * `props.loadOnReset` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the [GraphQL cache](#graphqlcache) is reset. (optional, default `false`)
+  * `props.resetOnLoad` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
+  * `props.children` **[QueryRender](#queryrender)** Renders the query status.
 
 **Examples**
 
@@ -303,9 +303,9 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 **Parameters**
 
 * `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
-* `loading` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
+* `loading` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
 * `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
-* `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
+* `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 * `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 * `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
 
@@ -367,7 +367,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `fetchOptionsHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
+* `fetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
 * `cache` **[RequestCache](#requestcache)?** Results from the last identical request.
 * `request` **[RequestCachePromise](#requestcachepromise)** A promise that resolves fresh [request cache](#requestcache).
 
@@ -379,10 +379,10 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `url` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
-* `body` **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
+* `url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
+* `body` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
 * `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
-* `credentials` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
+* `credentials` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
 
 ### FetchOptionsOverride
 
@@ -412,8 +412,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `status` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
-* `statusText` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
+* `status` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
+* `statusText` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
 
 ### Operation
 
@@ -423,7 +423,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
+* `query` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
 * `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.
 
 ### RequestCache
@@ -435,7 +435,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 **Properties**
 
 * `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
-* `parseError` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
+* `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 * `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 * `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
 

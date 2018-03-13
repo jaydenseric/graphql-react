@@ -50,18 +50,18 @@ export const {
 
 /**
  * A React component to manage a GraphQL query with a {@link GraphQL} instance.
- * See {@link Query}, which takes the {@link GraphQL} instance from context
- * instead of a prop.
+ * See also the {@link Query} component, which takes the {@link GraphQL}
+ * instance from context instead of a prop.
  * @ignore
  * @param {Object} props Component props.
  * @param {GraphQL} props.graphql {@link GraphQL} instance.
  * @param {Object} [props.variables] GraphQL query variables.
- * @param {String} props.query GraphQL query.
+ * @param {string} props.query GraphQL query.
  * @param {FetchOptionsOverride} [props.fetchOptionsOverride] Overrides default fetch options for the GraphQL request.
- * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when its {@link GraphQL#cache GraphQL cache} entry is reset.
- * @param {Boolean} [props.resetOnLoad=false] Should all other {@link GraphQL#cache GraphQL cache} reset when the query loads.
- * @param {RenderQuery} children Renders the query status.
+ * @param {boolean} [props.loadOnMount=false] Should the query load when the component mounts.
+ * @param {boolean} [props.loadOnReset=false] Should the query load when its {@link GraphQL#cache GraphQL cache} entry is reset.
+ * @param {boolean} [props.resetOnLoad=false] Should all other {@link GraphQL#cache GraphQL cache} reset when the query loads.
+ * @param {RenderQuery} props.children Renders the query status.
  */
 class GraphQLQuery extends React.Component {
   constructor(props) {
@@ -173,10 +173,18 @@ class GraphQLQuery extends React.Component {
     return request
   }
 
+  /**
+   * Invoked after the React component mounts.
+   * @protected
+   */
   componentDidMount() {
     if (this.props.loadOnMount) this.load()
   }
 
+  /**
+   * Invoked after the React component updates.
+   * @protected
+   */
   componentDidUpdate({ query, variables }) {
     if (
       // Load on cache reset enabled and…
@@ -189,6 +197,10 @@ class GraphQLQuery extends React.Component {
       this.load()
   }
 
+  /**
+   * Invoked before the React component is unmounted and destroyed.
+   * @protected
+   */
   componentWillUnmount() {
     if (this.state.fetchOptionsHash)
       this.props.graphql.offCacheUpdate(
@@ -199,6 +211,7 @@ class GraphQLQuery extends React.Component {
 
   /**
    * Renders the component.
+   * @protected
    * @returns {ReactElement} React virtual DOM element.
    */
   render() {
@@ -214,12 +227,12 @@ class GraphQLQuery extends React.Component {
  * A React component to manage a GraphQL query or mutation.
  * @param {Object} props Component props.
  * @param {Object} [props.variables] GraphQL query variables.
- * @param {String} props.query GraphQL query.
+ * @param {string} props.query GraphQL query.
  * @param {FetchOptionsOverride} [props.fetchOptionsOverride] Overrides default GraphQL request {@link FetchOptions fetch options}.
- * @param {Boolean} [props.loadOnMount=false] Should the query load when the component mounts.
- * @param {Boolean} [props.loadOnReset=false] Should the query load when the {@link GraphQL#cache GraphQL cache} is reset.
- * @param {Boolean} [props.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
- * @param {QueryRender} children Renders the query status.
+ * @param {boolean} [props.loadOnMount=false] Should the query load when the component mounts.
+ * @param {boolean} [props.loadOnReset=false] Should the query load when the {@link GraphQL#cache GraphQL cache} is reset.
+ * @param {boolean} [props.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
+ * @param {QueryRender} props.children Renders the query status.
  * @returns {ReactElement} React virtual DOM element.
  * @example <caption>A query to display a user profile.</caption>
  * import { Query } from 'graphql-react'
@@ -298,9 +311,9 @@ Query.propTypes = {
  * Renders the status of a query or mutation.
  * @typedef {Function} QueryRender
  * @param {Function} load Loads the query on demand, updating cache.
- * @param {Boolean} loading Is the query loading.
+ * @param {boolean} loading Is the query loading.
  * @param {HTTPError} [httpError] Fetch HTTP error.
- * @param {String} [parseError] Parse error message.
+ * @param {string} [parseError] Parse error message.
  * @param {Object} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
  * @returns {ReactElement} React virtual DOM element.

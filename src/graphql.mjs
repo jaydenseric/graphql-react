@@ -14,7 +14,7 @@ export class GraphQL {
   constructor({ cache = {} } = {}) {
     /**
      * GraphQL {@link RequestCache request cache} map, keyed by {@link FetchOptions fetch options} hashes.
-     * @type {Object.<String, RequestCache>}
+     * @type {Object.<string, RequestCache>}
      * @example <caption>Export cache as JSON.</caption>
      * const exportedCache = JSON.stringify(graphql.cache)
      */
@@ -27,7 +27,7 @@ export class GraphQL {
   /**
    * Adds a cache update listener for a request.
    * @protected
-   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {CacheUpdateCallback} callback Callback.
    */
   onCacheUpdate = (fetchOptionsHash, callback) => {
@@ -38,7 +38,7 @@ export class GraphQL {
   /**
    * Removes a cache update listener for a request.
    * @protected
-   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {CacheUpdateCallback} callback Callback.
    */
   offCacheUpdate = (fetchOptionsHash, callback) => {
@@ -54,7 +54,7 @@ export class GraphQL {
   /**
    * Triggers cache update listeners for a request.
    * @protected
-   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {RequestCache} requestCache Request cache.
    */
   emitCacheUpdate = (fetchOptionsHash, requestCache) => {
@@ -66,7 +66,7 @@ export class GraphQL {
 
   /**
    * Resets the {@link GraphQL#cache GraphQL cache}. Useful when a user logs out.
-   * @param {String} [exceptFetchOptionsHash] A {@link FetchOptions fetch options} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * @param {string} [exceptFetchOptionsHash] A {@link FetchOptions fetch options} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example
    * graphql.reset()
    */
@@ -95,7 +95,7 @@ export class GraphQL {
    * operation object. See the {@link https://github.com/jaydenseric/graphql-multipart-request-spec GraphQL multipart request spec}.
    * @protected
    * @param {Operation} operation GraphQL operation.
-   * @returns {String|FormData} A JSON string, or for uploads a multipart form.
+   * @returns {string|FormData} A JSON string, or for uploads a multipart form.
    */
   static requestBody(operation) {
     const files = extractFiles(operation)
@@ -142,7 +142,7 @@ export class GraphQL {
    * Hashes a {@link FetchOptions fetch options} object.
    * @ignore
    * @param {FetchOptions} fetchOptions Fetch options.
-   * @returns {String} A hash.
+   * @returns {string} A hash.
    */
   static hashFetchOptions = fetchOptions =>
     fnv1a(JSON.stringify(fetchOptions)).toString(36)
@@ -151,7 +151,7 @@ export class GraphQL {
    * Executes a fetch request.
    * @ignore
    * @param {FetchOptions} fetchOptions URL and options for fetch.
-   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @returns {RequestCachePromise} A promise that resolves the {@link RequestCache request cache}.
    */
   request = ({ url, ...options }, fetchOptionsHash) => {
@@ -198,7 +198,7 @@ export class GraphQL {
    * @param {Object} options Options.
    * @param {Operation} options.operation GraphQL operation object.
    * @param {FetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL request {@link FetchOptions fetch options}.
-   * @param {Boolean} [options.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
+   * @param {boolean} [options.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
    * @returns {ActiveQuery} Loading query details.
    */
   query = ({ operation, fetchOptionsOverride, resetOnLoad }) => {
@@ -234,17 +234,17 @@ export class GraphQL {
  * A GraphQL operation object. Additional properties may be used; all are sent
  * to the GraphQL server.
  * @typedef {Object} Operation
- * @prop {String} query GraphQL queries or mutations.
+ * @prop {string} query GraphQL queries or mutations.
  * @prop {Object} variables Variables used by the query.
  */
 
 /**
  * Fetch options for a GraphQL request. See {@link https://github.github.io/fetch/#options polyfillable fetch options}.
  * @typedef {Object} FetchOptions
- * @prop {String} url A GraphQL API URL.
- * @prop {String|FormData} body HTTP request body.
+ * @prop {string} url A GraphQL API URL.
+ * @prop {string|FormData} body HTTP request body.
  * @prop {Object} headers HTTP request headers.
- * @prop {String} [credentials] Authentication credentials mode.
+ * @prop {string} [credentials] Authentication credentials mode.
  */
 
 /**
@@ -263,7 +263,7 @@ export class GraphQL {
 /**
  * Loading query details.
  * @typedef {Object} ActiveQuery
- * @prop {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+ * @prop {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
  * @prop {RequestCache} [cache] Results from the last identical request.
  * @prop {RequestCachePromise} request A promise that resolves fresh {@link RequestCache request cache}.
  */
@@ -278,7 +278,7 @@ export class GraphQL {
  * suitable for caching.
  * @typedef {Object} RequestCache
  * @prop {HTTPError} [httpError] Fetch HTTP error.
- * @prop {String} [parseError] Parse error message.
+ * @prop {string} [parseError] Parse error message.
  * @prop {Object} [graphQLErrors] GraphQL response errors.
  * @prop {Object} [data] GraphQL response data.
  */
@@ -286,6 +286,6 @@ export class GraphQL {
 /**
  * Fetch HTTP error.
  * @typedef {Object} HTTPError
- * @prop {Number} status HTTP status code.
- * @prop {String} statusText HTTP status text.
+ * @prop {number} status HTTP status code.
+ * @prop {string} statusText HTTP status text.
  */
