@@ -80,7 +80,8 @@
     "build:js": "babel src -d lib",
     "build:mjs": "cross-env MODULE=true babel src -d lib --keep-file-extension",
     "postbuild": "prettier 'lib/**/*.{mjs,js}' --write",
-    "jsdoc": "documentation readme src -s API -c documentation.json -q",
+    "jsdoc":
+      "documentation readme src -s API -c documentation.json --sort-order alpha -q",
     "postjsdoc": "prettier readme.md --write",
     "prewatch": "npm run build",
     "watch": "run-p watch:*",
