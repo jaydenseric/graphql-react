@@ -15,19 +15,21 @@ A lightweight GraphQL client for React; the first Relay and Apollo alternative w
 * Automatically fresh cache, even after mutations.
 * Use file input values as mutation arguments to upload files; compatible with [a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
 * [Template literal](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals) queries; no need for [`gql`](https://github.com/apollographql/graphql-tag#gql).
+* Query multiple GraphQL APIs.
 
 ### Smart 💡
 
 * Adds only a few KB to a typical min+gzip bundle.
 * [Native ESM in Node.js](https://nodejs.org/api/esm.html) via `.mjs`.
 * [Package `module` entry](https://github.com/rollup/rollup/wiki/pkg.module) for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers.
+* Server side rendering for crawlable pages and a better UX.
 * Components use the [React v16.3 context API](https://github.com/facebook/react/pull/11818).
-* All fetch options overridable per request.
-* Request hash based cache:
-  * No data denormalization and no need to query `id` fields.
+* **_All_** fetch options overridable per request.
+* GraphQL request fetch options hash based cache:
+  * No data denormalization or need to query `id` fields.
   * No tampering with queries or `__typename` insertion.
   * Query multiple GraphQL services without stitching data.
-  * Errors also cache, enabling error SSR.
+  * Errors are cached and can be server side rendered.
 
 ## Setup
 
@@ -75,12 +77,12 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 * [QueryRender](#queryrender)
 * [preload](#preload)
 * [ActiveQuery](#activequery)
+* [FetchOptions](#fetchoptions)
+* [FetchOptionsOverride](#fetchoptionsoverride)
 * [HTTPError](#httperror)
 * [Operation](#operation)
 * [RequestCache](#requestcache)
 * [RequestCachePromise](#requestcachepromise)
-* [RequestOptions](#requestoptions)
-* [RequestOptionsOverride](#requestoptionsoverride)
 
 ### GraphQL
 
@@ -89,27 +91,29 @@ A lightweight GraphQL client that caches requests.
 **Parameters**
 
 * `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options. (optional, default `{}`)
-  * `options.cache` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Cache to import; useful once a SSR API is available. (optional, default `{}`)
-  * `options.requestOptions` **[RequestOptionsOverride](#requestoptionsoverride)?** A function that accepts and modifies generated options for every request.
+  * `options.cache` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Cache to import; usually from a server side render. (optional, default `{}`)
 
 **Examples**
 
 ```javascript
 import { GraphQL } from 'graphql-react'
 
-const graphql = new GraphQL({
-  requestOptions: options => {
-    options.url = 'https://api.example.com/graphql'
-    options.credentials = 'include'
-  }
-})
+const graphql = new GraphQL()
 ```
 
 #### cache
 
-GraphQL request cache.
+GraphQL [request cache](#requestcache) map, keyed by [fetch options](#fetchoptions) hashes.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [RequestCache](#requestcache)>
+
+**Examples**
+
+_Export cache as JSON._
+
+```javascript
+const exportedCache = JSON.stringify(graphql.cache)
+```
 
 #### query
 
@@ -117,17 +121,20 @@ Queries a GraphQL server.
 
 **Parameters**
 
-* `operation` **[Operation](#operation)** GraphQL operation object.
+* `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options.
+  * `options.operation` **[Operation](#operation)** GraphQL operation object.
+  * `options.fetchOptionsOverride` **[FetchOptionsOverride](#fetchoptionsoverride)?** Overrides default GraphQL request [fetch options](#fetchoptions).
+  * `options.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
 
 Returns **[ActiveQuery](#activequery)** Loading query details.
 
 #### reset
 
-Resets the cache. Useful when a user logs out.
+Resets the [GraphQL cache](#graphqlcache). Useful when a user logs out.
 
 **Parameters**
 
-* `exceptRequestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A request hash to exempt from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+* `exceptFetchOptionsHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A [fetch options](#fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
 
 **Examples**
 
@@ -137,7 +144,7 @@ graphql.reset()
 
 ### Provider
 
-A React component that puts a [GraphQL](#graphql) instance in context for nested [Consumer](#consumer) components to use.
+A React component provides a [GraphQL](#graphql) instance in context for nested [Consumer](#consumer) components to use.
 
 **Parameters**
 
@@ -168,7 +175,7 @@ A React component that gets the [GraphQL](#graphql) instance from context.
 
 **Examples**
 
-_A button component that resets the [GraphQL](#graphql) cache._
+_A button component that resets the [GraphQL cache](#graphqlcache)._
 
 ```javascript
 import { Consumer } from 'graphql-react'
@@ -194,7 +201,7 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 
 **Examples**
 
-_A button that resets the [GraphQL](#graphql) cache._
+_A button that resets the [GraphQL cache](#graphqlcache)._
 
 ```javascript
 graphql => <button onClick={graphql.reset}>Reset cache</button>
@@ -211,9 +218,10 @@ A React component to manage a GraphQL query or mutation.
 * `props` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Component props.
   * `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
   * `props.query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL query.
+  * `props.fetchOptionsOverride` **[FetchOptionsOverride](#fetchoptionsoverride)?** Overrides default GraphQL request [fetch options](#fetchoptions).
   * `props.loadOnMount` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the component mounts. (optional, default `false`)
-  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the [GraphQL](#graphql) cache is reset. (optional, default `false`)
-  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL](#graphql) cache reset when the query loads. (optional, default `false`)
+  * `props.loadOnReset` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the query load when the [GraphQL cache](#graphqlcache) is reset. (optional, default `false`)
+  * `props.resetOnLoad` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
 * `children` **[QueryRender](#queryrender)** Renders the query status.
 
 **Examples**
@@ -353,9 +361,42 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `requestHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Request options hash.
-* `pastRequestCache` **[RequestCache](#requestcache)?** Results from the last identical request.
-* `request` **[RequestCachePromise](#requestcachepromise)** Promise that resolves fresh request cache.
+* `fetchOptionsHash` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
+* `cache` **[RequestCache](#requestcache)?** Results from the last identical request.
+* `request` **[RequestCachePromise](#requestcachepromise)** A promise that resolves fresh [request cache](#requestcache).
+
+### FetchOptions
+
+Fetch options for a GraphQL request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+**Properties**
+
+* `url` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
+* `body` **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
+* `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
+* `credentials` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
+
+### FetchOptionsOverride
+
+Overrides default GraphQL request [fetch options](#fetchoptions). Modify the provided options object without a return.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+**Parameters**
+
+* `fetchOptions` **[FetchOptions](#fetchoptions)** Default GraphQL request fetch options.
+* `operation` **[Operation](#operation)?** A GraphQL operation object.
+
+**Examples**
+
+```javascript
+options => {
+  options.url = 'https://api.example.com/graphql'
+  options.credentials = 'include'
+}
+```
 
 ### HTTPError
 
@@ -394,38 +435,6 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### RequestCachePromise
 
-A promise for a loading query that resolves the request cache.
+A promise for a loading query that resolves the [request cache](#requestcache).
 
 Type: [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[RequestCache](#requestcache)>
-
-### RequestOptions
-
-Options for a GraphQL fetch request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-**Properties**
-
-* `url` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
-* `body` **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
-* `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
-* `credentials` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
-
-### RequestOptionsOverride
-
-A way to override request options generated for a fetch. Modify the provided options object directly; no return.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-**Parameters**
-
-* `requestOptions` **[RequestOptions](#requestoptions)**
-
-**Examples**
-
-```javascript
-options => {
-  options.url = 'https://api.example.com/graphql'
-  options.credentials = 'include'
-}
-```

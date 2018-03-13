@@ -4,26 +4,21 @@ import extractFiles from 'extract-files'
 /**
  * A lightweight GraphQL client that caches requests.
  * @param {Object} [options={}] Options.
- * @param {Object} [options.cache={}] Cache to import; useful once a SSR API is available.
- * @param {RequestOptionsOverride} [options.requestOptions] A function that accepts and modifies generated options for every request.
+ * @param {Object} [options.cache={}] Cache to import; usually from a server side render.
  * @example
  * import { GraphQL } from 'graphql-react'
  *
- * const graphql = new GraphQL({
- *   requestOptions: options => {
- *     options.url = 'https://api.example.com/graphql'
- *     options.credentials = 'include'
- *   }
- * })
+ * const graphql = new GraphQL()
  */
 export class GraphQL {
-  constructor({ cache = {}, requestOptions } = {}) {
+  constructor({ cache = {} } = {}) {
     /**
-     * GraphQL request cache.
+     * GraphQL {@link RequestCache request cache} map, keyed by {@link FetchOptions fetch options} hashes.
      * @type {Object.<String, RequestCache>}
+     * @example <caption>Export cache as JSON.</caption>
+     * const exportedCache = JSON.stringify(graphql.cache)
      */
     this.cache = cache
-    this.requestOptions = requestOptions
   }
 
   requests = {}
@@ -31,70 +26,78 @@ export class GraphQL {
 
   /**
    * Adds a cache update listener for a request.
-   * @private
-   * @param {String} requestHash Request options hash.
+   * @protected
+   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {CacheUpdateCallback} callback Callback.
    */
-  onCacheUpdate = (requestHash, callback) => {
-    if (!this.listeners[requestHash]) this.listeners[requestHash] = []
-    this.listeners[requestHash].push(callback)
+  onCacheUpdate = (fetchOptionsHash, callback) => {
+    if (!this.listeners[fetchOptionsHash]) this.listeners[fetchOptionsHash] = []
+    this.listeners[fetchOptionsHash].push(callback)
   }
 
   /**
    * Removes a cache update listener for a request.
-   * @private
-   * @param {String} requestHash Request options hash.
+   * @protected
+   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {CacheUpdateCallback} callback Callback.
    */
-  offCacheUpdate = (requestHash, callback) => {
-    if (this.listeners[requestHash]) {
-      this.listeners[requestHash] = this.listeners[requestHash].filter(
-        listenerCallback => listenerCallback !== callback
-      )
-      if (!this.listeners[requestHash].length)
-        delete this.listeners[requestHash]
+  offCacheUpdate = (fetchOptionsHash, callback) => {
+    if (this.listeners[fetchOptionsHash]) {
+      this.listeners[fetchOptionsHash] = this.listeners[
+        fetchOptionsHash
+      ].filter(listenerCallback => listenerCallback !== callback)
+      if (!this.listeners[fetchOptionsHash].length)
+        delete this.listeners[fetchOptionsHash]
     }
   }
 
   /**
    * Triggers cache update listeners for a request.
-   * @private
-   * @param {String} requestHash Request options hash.
+   * @protected
+   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
    * @param {RequestCache} requestCache Request cache.
    */
-  emitCacheUpdate = (requestHash, requestCache) => {
-    if (this.listeners[requestHash])
-      this.listeners[requestHash].forEach(callback => callback(requestCache))
+  emitCacheUpdate = (fetchOptionsHash, requestCache) => {
+    if (this.listeners[fetchOptionsHash])
+      this.listeners[fetchOptionsHash].forEach(callback =>
+        callback(requestCache)
+      )
   }
 
   /**
-   * Resets the cache. Useful when a user logs out.
-   * @param {String} [exceptRequestHash] A request hash to exempt from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * Resets the {@link GraphQL#cache GraphQL cache}. Useful when a user logs out.
+   * @param {String} [exceptFetchOptionsHash] A {@link FetchOptions fetch options} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example
    * graphql.reset()
    */
-  reset = exceptRequestHash => {
-    let requestHashes = Object.keys(this.cache)
+  reset = exceptFetchOptionsHash => {
+    let fetchOptionsHashes = Object.keys(this.cache)
 
-    if (exceptRequestHash)
-      requestHashes = requestHashes.filter(hash => hash !== exceptRequestHash)
+    if (exceptFetchOptionsHash)
+      fetchOptionsHashes = fetchOptionsHashes.filter(
+        hash => hash !== exceptFetchOptionsHash
+      )
 
-    requestHashes.forEach(requestHash => delete this.cache[requestHash])
+    fetchOptionsHashes.forEach(
+      fetchOptionsHash => delete this.cache[fetchOptionsHash]
+    )
 
     // Emit cache updates after the entire cache has been updated, so logic in
     // listeners can assume cache for all requests is fresh and stable.
-    requestHashes.forEach(requestHash => this.emitCacheUpdate(requestHash))
+    fetchOptionsHashes.forEach(fetchOptionsHash =>
+      this.emitCacheUpdate(fetchOptionsHash)
+    )
   }
 
   /**
    * Derives a fetch request body from a GraphQL operation, accounting for
    * file uploads. Files are extracted from the operation, modifying the
    * operation object. See the {@link https://github.com/jaydenseric/graphql-multipart-request-spec GraphQL multipart request spec}.
-   * @private
+   * @protected
    * @param {Operation} operation GraphQL operation.
    * @returns {String|FormData} A JSON string, or for uploads a multipart form.
    */
-  static getRequestBody(operation) {
+  static requestBody(operation) {
     const files = extractFiles(operation)
     if (files.length) {
       const form = new FormData()
@@ -114,109 +117,115 @@ export class GraphQL {
   }
 
   /**
-   * Gets request options for a GraphQL operation.
-   * @private
+   * Gets default {@link FetchOptions fetch options} for a GraphQL operation.
+   * @ignore
    * @param {Operation} operation GraphQL operation.
-   * @returns {RequestOptions} Request options.
+   * @returns {FetchOptions} Fetch options.
    */
-  getRequestOptions(operation) {
-    const requestOptions = {
+  static fetchOptions(operation) {
+    const fetchOptions = {
       url: '/graphql',
       method: 'POST',
       headers: { accept: 'application/json' }
     }
 
-    requestOptions.body = this.constructor.getRequestBody(operation)
+    fetchOptions.body = this.requestBody(operation)
 
     // Body may be a JSON string or a FormData instance.
-    if (typeof requestOptions.body === 'string')
-      requestOptions.headers['Content-Type'] = 'application/json'
+    if (typeof fetchOptions.body === 'string')
+      fetchOptions.headers['Content-Type'] = 'application/json'
 
-    if (
-      // A function to override request options has been configured…
-      this.requestOptions
-    )
-      // Override request options.
-      this.requestOptions(requestOptions, operation)
-
-    return requestOptions
+    return fetchOptions
   }
 
   /**
-   * Hashes a request options object.
-   * @private
-   * @param {RequestOptions} requestOptions Request options.
+   * Hashes a {@link FetchOptions fetch options} object.
+   * @ignore
+   * @param {FetchOptions} fetchOptions Fetch options.
    * @returns {String} A hash.
    */
-  static hashRequestOptions = requestOptions =>
-    fnv1a(JSON.stringify(requestOptions)).toString(36)
+  static hashFetchOptions = fetchOptions =>
+    fnv1a(JSON.stringify(fetchOptions)).toString(36)
 
   /**
    * Executes a fetch request.
-   * @private
-   * @param {RequestOptions} requestOptions URL and options for fetch.
-   * @param {String} requestHash Request options hash.
-   * @returns {RequestCachePromise} Promise that resolves the request cache.
+   * @ignore
+   * @param {FetchOptions} fetchOptions URL and options for fetch.
+   * @param {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @returns {RequestCachePromise} A promise that resolves the {@link RequestCache request cache}.
    */
-  request = ({ url, ...options }, requestHash) => {
+  request = ({ url, ...options }, fetchOptionsHash) => {
     const requestCache = {}
-    return (this.requests[requestHash] = fetch(url, options)).then(response => {
-      if (!response.ok)
-        requestCache.httpError = {
-          status: response.status,
-          statusText: response.statusText
-        }
-
-      return response
-        .json()
-        .then(
-          ({ errors, data }) => {
-            // JSON parse ok.
-            if (!errors && !data) requestCache.parseError = 'Malformed payload.'
-            if (errors) requestCache.graphQLErrors = errors
-            if (data) requestCache.data = data
-          },
-          ({ message }) => {
-            // JSON parse error.
-            requestCache.parseError = message
+    return (this.requests[fetchOptionsHash] = fetch(url, options)).then(
+      response => {
+        if (!response.ok)
+          requestCache.httpError = {
+            status: response.status,
+            statusText: response.statusText
           }
-        )
-        .then(() => {
-          // Cache the request.
-          this.cache[requestHash] = requestCache
-          this.emitCacheUpdate(requestHash, requestCache)
 
-          // Clear the done request.
-          delete this.requests[requestHash]
+        return response
+          .json()
+          .then(
+            ({ errors, data }) => {
+              // JSON parse ok.
+              if (!errors && !data)
+                requestCache.parseError = 'Malformed payload.'
+              if (errors) requestCache.graphQLErrors = errors
+              if (data) requestCache.data = data
+            },
+            ({ message }) => {
+              // JSON parse error.
+              requestCache.parseError = message
+            }
+          )
+          .then(() => {
+            // Cache the request.
+            this.cache[fetchOptionsHash] = requestCache
+            this.emitCacheUpdate(fetchOptionsHash, requestCache)
 
-          return requestCache
-        })
-    })
+            // Clear the done request.
+            delete this.requests[fetchOptionsHash]
+
+            return requestCache
+          })
+      }
+    )
   }
 
   /**
    * Queries a GraphQL server.
-   * @param {Operation} operation GraphQL operation object.
+   * @param {Object} options Options.
+   * @param {Operation} options.operation GraphQL operation object.
+   * @param {FetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL request {@link FetchOptions fetch options}.
+   * @param {Boolean} [options.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
    * @returns {ActiveQuery} Loading query details.
    */
-  query = operation => {
-    const requestOptions = this.getRequestOptions(operation)
-    const requestHash = this.constructor.hashRequestOptions(requestOptions)
+  query = ({ operation, fetchOptionsOverride, resetOnLoad }) => {
+    const fetchOptions = this.constructor.fetchOptions(operation)
+    if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
+    const fetchOptionsHash = this.constructor.hashFetchOptions(fetchOptions)
+    const request =
+      // Use an identical active request or…
+      this.requests[fetchOptionsHash] ||
+      // …make a fresh request.
+      this.request(fetchOptions, fetchOptionsHash)
+
+    // Potential edge-case issue: Multiple identical request queries with
+    // resetOnLoad enabled will cause excessive resets.
+    if (resetOnLoad) request.then(() => this.reset(fetchOptionsHash))
+
     return {
-      requestHash,
-      pastRequestCache: this.cache[requestHash],
-      request:
-        // Existing request or…
-        this.requests[requestHash] ||
-        // …a fresh request.
-        this.request(requestOptions, requestHash)
+      fetchOptionsHash,
+      cache: this.cache[fetchOptionsHash],
+      request
     }
   }
 }
 
 /**
  * A cache update listener callback.
- * @private
+ * @ignore
  * @callback CacheUpdateCallback
  * @param {RequestCache} requestCache Request cache.
  */
@@ -230,8 +239,8 @@ export class GraphQL {
  */
 
 /**
- * Options for a GraphQL fetch request. See {@link https://github.github.io/fetch/#options polyfillable fetch options}.
- * @typedef {Object} RequestOptions
+ * Fetch options for a GraphQL request. See {@link https://github.github.io/fetch/#options polyfillable fetch options}.
+ * @typedef {Object} FetchOptions
  * @prop {String} url A GraphQL API URL.
  * @prop {String|FormData} body HTTP request body.
  * @prop {Object} headers HTTP request headers.
@@ -239,10 +248,11 @@ export class GraphQL {
  */
 
 /**
- * A way to override request options generated for a fetch. Modify the provided
- * options object directly; no return.
- * @typedef {Function} RequestOptionsOverride
- * @param {RequestOptions} requestOptions
+ * Overrides default GraphQL request {@link FetchOptions fetch options}. Modify the provided
+ * options object without a return.
+ * @typedef {Function} FetchOptionsOverride
+ * @param {FetchOptions} fetchOptions Default GraphQL request fetch options.
+ * @param {Operation} [operation] A GraphQL operation object.
  * @example
  * options => {
  *   options.url = 'https://api.example.com/graphql'
@@ -253,13 +263,13 @@ export class GraphQL {
 /**
  * Loading query details.
  * @typedef {Object} ActiveQuery
- * @prop {String} requestHash Request options hash.
- * @prop {RequestCache} [pastRequestCache] Results from the last identical request.
- * @prop {RequestCachePromise} request Promise that resolves fresh request cache.
+ * @prop {String} fetchOptionsHash {@link FetchOptions fetch options} hash.
+ * @prop {RequestCache} [cache] Results from the last identical request.
+ * @prop {RequestCachePromise} request A promise that resolves fresh {@link RequestCache request cache}.
  */
 
 /**
- * A promise for a loading query that resolves the request cache.
+ * A promise for a loading query that resolves the {@link RequestCache request cache}.
  * @typedef {Promise<RequestCache>} RequestCachePromise
  */
 

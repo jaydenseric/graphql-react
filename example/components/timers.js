@@ -3,9 +3,11 @@ import Loader from './loader'
 import HTTPError from './http-error'
 import ParseError from './parse-error'
 import GraphQLErrors from './graphql-errors'
+import { timeFetchOptionsOverride } from '../api-fetch-options'
 
 const Timer = ({ id, milliseconds }) => (
   <Query
+    fetchOptionsOverride={timeFetchOptionsOverride}
     variables={{ id }}
     query={
       /* GraphQL */ `
@@ -39,6 +41,7 @@ const Timers = () => (
   <Query
     loadOnMount
     loadOnReset
+    fetchOptionsOverride={timeFetchOptionsOverride}
     query={
       /* GraphQL */ `
       {

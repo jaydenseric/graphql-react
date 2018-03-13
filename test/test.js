@@ -82,21 +82,22 @@ test.before(async () => {
 })
 
 test('Cache export & import.', async t => {
-  const graphql1 = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
+  const graphql1 = new GraphQL()
 
   await graphql1.query({
-    variables: { date: '2018-01-01' },
-    query: /* GraphQL */ `
-      query($date: String!) {
-        date(isoDate: $date) {
-          day
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: /* GraphQL */ `
+        query($date: String!) {
+          date(isoDate: $date) {
+            day
+          }
         }
-      }
-    `
+      `
+    }
   }).request
 
   const graphql2 = new GraphQL({ cache: graphql1.cache })
@@ -105,28 +106,38 @@ test('Cache export & import.', async t => {
 })
 
 test('Cache reset.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
+  const graphql = new GraphQL()
 
-  const { requestHash: requestHash1, request: request1 } = await graphql.query({
-    variables: { date: '2018-01-01' },
-    query: /* GraphQL */ `
-      query($date: String!) {
-        date(isoDate: $date) {
-          day
+  const {
+    fetchOptionsHash: fetchOptionsHash1,
+    request: request1
+  } = await graphql.query({
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: /* GraphQL */ `
+        query($date: String!) {
+          date(isoDate: $date) {
+            day
+          }
         }
-      }
-    `
+      `
+    }
   })
 
   await request1
 
   const cacheBefore = JSON.stringify(graphql.cache)
 
-  const { requestHash: requestHash2, request: request2 } = graphql.query({
+  const {
+    fetchOptionsHash: fetchOptionsHash2,
+    request: request2
+  } = graphql.query({
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
     variables: { date: '2018-01-02' },
     query: /* GraphQL */ `
       query($date: String!) {
@@ -139,13 +150,13 @@ test('Cache reset.', async t => {
 
   await request2
 
-  graphql.onCacheUpdate(requestHash1, () => t.fail())
+  graphql.onCacheUpdate(fetchOptionsHash1, () => t.fail())
 
   const request2CacheListener = new Promise(resolve => {
-    graphql.onCacheUpdate(requestHash2, resolve)
+    graphql.onCacheUpdate(fetchOptionsHash2, resolve)
   })
 
-  graphql.reset(requestHash1)
+  graphql.reset(fetchOptionsHash1)
 
   const cacheAfter = JSON.stringify(graphql.cache)
 
@@ -155,56 +166,59 @@ test('Cache reset.', async t => {
 })
 
 test('Request cache for valid query.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
+  const graphql = new GraphQL()
 
   const requestCache = await graphql.query({
-    variables: { date: '2018-01-01' },
-    query: /* GraphQL */ `
-      query($date: String!) {
-        date(isoDate: $date) {
-          day
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: /* GraphQL */ `
+        query($date: String!) {
+          date(isoDate: $date) {
+            day
+          }
         }
-      }
-    `
+      `
+    }
   }).request
 
   t.snapshot(requestCache)
 })
 
 test('Request cache for invalid query.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
+  const graphql = new GraphQL()
 
   const requestCache = await graphql.query({
-    variables: { date: '2018-01-01' },
-    query: 'x'
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: 'x'
+    }
   }).request
 
   t.snapshot(requestCache)
 })
 
 test('Request cache for response JSON invalid.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}?bad=json`
-    }
-  })
+  const graphql = new GraphQL()
 
   const { parseError, ...rest } = await graphql.query({
-    query: /* GraphQL */ `
-      {
-        epoch {
-          year
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}?bad=json`
+    },
+    operation: {
+      query: /* GraphQL */ `
+        {
+          epoch {
+            year
+          }
         }
-      }
-    `
+      `
+    }
   }).request
 
   t.is(typeof parseError, 'string')
@@ -212,37 +226,37 @@ test('Request cache for response JSON invalid.', async t => {
 })
 
 test('Request cache for response payload malformed.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}?bad=payload`
-    }
-  })
+  const graphql = new GraphQL()
 
   const requestCache = await graphql.query({
-    query: /* GraphQL */ `
-      {
-        epoch {
-          year
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}?bad=payload`
+    },
+    operation: {
+      query: /* GraphQL */ `
+        {
+          epoch {
+            year
+          }
         }
-      }
-    `
+      `
+    }
   }).request
 
   t.snapshot(requestCache)
 })
 
 test('Query render.', t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
+  const graphql = new GraphQL()
 
   const tree = render
     .create(
       <Provider value={graphql}>
         <Query
           loadOnMount
+          fetchOptionsOverride={options => {
+            options.url = `http://localhost:${port}`
+          }}
           variables={{ date: '2018-01-01' }}
           query={
             /* GraphQL */ `
@@ -263,16 +277,15 @@ test('Query render.', t => {
 })
 
 test('Server side render nested queries.', async t => {
-  const graphql = new GraphQL({
-    requestOptions: options => {
-      options.url = `http://localhost:${port}`
-    }
-  })
-
+  const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}`
+  }
   const tree = (
     <Provider value={graphql}>
       <Query
         loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
         query={
           /* GraphQL */ `
             {
@@ -286,13 +299,14 @@ test('Server side render nested queries.', async t => {
         {({ data: { epoch: { iso } } }) => (
           <Query
             loadOnMount
+            fetchOptionsOverride={fetchOptionsOverride}
             variables={{ isoDateFrom: iso }}
             query={
               /* GraphQL */ `
-              query($isoDateFrom: String!) {
-                daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
-              }
-            `
+                query($isoDateFrom: String!) {
+                  daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
+                }
+              `
             }
           >
             {result => JSON.stringify(result)}
