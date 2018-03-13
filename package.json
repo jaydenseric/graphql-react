@@ -152,7 +152,7 @@
     }
   ],
   "ava": {
-    "cache": false,
-    "sources": ["!lib/**", "!example/**"]
+    "sources": ["src/**/*.mjs", "!lib", "!example"],
+    "cache": false
   }
 }
