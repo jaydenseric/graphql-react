@@ -274,8 +274,8 @@ export class GraphQL {
  */
 
 /**
- * JSON serializable result of a request (including all errors and data) for
- * caching purposes.
+ * JSON serializable result of a GraphQL request (including all errors and data)
+ * suitable for caching.
  * @typedef {Object} RequestCache
  * @prop {HTTPError} [httpError] Fetch HTTP error.
  * @prop {String} [parseError] Parse error message.

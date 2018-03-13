@@ -28,8 +28,8 @@ A lightweight GraphQL client for React; the first Relay and Apollo alternative w
 * GraphQL request fetch options hash based cache:
   * No data denormalization or need to query `id` fields.
   * No tampering with queries or `__typename` insertion.
-  * Query multiple GraphQL services without stitching data.
   * Errors are cached and can be server side rendered.
+  * Query multiple GraphQL APIs without stitching data.
 
 ## Setup
 
@@ -428,7 +428,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### RequestCache
 
-JSON serializable result of a request (including all errors and data) for caching purposes.
+JSON serializable result of a GraphQL request (including all errors and data) suitable for caching.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
