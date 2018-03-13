@@ -160,38 +160,38 @@ export class GraphQL {
    */
   request = ({ url, ...options }, requestHash) => {
     const requestCache = {}
-    return (this.requests[requestHash] = fetch(url, options))
-      .then(response => {
-        if (!response.ok)
-          requestCache.httpError = {
-            status: response.status,
-            statusText: response.statusText
-          }
-
-        return response.json()
-      })
-      .then(
-        ({ errors, data }) => {
-          // JSON parse ok.
-          if (!errors && !data) requestCache.parseError = 'Malformed payload.'
-          if (errors) requestCache.graphQLErrors = errors
-          if (data) requestCache.data = data
-        },
-        ({ message }) => {
-          // JSON parse error.
-          requestCache.parseError = message
+    return (this.requests[requestHash] = fetch(url, options)).then(response => {
+      if (!response.ok)
+        requestCache.httpError = {
+          status: response.status,
+          statusText: response.statusText
         }
-      )
-      .then(() => {
-        // Cache the request.
-        this.cache[requestHash] = requestCache
-        this.emitCacheUpdate(requestHash, requestCache)
 
-        // Clear the done request.
-        delete this.requests[requestHash]
+      return response
+        .json()
+        .then(
+          ({ errors, data }) => {
+            // JSON parse ok.
+            if (!errors && !data) requestCache.parseError = 'Malformed payload.'
+            if (errors) requestCache.graphQLErrors = errors
+            if (data) requestCache.data = data
+          },
+          ({ message }) => {
+            // JSON parse error.
+            requestCache.parseError = message
+          }
+        )
+        .then(() => {
+          // Cache the request.
+          this.cache[requestHash] = requestCache
+          this.emitCacheUpdate(requestHash, requestCache)
 
-        return requestCache
-      })
+          // Clear the done request.
+          delete this.requests[requestHash]
+
+          return requestCache
+        })
+    })
   }
 
   /**
