@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0-alpha.1
 
 * Updated dependencies.
 * Updated Node.js support to v7.6+.
