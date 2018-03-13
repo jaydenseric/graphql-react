@@ -1,0 +1,14 @@
+{
+  "quiet": true,
+  "access": ["public", "undefined"],
+  "sort-order": "alpha",
+  "toc": [
+    "GraphQL",
+    "Provider",
+    "Consumer",
+    "ConsumerRender",
+    "Query",
+    "QueryRender",
+    "preload"
+  ]
+}

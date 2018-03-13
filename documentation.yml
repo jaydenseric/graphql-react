@@ -1,8 +1,0 @@
-toc:
-  - GraphQL
-  - Provider
-  - Consumer
-  - ConsumerRender
-  - Query
-  - QueryRender
-  - preload
