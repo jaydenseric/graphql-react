@@ -1,5 +1,9 @@
 # graphql-react changelog
 
+## Next
+
+* Updated dependencies.
+
 ## 1.0.0-alpha.1
 
 * Updated dependencies.
