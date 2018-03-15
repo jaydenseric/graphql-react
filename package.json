@@ -106,16 +106,9 @@
     "*.{mjs,js}": "eslint",
     "*.{json,md}": "prettier -l"
   },
-  "eslintIgnore": ["!.*", "node_modules", ".next", "lib"],
+  "eslintIgnore": ["!.*", "node_modules", "lib", ".next"],
   "eslintConfig": {
     "parser": "babel-eslint",
-    "parserOptions": {
-      "sourceType": "module",
-      "ecmaVersion": 2017,
-      "ecmaFeatures": {
-        "experimentalObjectRestSpread": true
-      }
-    },
     "env": {
       "es6": true,
       "node": true,
@@ -132,6 +125,13 @@
         }
       ],
       "curly": ["error", "multi"],
+      "prefer-destructuring": [
+        "error",
+        {
+          "array": true,
+          "object": true
+        }
+      ],
       "prettier/prettier": "error"
     }
   },

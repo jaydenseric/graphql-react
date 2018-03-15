@@ -3,6 +3,9 @@
 ## Next
 
 * Updated dependencies.
+* Updated ESLint config:
+  * `parserOptions` is unnecessary when using `babel-eslint`.
+  * Enabled `prefer-destructuring` rule.
 
 ## 1.0.0-alpha.1
 
