@@ -3,6 +3,8 @@
 ## Next
 
 * Updated dependencies.
+* Remove `Promise` polyfill. For optimal bundle size consumers can handle it.
+* Document required polyfills in the readme.
 * Updated ESLint config:
   * `parserOptions` is unnecessary when using `babel-eslint`.
   * Enabled `prefer-destructuring` rule.

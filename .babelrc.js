@@ -6,13 +6,12 @@ module.exports = {
     [
       '@babel/env',
       {
+        targets: { node: node.substring(2) }, // Strip `>=`
+        modules: process.env.MODULE ? false : 'commonjs',
         useBuiltIns: 'usage',
         shippedProposals: true,
-        modules: process.env.MODULE ? false : 'commonjs',
-        loose: true,
-        targets: {
-          node: node.substring(2) // Strip `>=`
-        }
+        exclude: ['es6.promise'],
+        loose: true
       }
     ],
     '@babel/preset-react'
