@@ -3,7 +3,7 @@
 ## Next
 
 * Updated dependencies.
-* Significantly reduced the bundle size to < 4 KB by simplifying Babel helpers and reusing the [`object-assign`](https://npm.im/object-assign) React dependency.
+* Significantly reduced the bundle size to < 4 KB by simplifying Babel helpers and reusing the [`object-assign`](https://npm.im/object-assign) React dependency with [`babel-plugin-transform-replace-object-assign`](https://npm.im/babel-plugin-transform-replace-object-assign).
 * Removed the `Promise` polyfill; consumers can polyfill as required for optimal bundle size.
 * Document required polyfills in the readme.
 * Updated ESLint config:

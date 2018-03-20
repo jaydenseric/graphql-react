@@ -52,8 +52,7 @@
     "apollo-upload-server": "^5.0.0",
     "ava": "^1.0.0-beta.2",
     "babel-eslint": "^8.2.2",
-    "babel-plugin-transform-replace-object-assign":
-      "github:jaydenseric/babel-plugin-transform-replace-object-assign#babel-v7",
+    "babel-plugin-transform-replace-object-assign": "^2.0.0-beta.0",
     "cross-env": "^5.1.4",
     "documentation": "^6.1.0",
     "eslint": "^4.19.0",
