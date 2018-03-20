@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0-alpha.2
 
 * Updated dependencies.
 * Significantly reduced the bundle size to < 4 KB by simplifying Babel helpers and reusing the [`object-assign`](https://npm.im/object-assign) React dependency with [`babel-plugin-transform-replace-object-assign`](https://npm.im/babel-plugin-transform-replace-object-assign).
