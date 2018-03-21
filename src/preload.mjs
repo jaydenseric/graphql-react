@@ -24,13 +24,17 @@
  * }
  */
 export function preload(element) {
-  const recursePreload = (rootElement, loadRoot = true) => {
+  const recursePreload = (
+    rootElement,
+    rootLegacyContext = {},
+    loadRoot = true
+  ) => {
     const loading = []
-    const recurse = element => {
+    const recurse = (element, legacyContext) => {
       if (!element) return
 
       if (Array.isArray(element)) {
-        element.forEach(item => recurse(item))
+        element.forEach(item => recurse(item, legacyContext))
         return
       }
 
@@ -45,14 +49,17 @@ export function preload(element) {
 
         if (element.type.Consumer)
           // Context consumer element.
-          recurse(element.props.children(element.type.currentValue))
+          recurse(
+            element.props.children(element.type.currentValue),
+            legacyContext
+          )
         else if (
           // The element is a class component…
           element.type.prototype &&
           (element.type.prototype.isReactComponent ||
             element.type.prototype.isPureReactComponent)
         ) {
-          const instance = new element.type(props)
+          const instance = new element.type(props, legacyContext)
 
           // Match React API for default state.
           instance.state = instance.state || null
@@ -64,9 +71,19 @@ export function preload(element) {
             instance.state = { ...instance.state, ...newState }
           }
 
-          // Support for componentWillMount can be removed when it’s deprecated in
-          // React: https://github.com/facebook/react/issues/12152
+          // Deprecated componentWillMount and legacy context APIs must be
+          // supported until removal from React, likely in v17:
+          // https://github.com/facebook/react/issues/12152
+
+          // Support componentWillMount.
           if (instance.componentWillMount) instance.componentWillMount()
+
+          // Support legacy context.
+          if (instance.getChildContext)
+            legacyContext = {
+              ...legacyContext,
+              ...instance.getChildContext()
+            }
 
           if (
             // The element is a GraphQL query component and…
@@ -80,13 +97,13 @@ export function preload(element) {
               // Load this query.
               instance.load().then(() =>
                 // Preload children, without reloading this query as the root.
-                recursePreload(element, false)
+                recursePreload(element, legacyContext, false)
               )
             )
-          else recurse(instance.render())
+          else recurse(instance.render(), legacyContext)
         } else
           // The element is a functional component…
-          recurse(element.type(props))
+          recurse(element.type(props), legacyContext)
       } else if (
         // The element is a context provider or DOM element and…
         element.props &&
@@ -97,11 +114,11 @@ export function preload(element) {
         if (element.type.context)
           element.type.context.currentValue = element.props.value
 
-        recurse(element.props.children)
+        recurse(element.props.children, legacyContext)
       }
     }
 
-    recurse(rootElement)
+    recurse(rootElement, rootLegacyContext)
 
     return Promise.all(loading)
   }
