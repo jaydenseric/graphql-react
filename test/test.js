@@ -11,6 +11,7 @@ import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import render from 'react-test-renderer'
+import PropTypes from 'prop-types'
 import { GraphQL, Provider, Query, preload } from '../lib'
 
 let port
@@ -319,6 +320,46 @@ test('Server side render nested queries.', async t => {
   await preload(tree)
 
   t.snapshot(renderToString(tree))
+})
+
+test('Preload legacy React context API components.', async t => {
+  class LegacyContextProvider extends React.Component {
+    static childContextTypes = {
+      value: PropTypes.string
+    }
+
+    getChildContext() {
+      return { value: this.props.value }
+    }
+
+    render() {
+      return <div>{this.props.children}</div>
+    }
+  }
+
+  class LegacyContextConsumer extends React.Component {
+    static contextTypes = {
+      value: PropTypes.string
+    }
+
+    render() {
+      return <p>{this.context.value}</p>
+    }
+  }
+
+  const tree = (
+    <LegacyContextProvider value="Context value.">
+      <div>
+        <LegacyContextConsumer />
+      </div>
+    </LegacyContextProvider>
+  )
+
+  t.snapshot(renderToString(tree))
+
+  await t.notThrows(async () => {
+    await preload(tree)
+  })
 })
 
 test.after(() =>
