@@ -56,6 +56,7 @@
     "cross-env": "^5.1.4",
     "documentation": "^6.1.0",
     "eslint": "^4.19.0",
+    "eslint-plugin-ava": "^4.5.1",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-react": "^7.7.0",
     "get-port": "^3.2.0",
@@ -115,8 +116,12 @@
       "node": true,
       "browser": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
-    "plugins": ["react", "prettier"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:ava/recommended"
+    ],
+    "plugins": ["react", "ava", "prettier"],
     "rules": {
       "require-jsdoc": "warn",
       "valid-jsdoc": [
