@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0-alpha.3
 
 * Support the legacy React context API, fixing [#7](https://github.com/jaydenseric/graphql-react/issues/7).
 * Use [`eslint-plugin-ava`](https://npm.im/eslint-plugin-ava).
