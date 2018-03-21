@@ -1,5 +1,9 @@
 # graphql-react changelog
 
+## Next
+
+* Use [`eslint-plugin-ava`](https://npm.im/eslint-plugin-ava).
+
 ## 1.0.0-alpha.2
 
 * Updated dependencies.
@@ -9,7 +13,6 @@
 * Updated ESLint config:
   * `parserOptions` is unnecessary when using `babel-eslint`.
   * Enabled `prefer-destructuring` rule.
-  * Use [`eslint-plugin-ava`](https://npm.im/eslint-plugin-ava).
 
 ## 1.0.0-alpha.1
 
