@@ -3,6 +3,7 @@
 ## Next
 
 * Updated dependencies.
+* Use `.prettierignore` to defer `package.json` formatting to npm.
 
 ## 1.0.0-alpha.3
 

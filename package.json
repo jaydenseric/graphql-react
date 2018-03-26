@@ -24,7 +24,9 @@
     "upload",
     "multipart"
   ],
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "main": "lib",
   "module": "lib/index.mjs",
   "engines": {
@@ -82,8 +84,7 @@
     "build:js": "babel src -d lib",
     "build:mjs": "cross-env ESM=true babel src -d lib --keep-file-extension",
     "postbuild": "prettier 'lib/**/*.{mjs,js}' --write",
-    "jsdoc":
-      "documentation readme src -s API -c documentation.json --sort-order alpha -q",
+    "jsdoc": "documentation readme src -s API -c documentation.json --sort-order alpha -q",
     "postjsdoc": "prettier readme.md --write",
     "prewatch": "npm run build",
     "watch": "run-p watch:*",
@@ -91,12 +92,11 @@
     "watch:test": "ava -vw",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint . --ext mjs,js",
-    "lint:prettier": "prettier '**/*.{json,md}' -l --ignore-path .gitignore",
+    "lint:prettier": "prettier '**/*.{json,md}' -l",
     "lint:jsdoc": "documentation lint src",
     "fix": "run-p fix:*",
     "fix:eslint": "eslint . --ext mjs,js --fix",
-    "fix:prettier":
-      "prettier '**/*.{json,md}' --write --ignore-path .gitignore",
+    "fix:prettier": "prettier '**/*.{json,md}' --write",
     "presize": "npm run build",
     "size": "size-limit",
     "pretest": "npm run build",
@@ -108,7 +108,12 @@
     "*.{mjs,js}": "eslint",
     "*.{json,md}": "prettier -l"
   },
-  "eslintIgnore": ["!.*", "node_modules", "lib", ".next"],
+  "eslintIgnore": [
+    "!.*",
+    "node_modules",
+    "lib",
+    ".next"
+  ],
   "eslintConfig": {
     "parser": "babel-eslint",
     "env": {
@@ -121,7 +126,11 @@
       "plugin:react/recommended",
       "plugin:ava/recommended"
     ],
-    "plugins": ["react", "ava", "prettier"],
+    "plugins": [
+      "react",
+      "ava",
+      "prettier"
+    ],
     "rules": {
       "require-jsdoc": "warn",
       "valid-jsdoc": [
@@ -130,7 +139,10 @@
           "requireReturn": false
         }
       ],
-      "curly": ["error", "multi"],
+      "curly": [
+        "error",
+        "multi"
+      ],
       "prefer-destructuring": [
         "error",
         {
@@ -159,7 +171,11 @@
     }
   ],
   "ava": {
-    "sources": ["src/**/*.mjs", "!lib", "!example"],
+    "sources": [
+      "src/**/*.mjs",
+      "!lib",
+      "!example"
+    ],
     "cache": false
   }
 }
