@@ -1,78 +1,89 @@
-/* eslint-disable react/prop-types */
-
 import 'cross-fetch/polyfill'
 import test from 'ava'
 import getPort from 'get-port'
 import Koa from 'koa'
+import Router from 'koa-router'
 import koaBody from 'koa-bodyparser'
 import { apolloUploadKoa, GraphQLUpload } from 'apollo-upload-server'
 import * as apolloServerKoa from 'apollo-server-koa'
 import * as graphqlTools from 'graphql-tools'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import render from 'react-test-renderer'
 import PropTypes from 'prop-types'
 import { GraphQL, Provider, Query, preload } from '../lib'
 
 let port
 let server
 
-test.before(async () => {
-  // Setup the test GraphQL server.
-
-  const typeDefs = /* GraphQL */ `
-    type Query {
-      date(isoDate: String!): Date!
-      epoch: Date!
-      daysBetween(isoDateFrom: String!, isoDateTo: String!): Int!
-    }
-
-    scalar Upload
-
-    type Date {
-      iso: String!
-      day: Int!
-      month: Int!
-      year: Int!
-    }
-  `
-
-  const resolvers = {
-    Query: {
-      date: (obj, { isoDate }) => new Date(isoDate),
-      epoch: () => new Date(0),
-      daysBetween: (obj, { isoDateFrom, isoDateTo }) =>
-        Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
-    },
-    Upload: GraphQLUpload,
-    Date: {
-      iso: date => date.toISOString(),
-      day: date => date.getDate(),
-      month: date => date.getMonth(),
-      year: date => date.getFullYear()
-    }
+const typeDefs = /* GraphQL */ `
+  type Query {
+    date(isoDate: String!): Date!
+    epoch: Date!
+    daysBetween(isoDateFrom: String!, isoDateTo: String!): Int!
   }
 
-  const app = new Koa()
-    .use(koaBody())
-    .use(async (ctx, next) => {
-      if (ctx.query.bad === 'json') {
-        ctx.status = 200
-        ctx.type = 'txt'
-        ctx.body = 'Not JSON.'
-      } else if (ctx.query.bad === 'payload') {
-        ctx.status = 200
-        ctx.type = 'json'
-        ctx.body = '[{"bad": true}]'
-      } else await next()
-    })
-    .use(apolloUploadKoa())
-    .use(
-      apolloServerKoa.graphqlKoa({
-        schema: graphqlTools.makeExecutableSchema({ typeDefs, resolvers })
-      })
-    )
+  scalar Upload
 
+  type Date {
+    iso: String!
+    year: Int!
+  }
+`
+
+const resolvers = {
+  Query: {
+    date: (obj, { isoDate }) => new Date(isoDate),
+    epoch: () => new Date(0),
+    daysBetween: (obj, { isoDateFrom, isoDateTo }) =>
+      Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
+  },
+  Upload: GraphQLUpload,
+  Date: {
+    iso: date => date.toISOString(),
+    year: date => date.getFullYear()
+  }
+}
+
+const router = new Router().post(
+  '/',
+  koaBody(),
+  async (ctx, next) => {
+    if (ctx.query.bad === 'json') {
+      ctx.status = 200
+      ctx.type = 'txt'
+      ctx.body = 'Not JSON.'
+    } else if (ctx.query.bad === 'payload') {
+      ctx.status = 200
+      ctx.type = 'json'
+      ctx.body = '[{"bad": true}]'
+    } else await next()
+  },
+  apolloUploadKoa(),
+  apolloServerKoa.graphqlKoa({
+    schema: graphqlTools.makeExecutableSchema({ typeDefs, resolvers })
+  })
+)
+
+const app = new Koa().use(router.routes()).use(router.allowedMethods())
+
+const EPOCH_QUERY = /* GraphQL */ `
+  {
+    epoch {
+      iso
+    }
+  }
+`
+
+const YEAR_QUERY = /* GraphQL */ `
+  query($date: String!) {
+    date(isoDate: $date) {
+      year
+    }
+  }
+`
+
+test.before(async () => {
+  // Setup the test GraphQL server.
   port = await getPort()
   server = await new Promise((resolve, reject) => {
     const server = app.listen(port, error => {
@@ -91,13 +102,7 @@ test('Cache export & import.', async t => {
     },
     operation: {
       variables: { date: '2018-01-01' },
-      query: /* GraphQL */ `
-        query($date: String!) {
-          date(isoDate: $date) {
-            day
-          }
-        }
-      `
+      query: YEAR_QUERY
     }
   }).request
 
@@ -118,13 +123,7 @@ test('Cache reset.', async t => {
     },
     operation: {
       variables: { date: '2018-01-01' },
-      query: /* GraphQL */ `
-        query($date: String!) {
-          date(isoDate: $date) {
-            day
-          }
-        }
-      `
+      query: YEAR_QUERY
     }
   })
 
@@ -140,13 +139,7 @@ test('Cache reset.', async t => {
       options.url = `http://localhost:${port}`
     },
     variables: { date: '2018-01-02' },
-    query: /* GraphQL */ `
-      query($date: String!) {
-        date(isoDate: $date) {
-          year
-        }
-      }
-    `
+    query: YEAR_QUERY
   })
 
   await request2
@@ -166,115 +159,162 @@ test('Cache reset.', async t => {
   t.is(cacheAfter, cacheBefore)
 })
 
-test('Request cache for valid query.', async t => {
+test('Query with HTTP error.', async t => {
   const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}/404`
+  }
+  const requestCache = await graphql.query({
+    fetchOptionsOverride,
+    operation: { query: EPOCH_QUERY }
+  }).request
+
+  // Prevent the dynamic port that appears in the error message from failing
+  // snapshot comparisons.
+  if (typeof requestCache.parseError === 'string')
+    requestCache.parseError = requestCache.parseError.replace(port, '<port>')
+
+  t.snapshot(requestCache, 'GraphQL request cache.')
+
+  renderToString(
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        query={EPOCH_QUERY}
+      >
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
+})
+
+test('Query with response JSON invalid.', async t => {
+  const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}?bad=json`
+  }
+  const requestCache = await graphql.query({
+    fetchOptionsOverride,
+    operation: { query: EPOCH_QUERY }
+  }).request
+
+  // Prevent the dynamic port that appears in the error message from failing
+  // snapshot comparisons.
+  if (typeof requestCache.parseError === 'string')
+    requestCache.parseError = requestCache.parseError.replace(port, '<port>')
+
+  t.snapshot(requestCache, 'GraphQL request cache.')
+
+  renderToString(
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        query={EPOCH_QUERY}
+      >
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
+})
+
+test('Query with response payload malformed.', async t => {
+  const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}?bad=payload`
+  }
+  const requestCache = await graphql.query({
+    fetchOptionsOverride,
+    operation: { query: EPOCH_QUERY }
+  }).request
+
+  t.snapshot(requestCache, 'GraphQL request cache.')
+
+  renderToString(
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        query={EPOCH_QUERY}
+      >
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
+})
+
+test('Query with GraphQL errors.', async t => {
+  const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}`
+  }
+
+  const query = 'x'
 
   const requestCache = await graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
-    },
-    operation: {
-      variables: { date: '2018-01-01' },
-      query: /* GraphQL */ `
-        query($date: String!) {
-          date(isoDate: $date) {
-            day
-          }
-        }
-      `
-    }
+    fetchOptionsOverride,
+    operation: { query }
   }).request
 
-  t.snapshot(requestCache)
+  t.snapshot(requestCache, 'GraphQL request cache.')
+
+  renderToString(
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        query={query}
+      >
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
 })
 
-test('Request cache for invalid query.', async t => {
+test('Query with variables.', async t => {
   const graphql = new GraphQL()
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}`
+  }
+
+  const variables = { date: '2018-01-01' }
+  const query = YEAR_QUERY
 
   const requestCache = await graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
-    },
-    operation: {
-      variables: { date: '2018-01-01' },
-      query: 'x'
-    }
+    fetchOptionsOverride,
+    operation: { variables, query }
   }).request
 
-  t.snapshot(requestCache)
-})
+  t.snapshot(requestCache, 'GraphQL request cache.')
 
-test('Request cache for response JSON invalid.', async t => {
-  const graphql = new GraphQL()
-
-  const { parseError, ...rest } = await graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}?bad=json`
-    },
-    operation: {
-      query: /* GraphQL */ `
-        {
-          epoch {
-            year
-          }
-        }
-      `
-    }
-  }).request
-
-  t.is(typeof parseError, 'string')
-  t.deepEqual(rest, {})
-})
-
-test('Request cache for response payload malformed.', async t => {
-  const graphql = new GraphQL()
-
-  const requestCache = await graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}?bad=payload`
-    },
-    operation: {
-      query: /* GraphQL */ `
-        {
-          epoch {
-            year
-          }
-        }
-      `
-    }
-  }).request
-
-  t.snapshot(requestCache)
-})
-
-test('Query render.', t => {
-  const graphql = new GraphQL()
-
-  const tree = render
-    .create(
-      <Provider value={graphql}>
-        <Query
-          loadOnMount
-          fetchOptionsOverride={options => {
-            options.url = `http://localhost:${port}`
-          }}
-          variables={{ date: '2018-01-01' }}
-          query={
-            /* GraphQL */ `
-              query($date: String!) {
-                date(isoDate: $date) {
-                  day
-                }
-              }
-            `
-          }
-        >
-          {result => <div>{JSON.stringify(result)}</div>}
-        </Query>
-      </Provider>
-    )
-    .toJSON()
-  t.snapshot(tree)
+  renderToString(
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        variables={variables}
+        query={query}
+      >
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
 })
 
 test('Server side render nested queries.', async t => {
@@ -287,15 +327,7 @@ test('Server side render nested queries.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={
-          /* GraphQL */ `
-            {
-              epoch {
-                iso
-              }
-            }
-          `
-        }
+        query={EPOCH_QUERY}
       >
         {({ data: { epoch: { iso } } }) => (
           <Query
@@ -305,12 +337,21 @@ test('Server side render nested queries.', async t => {
             query={
               /* GraphQL */ `
                 query($isoDateFrom: String!) {
-                  daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
+                  daysBetween(
+                    isoDateFrom: $isoDateFrom,
+                    isoDateTo: "2018-01-01"
+                  )
                 }
               `
             }
           >
-            {result => JSON.stringify(result)}
+            {result => (
+              <pre
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(result)
+                }}
+              />
+            )}
           </Query>
         )}
       </Query>
@@ -319,11 +360,19 @@ test('Server side render nested queries.', async t => {
 
   await preload(tree)
 
-  t.snapshot(renderToString(tree))
+  t.snapshot(
+    renderToString(tree),
+    'HTML displaying the nested query render function argument.'
+  )
 })
 
 test('Preload legacy React context API components.', async t => {
   class LegacyContextProvider extends React.Component {
+    static propTypes = {
+      value: PropTypes.string,
+      children: PropTypes.node
+    }
+
     static childContextTypes = {
       value: PropTypes.string
     }
@@ -355,7 +404,7 @@ test('Preload legacy React context API components.', async t => {
     </LegacyContextProvider>
   )
 
-  t.snapshot(renderToString(tree))
+  t.snapshot(renderToString(tree), 'HTML.')
 
   await t.notThrows(async () => {
     await preload(tree)

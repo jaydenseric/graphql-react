@@ -68,12 +68,12 @@
     "husky": "^0.14.3",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.4.0",
     "lint-staged": "^7.0.0",
     "npm-run-all": "^4.1.2",
     "prettier": "^1.11.1",
     "react": "^16.3.0-alpha.3",
     "react-dom": "^16.3.0-alpha.3",
-    "react-test-renderer": "^16.3.0-alpha.3",
     "rimraf": "^2.6.2",
     "size-limit": "^0.17.0"
   },
