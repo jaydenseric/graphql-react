@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import 'isomorphic-unfetch'
+import 'cross-fetch/polyfill'
 import test from 'ava'
 import getPort from 'get-port'
 import Koa from 'koa'

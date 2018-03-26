@@ -1,4 +1,4 @@
-import 'isomorphic-unfetch'
+import 'cross-fetch/polyfill'
 import { GraphQL, Provider, preload } from 'graphql-react'
 import Head from 'next/head'
 
