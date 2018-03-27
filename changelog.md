@@ -6,6 +6,7 @@
 * Replaced [`isomorphic-unfetch`](https://npm.im/isomorphic-unfetch) with the more updated [`cross-fetch`](https://npm.im/cross-fetch).
 * Added a `fetchError` `Query` render function argument, enabling graceful caching and handling of errors in situations such as when a global `fetch` API is unavailable or a relative URL is used on the sever.
 * Use `.prettierignore` to defer `package.json` formatting to npm.
+* Improved example project environment config and deployed it to [graphql-react.now.sh](https://graphql-react.now.sh).
 
 ## 1.0.0-alpha.3
 

@@ -23,17 +23,16 @@ const router = new Router()
 
 const nextApp = next({ dev: process.env.NODE_ENV === 'development' })
 const nextRequestHandler = nextApp.getRequestHandler()
-const port = 3000
 
 nextApp.prepare().then(() =>
   new Koa()
     .use(router.routes())
     .use(router.allowedMethods())
-    .listen(port, error => {
+    .listen(process.env.PORT, error => {
       if (error) throw error
       // eslint-disable-next-line no-console
       console.info(
-        `Serving http://localhost:${port} for ${process.env.NODE_ENV}.`
+        `Serving localhost:${process.env.PORT} for ${process.env.NODE_ENV}.`
       )
     })
 )

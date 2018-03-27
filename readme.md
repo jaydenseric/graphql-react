@@ -35,7 +35,7 @@ A lightweight GraphQL client for React; the first Relay and Apollo alternative w
 
 Install with [npm](https://npmjs.com):
 
-```shell
+```sh
 npm install graphql-react
 ```
 

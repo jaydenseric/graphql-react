@@ -1,5 +1,5 @@
 export const timeFetchOptionsOverride = options => {
-  options.url = 'http://localhost:3000/graphql'
+  options.url = process.env.API_URL
 }
 
 export const pokemonFetchOptionsOverride = options => {
