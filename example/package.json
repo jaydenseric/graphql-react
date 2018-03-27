@@ -2,11 +2,11 @@
   "name": "graphql-react-example",
   "private": true,
   "dependencies": {
-    "@std/esm": "^0.25.5",
     "apollo-server-koa": "^1.3.3",
     "babel-plugin-transform-inline-environment-variables": "^0.3.0",
     "cross-fetch": "^2.1.0",
     "dotenv-cli": "^1.4.0",
+    "esm": "^3.0.10",
     "graphql": "^0.13.2",
     "graphql-react": "latest",
     "graphql-tools": "^2.23.1",
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "dotenv next build",
-    "start": "dotenv node -- -r @std/esm server.mjs",
+    "start": "dotenv node -- -r esm server",
     "deploy": "now"
   },
   "babel": {
