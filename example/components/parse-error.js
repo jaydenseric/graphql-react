@@ -1,8 +1,9 @@
+import ErrorMessage from './error-message'
+
 const ParseError = ({ error }) => (
-  <aside>
-    <h1>Parse error</h1>
+  <ErrorMessage heading="Parse error">
     <p>{error}</p>
-  </aside>
+  </ErrorMessage>
 )
 
 export default ParseError

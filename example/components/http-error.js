@@ -1,8 +1,9 @@
+import ErrorMessage from './error-message'
+
 const HTTPError = ({ error: { status, statusText } }) => (
-  <aside>
-    <h1>Error: {status}</h1>
+  <ErrorMessage heading={`HTTP error: ${status}`}>
     <p>{statusText}</p>
-  </aside>
+  </ErrorMessage>
 )
 
 export default HTTPError

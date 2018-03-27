@@ -8,17 +8,17 @@ const CreateTimer = () => (
     fetchOptionsOverride={timeFetchOptionsOverride}
     query={
       /* GraphQL */ `
-      mutation createTimer {
-        createTimer {
-          id
+        mutation createTimer {
+          createTimer {
+            id
+          }
         }
-      }
-    `
+      `
     }
   >
     {({ loading, data, load }) => (
       <section>
-        {data && <p>Timer ID “{data.createTimer.id}” created.</p>}
+        {data && <p>Created timer ID “{data.createTimer.id}”.</p>}
         {loading ? <Loader /> : <button onClick={load}>Create timer</button>}
       </section>
     )}

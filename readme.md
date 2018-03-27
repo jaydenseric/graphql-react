@@ -53,7 +53,7 @@ const Page = () => (
 
 ## Example
 
-See the [example Next.js app and GraphQL API](example/readme.md).
+See the [example GraphQL API and Next.js web app](example/readme.md), deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
 ## Support
 

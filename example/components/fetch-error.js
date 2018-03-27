@@ -1,8 +1,9 @@
+import ErrorMessage from './error-message'
+
 const FetchError = ({ error }) => (
-  <aside>
-    <h1>Fetch error</h1>
+  <ErrorMessage heading="Fetch error">
     <p>{error}</p>
-  </aside>
+  </ErrorMessage>
 )
 
 export default FetchError

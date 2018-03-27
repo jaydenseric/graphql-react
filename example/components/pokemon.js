@@ -1,11 +1,10 @@
-import { Fragment } from 'react'
 import { Query } from 'graphql-react'
+import { pokemonFetchOptionsOverride } from '../api-fetch-options'
 import Loader from './loader'
 import FetchError from './fetch-error'
 import HTTPError from './http-error'
 import ParseError from './parse-error'
 import GraphQLErrors from './graphql-errors'
-import { pokemonFetchOptionsOverride } from '../api-fetch-options'
 
 const Pokemon = ({ name }) => (
   <Query
@@ -15,22 +14,25 @@ const Pokemon = ({ name }) => (
     fetchOptionsOverride={pokemonFetchOptionsOverride}
     query={
       /* GraphQL */ `
-      query pokemon($name: String!) {
-        pokemon(name: $name) {
-          number
-          classification
-          image
+        query pokemon($name: String!) {
+          pokemon(name: $name) {
+            number
+            classification
+            image
+          }
         }
-      }
-    `
+      `
     }
   >
     {({ loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
       <article>
-        <h1>{name}</h1>
-        {data && (
-          <Fragment>
-            <img src={data.pokemon.image} width="100" alt={name} />
+        {loading && <Loader />}
+        {fetchError && <FetchError error={fetchError} />}
+        {httpError && <HTTPError error={httpError} />}
+        {parseError && <ParseError error={parseError} />}
+        {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
+        {data &&
+          data.pokemon && (
             <table>
               <tbody>
                 <tr>
@@ -38,18 +40,31 @@ const Pokemon = ({ name }) => (
                   <td>{data.pokemon.number}</td>
                 </tr>
                 <tr>
+                  <th>Name</th>
+                  <td>{name}</td>
+                </tr>
+                <tr>
                   <th>Classification</th>
                   <td>{data.pokemon.classification}</td>
                 </tr>
+                <tr>
+                  <th>Image</th>
+                  <td>
+                    <img src={data.pokemon.image} width="50" alt={name} />
+                  </td>
+                </tr>
               </tbody>
+              <style jsx>{`
+                th {
+                  text-align: right;
+                }
+                th,
+                td {
+                  vertical-align: top;
+                }
+              `}</style>
             </table>
-          </Fragment>
-        )}
-        {loading && <Loader />}
-        {fetchError && <FetchError error={fetchError} />}
-        {httpError && <HTTPError error={httpError} />}
-        {parseError && <ParseError error={parseError} />}
-        {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
+          )}
       </article>
     )}
   </Query>

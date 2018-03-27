@@ -1,10 +1,11 @@
+import ErrorMessage from './error-message'
+
 const GraphQLErrors = ({ errors }) => (
-  <aside>
-    <h1>GraphQL errors</h1>
+  <ErrorMessage heading="GraphQL errors">
     <ul>
       {errors.map(({ message }, index) => <li key={index}>{message}</li>)}
     </ul>
-  </aside>
+  </ErrorMessage>
 )
 
 export default GraphQLErrors

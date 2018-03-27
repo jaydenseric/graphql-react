@@ -1,0 +1,15 @@
+{
+  "short_name": "graphql-react",
+  "name": "graphql-react example",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "white",
+  "background_color": "white",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
