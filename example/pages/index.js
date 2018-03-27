@@ -116,6 +116,7 @@ export default provider(
       </p>
       <Query
         loadOnMount
+        loadOnReset
         fetchOptionsOverride={timeFetchOptionsOverride}
         query={
           /* GraphQL */ `
