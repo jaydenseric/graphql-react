@@ -156,17 +156,24 @@ export class GraphQL {
    */
   request = ({ url, ...options }, fetchOptionsHash) => {
     const requestCache = {}
-    return (this.requests[fetchOptionsHash] = fetch(url, options)).then(
-      response => {
-        if (!response.ok)
-          requestCache.httpError = {
-            status: response.status,
-            statusText: response.statusText
-          }
+    const fetcher =
+      typeof fetch === 'function'
+        ? fetch
+        : () =>
+            Promise.reject(
+              new Error('Global fetch API or polyfill unavailable.')
+            )
 
-        return response
-          .json()
-          .then(
+    return (this.requests[fetchOptionsHash] = fetcher(url, options))
+      .then(
+        response => {
+          if (!response.ok)
+            requestCache.httpError = {
+              status: response.status,
+              statusText: response.statusText
+            }
+
+          return response.json().then(
             ({ errors, data }) => {
               // JSON parse ok.
               if (!errors && !data)
@@ -179,18 +186,21 @@ export class GraphQL {
               requestCache.parseError = message
             }
           )
-          .then(() => {
-            // Cache the request.
-            this.cache[fetchOptionsHash] = requestCache
-            this.emitCacheUpdate(fetchOptionsHash, requestCache)
+        },
+        ({ message }) => {
+          requestCache.fetchError = message
+        }
+      )
+      .then(() => {
+        // Cache the request.
+        this.cache[fetchOptionsHash] = requestCache
+        this.emitCacheUpdate(fetchOptionsHash, requestCache)
 
-            // Clear the done request.
-            delete this.requests[fetchOptionsHash]
+        // Clear the done request.
+        delete this.requests[fetchOptionsHash]
 
-            return requestCache
-          })
-      }
-    )
+        return requestCache
+      })
   }
 
   /**
@@ -277,7 +287,8 @@ export class GraphQL {
  * JSON serializable result of a GraphQL request (including all errors and data)
  * suitable for caching.
  * @typedef {Object} RequestCache
- * @prop {HTTPError} [httpError] Fetch HTTP error.
+ * @prop {string} [fetchError] Fetch error message.
+ * @prop {HTTPError} [httpError] Fetch response HTTP error.
  * @prop {string} [parseError] Parse error message.
  * @prop {Object} [graphQLErrors] GraphQL response errors.
  * @prop {Object} [data] GraphQL response data.

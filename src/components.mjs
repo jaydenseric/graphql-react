@@ -253,11 +253,21 @@ class GraphQLQuery extends React.Component {
  *       }
  *     `}
  *   >
- *     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+ *     {({
+ *       load,
+ *       loading,
+ *       fetchError,
+ *       httpError,
+ *       parseError,
+ *       graphQLErrors,
+ *       data
+ *     }) => (
  *       <article>
  *         <button onClick={load}>Reload</button>
  *         {loading && <span>Loading…</span>}
- *         {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+ *         {(fetchError || httpError || parseError || graphQLErrors) && (
+ *           <strong>Error!</strong>
+ *         )}
  *         {data && <h1>{data.user.name}</h1>}
  *       </article>
  *     )}
@@ -270,7 +280,7 @@ class GraphQLQuery extends React.Component {
  *   <Query
  *     resetOnLoad
  *     fetchOptionsOverride={options => {
- *      options.url = 'https://api.example.com/graphql'
+ *       options.url = 'https://api.example.com/graphql'
  *     }}
  *     variables={{ articleId }}
  *     query={`
@@ -281,10 +291,22 @@ class GraphQLQuery extends React.Component {
  *       }
  *     `}
  *   >
- *     {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+ *     {({
+ *       load,
+ *       loading,
+ *       fetchError,
+ *       httpError,
+ *       parseError,
+ *       graphQLErrors,
+ *       data
+ *     }) => (
  *       <aside>
- *         <button onClick={load} disabled={loading}>Clap</button>
- *         {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+ *         <button onClick={load} disabled={loading}>
+ *           Clap
+ *         </button>
+ *         {(fetchError || httpError || parseError || graphQLErrors) && (
+ *           <strong>Error!</strong>
+ *         )}
  *         {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
  *       </aside>
  *     )}
@@ -312,17 +334,18 @@ Query.propTypes = {
  * @typedef {Function} QueryRender
  * @param {Function} load Loads the query on demand, updating cache.
  * @param {boolean} loading Is the query loading.
- * @param {HTTPError} [httpError] Fetch HTTP error.
+ * @param {string} [fetchError] Fetch error message.
+ * @param {HTTPError} [httpError] Fetch response HTTP error.
  * @param {string} [parseError] Parse error message.
  * @param {Object} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
  * @returns {ReactElement} React virtual DOM element.
  * @example
- * ({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+ * ({ load, loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
  *   <aside>
  *     <button onClick={load}>Reload</button>
  *     {loading && <span>Loading…</span>}
- *     {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+ *     {(fetchError || httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
  *     {data && <h1>{data.user.name}</h1>}
  *   </aside>
  * )

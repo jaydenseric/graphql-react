@@ -93,73 +93,59 @@ test.before(async () => {
   })
 })
 
-test('Cache export & import.', async t => {
-  const graphql1 = new GraphQL()
-
-  await graphql1.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
-    },
-    operation: {
-      variables: { date: '2018-01-01' },
-      query: YEAR_QUERY
-    }
-  }).request
-
-  const graphql2 = new GraphQL({ cache: graphql1.cache })
-
-  t.is(graphql1.cache, graphql2.cache)
-})
-
-test('Cache reset.', async t => {
+test.serial('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
 
-  const {
-    fetchOptionsHash: fetchOptionsHash1,
-    request: request1
-  } = await graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
-    },
-    operation: {
-      variables: { date: '2018-01-01' },
-      query: YEAR_QUERY
-    }
-  })
+  // Store and delete the global fetch polyfill.
+  const { fetch } = global
+  delete global.fetch
 
-  await request1
+  // Run the query with fetch unavailable.
+  const requestCache = await graphql.query({
+    operation: { query: EPOCH_QUERY }
+  }).request
 
-  const cacheBefore = JSON.stringify(graphql.cache)
+  // Restore the global fetch polyfill.
+  global.fetch = fetch
 
-  const {
-    fetchOptionsHash: fetchOptionsHash2,
-    request: request2
-  } = graphql.query({
-    fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
-    },
-    variables: { date: '2018-01-02' },
-    query: YEAR_QUERY
-  })
+  t.snapshot(requestCache, 'GraphQL request cache.')
 
-  await request2
-
-  graphql.onCacheUpdate(fetchOptionsHash1, () => t.fail())
-
-  const request2CacheListener = new Promise(resolve => {
-    graphql.onCacheUpdate(fetchOptionsHash2, resolve)
-  })
-
-  graphql.reset(fetchOptionsHash1)
-
-  const cacheAfter = JSON.stringify(graphql.cache)
-
-  t.falsy(await request2CacheListener)
-
-  t.is(cacheAfter, cacheBefore)
+  renderToString(
+    <Provider value={graphql}>
+      <Query loadOnMount query={EPOCH_QUERY}>
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
 })
 
-test('Query with HTTP error.', async t => {
+test('Query SSR with relative fetch URL.', async t => {
+  // The relative default fetch options URL causes a fetch error in a server
+  // environment.
+
+  const graphql = new GraphQL()
+  const requestCache = await graphql.query({
+    operation: { query: EPOCH_QUERY }
+  }).request
+
+  t.snapshot(requestCache, 'GraphQL request cache.')
+
+  renderToString(
+    <Provider value={graphql}>
+      <Query loadOnMount query={EPOCH_QUERY}>
+        {function() {
+          t.snapshot(arguments, 'Query render function arguments.')
+          return null
+        }}
+      </Query>
+    </Provider>
+  )
+})
+
+test('Query SSR with HTTP error.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}/404`
@@ -192,7 +178,7 @@ test('Query with HTTP error.', async t => {
   )
 })
 
-test('Query with response JSON invalid.', async t => {
+test('Query SSR with response JSON invalid.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}?bad=json`
@@ -225,7 +211,7 @@ test('Query with response JSON invalid.', async t => {
   )
 })
 
-test('Query with response payload malformed.', async t => {
+test('Query SSR with response payload malformed.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}?bad=payload`
@@ -253,7 +239,7 @@ test('Query with response payload malformed.', async t => {
   )
 })
 
-test('Query with GraphQL errors.', async t => {
+test('Query SSR with GraphQL errors.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
@@ -284,7 +270,7 @@ test('Query with GraphQL errors.', async t => {
   )
 })
 
-test('Query with variables.', async t => {
+test('Query SSR with variables.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
@@ -317,7 +303,7 @@ test('Query with variables.', async t => {
   )
 })
 
-test('Server side render nested queries.', async t => {
+test('Query SSR with nested query.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
@@ -409,6 +395,72 @@ test('Preload legacy React context API components.', async t => {
   await t.notThrows(async () => {
     await preload(tree)
   })
+})
+
+test('Cache export & import.', async t => {
+  const graphql1 = new GraphQL()
+
+  await graphql1.query({
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: YEAR_QUERY
+    }
+  }).request
+
+  const graphql2 = new GraphQL({ cache: graphql1.cache })
+
+  t.is(graphql1.cache, graphql2.cache)
+})
+
+test('Cache reset.', async t => {
+  const graphql = new GraphQL()
+
+  const {
+    fetchOptionsHash: fetchOptionsHash1,
+    request: request1
+  } = await graphql.query({
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    operation: {
+      variables: { date: '2018-01-01' },
+      query: YEAR_QUERY
+    }
+  })
+
+  await request1
+
+  const cacheBefore = JSON.stringify(graphql.cache)
+
+  const {
+    fetchOptionsHash: fetchOptionsHash2,
+    request: request2
+  } = graphql.query({
+    fetchOptionsOverride: options => {
+      options.url = `http://localhost:${port}`
+    },
+    variables: { date: '2018-01-02' },
+    query: YEAR_QUERY
+  })
+
+  await request2
+
+  graphql.onCacheUpdate(fetchOptionsHash1, () => t.fail())
+
+  const request2CacheListener = new Promise(resolve => {
+    graphql.onCacheUpdate(fetchOptionsHash2, resolve)
+  })
+
+  graphql.reset(fetchOptionsHash1)
+
+  const cacheAfter = JSON.stringify(graphql.cache)
+
+  t.falsy(await request2CacheListener)
+
+  t.is(cacheAfter, cacheBefore)
 })
 
 test.after(() =>

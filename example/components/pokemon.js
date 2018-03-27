@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { Query } from 'graphql-react'
 import Loader from './loader'
+import FetchError from './fetch-error'
 import HTTPError from './http-error'
 import ParseError from './parse-error'
 import GraphQLErrors from './graphql-errors'
@@ -24,7 +25,7 @@ const Pokemon = ({ name }) => (
     `
     }
   >
-    {({ loading, httpError, parseError, graphQLErrors, data }) => (
+    {({ loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
       <article>
         <h1>{name}</h1>
         {data && (
@@ -45,6 +46,7 @@ const Pokemon = ({ name }) => (
           </Fragment>
         )}
         {loading && <Loader />}
+        {fetchError && <FetchError error={fetchError} />}
         {httpError && <HTTPError error={httpError} />}
         {parseError && <ParseError error={parseError} />}
         {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}

@@ -62,8 +62,8 @@ See the [example Next.js app and GraphQL API](example/readme.md).
 
 Consider polyfilling:
 
-* [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API)
 * [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+* [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API)
 
 ## API
 
@@ -252,11 +252,21 @@ const Profile = ({ userId }) => (
       }
     `}
   >
-    {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+    {({
+      load,
+      loading,
+      fetchError,
+      httpError,
+      parseError,
+      graphQLErrors,
+      data
+    }) => (
       <article>
         <button onClick={load}>Reload</button>
         {loading && <span>Loading…</span>}
-        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+        {(fetchError || httpError || parseError || graphQLErrors) && (
+          <strong>Error!</strong>
+        )}
         {data && <h1>{data.user.name}</h1>}
       </article>
     )}
@@ -284,12 +294,22 @@ const ClapArticleButton = ({ articleId }) => (
       }
     `}
   >
-    {({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+    {({
+      load,
+      loading,
+      fetchError,
+      httpError,
+      parseError,
+      graphQLErrors,
+      data
+    }) => (
       <aside>
         <button onClick={load} disabled={loading}>
           Clap
         </button>
-        {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+        {(fetchError || httpError || parseError || graphQLErrors) && (
+          <strong>Error!</strong>
+        )}
         {data && <p>Clapped {data.clapArticle.clapCount} times.</p>}
       </aside>
     )}
@@ -309,7 +329,8 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 
 * `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
 * `loading` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
-* `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
+* `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
+* `httpError` **[HTTPError](#httperror)?** Fetch response HTTP error.
 * `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 * `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 * `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
@@ -317,11 +338,21 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 **Examples**
 
 ```javascript
-;({ load, loading, httpError, parseError, graphQLErrors, data }) => (
+;({
+  load,
+  loading,
+  fetchError,
+  httpError,
+  parseError,
+  graphQLErrors,
+  data
+}) => (
   <aside>
     <button onClick={load}>Reload</button>
     {loading && <span>Loading…</span>}
-    {(httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+    {(fetchError || httpError || parseError || graphQLErrors) && (
+      <strong>Error!</strong>
+    )}
     {data && <h1>{data.user.name}</h1>}
   </aside>
 )
@@ -439,7 +470,8 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 **Properties**
 
-* `httpError` **[HTTPError](#httperror)?** Fetch HTTP error.
+* `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
+* `httpError` **[HTTPError](#httperror)?** Fetch response HTTP error.
 * `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 * `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 * `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
