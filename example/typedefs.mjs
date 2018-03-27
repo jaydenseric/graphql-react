@@ -1,7 +1,8 @@
-export default `
+export default /* GraphQL */ `
   type Query {
     timer(timerId: ID!): Timer!
     timers: [Timer]!
+    exampleError: Boolean!
   }
 
   type Mutation {

@@ -3,7 +3,12 @@ const timers = {}
 export default {
   Query: {
     timer: (obj, { timerId }) => timers[timerId],
-    timers: () => Object.values(timers)
+    timers: () => Object.values(timers),
+    exampleError: () => {
+      throw new Error(
+        'This example error was thrown in the “exampleError” query resolver.'
+      )
+    }
   },
   Mutation: {
     createTimer: () => {

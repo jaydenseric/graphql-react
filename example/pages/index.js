@@ -1,15 +1,10 @@
-import { Query } from 'graphql-react'
-import { timeFetchOptionsOverride } from '../api-fetch-options'
 import provider from '../provider'
 import Page from '../components/page'
 import CacheResetter from '../components/cache-resetter'
 import CreateTimer from '../components/create-timer'
 import Timers from '../components/timers'
 import Pokemon from '../components/pokemon'
-import FetchError from '../components/fetch-error'
-import HTTPError from '../components/http-error'
-import ParseError from '../components/parse-error'
-import GraphQLErrors from '../components/graphql-errors'
+import ExampleGraphQLError from '../components/example-graphql-error'
 
 export default provider(
   <Page
@@ -112,29 +107,9 @@ export default provider(
       <h2>SSR errors</h2>
       <p>
         A novel characteristic is that errors cache and therefore SSR. Below is
-        an invalid GraphQL query.
+        a query with an example error thrown in the resolver.
       </p>
-      <Query
-        loadOnMount
-        loadOnReset
-        fetchOptionsOverride={timeFetchOptionsOverride}
-        query={
-          /* GraphQL */ `
-            {
-              meaningOfLife
-            }
-          `
-        }
-      >
-        {({ fetchError, httpError, parseError, graphQLErrors }) => (
-          <article>
-            {fetchError && <FetchError error={fetchError} />}
-            {httpError && <HTTPError error={httpError} />}
-            {parseError && <ParseError error={parseError} />}
-            {graphQLErrors && <GraphQLErrors errors={graphQLErrors} />}
-          </article>
-        )}
-      </Query>
+      <ExampleGraphQLError />
     </section>
   </Page>
 )
