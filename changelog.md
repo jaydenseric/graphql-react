@@ -2,7 +2,9 @@
 
 ## Next
 
-* Valid length `short_name` for the example app manifest.
+* Example updates:
+  * Valid length app manifest `short_name`.
+  * Added `<html>` `lang` attribute.
 
 ## 1.0.0-alpha.4
 
