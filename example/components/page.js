@@ -11,6 +11,9 @@ const Page = ({ title, description, children }) => (
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
       <meta name="theme-color" content="white" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:site" content="@jaydenseric" />
+      <meta name="twitter:creator" content="@jaydenseric" />
       <meta property="og:title" content={title} />
       {description && <meta property="og:description" content={description} />}
       <meta

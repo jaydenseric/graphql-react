@@ -5,6 +5,7 @@
 * Example updates:
   * Valid length app manifest `short_name`.
   * Added `<html>` `lang` attribute.
+  * Added Twitter card meta tags.
 
 ## 1.0.0-alpha.4
 
