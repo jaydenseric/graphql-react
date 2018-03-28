@@ -1,5 +1,9 @@
 # graphql-react changelog
 
+## Next
+
+* Valid length `short_name` for the example app manifest.
+
 ## 1.0.0-alpha.4
 
 * Updated dependencies.
