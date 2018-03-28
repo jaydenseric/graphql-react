@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0-alpha.4
 
 * Updated dependencies.
 * Replaced [`isomorphic-unfetch`](https://npm.im/isomorphic-unfetch) with the more updated [`cross-fetch`](https://npm.im/cross-fetch).
