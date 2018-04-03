@@ -2,6 +2,7 @@
 
 ## Next
 
+* Updated dependencies.
 * Example updates:
   * Valid length app manifest `short_name`.
   * Added `<html>` `lang` attribute.
