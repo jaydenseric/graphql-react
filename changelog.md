@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0-alpha.5
 
 * Updated dependencies.
 * Updated the `react` peer dependency to `^16.3.1`.

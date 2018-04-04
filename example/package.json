@@ -8,7 +8,7 @@
     "dotenv-cli": "^1.4.0",
     "esm": "^3.0.15",
     "graphql": "^0.13.2",
-    "graphql-react": "^1.0.0-alpha.4",
+    "graphql-react": "^1.0.0-alpha.5",
     "graphql-tools": "^2.23.1",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
