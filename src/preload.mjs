@@ -111,8 +111,8 @@ export function preload(element) {
         element.props.children
       ) {
         // If the element is a context provider first set the value.
-        if (element.type.context)
-          element.type.context.currentValue = element.props.value
+        if (element.type._context)
+          element.type._context.currentValue = element.props.value
 
         recurse(element.props.children, legacyContext)
       }

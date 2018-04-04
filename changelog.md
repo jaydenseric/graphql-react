@@ -3,6 +3,8 @@
 ## Next
 
 * Updated dependencies.
+* Updated the `react` peer dependency to `^16.3.1`.
+* Fixed `preload` broken due to the [React v16.3.1](https://github.com/facebook/react/releases/tag/v16.3.1) [context API change](https://github.com/facebook/react/pull/12501).
 * Example updates:
   * Valid length app manifest `short_name`.
   * Added `<html>` `lang` attribute.
