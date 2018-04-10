@@ -126,7 +126,7 @@ export class GraphQL {
     const fetchOptions = {
       url: '/graphql',
       method: 'POST',
-      headers: { accept: 'application/json' }
+      headers: { Accept: 'application/json' }
     }
 
     fetchOptions.body = this.requestBody(operation)
