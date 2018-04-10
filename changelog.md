@@ -1,5 +1,9 @@
 # graphql-react changelog
 
+## Next
+
+* Readme example link goes to the example project directory instead of the readme file.
+
 ## 1.0.0-alpha.5
 
 * Updated dependencies.
