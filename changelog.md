@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.0
 
 * Updated dependencies.
 * Pinned `@babel` dev dependencies to match new AVA requirements.
