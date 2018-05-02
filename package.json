@@ -64,7 +64,6 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "fake-tag": "^1.0.0",
-    "get-port": "^3.2.0",
     "graphql": "^0.13.2",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.5",

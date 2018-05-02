@@ -13,6 +13,7 @@
   * Use [`express-graphql`](https://npm.im/express-graphql) instead of Apollo packages.
 * Test updates:
   * Removed [`apollo-upload-server`](https://npm.im/apollo-upload-server) as there are no upload tests yet.
+  * Removed [`get-port`](https://npm.im/get-port) as not providing a port to `app.listen` has the same effect.
 * Example updates:
   * Stop using [`esm`](https://npm.im/esm) due to [graphql/express-graphql#425](https://github.com/graphql/express-graphql/issues/425).
   * Enabled GraphiQL and added a link to it on the homepage.

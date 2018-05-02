@@ -1,6 +1,5 @@
 import 'cross-fetch/polyfill'
 import test from 'ava'
-import getPort from 'get-port'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import { buildSchema } from 'graphql'
@@ -9,9 +8,6 @@ import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
 import gql from 'fake-tag'
 import { GraphQL, Provider, Query, preload } from '../lib'
-
-let port
-let server
 
 const EPOCH_QUERY = gql`
   {
@@ -42,6 +38,13 @@ const schema = buildSchema(gql`
   }
 `)
 
+const rootValue = {
+  date: ({ isoDate }) => new ISODate(isoDate),
+  epoch: () => new ISODate(0),
+  daysBetween: ({ isoDateFrom, isoDateTo }) =>
+    Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
+}
+
 class ISODate {
   constructor(value) {
     this.date = new Date(value)
@@ -54,13 +57,6 @@ class ISODate {
   year() {
     return this.date.getFullYear()
   }
-}
-
-const rootValue = {
-  date: ({ isoDate }) => new ISODate(isoDate),
-  epoch: () => new ISODate(0),
-  daysBetween: ({ isoDateFrom, isoDateTo }) =>
-    Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
 }
 
 const app = express()
@@ -84,16 +80,22 @@ const app = express()
       .send('Not found.')
   )
 
-test.before(async () => {
-  // Setup the test GraphQL server.
-  port = await getPort()
-  server = await new Promise((resolve, reject) => {
-    const server = app.listen(port, error => {
-      if (error) reject(error)
-      else resolve(server)
+let port
+let server
+
+test.before(
+  () =>
+    new Promise((resolve, reject) => {
+      // Setup the test GraphQL server.
+      server = app.listen(error => {
+        if (error) reject(error)
+        else {
+          ;({ port } = server.address())
+          resolve()
+        }
+      })
     })
-  })
-})
+)
 
 test.serial('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
