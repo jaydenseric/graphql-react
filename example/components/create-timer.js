@@ -1,4 +1,5 @@
 import { Query } from 'graphql-react'
+import gql from 'fake-tag'
 import Loader from './loader'
 import { timeFetchOptionsOverride } from '../api-fetch-options'
 
@@ -6,15 +7,13 @@ const CreateTimer = () => (
   <Query
     resetOnLoad
     fetchOptionsOverride={timeFetchOptionsOverride}
-    query={
-      /* GraphQL */ `
-        mutation createTimer {
-          createTimer {
-            id
-          }
+    query={gql`
+      mutation createTimer {
+        createTimer {
+          id
         }
-      `
-    }
+      }
+    `}
   >
     {({ loading, data, load }) => (
       <section>

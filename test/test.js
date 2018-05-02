@@ -1,72 +1,19 @@
 import 'cross-fetch/polyfill'
 import test from 'ava'
 import getPort from 'get-port'
-import Koa from 'koa'
-import Router from 'koa-router'
-import koaBody from 'koa-bodyparser'
-import { apolloUploadKoa, GraphQLUpload } from 'apollo-upload-server'
-import * as apolloServerKoa from 'apollo-server-koa'
-import * as graphqlTools from 'graphql-tools'
+import express from 'express'
+import graphqlHTTP from 'express-graphql'
+import { buildSchema } from 'graphql'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
+import gql from 'fake-tag'
 import { GraphQL, Provider, Query, preload } from '../lib'
 
 let port
 let server
 
-const typeDefs = /* GraphQL */ `
-  type Query {
-    date(isoDate: String!): Date!
-    epoch: Date!
-    daysBetween(isoDateFrom: String!, isoDateTo: String!): Int!
-  }
-
-  scalar Upload
-
-  type Date {
-    iso: String!
-    year: Int!
-  }
-`
-
-const resolvers = {
-  Query: {
-    date: (obj, { isoDate }) => new Date(isoDate),
-    epoch: () => new Date(0),
-    daysBetween: (obj, { isoDateFrom, isoDateTo }) =>
-      Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
-  },
-  Upload: GraphQLUpload,
-  Date: {
-    iso: date => date.toISOString(),
-    year: date => date.getFullYear()
-  }
-}
-
-const router = new Router().post(
-  '/',
-  koaBody(),
-  async (ctx, next) => {
-    if (ctx.query.bad === 'json') {
-      ctx.status = 200
-      ctx.type = 'txt'
-      ctx.body = 'Not JSON.'
-    } else if (ctx.query.bad === 'payload') {
-      ctx.status = 200
-      ctx.type = 'json'
-      ctx.body = '[{"bad": true}]'
-    } else await next()
-  },
-  apolloUploadKoa(),
-  apolloServerKoa.graphqlKoa({
-    schema: graphqlTools.makeExecutableSchema({ typeDefs, resolvers })
-  })
-)
-
-const app = new Koa().use(router.routes()).use(router.allowedMethods())
-
-const EPOCH_QUERY = /* GraphQL */ `
+const EPOCH_QUERY = gql`
   {
     epoch {
       iso
@@ -74,13 +21,68 @@ const EPOCH_QUERY = /* GraphQL */ `
   }
 `
 
-const YEAR_QUERY = /* GraphQL */ `
+const YEAR_QUERY = gql`
   query($date: String!) {
     date(isoDate: $date) {
       year
     }
   }
 `
+
+const schema = buildSchema(gql`
+  type Query {
+    date(isoDate: String!): Date!
+    epoch: Date!
+    daysBetween(isoDateFrom: String!, isoDateTo: String!): Int!
+  }
+
+  type Date {
+    iso: String!
+    year: Int!
+  }
+`)
+
+class ISODate {
+  constructor(value) {
+    this.date = new Date(value)
+  }
+
+  iso() {
+    return this.date.toISOString()
+  }
+
+  year() {
+    return this.date.getFullYear()
+  }
+}
+
+const rootValue = {
+  date: ({ isoDate }) => new ISODate(isoDate),
+  epoch: () => new ISODate(0),
+  daysBetween: ({ isoDateFrom, isoDateTo }) =>
+    Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
+}
+
+const app = express()
+  .use('/graphql', graphqlHTTP({ schema, rootValue }))
+  .use('/bad-payload', (request, response) =>
+    response
+      .status(200)
+      .type('json')
+      .send('[{"bad": true}]')
+  )
+  .use('/bad-json', (request, response) =>
+    response
+      .status(200)
+      .type('txt')
+      .send('Not JSON.')
+  )
+  .use('/404', (request, response) =>
+    response
+      .status(404)
+      .type('txt')
+      .send('Not found.')
+  )
 
 test.before(async () => {
   // Setup the test GraphQL server.
@@ -181,7 +183,7 @@ test('Query SSR with HTTP error.', async t => {
 test('Query SSR with response JSON invalid.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}?bad=json`
+    options.url = `http://localhost:${port}/bad-json`
   }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
@@ -214,7 +216,7 @@ test('Query SSR with response JSON invalid.', async t => {
 test('Query SSR with response payload malformed.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}?bad=payload`
+    options.url = `http://localhost:${port}/bad-payload`
   }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
@@ -242,7 +244,7 @@ test('Query SSR with response payload malformed.', async t => {
 test('Query SSR with GraphQL errors.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}`
+    options.url = `http://localhost:${port}/graphql`
   }
 
   const query = 'x'
@@ -273,7 +275,7 @@ test('Query SSR with GraphQL errors.', async t => {
 test('Query SSR with variables.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}`
+    options.url = `http://localhost:${port}/graphql`
   }
 
   const variables = { date: '2018-01-01' }
@@ -306,7 +308,7 @@ test('Query SSR with variables.', async t => {
 test('Query SSR with nested query.', async t => {
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}`
+    options.url = `http://localhost:${port}/graphql`
   }
   const tree = (
     <Provider value={graphql}>
@@ -315,21 +317,20 @@ test('Query SSR with nested query.', async t => {
         fetchOptionsOverride={fetchOptionsOverride}
         query={EPOCH_QUERY}
       >
-        {({ data: { epoch: { iso } } }) => (
+        {({
+          data: {
+            epoch: { iso }
+          }
+        }) => (
           <Query
             loadOnMount
             fetchOptionsOverride={fetchOptionsOverride}
             variables={{ isoDateFrom: iso }}
-            query={
-              /* GraphQL */ `
-                query($isoDateFrom: String!) {
-                  daysBetween(
-                    isoDateFrom: $isoDateFrom,
-                    isoDateTo: "2018-01-01"
-                  )
-                }
-              `
-            }
+            query={gql`
+              query($isoDateFrom: String!) {
+                daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
+              }
+            `}
           >
             {result => (
               <pre
@@ -402,7 +403,7 @@ test('Cache export & import.', async t => {
 
   await graphql1.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
+      options.url = `http://localhost:${port}/graphql`
     },
     operation: {
       variables: { date: '2018-01-01' },
@@ -423,7 +424,7 @@ test('Cache reset.', async t => {
     request: request1
   } = await graphql.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
+      options.url = `http://localhost:${port}/graphql`
     },
     operation: {
       variables: { date: '2018-01-01' },
@@ -440,7 +441,7 @@ test('Cache reset.', async t => {
     request: request2
   } = graphql.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}`
+      options.url = `http://localhost:${port}/graphql`
     },
     variables: { date: '2018-01-02' },
     query: YEAR_QUERY

@@ -24,11 +24,16 @@ export default provider(
         <a href="https://github.com/jaydenseric/graphql-react">graphql-react</a>{' '}
         npm package.
       </p>
-      <p>
-        <a href="https://github.com/jaydenseric/graphql-react/tree/master/example">
-          See the source code on Github
-        </a>.
-      </p>
+      <ul>
+        <li>
+          <a href="/graphql">Explore the API with GraphiQL.</a>
+        </li>
+        <li>
+          <a href="https://github.com/jaydenseric/graphql-react/tree/master/example">
+            See the source code on Github.
+          </a>
+        </li>
+      </ul>
     </header>
     <section>
       <h2>Mutations</h2>

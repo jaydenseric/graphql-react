@@ -1,4 +1,5 @@
 import { Query } from 'graphql-react'
+import gql from 'fake-tag'
 import { timeFetchOptionsOverride } from '../api-fetch-options'
 import Loader from './loader'
 import FetchError from './fetch-error'
@@ -10,16 +11,14 @@ const Timer = ({ id, milliseconds }) => (
   <Query
     fetchOptionsOverride={timeFetchOptionsOverride}
     variables={{ id }}
-    query={
-      /* GraphQL */ `
-        query timer($id: ID!) {
-          timer(timerId: $id) {
-            id
-            milliseconds
-          }
+    query={gql`
+      query timer($id: ID!) {
+        timer(timerId: $id) {
+          id
+          milliseconds
         }
-      `
-    }
+      }
+    `}
   >
     {({
       load,
@@ -53,16 +52,14 @@ const Timers = () => (
     loadOnMount
     loadOnReset
     fetchOptionsOverride={timeFetchOptionsOverride}
-    query={
-      /* GraphQL */ `
-        {
-          timers {
-            id
-            milliseconds
-          }
+    query={gql`
+      {
+        timers {
+          id
+          milliseconds
         }
-      `
-    }
+      }
+    `}
   >
     {({ loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
       <section>

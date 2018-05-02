@@ -1,4 +1,5 @@
 import { Query } from 'graphql-react'
+import gql from 'fake-tag'
 import { pokemonFetchOptionsOverride } from '../api-fetch-options'
 import Loader from './loader'
 import FetchError from './fetch-error'
@@ -12,17 +13,15 @@ const Pokemon = ({ name }) => (
     loadOnReset
     variables={{ name }}
     fetchOptionsOverride={pokemonFetchOptionsOverride}
-    query={
-      /* GraphQL */ `
-        query pokemon($name: String!) {
-          pokemon(name: $name) {
-            number
-            classification
-            image
-          }
+    query={gql`
+      query pokemon($name: String!) {
+        pokemon(name: $name) {
+          number
+          classification
+          image
         }
-      `
-    }
+      }
+    `}
   >
     {({ loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
       <article>

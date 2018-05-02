@@ -6,6 +6,15 @@
 * Pinned `@babel` dev dependencies to match new AVA requirements.
 * Capitalized the fetch options `Accept` header for display consistency in tools such as the Chrome network inspector and to better support case-sensitive systems, even though HTTP headers are supposed to be case-insensitive.
 * Readme example link goes to the example project directory instead of the readme file.
+* Test and example updates:
+  * Use [`fake-tag`](https://npm.im/fake-tag) for GraphQL template literals due to [prettier/prettier#4360](https://github.com/prettier/prettier/issues/4360).
+  * Use [`express`](https://npm.im/express) instead of Koa packages.
+  * Use [`express-graphql`](https://npm.im/express-graphql) instead of Apollo packages.
+* Test updates:
+  * Removed [`apollo-upload-server`](https://npm.im/apollo-upload-server) as there are no upload tests yet.
+* Example updates:
+  * Stop using [`esm`](https://npm.im/esm) due to [graphql/express-graphql#425](https://github.com/graphql/express-graphql/issues/425).
+  * Enabled GraphiQL and added a link to it on the homepage.
 
 ## 1.0.0-alpha.5
 

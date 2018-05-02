@@ -101,9 +101,9 @@ export function preload(element) {
               )
             )
           else recurse(instance.render(), legacyContext)
-        } else
-          // The element is a functional component…
-          recurse(element.type(props), legacyContext)
+        }
+        // The element is a functional component…
+        else recurse(element.type(props), legacyContext)
       } else if (
         // The element is a context provider or DOM element and…
         element.props &&

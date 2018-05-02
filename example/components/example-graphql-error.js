@@ -1,4 +1,5 @@
 import { Query } from 'graphql-react'
+import gql from 'fake-tag'
 import { timeFetchOptionsOverride } from '../api-fetch-options'
 import Loader from './loader'
 import FetchError from './fetch-error'
@@ -11,13 +12,11 @@ const ExampleGraphQLError = () => (
     loadOnMount
     loadOnReset
     fetchOptionsOverride={timeFetchOptionsOverride}
-    query={
-      /* GraphQL */ `
-        {
-          exampleError
-        }
-      `
-    }
+    query={gql`
+      {
+        exampleError
+      }
+    `}
   >
     {({ loading, fetchError, httpError, parseError, graphQLErrors }) => (
       <article>
