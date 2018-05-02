@@ -4,6 +4,7 @@
 
 * Updated dependencies.
 * Pinned `@babel` dev dependencies to match new AVA requirements.
+* Use [`eslint-config-prettier`](https://npm.im/eslint-config-prettier).
 * Capitalized the fetch options `Accept` header for display consistency in tools such as the Chrome network inspector and to better support case-sensitive systems, even though HTTP headers are supposed to be case-insensitive.
 * Readme example link goes to the example project directory instead of the readme file.
 * Test and example updates:
