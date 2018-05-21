@@ -4,6 +4,7 @@
 
 * Fixed accidental distribution code Prettier ignoring.
 * No longer use `cross-env`; contributors with Windows may setup and use a Bash shell.
+* Removed linting fix scripts.
 
 ## 1.0.0
 
