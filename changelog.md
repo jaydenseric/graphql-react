@@ -3,6 +3,7 @@
 ## Next
 
 * Fixed accidental distribution code Prettier ignoring.
+* No longer use `cross-env`; contributors with Windows may setup and use a Bash shell.
 
 ## 1.0.0
 
