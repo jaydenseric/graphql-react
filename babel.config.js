@@ -10,7 +10,7 @@ module.exports = {
       '@babel/env',
       {
         targets: { node: node.substring(2) }, // Strip `>=`
-        modules: process.env.ESM ? false : 'commonjs',
+        modules: process.env.BABEL_ESM ? false : 'commonjs',
         loose: true,
         exclude: ['transform-async-to-generator', 'transform-regenerator']
       }

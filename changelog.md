@@ -8,6 +8,7 @@
 * Tests run against the actual dist `.mjs` and `.js` files in native ESM (`--experimental-modules`) and CJS environments.
 * Updated Babel config:
   * Use `babel.config.js` instead of `.babelrc.js`.
+  * Renamed the `ESM` environment variable to `BABEL_ESM` to be more specific.
 * Improved `package.json` scripts:
   * Leveraged `npm-run-all` more for parallelism and reduced noise.
   * Removed linting fix scripts.
