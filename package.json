@@ -57,6 +57,8 @@
     "documentation": "^7.0.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-react": "^7.8.2",
     "express": "^4.16.3",
@@ -111,15 +113,19 @@
       "node": true,
       "browser": true
     },
+    "plugins": [
+      "import",
+      "node",
+      "react",
+      "prettier"
+    ],
     "extends": [
       "eslint:recommended",
+      "plugin:import/recommended",
+      "plugin:node/recommended",
       "plugin:react/recommended",
       "prettier",
       "prettier/react"
-    ],
-    "plugins": [
-      "react",
-      "prettier"
     ],
     "rules": {
       "require-jsdoc": "warn",
@@ -129,17 +135,20 @@
           "requireReturn": false
         }
       ],
+      "require-await": "error",
+      "no-return-await": "error",
+      "arrow-body-style": "error",
+      "prefer-arrow-callback": "error",
       "curly": [
         "error",
         "multi"
       ],
-      "prefer-destructuring": [
-        "error",
-        {
-          "array": true,
-          "object": true
-        }
-      ],
+      "prefer-destructuring": "error",
+      "import/first": "error",
+      "import/newline-after-import": "error",
+      "import/no-useless-path-segments": "error",
+      "import/order": "error",
+      "node/no-unsupported-features": "off",
       "prettier/prettier": "error"
     },
     "overrides": [

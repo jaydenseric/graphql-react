@@ -1,7 +1,7 @@
 import { Query } from 'graphql-react'
 import gql from 'fake-tag'
-import Loader from './loader'
 import { timeFetchOptionsOverride } from '../api-fetch-options'
+import Loader from './loader'
 
 const CreateTimer = () => (
   <Query

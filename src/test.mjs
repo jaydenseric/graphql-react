@@ -2,14 +2,14 @@ import 'cross-fetch/polyfill'
 import t from 'tap'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
-
-// https://github.com/graphql/express-graphql/issues/425
-import graphql from '../graphql'
-
 import React from 'react'
 import reactDom from 'react-dom/server'
 import PropTypes from 'prop-types'
 import gql from 'fake-tag'
+
+// https://github.com/graphql/express-graphql/issues/425
+import graphql from '../graphql'
+
 import { GraphQL, Provider, Query, preload } from '.'
 
 const EPOCH_QUERY = gql`
