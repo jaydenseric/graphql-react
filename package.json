@@ -96,12 +96,16 @@
     "*.{json,md}": "prettier -l"
   },
   "eslintIgnore": [
+    "node_modules",
     "lib",
-    "tap-snapshots",
-    ".next"
+    "tap-snapshots"
   ],
   "eslintConfig": {
     "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "script",
+      "ecmaVersion": 2018
+    },
     "env": {
       "es6": true,
       "node": true,
@@ -137,7 +141,17 @@
         }
       ],
       "prettier/prettier": "error"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.mjs"
+        ],
+        "parserOptions": {
+          "sourceType": "module"
+        }
+      }
+    ]
   },
   "prettier": {
     "proseWrap": "never",
