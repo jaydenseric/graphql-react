@@ -2,6 +2,7 @@
 
 ## Next
 
+* Updated dependencies.
 * Fixed accidental distribution code Prettier ignoring.
 * Replaced `ava` with `node-tap` for testing. Tests don't require a special CLI, no longer transpile on the fly, are faster and AVA no longer dictates the Babel version.
 * Tests run against the actual dist `.mjs` and `.js` files in native ESM (`--experimental-modules`) and CJS environments.
