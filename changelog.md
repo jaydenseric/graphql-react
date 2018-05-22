@@ -6,12 +6,16 @@
 * Fixed accidental distribution code Prettier ignoring.
 * Replaced `ava` with `node-tap` for testing. Tests don't require a special CLI, no longer transpile on the fly, are faster and AVA no longer dictates the Babel version.
 * Tests run against the actual dist `.mjs` and `.js` files in native ESM (`--experimental-modules`) and CJS environments.
+* Updated Babel config:
+  * Use `babel.config.js` instead of `.babelrc.js`.
 * Improved `package.json` scripts:
   * Leveraged `npm-run-all` more for parallelism and reduced noise.
   * Removed linting fix scripts.
   * Linting included in the `test` script. Travis CI will fail PR's with lint errors.
   * Custom watch script.
   * No longer use `cross-env`; contributors with Windows may setup and use a Bash shell.
+* Improved ESLint config:
+  * Undo overriding ESLint ignoring dotfiles by default as there are none now.
 
 ## 1.0.0
 
