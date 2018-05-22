@@ -1,13 +1,16 @@
 import 'cross-fetch/polyfill'
-import test from 'ava'
+import t from 'tap'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
-import { buildSchema } from 'graphql'
+
+// https://github.com/graphql/express-graphql/issues/425
+import graphql from '../graphql'
+
 import React from 'react'
-import { renderToString } from 'react-dom/server'
+import reactDom from 'react-dom/server'
 import PropTypes from 'prop-types'
 import gql from 'fake-tag'
-import { GraphQL, Provider, Query, preload } from '../lib'
+import { GraphQL, Provider, Query, preload } from '.'
 
 const EPOCH_QUERY = gql`
   {
@@ -25,7 +28,7 @@ const YEAR_QUERY = gql`
   }
 `
 
-const schema = buildSchema(gql`
+const schema = graphql.buildSchema(gql`
   type Query {
     date(isoDate: String!): Date!
     epoch: Date!
@@ -59,45 +62,18 @@ class ISODate {
   }
 }
 
-const app = express()
-  .use('/graphql', graphqlHTTP({ schema, rootValue }))
-  .use('/bad-payload', (request, response) =>
-    response
-      .status(200)
-      .type('json')
-      .send('[{"bad": true}]')
-  )
-  .use('/bad-json', (request, response) =>
-    response
-      .status(200)
-      .type('txt')
-      .send('Not JSON.')
-  )
-  .use('/404', (request, response) =>
-    response
-      .status(404)
-      .type('txt')
-      .send('Not found.')
-  )
-
-let port
-let server
-
-test.before(
-  () =>
-    new Promise((resolve, reject) => {
-      // Setup the test GraphQL server.
-      server = app.listen(error => {
-        if (error) reject(error)
-        else {
-          ;({ port } = server.address())
-          resolve()
-        }
-      })
+const startServer = (t, app) =>
+  new Promise((resolve, reject) => {
+    app.listen(function(error) {
+      if (error) reject(error)
+      else {
+        t.tearDown(() => this.close())
+        resolve(this.address().port)
+      }
     })
-)
+  })
 
-test.serial('Query SSR with fetch unavailable.', async t => {
+t.test('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
 
   // Store and delete the global fetch polyfill.
@@ -112,13 +88,13 @@ test.serial('Query SSR with fetch unavailable.', async t => {
   // Restore the global fetch polyfill.
   global.fetch = fetch
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query loadOnMount query={EPOCH_QUERY}>
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -126,7 +102,7 @@ test.serial('Query SSR with fetch unavailable.', async t => {
   )
 })
 
-test('Query SSR with relative fetch URL.', async t => {
+t.test('Query SSR with relative fetch URL.', async t => {
   // The relative default fetch options URL causes a fetch error in a server
   // environment.
 
@@ -135,13 +111,13 @@ test('Query SSR with relative fetch URL.', async t => {
     operation: { query: EPOCH_QUERY }
   }).request
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query loadOnMount query={EPOCH_QUERY}>
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -149,10 +125,17 @@ test('Query SSR with relative fetch URL.', async t => {
   )
 })
 
-test('Query SSR with HTTP error.', async t => {
+t.test('Query SSR with HTTP error.', async t => {
+  const app = express().use((request, response) =>
+    response
+      .status(404)
+      .type('txt')
+      .send('Not found.')
+  )
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/404`
+    options.url = `http://localhost:${port}`
   }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
@@ -164,9 +147,9 @@ test('Query SSR with HTTP error.', async t => {
   if (typeof requestCache.parseError === 'string')
     requestCache.parseError = requestCache.parseError.replace(port, '<port>')
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -174,7 +157,7 @@ test('Query SSR with HTTP error.', async t => {
         query={EPOCH_QUERY}
       >
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -182,10 +165,17 @@ test('Query SSR with HTTP error.', async t => {
   )
 })
 
-test('Query SSR with response JSON invalid.', async t => {
+t.test('Query SSR with response JSON invalid.', async t => {
+  const app = express().use((request, response) =>
+    response
+      .status(200)
+      .type('txt')
+      .send('Not JSON.')
+  )
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/bad-json`
+    options.url = `http://localhost:${port}`
   }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
@@ -197,9 +187,9 @@ test('Query SSR with response JSON invalid.', async t => {
   if (typeof requestCache.parseError === 'string')
     requestCache.parseError = requestCache.parseError.replace(port, '<port>')
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -207,7 +197,7 @@ test('Query SSR with response JSON invalid.', async t => {
         query={EPOCH_QUERY}
       >
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -215,19 +205,26 @@ test('Query SSR with response JSON invalid.', async t => {
   )
 })
 
-test('Query SSR with response payload malformed.', async t => {
+t.test('Query SSR with response payload malformed.', async t => {
+  const app = express().use((request, response) =>
+    response
+      .status(200)
+      .type('json')
+      .send('[{"bad": true}]')
+  )
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/bad-payload`
+    options.url = `http://localhost:${port}`
   }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query: EPOCH_QUERY }
   }).request
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -235,7 +232,7 @@ test('Query SSR with response payload malformed.', async t => {
         query={EPOCH_QUERY}
       >
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -243,22 +240,22 @@ test('Query SSR with response payload malformed.', async t => {
   )
 })
 
-test('Query SSR with GraphQL errors.', async t => {
+t.test('Query SSR with GraphQL errors.', async t => {
+  const app = express().use(graphqlHTTP({ schema, rootValue }))
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/graphql`
+    options.url = `http://localhost:${port}`
   }
-
   const query = 'x'
-
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query }
   }).request
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -266,7 +263,7 @@ test('Query SSR with GraphQL errors.', async t => {
         query={query}
       >
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -274,23 +271,23 @@ test('Query SSR with GraphQL errors.', async t => {
   )
 })
 
-test('Query SSR with variables.', async t => {
+t.test('Query SSR with variables.', async t => {
+  const app = express().use(graphqlHTTP({ schema, rootValue }))
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/graphql`
+    options.url = `http://localhost:${port}`
   }
-
   const variables = { date: '2018-01-01' }
   const query = YEAR_QUERY
-
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { variables, query }
   }).request
 
-  t.snapshot(requestCache, 'GraphQL request cache.')
+  t.matchSnapshot(requestCache, 'GraphQL request cache.')
 
-  renderToString(
+  reactDom.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -299,7 +296,7 @@ test('Query SSR with variables.', async t => {
         query={query}
       >
         {function() {
-          t.snapshot(arguments, 'Query render function arguments.')
+          t.matchSnapshot(arguments, 'Query render function arguments.')
           return null
         }}
       </Query>
@@ -307,10 +304,12 @@ test('Query SSR with variables.', async t => {
   )
 })
 
-test('Query SSR with nested query.', async t => {
+t.test('Query SSR with nested query.', async t => {
+  const app = express().use(graphqlHTTP({ schema, rootValue }))
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
   const fetchOptionsOverride = options => {
-    options.url = `http://localhost:${port}/graphql`
+    options.url = `http://localhost:${port}`
   }
   const tree = (
     <Provider value={graphql}>
@@ -349,13 +348,13 @@ test('Query SSR with nested query.', async t => {
 
   await preload(tree)
 
-  t.snapshot(
-    renderToString(tree),
+  t.matchSnapshot(
+    reactDom.renderToString(tree),
     'HTML displaying the nested query render function argument.'
   )
 })
 
-test('Preload legacy React context API components.', async t => {
+t.test('Preload legacy React context API components.', async t => {
   class LegacyContextProvider extends React.Component {
     static propTypes = {
       value: PropTypes.string,
@@ -393,40 +392,39 @@ test('Preload legacy React context API components.', async t => {
     </LegacyContextProvider>
   )
 
-  t.snapshot(renderToString(tree), 'HTML.')
+  t.matchSnapshot(reactDom.renderToString(tree), 'HTML.')
 
-  await t.notThrows(async () => {
-    await preload(tree)
-  })
+  await preload(tree)
 })
 
-test('Cache export & import.', async t => {
+t.test('Cache export & import.', async t => {
+  const app = express().use(graphqlHTTP({ schema, rootValue }))
+  const port = await startServer(t, app)
   const graphql1 = new GraphQL()
-
   await graphql1.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}/graphql`
+      options.url = `http://localhost:${port}`
     },
     operation: {
       variables: { date: '2018-01-01' },
       query: YEAR_QUERY
     }
   }).request
-
   const graphql2 = new GraphQL({ cache: graphql1.cache })
 
-  t.is(graphql1.cache, graphql2.cache)
+  t.equals(graphql1.cache, graphql2.cache, 'Exported and imported cache match.')
 })
 
-test('Cache reset.', async t => {
+t.test('Cache reset.', async t => {
+  const app = express().use(graphqlHTTP({ schema, rootValue }))
+  const port = await startServer(t, app)
   const graphql = new GraphQL()
-
   const {
     fetchOptionsHash: fetchOptionsHash1,
     request: request1
   } = await graphql.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}/graphql`
+      options.url = `http://localhost:${port}`
     },
     operation: {
       variables: { date: '2018-01-01' },
@@ -437,13 +435,12 @@ test('Cache reset.', async t => {
   await request1
 
   const cacheBefore = JSON.stringify(graphql.cache)
-
   const {
     fetchOptionsHash: fetchOptionsHash2,
     request: request2
   } = graphql.query({
     fetchOptionsOverride: options => {
-      options.url = `http://localhost:${port}/graphql`
+      options.url = `http://localhost:${port}`
     },
     variables: { date: '2018-01-02' },
     query: YEAR_QUERY
@@ -461,12 +458,7 @@ test('Cache reset.', async t => {
 
   const cacheAfter = JSON.stringify(graphql.cache)
 
-  t.falsy(await request2CacheListener)
+  t.notOk(await request2CacheListener, 'On cache update listener didn’t run.')
 
-  t.is(cacheAfter, cacheBefore)
+  t.equals(cacheAfter, cacheBefore, 'Before and after reset cache match.')
 })
-
-test.after(() =>
-  // Close the test GraphQL server.
-  server.close()
-)

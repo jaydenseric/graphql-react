@@ -25,7 +25,8 @@
     "multipart"
   ],
   "files": [
-    "lib"
+    "lib",
+    "!lib/test.*"
   ],
   "main": "lib",
   "module": "lib/index.mjs",
@@ -50,14 +51,12 @@
     "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.44",
     "@babel/preset-env": "7.0.0-beta.44",
     "@babel/preset-react": "7.0.0-beta.44",
-    "ava": "^1.0.0-beta.4",
     "babel-eslint": "^8.2.3",
     "babel-plugin-transform-replace-object-assign": "^2.0.0-beta.0",
     "cross-fetch": "^2.1.1",
     "documentation": "^6.3.2",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-ava": "^4.5.1",
     "eslint-plugin-prettier": "^2.5.0",
     "eslint-plugin-react": "^7.7.0",
     "express": "^4.16.3",
@@ -72,30 +71,25 @@
     "react-dom": "^16.3.2",
     "rimraf": "^2.6.2",
     "size-limit": "^0.17.0"
+    "tap": "^12.0.1",
+    "watch": "^1.0.2"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "prebuild": "npm run clean",
-    "build": "run-p build:*",
+    "build:clean": "rimraf lib",
     "build:js": "babel src -d lib",
     "build:mjs": "ESM=true babel src -d lib --keep-file-extension",
-    "postbuild": "prettier 'lib/**/*.{mjs,js}' --write",
-    "jsdoc": "documentation readme src -s API -c documentation.json --sort-order alpha -q",
-    "postjsdoc": "prettier readme.md --write",
-    "prewatch": "npm run build",
-    "watch": "run-p watch:*",
-    "watch:build": "run-p 'build:* -- --skip-initial-build --watch'",
-    "watch:test": "ava -vw",
-    "lint": "run-p lint:*",
+    "build:jsdoc": "documentation readme src -s API -c documentation.json --sort-order alpha -q",
+    "build:prettier": "prettier 'lib/**/*.{mjs,js}' readme.md --write",
     "lint:eslint": "eslint . --ext mjs,js",
     "lint:prettier": "prettier '**/*.{json,md}' -l",
     "lint:jsdoc": "documentation lint src",
-    "presize": "npm run build",
-    "size": "size-limit",
-    "pretest": "npm run build",
-    "test": "ava",
-    "precommit": "lint-staged",
-    "prepublishOnly": "run-s jsdoc lint size test"
+    "lint:size": "size-limit",
+    "tap:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
+    "tap:js": "node lib/test | tap-mocha-reporter spec",
+    "test": "FORCE_COLOR=1 TAP_COLORS=1 npm-run-all build:clean -p build:js build:mjs build:jsdoc -s build:prettier -p lint:* tap:* -c --aggregate-output --silent",
+    "watch": "watch 'npm run test --silent' src --interval 1",
+    "prepublishOnly": "npm run test",
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.{mjs,js}": "eslint",
@@ -105,6 +99,7 @@
     "!.*",
     "node_modules",
     "lib",
+    "tap-snapshots",
     ".next"
   ],
   "eslintConfig": {
@@ -117,13 +112,11 @@
     "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
-      "plugin:ava/recommended",
       "prettier",
       "prettier/react"
     ],
     "plugins": [
       "react",
-      "ava",
       "prettier"
     ],
     "rules": {
@@ -164,13 +157,5 @@
       "path": "lib/index.mjs",
       "limit": "4 KB"
     }
-  ],
-  "ava": {
-    "cache": false,
-    "sources": [
-      "src/**/*.mjs",
-      "!lib",
-      "!example"
-    ]
-  }
+  ]
 }
