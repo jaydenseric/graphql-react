@@ -1,4 +1,4 @@
-![Logo](https://cdn.rawgit.com/jaydenseric/graphql-react/b2e60e80/graphql-react-logo.svg)
+![graphql-react logo](https://cdn.rawgit.com/jaydenseric/graphql-react/b2e60e80/graphql-react-logo.svg)
 
 # graphql-react
 
