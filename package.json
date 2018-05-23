@@ -54,7 +54,7 @@
     "babel-eslint": "^8.2.3",
     "babel-plugin-transform-replace-object-assign": "^2.0.0-beta.0",
     "cross-fetch": "^2.2.0",
-    "documentation": "^7.0.0",
+    "documentation": "^6.3.3",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.12.0",
