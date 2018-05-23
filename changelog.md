@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 1.0.1
 
 * Updated dependencies.
 * Fixed accidental distribution code Prettier ignoring.
