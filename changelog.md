@@ -20,6 +20,7 @@
   * Removed redundant `eslint-plugin-ava` dev dependency and config.
   * Use `eslint-plugin-import` and `eslint-plugin-node` and enable more rules.
   * Undo overriding ESLint ignoring dotfiles by default as there are none now.
+* Moved the example project to [a separate repo](https://github.com/jaydenseric/graphql-react-examples).
 
 ## 1.0.0
 
