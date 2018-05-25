@@ -89,8 +89,8 @@
     "tap:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
     "tap:js": "node lib/test | tap-mocha-reporter spec",
     "test": "FORCE_COLOR=1 TAP_COLORS=1 npm-run-all build:clean -p build:js build:mjs build:jsdoc -s build:prettier -p lint:* tap:* -c --aggregate-output --silent",
-    "watch": "watch 'npm run test --silent' src --interval 1",
-    "prepublishOnly": "npm run test",
+    "watch": "watch 'npm test --silent' src --interval 1",
+    "prepublishOnly": "npm test",
     "precommit": "lint-staged"
   },
   "lint-staged": {

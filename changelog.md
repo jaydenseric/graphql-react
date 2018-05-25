@@ -1,5 +1,9 @@
 # graphql-react changelog
 
+## Next
+
+* Remove unnecessary `run` from `test` scripts.
+
 ## 1.0.1
 
 * Updated dependencies.
