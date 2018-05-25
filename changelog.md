@@ -2,13 +2,14 @@
 
 ## Next
 
-* Remove unnecessary `run` from `test` scripts.
+* Removed unnecessary `run` from `test` scripts.
+* Corrected `node-tap` to `tap` in the changelog.
 
 ## 1.0.1
 
 * Updated dependencies.
 * Fixed accidental distribution code Prettier ignoring.
-* Replaced `ava` with `node-tap` for testing. Tests don't require a special CLI, no longer transpile on the fly, are faster and AVA no longer dictates the Babel version.
+* Replaced `ava` with `tap` for testing. Tests don't require a special CLI, no longer transpile on the fly, are faster and AVA no longer dictates the Babel version.
 * Tests run against the actual dist `.mjs` and `.js` files in native ESM (`--experimental-modules`) and CJS environments.
 * Updated Babel config:
   * Use `babel.config.js` instead of `.babelrc.js`.
