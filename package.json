@@ -79,7 +79,7 @@
     "build:clean": "rimraf lib",
     "build:js": "babel src -d lib",
     "build:mjs": "BABEL_ESM=1 babel src -d lib --keep-file-extension",
-    "build:jsdoc": "documentation readme src --readme-file readme.md -s API -c documentation.json --sort-order alpha -q",
+    "build:jsdoc": "documentation readme src -s API -c documentation.json --sort-order alpha -q",
     "build:prettier": "prettier 'lib/**/*.{mjs,js}' readme.md --write",
     "lint:eslint": "eslint . --ext mjs,js",
     "lint:prettier": "prettier '**/*.{json,md}' -l",
