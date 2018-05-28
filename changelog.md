@@ -2,6 +2,7 @@
 
 ## Next
 
+* Updated dependencies.
 * Removed unnecessary `run` from `test` scripts.
 * Corrected `node-tap` to `tap` in the changelog.
 
