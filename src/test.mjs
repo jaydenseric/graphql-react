@@ -5,14 +5,13 @@ import graphqlHTTP from 'express-graphql'
 import React from 'react'
 import reactDom from 'react-dom/server'
 import PropTypes from 'prop-types'
-import gql from 'fake-tag'
 
 // https://github.com/graphql/express-graphql/issues/425
 import graphql from '../graphql'
 
 import { GraphQL, Provider, Query, preload } from '.'
 
-const EPOCH_QUERY = gql`
+const EPOCH_QUERY = /* GraphQL */ `
   {
     epoch {
       iso
@@ -20,7 +19,7 @@ const EPOCH_QUERY = gql`
   }
 `
 
-const YEAR_QUERY = gql`
+const YEAR_QUERY = /* GraphQL */ `
   query($date: String!) {
     date(isoDate: $date) {
       year
@@ -28,7 +27,7 @@ const YEAR_QUERY = gql`
   }
 `
 
-const schema = graphql.buildSchema(gql`
+const schema = graphql.buildSchema(/* GraphQL */ `
   type Query {
     date(isoDate: String!): Date!
     epoch: Date!
@@ -39,6 +38,7 @@ const schema = graphql.buildSchema(gql`
     iso: String!
     year: Int!
   }
+
 `)
 
 const rootValue = {
@@ -327,11 +327,16 @@ t.test('Query SSR with nested query.', async t => {
             loadOnMount
             fetchOptionsOverride={fetchOptionsOverride}
             variables={{ isoDateFrom: iso }}
-            query={gql`
-              query($isoDateFrom: String!) {
-                daysBetween(isoDateFrom: $isoDateFrom, isoDateTo: "2018-01-01")
-              }
-            `}
+            query={
+              /* GraphQL */ `
+                query($isoDateFrom: String!) {
+                  daysBetween(
+                    isoDateFrom: $isoDateFrom
+                    isoDateTo: "2018-01-01"
+                  )
+                }
+              `
+            }
           >
             {result => (
               <pre
