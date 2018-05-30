@@ -70,13 +70,12 @@
     "prettier": "^1.13.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "rimraf": "^2.6.2",
     "size-limit": "^0.18.1",
     "tap": "^12.0.1",
     "watch": "^1.0.2"
   },
   "scripts": {
-    "build:clean": "rimraf lib",
+    "build:clean": "rm -r lib; mkdir lib",
     "build:js": "babel src -d lib",
     "build:mjs": "BABEL_ESM=1 babel src -d lib --keep-file-extension",
     "build:jsdoc": "documentation readme src --readme-file readme.md -s API -c documentation.json --sort-order alpha -q",
@@ -87,7 +86,7 @@
     "lint:size": "size-limit",
     "tap:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
     "tap:js": "node lib/test | tap-mocha-reporter spec",
-    "test": "FORCE_COLOR=1 TAP_COLORS=1 npm-run-all build:clean -p build:js build:mjs build:jsdoc -s build:prettier -p lint:* tap:* -c --aggregate-output --silent",
+    "test": "FORCE_COLOR=1 TAP_COLORS=1 npm-run-all build:clean -p build:mjs build:js build:jsdoc -s build:prettier -p lint:* tap:* -c --aggregate-output --silent",
     "watch": "watch 'npm test --silent' src --interval 1",
     "prepublishOnly": "npm test",
     "precommit": "lint-staged"

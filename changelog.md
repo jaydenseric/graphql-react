@@ -3,8 +3,11 @@
 ## Next
 
 - Updated dependencies.
-- Fixed lint errors for Prettier v1.13.0 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
-- Removed unnecessary `run` from `test` scripts.
+- Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
+- Improved package `clean` script:
+  - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
+  - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
+- Removed unnecessary `run` from `test` package scripts.
 - Corrected `node-tap` to `tap` in the changelog.
 
 ## 1.0.1
