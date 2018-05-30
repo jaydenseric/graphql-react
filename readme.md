@@ -57,7 +57,7 @@ See the [example GraphQL API and Next.js web app](https://github.com/jaydenseric
 
 ## Support
 
-- Node.js v7.6+.
+- Node.js v8.5+.
 - Browsers [>1% usage](http://browserl.ist/?q=%3E1%25).
 
 Consider polyfilling:

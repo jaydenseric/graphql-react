@@ -3,6 +3,7 @@
 ## Next
 
 - Updated dependencies.
+- Updated Node.js support from v7.6+ to v8.5+.
 - Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Improved package `clean` script:
   - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
