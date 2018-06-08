@@ -12,6 +12,10 @@
     - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
 - Corrected `node-tap` to `tap` in the changelog and other tweaks.
 - Improved documentation outline, clarified types are for documentation only and are not exported, and removed the `RequestCachePromise` type.
+- Readme badge changes to deal with [shields.io](https://shields.io) unreliability:
+  - Used the more reliable build status badge provided by Travis and placed it first as it loads the quickest.
+  - Removed the licence badge. The licence can be found in `package.json` and rarely changes.
+  - Removed the Github issues and stars badges. The readme is most viewed on Github anyway.
 
 ## 1.0.1
 
