@@ -72,33 +72,58 @@ Consider polyfilling:
 #### Table of Contents
 
 - [GraphQL](#graphql)
+  - [Parameters](#parameters)
+  - [Examples](#examples)
   - [cache](#cache)
+    - [Examples](#examples-1)
   - [query](#query)
+    - [Parameters](#parameters-1)
   - [reset](#reset)
+    - [Parameters](#parameters-2)
+    - [Examples](#examples-2)
 - [Provider](#provider)
+  - [Parameters](#parameters-3)
+  - [Examples](#examples-3)
 - [Consumer](#consumer)
+  - [Parameters](#parameters-4)
+  - [Examples](#examples-4)
 - [ConsumerRender](#consumerrender)
+  - [Parameters](#parameters-5)
+  - [Examples](#examples-5)
 - [Query](#query-1)
+  - [Parameters](#parameters-6)
+  - [Examples](#examples-6)
 - [QueryRender](#queryrender)
+  - [Parameters](#parameters-7)
+  - [Examples](#examples-7)
 - [preload](#preload)
+  - [Parameters](#parameters-8)
+  - [Examples](#examples-8)
 - [ActiveQuery](#activequery)
+  - [Properties](#properties)
 - [FetchOptions](#fetchoptions)
+  - [Properties](#properties-1)
 - [FetchOptionsOverride](#fetchoptionsoverride)
+  - [Parameters](#parameters-9)
+  - [Examples](#examples-9)
 - [HTTPError](#httperror)
+  - [Properties](#properties-2)
 - [Operation](#operation)
+  - [Properties](#properties-3)
 - [RequestCache](#requestcache)
+  - [Properties](#properties-4)
 - [RequestCachePromise](#requestcachepromise)
 
 ### GraphQL
 
 A lightweight GraphQL client that caches requests.
 
-**Parameters**
+#### Parameters
 
 - `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options. (optional, default `{}`)
   - `options.cache` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Cache to import; usually from a server side render. (optional, default `{}`)
 
-**Examples**
+#### Examples
 
 ```javascript
 import { GraphQL } from 'graphql-react'
@@ -112,7 +137,7 @@ GraphQL [request cache](#requestcache) map, keyed by [fetch options](#fetchoptio
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [RequestCache](#requestcache)>
 
-**Examples**
+##### Examples
 
 _Export cache as JSON._
 
@@ -124,7 +149,7 @@ const exportedCache = JSON.stringify(graphql.cache)
 
 Queries a GraphQL server.
 
-**Parameters**
+##### Parameters
 
 - `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Options.
   - `options.operation` **[Operation](#operation)** GraphQL operation object.
@@ -137,11 +162,11 @@ Returns **[ActiveQuery](#activequery)** Loading query details.
 
 Resets the [GraphQL cache](#graphqlcache). Useful when a user logs out.
 
-**Parameters**
+##### Parameters
 
 - `exceptFetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** A [fetch options](#fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
 
-**Examples**
+##### Examples
 
 ```javascript
 graphql.reset()
@@ -151,12 +176,12 @@ graphql.reset()
 
 A React component provides a [GraphQL](#graphql) instance in context for nested [Consumer](#consumer) components to use.
 
-**Parameters**
+#### Parameters
 
 - `value` **[GraphQL](#graphql)** A [GraphQL](#graphql) instance.
 - `children` **ReactNode** A React node.
 
-**Examples**
+#### Examples
 
 ```javascript
 import { GraphQL, Provider } from 'graphql-react'
@@ -174,11 +199,11 @@ Returns **ReactElement** React virtual DOM element.
 
 A React component that gets the [GraphQL](#graphql) instance from context.
 
-**Parameters**
+#### Parameters
 
 - `children` **[ConsumerRender](#consumerrender)** Render function that receives a [GraphQL](#graphql) instance.
 
-**Examples**
+#### Examples
 
 _A button component that resets the [GraphQL cache](#graphqlcache)._
 
@@ -200,11 +225,11 @@ Renders a [GraphQL](#graphql) consumer.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
-**Parameters**
+#### Parameters
 
 - `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
 
-**Examples**
+#### Examples
 
 _A button that resets the [GraphQL cache](#graphqlcache)._
 
@@ -218,7 +243,7 @@ Returns **ReactElement** React virtual DOM element.
 
 A React component to manage a GraphQL query or mutation.
 
-**Parameters**
+#### Parameters
 
 - `props` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Component props.
   - `props.variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL query variables.
@@ -229,7 +254,7 @@ A React component to manage a GraphQL query or mutation.
   - `props.resetOnLoad` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Should the [GraphQL cache](#graphqlcache) reset when the query loads. (optional, default `false`)
   - `props.children` **[QueryRender](#queryrender)** Renders the query status.
 
-**Examples**
+#### Examples
 
 _A query to display a user profile._
 
@@ -325,7 +350,7 @@ Renders the status of a query or mutation.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
-**Parameters**
+#### Parameters
 
 - `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
 - `loading` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
@@ -335,7 +360,7 @@ Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Sta
 - `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 - `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
 
-**Examples**
+#### Examples
 
 ```javascript
 ;({
@@ -364,11 +389,11 @@ Returns **ReactElement** React virtual DOM element.
 
 Recursively preloads [Query](#query) components that have the `loadOnMount` prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
 
-**Parameters**
+#### Parameters
 
 - `element` **ReactElement** A React virtual DOM element.
 
-**Examples**
+#### Examples
 
 _An async SSR function that returns a HTML string and cache JSON for client hydration._
 
@@ -401,7 +426,7 @@ Loading query details.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-**Properties**
+#### Properties
 
 - `fetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
 - `cache` **[RequestCache](#requestcache)?** Results from the last identical request.
@@ -413,7 +438,7 @@ Fetch options for a GraphQL request. See [polyfillable fetch options](https://gi
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-**Properties**
+#### Properties
 
 - `url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
 - `body` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
@@ -426,12 +451,12 @@ Overrides default GraphQL request [fetch options](#fetchoptions). Modify the pro
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
-**Parameters**
+#### Parameters
 
 - `fetchOptions` **[FetchOptions](#fetchoptions)** Default GraphQL request fetch options.
 - `operation` **[Operation](#operation)?** A GraphQL operation object.
 
-**Examples**
+#### Examples
 
 ```javascript
 options => {
@@ -446,7 +471,7 @@ Fetch HTTP error.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-**Properties**
+#### Properties
 
 - `status` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
 - `statusText` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
@@ -457,7 +482,7 @@ A GraphQL operation object. Additional properties may be used; all are sent to t
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-**Properties**
+#### Properties
 
 - `query` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
 - `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.
@@ -468,7 +493,7 @@ JSON serializable result of a GraphQL request (including all errors and data) su
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-**Properties**
+#### Properties
 
 - `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
 - `httpError` **[HTTPError](#httperror)?** Fetch response HTTP error.

@@ -38,7 +38,6 @@ const schema = graphql.buildSchema(/* GraphQL */ `
     iso: String!
     year: Int!
   }
-
 `)
 
 const rootValue = {
