@@ -10,6 +10,9 @@
   - Improved package clean script:
     - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
     - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
+- Improved tests:
+  - Switched from [`express-graphql`](https://npm.im/express-graphql) to [`graphql-api-koa`](https://npm.im/graphql-api-koa).
+  - Fixed test snapshot consistency between Node.js versions (see [tapjs/node-tap#450](https://github.com/tapjs/node-tap/issues/450)).
 - Corrected `node-tap` to `tap` in the changelog and other tweaks.
 - Improved documentation outline, clarified types are for documentation only and are not exported, and removed the `RequestCachePromise` type.
 - Readme badge changes to deal with [shields.io](https://shields.io) unreliability:
