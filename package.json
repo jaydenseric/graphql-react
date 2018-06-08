@@ -8,10 +8,7 @@
     "email": "me@jaydenseric.com",
     "url": "https://jaydenseric.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jaydenseric/graphql-react.git"
-  },
+  "repository": "github:jaydenseric/graphql-react",
   "homepage": "https://github.com/jaydenseric/graphql-react#readme",
   "bugs": "https://github.com/jaydenseric/graphql-react/issues",
   "keywords": [

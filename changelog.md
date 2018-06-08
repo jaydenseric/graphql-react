@@ -5,6 +5,7 @@
 - Updated dependencies.
 - Updated Node.js support from v7.6+ to v8.5+.
 - Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
+- Compact package `repository` field.
 - Refactored package scripts:
   - Use `prepare` to support installation via Git (e.g. `npm install jaydenseric/graphql-api-koa`).
   - Improved package clean script:
