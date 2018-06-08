@@ -33,7 +33,7 @@ A lightweight GraphQL client for React; the first Relay and Apollo alternative w
 
 ## Setup
 
-Install with [npm](https://npmjs.com):
+To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://npmjs.com) run:
 
 ```sh
 npm install graphql-react
@@ -87,32 +87,32 @@ Consider polyfilling:
 - [Consumer](#consumer)
   - [Parameters](#parameters-4)
   - [Examples](#examples-4)
-- [ConsumerRender](#consumerrender)
+- [Query](#query-1)
   - [Parameters](#parameters-5)
   - [Examples](#examples-5)
-- [Query](#query-1)
+- [preload](#preload)
   - [Parameters](#parameters-6)
   - [Examples](#examples-6)
-- [QueryRender](#queryrender)
-  - [Parameters](#parameters-7)
-  - [Examples](#examples-7)
-- [preload](#preload)
-  - [Parameters](#parameters-8)
-  - [Examples](#examples-8)
-- [ActiveQuery](#activequery)
-  - [Properties](#properties)
-- [FetchOptions](#fetchoptions)
-  - [Properties](#properties-1)
-- [FetchOptionsOverride](#fetchoptionsoverride)
-  - [Parameters](#parameters-9)
-  - [Examples](#examples-9)
-- [HTTPError](#httperror)
-  - [Properties](#properties-2)
-- [Operation](#operation)
-  - [Properties](#properties-3)
-- [RequestCache](#requestcache)
-  - [Properties](#properties-4)
-- [RequestCachePromise](#requestcachepromise)
+- [Types](#types)
+  - [ConsumerRender](#consumerrender)
+    - [Parameters](#parameters-7)
+    - [Examples](#examples-7)
+  - [QueryRender](#queryrender)
+    - [Parameters](#parameters-8)
+    - [Examples](#examples-8)
+  - [Operation](#operation)
+    - [Properties](#properties)
+  - [FetchOptions](#fetchoptions)
+    - [Properties](#properties-1)
+  - [FetchOptionsOverride](#fetchoptionsoverride)
+    - [Parameters](#parameters-9)
+    - [Examples](#examples-9)
+  - [ActiveQuery](#activequery)
+    - [Properties](#properties-2)
+  - [RequestCache](#requestcache)
+    - [Properties](#properties-3)
+  - [HttpError](#httperror)
+    - [Properties](#properties-4)
 
 ### GraphQL
 
@@ -215,26 +215,6 @@ const ResetCacheButton = () => (
     {graphql => <button onClick={graphql.reset}>Reset cache</button>}
   </Consumer>
 )
-```
-
-Returns **ReactElement** React virtual DOM element.
-
-### ConsumerRender
-
-Renders a [GraphQL](#graphql) consumer.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-#### Parameters
-
-- `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
-
-#### Examples
-
-_A button that resets the [GraphQL cache](#graphqlcache)._
-
-```javascript
-graphql => <button onClick={graphql.reset}>Reset cache</button>
 ```
 
 Returns **ReactElement** React virtual DOM element.
@@ -344,47 +324,6 @@ const ClapArticleButton = ({ articleId }) => (
 
 Returns **ReactElement** React virtual DOM element.
 
-### QueryRender
-
-Renders the status of a query or mutation.
-
-Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
-
-#### Parameters
-
-- `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
-- `loading` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
-- `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
-- `httpError` **[HTTPError](#httperror)?** Fetch response HTTP error.
-- `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
-- `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
-- `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
-
-#### Examples
-
-```javascript
-;({
-  load,
-  loading,
-  fetchError,
-  httpError,
-  parseError,
-  graphQLErrors,
-  data
-}) => (
-  <aside>
-    <button onClick={load}>Reload</button>
-    {loading && <span>Loading…</span>}
-    {(fetchError || httpError || parseError || graphQLErrors) && (
-      <strong>Error!</strong>
-    )}
-    {data && <h1>{data.user.name}</h1>}
-  </aside>
-)
-```
-
-Returns **ReactElement** React virtual DOM element.
-
 ### preload
 
 Recursively preloads [Query](#query) components that have the `loadOnMount` prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
@@ -420,43 +359,107 @@ export async function ssr() {
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** Resolves once loading is done and cache is ready to be exported from the [GraphQL](#graphql) instance. Cache can be imported when constructing new [GraphQL](#graphql) instances.
 
-### ActiveQuery
+### Types
 
-Loading query details.
+The following types are for documentation only and are not exported.
+
+#### ConsumerRender
+
+Renders a [GraphQL](#graphql) consumer.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+##### Parameters
+
+- `graphql` **[GraphQL](#graphql)** [GraphQL](#graphql) instance.
+
+##### Examples
+
+_A button that resets the [GraphQL cache](#graphqlcache)._
+
+```javascript
+graphql => <button onClick={graphql.reset}>Reset cache</button>
+```
+
+Returns **ReactElement** React virtual DOM element.
+
+#### QueryRender
+
+Renders the status of a query or mutation.
+
+Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
+
+##### Parameters
+
+- `load` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Loads the query on demand, updating cache.
+- `loading` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Is the query loading.
+- `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
+- `httpError` **HTTPError?** Fetch response HTTP error.
+- `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
+- `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
+- `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
+
+##### Examples
+
+```javascript
+;({
+  load,
+  loading,
+  fetchError,
+  httpError,
+  parseError,
+  graphQLErrors,
+  data
+}) => (
+  <aside>
+    <button onClick={load}>Reload</button>
+    {loading && <span>Loading…</span>}
+    {(fetchError || httpError || parseError || graphQLErrors) && (
+      <strong>Error!</strong>
+    )}
+    {data && <h1>{data.user.name}</h1>}
+  </aside>
+)
+```
+
+Returns **ReactElement** React virtual DOM element.
+
+#### Operation
+
+A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-#### Properties
+##### Properties
 
-- `fetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
-- `cache` **[RequestCache](#requestcache)?** Results from the last identical request.
-- `request` **[RequestCachePromise](#requestcachepromise)** A promise that resolves fresh [request cache](#requestcache).
+- `query` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
+- `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.
 
-### FetchOptions
+#### FetchOptions
 
 Fetch options for a GraphQL request. See [polyfillable fetch options](https://github.github.io/fetch/#options).
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-#### Properties
+##### Properties
 
 - `url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A GraphQL API URL.
 - `body` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [FormData](https://developer.mozilla.org/docs/Web/API/FormData))** HTTP request body.
 - `headers` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** HTTP request headers.
 - `credentials` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Authentication credentials mode.
 
-### FetchOptionsOverride
+#### FetchOptionsOverride
 
 Overrides default GraphQL request [fetch options](#fetchoptions). Modify the provided options object without a return.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
-#### Parameters
+##### Parameters
 
 - `fetchOptions` **[FetchOptions](#fetchoptions)** Default GraphQL request fetch options.
 - `operation` **[Operation](#operation)?** A GraphQL operation object.
 
-#### Examples
+##### Examples
 
 ```javascript
 options => {
@@ -465,44 +468,39 @@ options => {
 }
 ```
 
-### HTTPError
+#### ActiveQuery
 
-Fetch HTTP error.
-
-Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
-
-#### Properties
-
-- `status` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
-- `statusText` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.
-
-### Operation
-
-A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
+Loading query details.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-#### Properties
+##### Properties
 
-- `query` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** GraphQL queries or mutations.
-- `variables` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Variables used by the query.
+- `fetchOptionsHash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** [fetch options](#fetchoptions) hash.
+- `cache` **[RequestCache](#requestcache)?** Results from the last identical request.
+- `request` **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[RequestCache](#requestcache)>** A promise that resolves fresh [request cache](#requestcache).
 
-### RequestCache
+#### RequestCache
 
 JSON serializable result of a GraphQL request (including all errors and data) suitable for caching.
 
 Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
 
-#### Properties
+##### Properties
 
 - `fetchError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Fetch error message.
-- `httpError` **[HTTPError](#httperror)?** Fetch response HTTP error.
+- `httpError` **[HttpError](#httperror)?** Fetch response HTTP error.
 - `parseError` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Parse error message.
 - `graphQLErrors` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response errors.
 - `data` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** GraphQL response data.
 
-### RequestCachePromise
+#### HttpError
 
-A promise for a loading query that resolves the [request cache](#requestcache).
+Fetch HTTP error.
 
-Type: [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[RequestCache](#requestcache)>
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+##### Properties
+
+- `status` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** HTTP status code.
+- `statusText` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP status text.

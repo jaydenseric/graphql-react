@@ -152,7 +152,7 @@ export class GraphQL {
    * @ignore
    * @param {FetchOptions} fetchOptions URL and options for fetch.
    * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
-   * @returns {RequestCachePromise} A promise that resolves the {@link RequestCache request cache}.
+   * @returns {Promise<RequestCache>} A promise that resolves the {@link RequestCache request cache}.
    */
   request = ({ url, ...options }, fetchOptionsHash) => {
     const requestCache = {}
@@ -275,12 +275,7 @@ export class GraphQL {
  * @typedef {Object} ActiveQuery
  * @prop {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
  * @prop {RequestCache} [cache] Results from the last identical request.
- * @prop {RequestCachePromise} request A promise that resolves fresh {@link RequestCache request cache}.
- */
-
-/**
- * A promise for a loading query that resolves the {@link RequestCache request cache}.
- * @typedef {Promise<RequestCache>} RequestCachePromise
+ * @prop {Promise<RequestCache>} request A promise that resolves fresh {@link RequestCache request cache}.
  */
 
 /**
@@ -288,7 +283,7 @@ export class GraphQL {
  * suitable for caching.
  * @typedef {Object} RequestCache
  * @prop {string} [fetchError] Fetch error message.
- * @prop {HTTPError} [httpError] Fetch response HTTP error.
+ * @prop {HttpError} [httpError] Fetch response HTTP error.
  * @prop {string} [parseError] Parse error message.
  * @prop {Object} [graphQLErrors] GraphQL response errors.
  * @prop {Object} [data] GraphQL response data.
@@ -296,7 +291,7 @@ export class GraphQL {
 
 /**
  * Fetch HTTP error.
- * @typedef {Object} HTTPError
+ * @typedef {Object} HttpError
  * @prop {number} status HTTP status code.
  * @prop {string} statusText HTTP status text.
  */

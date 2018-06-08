@@ -79,7 +79,7 @@
     "prepare:clean": "rm -r lib; mkdir lib",
     "prepare:mjs": "BABEL_ESM=1 babel src -d lib --keep-file-extension",
     "prepare:js": "babel src -d lib",
-    "prepare:jsdoc": "documentation readme src -s API -c documentation.json --sort-order alpha -q",
+    "prepare:jsdoc": "documentation readme src -s API -c documentation.yml --sort-order alpha -q",
     "prepare:prettier": "prettier 'lib/**/*.{mjs,js}' readme.md --write",
     "test": "FORCE_COLOR=1 TAP_COLORS=1 run-p test:* -c --aggregate-output",
     "test:eslint": "eslint . --ext mjs,js",
