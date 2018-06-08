@@ -5,11 +5,12 @@
 - Updated dependencies.
 - Updated Node.js support from v7.6+ to v8.5+.
 - Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
-- Improved package `clean` script:
-  - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
-  - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
-- Removed unnecessary `run` from `test` package scripts.
-- Corrected `node-tap` to `tap` in the changelog.
+- Refactored package scripts:
+  - Use `prepare` to support installation via Git (e.g. `npm install jaydenseric/graphql-api-koa`).
+  - Improved package clean script:
+    - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
+    - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
+- Corrected `node-tap` to `tap` in the changelog and other tweaks.
 
 ## 1.0.1
 
