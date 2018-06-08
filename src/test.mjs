@@ -287,7 +287,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
-  const query = 'x'
+  const query = '{ x }'
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query }

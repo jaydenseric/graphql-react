@@ -101,11 +101,11 @@ exports[`lib/test TAP Query SSR with GraphQL errors. > GraphQL request cache. 1`
   },
   "graphQLErrors": [
     {
-      "message": "GraphQL query syntax error: Syntax Error: Unexpected Name \\"x\\"",
+      "message": "Cannot query field \\"x\\" on type \\"Query\\".",
       "locations": [
         {
-          line: 1,
-          column: 1
+          "line": 1,
+          "column": 3
         }
       ]
     }
@@ -124,11 +124,11 @@ exports[`lib/test TAP Query SSR with GraphQL errors. > Query render function arg
     },
     "graphQLErrors": [
       {
-        "message": "GraphQL query syntax error: Syntax Error: Unexpected Name \\"x\\"",
+        "message": "Cannot query field \\"x\\" on type \\"Query\\".",
         "locations": [
           {
-            line: 1,
-            column: 1
+            "line": 1,
+            "column": 3
           }
         ]
       }
