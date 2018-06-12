@@ -70,9 +70,9 @@ const startServer = (t, app) =>
     })
   })
 
-const snapshotArgs = args =>
+const snapshotObject = object =>
   JSON.stringify(
-    args,
+    object,
     (key, value) => (typeof value === 'function' ? '[Function]' : value),
     2
   )
@@ -102,7 +102,7 @@ t.test('Query SSR with fetch unavailable.', async t => {
       <Query loadOnMount query={EPOCH_QUERY}>
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -131,7 +131,7 @@ t.test('Query SSR with relative fetch URL.', async t => {
       <Query loadOnMount query={EPOCH_QUERY}>
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -178,7 +178,7 @@ t.test('Query SSR with HTTP error.', async t => {
       >
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -225,7 +225,7 @@ t.test('Query SSR with response JSON invalid.', async t => {
       >
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -267,7 +267,7 @@ t.test('Query SSR with response payload malformed.', async t => {
       >
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -307,7 +307,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
       >
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
@@ -349,7 +349,7 @@ t.test('Query SSR with variables.', async t => {
       >
         {function() {
           t.matchSnapshot(
-            snapshotArgs(arguments),
+            snapshotObject(arguments),
             'Query render function arguments.'
           )
           return null
