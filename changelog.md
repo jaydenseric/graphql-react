@@ -5,7 +5,6 @@
 ### Major
 
 - Updated Node.js support from v7.6+ to v8.5+.
-- Updated dependencies.
 - Improved package clean script:
   - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
   - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
@@ -16,6 +15,7 @@
 
 ### Patch
 
+- Updated dev dependencies.
 - Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Compact package `repository` field.
 - Test with [`graphql-api-koa`](https://npm.im/graphql-api-koa) instead of [`express-graphql`](https://npm.im/express-graphql).
