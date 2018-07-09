@@ -5,9 +5,7 @@
 ### Major
 
 - Updated Node.js support from v7.6+ to v8.5+.
-- Improved package clean script:
-  - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
-  - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
+- Removed the `rimraf` dev dependency in favour of a native `rm -rf` package clean script. Leaner and faster; we only support \*nix for contributing anyway.
 
 ### Minor
 
