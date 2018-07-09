@@ -37,9 +37,8 @@
   - Custom watch script.
   - No longer use `cross-env`; contributors with Windows may setup and use a Bash shell.
 - Improved ESLint config:
-  - Use the right `sourceType` for `.js` (`script`) and `.mjs` (`module`) files.
+  - Use [eslint-config-env](https://npm.im/eslint-config-env).
   - Removed redundant `eslint-plugin-ava` dev dependency and config.
-  - Use `eslint-plugin-import` and `eslint-plugin-node` and enable more rules.
   - Undo overriding ESLint ignoring dotfiles by default as there are none now.
 - Moved the example project to [a separate repo](https://github.com/jaydenseric/graphql-react-examples).
 - Better readme logo alt text.

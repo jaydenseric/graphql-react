@@ -53,6 +53,7 @@
     "cross-fetch": "^2.2.2",
     "documentation": "^8.0.0",
     "eslint": "^5.1.0",
+    "eslint-config-env": "^0.5.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^6.0.1",
@@ -99,63 +100,11 @@
     "tap-snapshots"
   ],
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "parserOptions": {
-      "sourceType": "script",
-      "ecmaVersion": 2018
-    },
     "env": {
-      "es6": true,
-      "node": true,
       "browser": true
     },
-    "plugins": [
-      "import",
-      "node",
-      "react",
-      "prettier"
-    ],
     "extends": [
-      "eslint:recommended",
-      "plugin:import/recommended",
-      "plugin:node/recommended",
-      "plugin:react/recommended",
-      "prettier",
-      "prettier/react"
-    ],
-    "rules": {
-      "require-jsdoc": "warn",
-      "valid-jsdoc": [
-        "error",
-        {
-          "requireReturn": false
-        }
-      ],
-      "require-await": "error",
-      "no-return-await": "error",
-      "arrow-body-style": "error",
-      "prefer-arrow-callback": "error",
-      "curly": [
-        "error",
-        "multi"
-      ],
-      "prefer-destructuring": "error",
-      "import/first": "error",
-      "import/newline-after-import": "error",
-      "import/no-useless-path-segments": "error",
-      "import/order": "error",
-      "node/no-unsupported-features": "off",
-      "prettier/prettier": "error"
-    },
-    "overrides": [
-      {
-        "files": [
-          "*.mjs"
-        ],
-        "parserOptions": {
-          "sourceType": "module"
-        }
-      }
+      "env"
     ]
   },
   "prettier": {
