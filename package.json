@@ -19,7 +19,9 @@
     "mutation",
     "file",
     "upload",
-    "multipart"
+    "multipart",
+    "esm",
+    "mjs"
   ],
   "files": [
     "lib",
