@@ -100,9 +100,6 @@
     "tap-snapshots"
   ],
   "eslintConfig": {
-    "env": {
-      "browser": true
-    },
     "extends": [
       "env"
     ]
