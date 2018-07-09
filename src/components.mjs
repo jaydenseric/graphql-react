@@ -5,13 +5,14 @@ import { GraphQL } from './graphql'
 
 export const {
   /**
-   * A React component provides a [`GraphQL`]{@link GraphQL} instance in context for nested
-   * [`Consumer`]{@link Consumer} components to use.
-   * @function
+   * A React component that provides a [`GraphQL`]{@link GraphQL} instance in
+   * context for nested [`Consumer`]{@link Consumer} components to use.
+   * @kind function
+   * @name Provider
    * @param {GraphQL} value A [`GraphQL`]{@link GraphQL} instance.
    * @param {ReactNode} children A React node.
    * @returns {ReactElement} React virtual DOM element.
-   * @example
+   * @example <caption>Using the `Provider` component for a page.</caption>
    * ```jsx
    * import { GraphQL, Provider } from 'graphql-react'
    *
@@ -25,8 +26,10 @@ export const {
   Provider,
 
   /**
-   * A React component that gets the [`GraphQL`]{@link GraphQL} instance from context.
-   * @function
+   * A React component that gets the [`GraphQL`]{@link GraphQL} instance from
+   * context.
+   * @kind function
+   * @name Consumer
    * @param {ConsumerRender} children Render function that receives a [`GraphQL`]{@link GraphQL} instance.
    * @returns {ReactElement} React virtual DOM element.
    * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
@@ -145,7 +148,7 @@ class GraphQLQuery extends React.Component {
    * Loads the query, updating cache.
    * @kind function
    * @name GraphQLQuery#load
-   * @returns {RequestCachePromise} A promise that resolves the [request cache]{@link RequestCache}.
+   * @returns {Promise<RequestCache>} A promise that resolves the [request cache]{@link RequestCache}.
    */
   load = () => {
     const stateUpdate = { loading: true }
@@ -372,7 +375,7 @@ Query.propTypes = {
  * @param {Object} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
  * @returns {ReactElement} React virtual DOM element.
- * @example
+ * @example <caption>Rendering a user profile query.</caption>
  * ```jsx
  * ({ load, loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
  *   <aside>

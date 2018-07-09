@@ -40,7 +40,7 @@ import extractFiles from 'extract-files'
  * @type {function}
  * @param {FetchOptions} fetchOptions Default GraphQL request fetch options.
  * @param {Operation} [operation] A GraphQL operation object.
- * @example
+ * @example <caption>Setting [fetch options]{@link FetchOptions} for an example API.</caption>
  * ```js
  * options => {
  *   options.url = 'https://api.example.com/graphql'
@@ -87,7 +87,7 @@ import extractFiles from 'extract-files'
  * @name GraphQL
  * @param {Object} [options={}] Options.
  * @param {Object} [options.cache={}] Cache to import; usually from a server side render.
- * @example
+ * @example <caption>Constructing a new GraphQL client.</caption>
  * ```js
  * import { GraphQL } from 'graphql-react'
  *
@@ -165,7 +165,7 @@ export class GraphQL {
    * @kind function
    * @name GraphQL#reset
    * @param {string} [exceptFetchOptionsHash] A [fetch options]{@link FetchOptions} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
-   * @example
+   * @example <caption>Resetting the GraphQL cache.</caption>
    * ```js
    * graphql.reset()
    * ```

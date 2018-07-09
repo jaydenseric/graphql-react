@@ -69,30 +69,83 @@ Consider polyfilling:
 
 ### Table of contents
 
-- [type ConsumerRender](#type-consumerrender)
+- [function Provider](#function-provider)
   - [Examples](#examples)
+- [function Consumer](#function-consumer)
+  - [Examples](#examples-1)
+- [type ConsumerRender](#type-consumerrender)
+  - [Examples](#examples-2)
 - [class GraphQLQuery](#class-graphqlquery)
   - [GraphQLQuery instance method load](#graphqlquery-instance-method-load)
 - [function Query](#function-query)
-  - [Examples](#examples-1)
+  - [Examples](#examples-3)
 - [type QueryRender](#type-queryrender)
-  - [Examples](#examples-2)
+  - [Examples](#examples-4)
 - [type Operation](#type-operation)
 - [type FetchOptions](#type-fetchoptions)
 - [type FetchOptionsOverride](#type-fetchoptionsoverride)
-  - [Examples](#examples-3)
+  - [Examples](#examples-5)
 - [type ActiveQuery](#type-activequery)
 - [type RequestCache](#type-requestcache)
 - [type HttpError](#type-httperror)
 - [class GraphQL](#class-graphql)
-  - [Examples](#examples-4)
+  - [Examples](#examples-6)
   - [GraphQL instance property cache](#graphql-instance-property-cache)
-    - [Examples](#examples-5)
+    - [Examples](#examples-7)
   - [GraphQL instance method reset](#graphql-instance-method-reset)
-    - [Examples](#examples-6)
+    - [Examples](#examples-8)
   - [GraphQL instance method query](#graphql-instance-method-query)
 - [function preload](#function-preload)
-  - [Examples](#examples-7)
+  - [Examples](#examples-9)
+
+### function Provider
+
+A React component that provides a [`GraphQL`](#class-graphql) instance in context for nested [`Consumer`](#function-consumer) components to use.
+
+| Parameter | Type                      | Description                             |
+| --------- | ------------------------- | --------------------------------------- |
+| value     | [GraphQL](#class-graphql) | A [`GraphQL`](#class-graphql) instance. |
+| children  | ReactNode                 | A React node.                           |
+
+**Returns:** ReactElement — React virtual DOM element.
+
+#### Examples
+
+_Using the `Provider` component for a page._
+
+> ```jsx
+> import { GraphQL, Provider } from 'graphql-react'
+>
+> const graphql = new GraphQL()
+>
+> const Page = () => (
+>   <Provider value={graphql}>Use Consumer or Query components…</Provider>
+> )
+> ```
+
+### function Consumer
+
+A React component that gets the [`GraphQL`](#class-graphql) instance from context.
+
+| Parameter | Type                                   | Description                                                           |
+| --------- | -------------------------------------- | --------------------------------------------------------------------- |
+| children  | [ConsumerRender](#type-consumerrender) | Render function that receives a [`GraphQL`](#class-graphql) instance. |
+
+**Returns:** ReactElement — React virtual DOM element.
+
+#### Examples
+
+_A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
+
+> ```jsx
+> import { Consumer } from 'graphql-react'
+>
+> const ResetCacheButton = () => (
+>   <Consumer>
+>     {graphql => <button onClick={graphql.reset}>Reset cache</button>}
+>   </Consumer>
+> )
+> ```
 
 ### type ConsumerRender
 
@@ -134,7 +187,7 @@ A React component to manage a GraphQL query with a [`GraphQL`](#class-graphql) i
 
 Loads the query, updating cache.
 
-**Returns:** RequestCachePromise — A promise that resolves the [request cache](#type-requestcache).
+**Returns:** Promise&lt;[RequestCache](#type-requestcache)> — A promise that resolves the [request cache](#type-requestcache).
 
 ### function Query
 
@@ -261,6 +314,8 @@ Renders the status of a query or mutation.
 
 #### Examples
 
+_Rendering a user profile query._
+
 > ```jsx
 > ;({
 >   load,
@@ -319,6 +374,8 @@ Overrides default GraphQL request [fetch options](#type-fetchoptions). Modify th
 
 #### Examples
 
+_Setting [fetch options](#type-fetchoptions) for an example API._
+
 > ```js
 > options => {
 >   options.url = 'https://api.example.com/graphql'
@@ -374,6 +431,8 @@ A lightweight GraphQL client that caches requests.
 
 #### Examples
 
+_Constructing a new GraphQL client._
+
 > ```js
 > import { GraphQL } from 'graphql-react'
 >
@@ -401,6 +460,8 @@ Resets the [GraphQL cache](#graphql-instance-property-cache). Useful when a user
 | exceptFetchOptionsHash | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)? | A [fetch options](#type-fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
 
 ##### Examples
+
+_Resetting the GraphQL cache._
 
 > ```js
 > graphql.reset()
