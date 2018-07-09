@@ -15,7 +15,7 @@
   - Switched from [`express-graphql`](https://npm.im/express-graphql) to [`graphql-api-koa`](https://npm.im/graphql-api-koa).
   - Fixed test snapshot consistency between Node.js versions (see [tapjs/node-tap#450](https://github.com/tapjs/node-tap/issues/450)).
 - Corrected `node-tap` to `tap` in the changelog and other tweaks.
-- Improved documentation outline, clarified types are for documentation only and are not exported, and removed the `RequestCachePromise` type.
+- Use [`jsdoc-md`](https://npm.im/jsdoc-md) instead of [`documentation`](https://npm.im/documentation) to generate readme API docs.
 - Readme badge changes to deal with [shields.io](https://shields.io) unreliability:
   - Used the more reliable build status badge provided by Travis and placed it first as it loads the quickest.
   - Removed the licence badge. The licence can be found in `package.json` and rarely changes.

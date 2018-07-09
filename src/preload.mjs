@@ -1,9 +1,13 @@
 /**
- * Recursively preloads {@link Query} components that have the `loadOnMount`
- * prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
+ * Recursively preloads [`Query`]{@link Query} components that have the
+ * `loadOnMount` prop in a React element tree. Useful for server side rendering
+ * (SSR) or to preload components for a better user experience when they mount.
+ * @kind function
+ * @name preload
  * @param {ReactElement} element A React virtual DOM element.
- * @returns {Promise} Resolves once loading is done and cache is ready to be exported from the {@link GraphQL} instance. Cache can be imported when constructing new {@link GraphQL} instances.
+ * @returns {Promise} Resolves once loading is done and cache is ready to be exported from the [`GraphQL`]{@link GraphQL} instance. Cache can be imported when constructing new [`GraphQL`]{@link GraphQL} instances.
  * @example <caption>An async SSR function that returns a HTML string and cache JSON for client hydration.</caption>
+ * ```jsx
  * import { GraphQL, preload, Provider } from 'graphql-react'
  * import { renderToString } from 'react-dom/server'
  * import { App } from './components'
@@ -22,14 +26,32 @@
  *     html: renderToString(page)
  *   }
  * }
+ * ```
  */
 export function preload(element) {
+  /**
+   * @kind function
+   * @name preload~recursePreload
+   * @param {ReactElement} rootElement A React virtual DOM element.
+   * @param {Object} [rootLegacyContext={}] Legacy React context for the root element and children.
+   * @param {boolean} [loadRoot=true] Should the root element be loaded.
+   * @returns {Promise} Resolves once loading is done.
+   * @ignore
+   */
   const recursePreload = (
     rootElement,
     rootLegacyContext = {},
     loadRoot = true
   ) => {
     const loading = []
+
+    /**
+     * @kind function
+     * @name preload~recursePreload~recurse
+     * @param {ReactElement} element A React virtual DOM element.
+     * @param {Object} [legacyContext] Legacy React context for the element and children.
+     * @ignore
+     */
     const recurse = (element, legacyContext) => {
       if (!element) return
 

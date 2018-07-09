@@ -45,20 +45,52 @@ const rootValue = {
     Math.floor((new Date(isoDateTo) - new Date(isoDateFrom)) / 86400000)
 }
 
+/**
+ * A test class that represents a date.
+ * @kind class
+ * @name ISODate
+ * @param {string} value ISO date string.
+ * @ignore
+ */
 class ISODate {
+  // eslint-disable-next-line require-jsdoc
   constructor(value) {
     this.date = new Date(value)
   }
 
+  /**
+   * Gets the date as an ISO string.
+   * @kind function
+   * @name ISODate#iso
+   * @returns {string} ISO date.
+   * @ignore
+   */
   iso() {
     return this.date.toISOString()
   }
 
+  /**
+   * Gets the year.
+   * @kind function
+   * @name ISODate#year
+   * @returns {string} Year.
+   * @ignore
+   */
   year() {
     return this.date.getFullYear()
   }
 }
 
+/**
+ * Asynchronously starts a given Koa app server that automatically closes when
+ * the given test tears down.
+ * @kind function
+ * @name startServer
+ * @param {Test} t Tap test.
+ * @param {Object} app Koa app.
+ * @returns {Promise<Server>} Node.js net server.
+ * @ignore
+ */
 const startServer = (t, app) =>
   new Promise((resolve, reject) => {
     app.listen(function(error) {
@@ -70,6 +102,14 @@ const startServer = (t, app) =>
     })
   })
 
+/**
+ * Converts an object to a snapshot string.
+ * @kind function
+ * @name snapshotObject
+ * @param {Object} object Object to snapshot.
+ * @returns {string} Snapshot.
+ * @ignore
+ */
 const snapshotObject = object =>
   JSON.stringify(
     object,
@@ -146,14 +186,17 @@ t.test('Query SSR with HTTP error.', async t => {
     ctx.response.status = 404
     ctx.response.type = 'text/plain'
     ctx.response.body = 'Not found.'
-
     await next()
   })
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query: EPOCH_QUERY }
@@ -193,14 +236,17 @@ t.test('Query SSR with response JSON invalid.', async t => {
     ctx.response.status = 200
     ctx.response.type = 'text'
     ctx.response.body = 'Not JSON.'
-
     await next()
   })
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query: EPOCH_QUERY }
@@ -240,14 +286,17 @@ t.test('Query SSR with response payload malformed.', async t => {
     ctx.response.status = 200
     ctx.response.type = 'json'
     ctx.response.body = '[{"bad": true}]'
-
     await next()
   })
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const requestCache = await graphql.query({
     fetchOptionsOverride,
     operation: { query: EPOCH_QUERY }
@@ -282,11 +331,15 @@ t.test('Query SSR with GraphQL errors.', async t => {
     .use(errorHandler())
     .use(bodyParser())
     .use(execute({ schema, rootValue }))
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const query = '{ x }'
   const requestCache = await graphql.query({
     fetchOptionsOverride,
@@ -322,11 +375,15 @@ t.test('Query SSR with variables.', async t => {
     .use(errorHandler())
     .use(bodyParser())
     .use(execute({ schema, rootValue }))
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const variables = { date: '2018-01-01' }
   const query = YEAR_QUERY
   const requestCache = await graphql.query({
@@ -364,11 +421,15 @@ t.test('Query SSR with nested query.', async t => {
     .use(errorHandler())
     .use(bodyParser())
     .use(execute({ schema, rootValue }))
+
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
+
   const tree = (
     <Provider value={graphql}>
       <Query
@@ -418,6 +479,10 @@ t.test('Query SSR with nested query.', async t => {
 })
 
 t.test('Preload legacy React context API components.', async t => {
+  /**
+   * A test legacy context provider component.
+   * @ignore
+   */
   class LegacyContextProvider extends React.Component {
     static propTypes = {
       value: PropTypes.string,
@@ -428,20 +493,39 @@ t.test('Preload legacy React context API components.', async t => {
       value: PropTypes.string
     }
 
+    /**
+     * Provides the context value for descendants.
+     * @returns {Object} Context value.
+     * @ignore
+     */
     getChildContext() {
       return { value: this.props.value }
     }
 
+    /**
+     * Renders the component.
+     * @ignore
+     * @returns {ReactElement} React virtual DOM element.
+     */
     render() {
       return <div>{this.props.children}</div>
     }
   }
 
+  /**
+   * A test legacy context consumer component.
+   * @ignore
+   */
   class LegacyContextConsumer extends React.Component {
     static contextTypes = {
       value: PropTypes.string
     }
 
+    /**
+     * Renders the component.
+     * @ignore
+     * @returns {ReactElement} React virtual DOM element.
+     */
     render() {
       return <p>{this.context.value}</p>
     }

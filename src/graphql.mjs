@@ -2,21 +2,110 @@ import fnv1a from 'fnv1a'
 import extractFiles from 'extract-files'
 
 /**
+ * A cache update listener callback.
+ * @kind typedef
+ * @name CacheUpdateCallback
+ * @type {function}
+ * @param {RequestCache} requestCache Request cache.
+ * @ignore
+ */
+
+/**
+ * A GraphQL operation object. Additional properties may be used; all are sent
+ * to the GraphQL server.
+ * @kind typedef
+ * @name Operation
+ * @type {Object}
+ * @prop {string} query GraphQL queries or mutations.
+ * @prop {Object} variables Variables used by the query.
+ */
+
+/**
+ * [Polyfillable fetch options](https://github.github.io/fetch/#options) for a
+ * GraphQL request.
+ * @kind typedef
+ * @name FetchOptions
+ * @type {Object}
+ * @prop {string} url A GraphQL API URL.
+ * @prop {string|FormData} body HTTP request body.
+ * @prop {Object} headers HTTP request headers.
+ * @prop {string} [credentials] Authentication credentials mode.
+ */
+
+/**
+ * Overrides default GraphQL request [fetch options]{@link FetchOptions}. Modify
+ * the provided options object without a return.
+ * @kind typedef
+ * @name FetchOptionsOverride
+ * @type {function}
+ * @param {FetchOptions} fetchOptions Default GraphQL request fetch options.
+ * @param {Operation} [operation] A GraphQL operation object.
+ * @example
+ * ```js
+ * options => {
+ *   options.url = 'https://api.example.com/graphql'
+ *   options.credentials = 'include'
+ * }
+ * ```
+ */
+
+/**
+ * Loading query details.
+ * @kind typedef
+ * @name ActiveQuery
+ * @type {Object}
+ * @prop {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
+ * @prop {RequestCache} [cache] Results from the last identical request.
+ * @prop {Promise<RequestCache>} request A promise that resolves fresh [request cache]{@link RequestCache}.
+ */
+
+/**
+ * JSON serializable result of a GraphQL request (including all errors and data)
+ * suitable for caching.
+ * @kind typedef
+ * @name RequestCache
+ * @type {Object}
+ * @prop {string} [fetchError] Fetch error message.
+ * @prop {HttpError} [httpError] Fetch response HTTP error.
+ * @prop {string} [parseError] Parse error message.
+ * @prop {Object} [graphQLErrors] GraphQL response errors.
+ * @prop {Object} [data] GraphQL response data.
+ */
+
+/**
+ * Fetch HTTP error.
+ * @kind typedef
+ * @name HttpError
+ * @type {Object}
+ * @prop {number} status HTTP status code.
+ * @prop {string} statusText HTTP status text.
+ */
+
+/**
  * A lightweight GraphQL client that caches requests.
+ * @kind class
+ * @name GraphQL
  * @param {Object} [options={}] Options.
  * @param {Object} [options.cache={}] Cache to import; usually from a server side render.
  * @example
+ * ```js
  * import { GraphQL } from 'graphql-react'
  *
  * const graphql = new GraphQL()
+ * ```
  */
 export class GraphQL {
+  // eslint-disable-next-line
   constructor({ cache = {} } = {}) {
     /**
-     * GraphQL {@link RequestCache request cache} map, keyed by {@link FetchOptions fetch options} hashes.
+     * GraphQL [request cache]{@link RequestCache} map, keyed by [fetch options]{@link FetchOptions} hashes.
+     * @kind member
+     * @name GraphQL#cache
      * @type {Object.<string, RequestCache>}
      * @example <caption>Export cache as JSON.</caption>
+     * ```js
      * const exportedCache = JSON.stringify(graphql.cache)
+     * ```
      */
     this.cache = cache
   }
@@ -26,9 +115,11 @@ export class GraphQL {
 
   /**
    * Adds a cache update listener for a request.
-   * @protected
-   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @kind function
+   * @name GraphQL#onCacheUpdate
+   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
    * @param {CacheUpdateCallback} callback Callback.
+   * @ignore
    */
   onCacheUpdate = (fetchOptionsHash, callback) => {
     if (!this.listeners[fetchOptionsHash]) this.listeners[fetchOptionsHash] = []
@@ -37,9 +128,11 @@ export class GraphQL {
 
   /**
    * Removes a cache update listener for a request.
-   * @protected
-   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @kind function
+   * @name GraphQL#offCacheUpdate
+   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
    * @param {CacheUpdateCallback} callback Callback.
+   * @ignore
    */
   offCacheUpdate = (fetchOptionsHash, callback) => {
     if (this.listeners[fetchOptionsHash]) {
@@ -53,9 +146,11 @@ export class GraphQL {
 
   /**
    * Triggers cache update listeners for a request.
-   * @protected
-   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
+   * @kind function
+   * @name GraphQL#emitCacheUpdate
+   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
    * @param {RequestCache} requestCache Request cache.
+   * @ignore
    */
   emitCacheUpdate = (fetchOptionsHash, requestCache) => {
     if (this.listeners[fetchOptionsHash])
@@ -65,10 +160,15 @@ export class GraphQL {
   }
 
   /**
-   * Resets the {@link GraphQL#cache GraphQL cache}. Useful when a user logs out.
-   * @param {string} [exceptFetchOptionsHash] A {@link FetchOptions fetch options} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * Resets the [GraphQL cache]{@link GraphQL#cache}. Useful when a user logs
+   * out.
+   * @kind function
+   * @name GraphQL#reset
+   * @param {string} [exceptFetchOptionsHash] A [fetch options]{@link FetchOptions} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example
+   * ```js
    * graphql.reset()
+   * ```
    */
   reset = exceptFetchOptionsHash => {
     let fetchOptionsHashes = Object.keys(this.cache)
@@ -90,12 +190,14 @@ export class GraphQL {
   }
 
   /**
-   * Derives a fetch request body from a GraphQL operation, accounting for
-   * file uploads. Files are extracted from the operation, modifying the
-   * operation object. See the {@link https://github.com/jaydenseric/graphql-multipart-request-spec GraphQL multipart request spec}.
-   * @protected
+   * Derives a fetch request body from a GraphQL operation, accounting for file
+   * uploads. Files are extracted from the operation, modifying the operation
+   * object. See the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
+   * @kind function
+   * @name GraphQL.requestBody
    * @param {Operation} operation GraphQL operation.
    * @returns {string|FormData} A JSON string, or for uploads a multipart form.
+   * @ignore
    */
   static requestBody(operation) {
     const files = extractFiles(operation)
@@ -117,10 +219,12 @@ export class GraphQL {
   }
 
   /**
-   * Gets default {@link FetchOptions fetch options} for a GraphQL operation.
-   * @ignore
+   * Gets default [fetch options]{@link FetchOptions} for a GraphQL operation.
+   * @kind function
+   * @name GraphQL.fetchOptions
    * @param {Operation} operation GraphQL operation.
    * @returns {FetchOptions} Fetch options.
+   * @ignore
    */
   static fetchOptions(operation) {
     const fetchOptions = {
@@ -139,20 +243,24 @@ export class GraphQL {
   }
 
   /**
-   * Hashes a {@link FetchOptions fetch options} object.
-   * @ignore
+   * Hashes a [fetch options]{@link FetchOptions} object.
+   * @kind function
+   * @name GraphQL.hashFetchOptions
    * @param {FetchOptions} fetchOptions Fetch options.
    * @returns {string} A hash.
+   * @ignore
    */
   static hashFetchOptions = fetchOptions =>
     fnv1a(JSON.stringify(fetchOptions)).toString(36)
 
   /**
    * Executes a fetch request.
-   * @ignore
+   * @kind function
+   * @name GraphQL#request
    * @param {FetchOptions} fetchOptions URL and options for fetch.
-   * @param {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
-   * @returns {Promise<RequestCache>} A promise that resolves the {@link RequestCache request cache}.
+   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
+   * @returns {Promise<RequestCache>} A promise that resolves the [request cache]{@link RequestCache}.
+   * @ignore
    */
   request = ({ url, ...options }, fetchOptionsHash) => {
     const requestCache = {}
@@ -205,10 +313,12 @@ export class GraphQL {
 
   /**
    * Queries a GraphQL server.
+   * @kind function
+   * @name GraphQL#query
    * @param {Object} options Options.
    * @param {Operation} options.operation GraphQL operation object.
-   * @param {FetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL request {@link FetchOptions fetch options}.
-   * @param {boolean} [options.resetOnLoad=false] Should the {@link GraphQL#cache GraphQL cache} reset when the query loads.
+   * @param {FetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL request [fetch options]{@link FetchOptions}.
+   * @param {boolean} [options.resetOnLoad=false] Should the [GraphQL cache]{@link GraphQL#cache} reset when the query loads.
    * @returns {ActiveQuery} Loading query details.
    */
   query = ({ operation, fetchOptionsOverride, resetOnLoad }) => {
@@ -232,66 +342,3 @@ export class GraphQL {
     }
   }
 }
-
-/**
- * A cache update listener callback.
- * @ignore
- * @callback CacheUpdateCallback
- * @param {RequestCache} requestCache Request cache.
- */
-
-/**
- * A GraphQL operation object. Additional properties may be used; all are sent
- * to the GraphQL server.
- * @typedef {Object} Operation
- * @prop {string} query GraphQL queries or mutations.
- * @prop {Object} variables Variables used by the query.
- */
-
-/**
- * Fetch options for a GraphQL request. See {@link https://github.github.io/fetch/#options polyfillable fetch options}.
- * @typedef {Object} FetchOptions
- * @prop {string} url A GraphQL API URL.
- * @prop {string|FormData} body HTTP request body.
- * @prop {Object} headers HTTP request headers.
- * @prop {string} [credentials] Authentication credentials mode.
- */
-
-/**
- * Overrides default GraphQL request {@link FetchOptions fetch options}. Modify the provided
- * options object without a return.
- * @typedef {Function} FetchOptionsOverride
- * @param {FetchOptions} fetchOptions Default GraphQL request fetch options.
- * @param {Operation} [operation] A GraphQL operation object.
- * @example
- * options => {
- *   options.url = 'https://api.example.com/graphql'
- *   options.credentials = 'include'
- * }
- */
-
-/**
- * Loading query details.
- * @typedef {Object} ActiveQuery
- * @prop {string} fetchOptionsHash {@link FetchOptions fetch options} hash.
- * @prop {RequestCache} [cache] Results from the last identical request.
- * @prop {Promise<RequestCache>} request A promise that resolves fresh {@link RequestCache request cache}.
- */
-
-/**
- * JSON serializable result of a GraphQL request (including all errors and data)
- * suitable for caching.
- * @typedef {Object} RequestCache
- * @prop {string} [fetchError] Fetch error message.
- * @prop {HttpError} [httpError] Fetch response HTTP error.
- * @prop {string} [parseError] Parse error message.
- * @prop {Object} [graphQLErrors] GraphQL response errors.
- * @prop {Object} [data] GraphQL response data.
- */
-
-/**
- * Fetch HTTP error.
- * @typedef {Object} HttpError
- * @prop {number} status HTTP status code.
- * @prop {string} statusText HTTP status text.
- */
