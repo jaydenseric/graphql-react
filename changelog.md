@@ -2,19 +2,24 @@
 
 ## Next
 
-- Updated dependencies.
+### Major
+
 - Updated Node.js support from v7.6+ to v8.5+.
+- Updated dependencies.
+- Improved package clean script:
+  - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
+  - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
+
+### Minor
+
+- Use package `prepare` script to support installation via Git (e.g. `npm install jaydenseric/graphql-react`).
+
+### Patch
+
 - Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Compact package `repository` field.
-- Refactored package scripts:
-  - Use `prepare` to support installation via Git (e.g. `npm install jaydenseric/graphql-react`).
-  - Improved package clean script:
-    - Removed the `rimraf` dev dependency in favour of native `rm -r`. Leaner and faster; we only support \*nix for contributing anyway.
-    - Use native `mkdir` to mitigate [babel/babel#8077](https://github.com/babel/babel/issues/8077).
-- Improved tests:
-  - Switched from [`express-graphql`](https://npm.im/express-graphql) to [`graphql-api-koa`](https://npm.im/graphql-api-koa).
-  - Fixed test snapshot consistency between Node.js versions (see [tapjs/node-tap#450](https://github.com/tapjs/node-tap/issues/450)).
-- Corrected `node-tap` to `tap` in the changelog and other tweaks.
+- Test with [`graphql-api-koa`](https://npm.im/graphql-api-koa) instead of [`express-graphql`](https://npm.im/express-graphql).
+- Fixed test snapshot consistency between Node.js versions (see [tapjs/node-tap#450](https://github.com/tapjs/node-tap/issues/450)).
 - Use [`jsdoc-md`](https://npm.im/jsdoc-md) instead of [`documentation`](https://npm.im/documentation) to generate readme API docs.
 - Readme badge changes to deal with [shields.io](https://shields.io) unreliability:
   - Used the more reliable build status badge provided by Travis and placed it first as it loads the quickest.
