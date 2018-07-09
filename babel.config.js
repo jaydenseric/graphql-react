@@ -16,13 +16,10 @@ module.exports = {
         exclude: ['transform-async-to-generator', 'transform-regenerator']
       }
     ],
-    ['@babel/preset-react', { useBuiltIns: true }]
+    ['@babel/react', { useBuiltIns: true }]
   ],
   plugins: [
-    [
-      '@babel/plugin-proposal-object-rest-spread',
-      { loose: true, useBuiltIns: true }
-    ],
+    ['@babel/proposal-object-rest-spread', { loose: true, useBuiltIns: true }],
     ['@babel/proposal-class-properties', { loose: true }]
   ]
 }
