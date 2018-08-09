@@ -25,7 +25,7 @@
   - Used the more reliable build status badge provided by Travis, configured to only track `master` branch.
   - Removed the licence badge. The licence can be found in `package.json` and rarely changes.
   - Removed the Github issues and stars badges. The readme is most viewed on Github anyway.
-  - Use [Badgen](https://badgen.now.sh) for the readme npm version badge.
+  - Use [Badgen](https://badgen.net) for the npm version badge.
 
 ## 1.0.1
 

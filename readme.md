@@ -2,7 +2,7 @@
 
 # graphql-react
 
-[![Build status](https://travis-ci.org/jaydenseric/graphql-react.svg?branch=master)](https://travis-ci.org/jaydenseric/graphql-react) [![npm version](https://badgen.now.sh/npm/v/graphql-react)](https://npm.im/graphql-react)
+[![Build status](https://travis-ci.org/jaydenseric/graphql-react.svg?branch=master)](https://travis-ci.org/jaydenseric/graphql-react) [![npm version](https://badgen.net/npm/v/graphql-react)](https://npm.im/graphql-react)
 
 A lightweight GraphQL client for React; the first Relay and Apollo alternative with server side rendering.
 
