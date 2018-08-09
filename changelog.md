@@ -14,7 +14,7 @@
 ### Patch
 
 - Updated dev dependencies.
-- Fixed lint errors for Prettier v1.13 and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
+- Fixed new Prettier lint errors and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Compact package `repository` field.
 - Added more package tags.
 - Test with [`graphql-api-koa`](https://npm.im/graphql-api-koa) instead of [`express-graphql`](https://npm.im/express-graphql).
