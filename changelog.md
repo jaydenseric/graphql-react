@@ -35,6 +35,7 @@
 - Fixed accidental distribution code Prettier ignoring.
 - Replaced `ava` with `tap` for testing. Tests don't require a special CLI, no longer transpile on the fly, are faster and AVA no longer dictates the Babel version.
 - Tests run against the actual dist `.mjs` and `.js` files in native ESM (`--experimental-modules`) and CJS environments.
+- Ignore [`object-assign`](https://npm.im/object-assign) for bundle size tests as it’s a React dependency and tighten the allowed bundle size from 4 KB to 3 KB.
 - Updated Babel config:
   - Use `babel.config.js` instead of `.babelrc.js`.
   - Renamed the `ESM` environment variable to `BABEL_ESM` to be more specific.
