@@ -5,7 +5,6 @@
 ### Major
 
 - Updated Node.js support from v7.6+ to v8.5+.
-- Removed the `rimraf` dev dependency in favour of a native `rm -rf` package clean script. Leaner and faster; we only support \*nix for contributing anyway.
 
 ### Minor
 
@@ -14,6 +13,7 @@
 ### Patch
 
 - Updated dependencies.
+- Removed the `rimraf` dev dependency in favour of a native `rm -rf` package clean script. Leaner and faster; we only support \*nix for contributing anyway.
 - Fixed new Prettier lint errors and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Compact package `repository` field.
 - Added more package tags.
