@@ -10,6 +10,7 @@
 
 - Use package `prepare` script to support installation via Git (e.g. `npm install jaydenseric/graphql-react`).
 - Use [`@babel/plugin-transform-runtime`](https://npm.im/@babel/plugin-transform-runtime) and [`@babel/runtime`](https://npm.im/@babel/runtime) to make runtime helpers more DRY. Bundle size savings will manifest once more packages import the same helpers.
+- Package [marked side-effect free](https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free) for bundlers and tree-shaking.
 
 ### Patch
 
