@@ -1,5 +1,5 @@
 import fnv1a from 'fnv1a'
-import extractFiles from 'extract-files'
+import { extractFiles } from 'extract-files'
 
 /**
  * A cache update listener callback.

@@ -37,7 +37,7 @@
     "react": "^16.3.1"
   },
   "dependencies": {
-    "extract-files": "^3.1.0",
+    "extract-files": "^4.0.0",
     "fast-deep-equal": "^2.0.1",
     "fnv1a": "^1.0.1",
     "object-assign": "^4.1.1",

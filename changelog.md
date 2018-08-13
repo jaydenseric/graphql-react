@@ -13,7 +13,7 @@
 
 ### Patch
 
-- Updated dev dependencies.
+- Updated dependencies.
 - Fixed new Prettier lint errors and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
 - Compact package `repository` field.
 - Added more package tags.
