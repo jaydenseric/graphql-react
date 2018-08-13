@@ -42,11 +42,11 @@
   - Use `babel.config.js` instead of `.babelrc.js`.
   - Renamed the `ESM` environment variable to `BABEL_ESM` to be more specific.
 - Improved `package.json` scripts:
-  - Leveraged `npm-run-all` more for parallelism and reduced noise.
+  - Leveraged [`npm-run-all`](https://npm.im/npm-run-all) more for parallelism and reduced noise.
   - Removed linting fix scripts.
   - Linting included in the `test` script. Travis CI will fail PR's with lint errors.
   - Custom watch script.
-  - No longer use `cross-env`; contributors with Windows may setup and use a Bash shell.
+  - No longer use [`cross-env`](https://npm.im/cross-env); contributors with Windows may setup and use a Bash shell.
 - Improved ESLint config:
   - Use [eslint-config-env](https://npm.im/eslint-config-env).
   - Removed redundant `eslint-plugin-ava` dev dependency and config.
