@@ -20,6 +20,7 @@
 - Stopped using [`npm-run-all`](https://npm.im/npm-run-all) for package scripts to reduce complexity and bugs.
 - Compact package `repository` field.
 - Added more package tags.
+- Lint `.yml` files.
 - Test with [`graphql-api-koa`](https://npm.im/graphql-api-koa) instead of [`express-graphql`](https://npm.im/express-graphql).
 - Fixed test snapshot consistency between Node.js versions (see [tapjs/node-tap#450](https://github.com/tapjs/node-tap/issues/450)).
 - Use [`jsdoc-md`](https://npm.im/jsdoc-md) instead of [`documentation`](https://npm.im/documentation) to generate readme API docs.
