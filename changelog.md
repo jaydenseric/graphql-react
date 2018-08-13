@@ -16,6 +16,7 @@
 - Updated dependencies.
 - Removed the `rimraf` dev dependency in favour of a native `rm -rf` package clean script. Leaner and faster; we only support \*nix for contributing anyway.
 - Fixed new Prettier lint errors and removed the `fake-tag` dev dependency now that Prettier can format template literals tagged with `/* GraphQL */`.
+- Stopped using [`npm-run-all`](https://npm.im/npm-run-all) for package scripts to reduce complexity and bugs.
 - Compact package `repository` field.
 - Added more package tags.
 - Test with [`graphql-api-koa`](https://npm.im/graphql-api-koa) instead of [`express-graphql`](https://npm.im/express-graphql).
