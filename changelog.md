@@ -9,6 +9,7 @@
 ### Minor
 
 - Use package `prepare` script to support installation via Git (e.g. `npm install jaydenseric/graphql-react`).
+- Use [`@babel/plugin-transform-runtime`](https://npm.im/@babel/plugin-transform-runtime) and [`@babel/runtime`](https://npm.im/@babel/runtime) to make runtime helpers more DRY. Bundle size savings will manifest once more packages import the same helpers.
 
 ### Patch
 
@@ -39,7 +40,6 @@
 - Updated Babel config:
   - Use `babel.config.js` instead of `.babelrc.js`.
   - Renamed the `ESM` environment variable to `BABEL_ESM` to be more specific.
-  - Use [`@babel/plugin-transform-runtime`](https://npm.im/@babel/plugin-transform-runtime) and [`@babel/runtime`](https://npm.im/@babel/runtime) to make runtime helpers more DRY. Bundle size savings will manifest once more packages import the same helpers.
 - Improved `package.json` scripts:
   - Leveraged `npm-run-all` more for parallelism and reduced noise.
   - Removed linting fix scripts.
