@@ -20,6 +20,7 @@ module.exports = {
   ],
   plugins: [
     ['@babel/proposal-object-rest-spread', { loose: true, useBuiltIns: true }],
-    ['@babel/proposal-class-properties', { loose: true }]
+    ['@babel/proposal-class-properties', { loose: true }],
+    '@babel/transform-runtime'
   ]
 }

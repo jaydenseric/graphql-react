@@ -37,6 +37,7 @@
     "react": "^16.3.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0-rc.1",
     "extract-files": "^4.0.0",
     "fast-deep-equal": "^2.0.1",
     "fnv1a": "^1.0.1",
@@ -48,6 +49,7 @@
     "@babel/core": "^7.0.0-rc.1",
     "@babel/plugin-proposal-class-properties": "^7.0.0-rc.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-rc.1",
+    "@babel/plugin-transform-runtime": "^7.0.0-rc.1",
     "@babel/preset-env": "^7.0.0-rc.1",
     "@babel/preset-react": "^7.0.0-rc.1",
     "babel-eslint": "^8.2.6",
