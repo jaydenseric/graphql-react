@@ -102,10 +102,10 @@ Consider polyfilling:
 
 A lightweight GraphQL client that caches requests.
 
-| Parameter       | Type                                                                                       | Description                                         |
-| :-------------- | :----------------------------------------------------------------------------------------- | :-------------------------------------------------- |
-| `options`       | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)? = `{}` | Options.                                            |
-| `options.cache` | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)? = `{}` | Cache to import; usually from a server side render. |
+| Parameter       | Type                                    | Description                                         |
+| :-------------- | :-------------------------------------- | :-------------------------------------------------- |
+| `options`       | [Object](https://mdn.io/object)? = `{}` | Options.                                            |
+| `options.cache` | [Object](https://mdn.io/object)? = `{}` | Cache to import; usually from a server side render. |
 
 #### Examples
 
@@ -121,12 +121,12 @@ _Constructing a new GraphQL client._
 
 Queries a GraphQL server.
 
-| Parameter                      | Type                                                                                            | Description                                                                              |
-| :----------------------------- | :---------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
-| `options`                      | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)              | Options.                                                                                 |
-| `options.operation`            | [Operation](#type-operation)                                                                    | GraphQL operation object.                                                                |
-| `options.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)?                                             | Overrides default GraphQL request [fetch options](#type-fetchoptions).                   |
-| `options.resetOnLoad`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads. |
+| Parameter                      | Type                                                | Description                                                                              |
+| :----------------------------- | :-------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| `options`                      | [Object](https://mdn.io/object)                     | Options.                                                                                 |
+| `options.operation`            | [Operation](#type-operation)                        | GraphQL operation object.                                                                |
+| `options.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default GraphQL request [fetch options](#type-fetchoptions).                   |
+| `options.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads. |
 
 **Returns:** [ActiveQuery](#type-activequery) — Loading query details.
 
@@ -134,9 +134,9 @@ Queries a GraphQL server.
 
 Resets the [GraphQL cache](#graphql-instance-property-cache). Useful when a user logs out.
 
-| Parameter                | Type                                                                                | Description                                                                                                                                                     |
-| :----------------------- | :---------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `exceptFetchOptionsHash` | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)? | A [fetch options](#type-fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
+| Parameter                | Type                             | Description                                                                                                                                                     |
+| :----------------------- | :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `exceptFetchOptionsHash` | [string](https://mdn.io/string)? | A [fetch options](#type-fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
 
 ##### Examples
 
@@ -162,23 +162,23 @@ _Export cache as JSON._
 
 A React component to manage a GraphQL query with a [`GraphQL`](#class-graphql) instance. See also the [`Query`](#function-query) component, which takes the [`GraphQL`](#class-graphql) instance from context instead of a prop.
 
-| Parameter                    | Type                                                                                            | Description                                                                                      |
-| :--------------------------- | :---------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
-| `props`                      | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)              | Component props.                                                                                 |
-| `props.graphql`              | [GraphQL](#class-graphql)                                                                       | [`GraphQL`](#class-graphql) instance.                                                            |
-| `props.variables`            | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)?             | GraphQL query variables.                                                                         |
-| `props.query`                | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)              | GraphQL query.                                                                                   |
-| `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)?                                             | Overrides default fetch options for the GraphQL request.                                         |
-| `props.loadOnMount`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the query load when the component mounts.                                                 |
-| `props.loadOnReset`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the query load when its [GraphQL cache](#graphql-instance-property-cache) entry is reset. |
-| `props.resetOnLoad`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
-| `props.children`             | [QueryRender](#type-queryrender)                                                                | Renders the query status.                                                                        |
+| Parameter                    | Type                                                | Description                                                                                      |
+| :--------------------------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| `props`                      | [Object](https://mdn.io/object)                     | Component props.                                                                                 |
+| `props.graphql`              | [GraphQL](#class-graphql)                           | [`GraphQL`](#class-graphql) instance.                                                            |
+| `props.variables`            | [Object](https://mdn.io/object)?                    | GraphQL query variables.                                                                         |
+| `props.query`                | [string](https://mdn.io/string)                     | GraphQL query.                                                                                   |
+| `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default fetch options for the GraphQL request.                                         |
+| `props.loadOnMount`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the component mounts.                                                 |
+| `props.loadOnReset`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when its [GraphQL cache](#graphql-instance-property-cache) entry is reset. |
+| `props.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
+| `props.children`             | [QueryRender](#type-queryrender)                    | Renders the query status.                                                                        |
 
 #### GraphQLQuery instance method load
 
 Loads the query, updating cache.
 
-**Returns:** Promise&lt;[RequestCache](#type-requestcache)> — A promise that resolves the [request cache](#type-requestcache).
+**Returns:** [Promise](https://mdn.io/promise)&lt;[RequestCache](#type-requestcache)> — A promise that resolves the [request cache](#type-requestcache).
 
 ### function Consumer
 
@@ -212,7 +212,7 @@ Recursively preloads [`Query`](#function-query) components that have the `loadOn
 | :-------- | :----------- | :--------------------------- |
 | `element` | ReactElement | A React virtual DOM element. |
 
-**Returns:** Promise — Resolves once loading is done and cache is ready to be exported from the [`GraphQL`](#class-graphql) instance. Cache can be imported when constructing new [`GraphQL`](#class-graphql) instances.
+**Returns:** [Promise](https://mdn.io/promise) — Resolves once loading is done and cache is ready to be exported from the [`GraphQL`](#class-graphql) instance. Cache can be imported when constructing new [`GraphQL`](#class-graphql) instances.
 
 #### Examples
 
@@ -268,16 +268,16 @@ _Using the `Provider` component for a page._
 
 A React component to manage a GraphQL query or mutation.
 
-| Parameter                    | Type                                                                                            | Description                                                                                |
-| :--------------------------- | :---------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
-| `props`                      | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)              | Component props.                                                                           |
-| `props.variables`            | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)?             | GraphQL query variables.                                                                   |
-| `props.query`                | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)              | GraphQL query.                                                                             |
-| `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)?                                             | Overrides default GraphQL request [fetch options](#type-fetchoptions).                     |
-| `props.loadOnMount`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the query load when the component mounts.                                           |
-| `props.loadOnReset`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the query load when the [GraphQL cache](#graphql-instance-property-cache) is reset. |
-| `props.resetOnLoad`          | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)? = `false` | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
-| `props.children`             | [QueryRender](#type-queryrender)                                                                | Renders the query status.                                                                  |
+| Parameter                    | Type                                                | Description                                                                                |
+| :--------------------------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| `props`                      | [Object](https://mdn.io/object)                     | Component props.                                                                           |
+| `props.variables`            | [Object](https://mdn.io/object)?                    | GraphQL query variables.                                                                   |
+| `props.query`                | [string](https://mdn.io/string)                     | GraphQL query.                                                                             |
+| `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default GraphQL request [fetch options](#type-fetchoptions).                     |
+| `props.loadOnMount`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the component mounts.                                           |
+| `props.loadOnReset`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the [GraphQL cache](#graphql-instance-property-cache) is reset. |
+| `props.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
+| `props.children`             | [QueryRender](#type-queryrender)                    | Renders the query status.                                                                  |
 
 **Returns:** ReactElement — React virtual DOM element.
 
@@ -373,19 +373,19 @@ _A mutation to clap an article._
 
 Loading query details.
 
-**Type:** [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)
+**Type:** [Object](https://mdn.io/object)
 
-| Property           | Type                                                                               | Description                                                        |
-| :----------------- | :--------------------------------------------------------------------------------- | :----------------------------------------------------------------- |
-| `fetchOptionsHash` | [string](https://developer.mozilla.org/javascript/reference/global_objects/string) | [fetch options](#type-fetchoptions) hash.                          |
-| `cache`            | [RequestCache](#type-requestcache)?                                                | Results from the last identical request.                           |
-| `request`          | Promise&lt;[RequestCache](#type-requestcache)>                                     | A promise that resolves fresh [request cache](#type-requestcache). |
+| Property           | Type                                                                     | Description                                                        |
+| :----------------- | :----------------------------------------------------------------------- | :----------------------------------------------------------------- |
+| `fetchOptionsHash` | [string](https://mdn.io/string)                                          | [fetch options](#type-fetchoptions) hash.                          |
+| `cache`            | [RequestCache](#type-requestcache)?                                      | Results from the last identical request.                           |
+| `request`          | [Promise](https://mdn.io/promise)&lt;[RequestCache](#type-requestcache)> | A promise that resolves fresh [request cache](#type-requestcache). |
 
 ### type ConsumerRender
 
 Renders a [`GraphQL`](#class-graphql) consumer.
 
-**Type:** [function](https://developer.mozilla.org/javascript/reference/global_objects/function)
+**Type:** [function](https://mdn.io/function)
 
 | Parameter | Type                      | Description                           |
 | :-------- | :------------------------ | :------------------------------------ |
@@ -405,20 +405,20 @@ _A button that resets the [GraphQL cache](#graphql-instance-property-cache)._
 
 [Polyfillable fetch options](https://github.github.io/fetch/#options) for a GraphQL request.
 
-**Type:** [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)
+**Type:** [Object](https://mdn.io/object)
 
-| Property      | Type                                                                                           | Description                      |
-| :------------ | :--------------------------------------------------------------------------------------------- | :------------------------------- |
-| `url`         | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)             | A GraphQL API URL.               |
-| `body`        | [string](https://developer.mozilla.org/javascript/reference/global_objects/string) \| FormData | HTTP request body.               |
-| `headers`     | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)             | HTTP request headers.            |
-| `credentials` | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)?            | Authentication credentials mode. |
+| Property      | Type                                        | Description                      |
+| :------------ | :------------------------------------------ | :------------------------------- |
+| `url`         | [string](https://mdn.io/string)             | A GraphQL API URL.               |
+| `body`        | [string](https://mdn.io/string) \| FormData | HTTP request body.               |
+| `headers`     | [Object](https://mdn.io/object)             | HTTP request headers.            |
+| `credentials` | [string](https://mdn.io/string)?            | Authentication credentials mode. |
 
 ### type FetchOptionsOverride
 
 Overrides default GraphQL request [fetch options](#type-fetchoptions). Modify the provided options object without a return.
 
-**Type:** [function](https://developer.mozilla.org/javascript/reference/global_objects/function)
+**Type:** [function](https://mdn.io/function)
 
 | Parameter      | Type                               | Description                            |
 | :------------- | :--------------------------------- | :------------------------------------- |
@@ -440,39 +440,39 @@ _Setting [fetch options](#type-fetchoptions) for an example API._
 
 Fetch HTTP error.
 
-**Type:** [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)
+**Type:** [Object](https://mdn.io/object)
 
-| Property     | Type                                                                               | Description       |
-| :----------- | :--------------------------------------------------------------------------------- | :---------------- |
-| `status`     | [number](https://developer.mozilla.org/javascript/reference/global_objects/number) | HTTP status code. |
-| `statusText` | [string](https://developer.mozilla.org/javascript/reference/global_objects/string) | HTTP status text. |
+| Property     | Type                            | Description       |
+| :----------- | :------------------------------ | :---------------- |
+| `status`     | [number](https://mdn.io/number) | HTTP status code. |
+| `statusText` | [string](https://mdn.io/string) | HTTP status text. |
 
 ### type Operation
 
 A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
 
-**Type:** [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)
+**Type:** [Object](https://mdn.io/object)
 
-| Property    | Type                                                                               | Description                   |
-| :---------- | :--------------------------------------------------------------------------------- | :---------------------------- |
-| `query`     | [string](https://developer.mozilla.org/javascript/reference/global_objects/string) | GraphQL queries or mutations. |
-| `variables` | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object) | Variables used by the query.  |
+| Property    | Type                            | Description                   |
+| :---------- | :------------------------------ | :---------------------------- |
+| `query`     | [string](https://mdn.io/string) | GraphQL queries or mutations. |
+| `variables` | [Object](https://mdn.io/object) | Variables used by the query.  |
 
 ### type QueryRender
 
 Renders the status of a query or mutation.
 
-**Type:** [function](https://developer.mozilla.org/javascript/reference/global_objects/function)
+**Type:** [function](https://mdn.io/function)
 
-| Parameter       | Type                                                                                   | Description                                |
-| :-------------- | :------------------------------------------------------------------------------------- | :----------------------------------------- |
-| `load`          | [function](https://developer.mozilla.org/javascript/reference/global_objects/function) | Loads the query on demand, updating cache. |
-| `loading`       | [boolean](https://developer.mozilla.org/javascript/reference/global_objects/boolean)   | Is the query loading.                      |
-| `fetchError`    | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)?    | Fetch error message.                       |
-| `httpError`     | [HttpError](#type-httperror)?                                                          | Fetch response HTTP error.                 |
-| `parseError`    | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)?    | Parse error message.                       |
-| `graphQLErrors` | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)?    | GraphQL response errors.                   |
-| `data`          | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)?    | GraphQL response data.                     |
+| Parameter       | Type                                | Description                                |
+| :-------------- | :---------------------------------- | :----------------------------------------- |
+| `load`          | [function](https://mdn.io/function) | Loads the query on demand, updating cache. |
+| `loading`       | [boolean](https://mdn.io/boolean)   | Is the query loading.                      |
+| `fetchError`    | [string](https://mdn.io/string)?    | Fetch error message.                       |
+| `httpError`     | [HttpError](#type-httperror)?       | Fetch response HTTP error.                 |
+| `parseError`    | [string](https://mdn.io/string)?    | Parse error message.                       |
+| `graphQLErrors` | [Object](https://mdn.io/object)?    | GraphQL response errors.                   |
+| `data`          | [Object](https://mdn.io/object)?    | GraphQL response data.                     |
 
 **Returns:** ReactElement — React virtual DOM element.
 
@@ -505,12 +505,12 @@ _Rendering a user profile query._
 
 JSON serializable result of a GraphQL request (including all errors and data) suitable for caching.
 
-**Type:** [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)
+**Type:** [Object](https://mdn.io/object)
 
-| Property        | Type                                                                                | Description                |
-| :-------------- | :---------------------------------------------------------------------------------- | :------------------------- |
-| `fetchError`    | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)? | Fetch error message.       |
-| `httpError`     | [HttpError](#type-httperror)?                                                       | Fetch response HTTP error. |
-| `parseError`    | [string](https://developer.mozilla.org/javascript/reference/global_objects/string)? | Parse error message.       |
-| `graphQLErrors` | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)? | GraphQL response errors.   |
-| `data`          | [Object](https://developer.mozilla.org/javascript/reference/global_objects/object)? | GraphQL response data.     |
+| Property        | Type                             | Description                |
+| :-------------- | :------------------------------- | :------------------------- |
+| `fetchError`    | [string](https://mdn.io/string)? | Fetch error message.       |
+| `httpError`     | [HttpError](#type-httperror)?    | Fetch response HTTP error. |
+| `parseError`    | [string](https://mdn.io/string)? | Parse error message.       |
+| `graphQLErrors` | [Object](https://mdn.io/object)? | GraphQL response errors.   |
+| `data`          | [Object](https://mdn.io/object)? | GraphQL response data.     |

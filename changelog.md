@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Regenerated the readme API docs using the latest [`jsdoc-md`](https://npm.im/jsdoc-md) version.
 
 ## 2.0.0
 
