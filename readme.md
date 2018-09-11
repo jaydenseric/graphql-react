@@ -39,17 +39,67 @@ To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://np
 npm install graphql-react
 ```
 
-Create and provide a [GraphQL](#class-graphql) client:
+Create and provide a single [`GraphQL`](#class-graphql) client to hold the cache for all the queries in your app:
 
 ```jsx
 import { GraphQL, Provider } from 'graphql-react'
 
 const graphql = new GraphQL()
 
-const Page = () => (
-  <Provider value={graphql}>Use Consumer or Query components…</Provider>
+export const App = ({ children }) => (
+  <Provider value={graphql}>{children}</Provider>
 )
 ```
+
+[`GraphQL`](#class-graphql) accepts a single `cache` option for hydration after SSR; see [**_Example_**](#example).
+
+Setup is simple because [`Query`](#function-query) components determine their own fetch options (such as the GraphQL endpoint URI). Multiple GraphQL APIs can be used in an app 🤯
+
+## Usage
+
+Use the [`Query`](#function-query) component for queries and mutations throughout your app:
+
+```jsx
+import { Query } from 'graphql-react'
+
+export const PokemonViewer = ({ name }) => (
+  <Query
+    loadOnMount
+    loadOnReset
+    fetchOptionsOverride={options => {
+      options.url = 'https://graphql-pokemon.now.sh'
+    }}
+    variables={{ name }}
+    query={
+      /* GraphQL */ `
+        query pokemon($name: String!) {
+          pokemon(name: $name) {
+            number
+            image
+          }
+        }
+      `
+    }
+  >
+    {({ loading, data }) =>
+      data ? (
+        <figure>
+          <img src={data.image} alt={name} />
+          <figcaption>
+            Pokémon #{data.number}: {name}
+          </figcaption>
+        </figure>
+      ) : loading ? (
+        <p>Loading…</p>
+      ) : (
+        <p>Error!</p>
+      )
+    }
+  </Query>
+)
+```
+
+To make queries and mutations without a component, use the [`GraphQL` instance method `query`](#graphql-instance-method-query).
 
 ## Example
 
