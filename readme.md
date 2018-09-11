@@ -39,7 +39,7 @@ To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://np
 npm install graphql-react
 ```
 
-Create and provide a [GraphQL](#graphql) client:
+Create and provide a [GraphQL](#class-graphql) client:
 
 ```jsx
 import { GraphQL, Provider } from 'graphql-react'
