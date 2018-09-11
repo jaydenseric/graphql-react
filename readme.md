@@ -348,7 +348,7 @@ _A query to display a user profile._
 >     variables={{ userId }}
 >     query={`
 >       query user($userId: ID!) {
->         user(userId: $id) {
+>         user(userId: $userId) {
 >           name
 >         }
 >       }
@@ -390,7 +390,7 @@ _A mutation to clap an article._
 >     variables={{ articleId }}
 >     query={`
 >       mutation clapArticle($articleId: ID!) {
->         clapArticle(articleId: $id) {
+>         clapArticle(articleId: $articleId) {
 >           clapCount
 >         }
 >       }

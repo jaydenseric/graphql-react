@@ -8,6 +8,7 @@
 - Regenerated the readme API docs using the latest [`jsdoc-md`](https://npm.im/jsdoc-md) version.
 - Added a new “Usage” readme section.
 - Fixed a link in the readme.
+- Fixed example GraphQL query typos.
 
 ## 2.0.0
 

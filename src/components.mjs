@@ -277,7 +277,7 @@ class GraphQLQuery extends React.Component {
  *     variables={{ userId }}
  *     query={`
  *       query user($userId: ID!) {
- *         user(userId: $id) {
+ *         user(userId: $userId) {
  *           name
  *         }
  *       }
@@ -317,7 +317,7 @@ class GraphQLQuery extends React.Component {
  *     variables={{ articleId }}
  *     query={`
  *       mutation clapArticle($articleId: ID!) {
- *         clapArticle(articleId: $id) {
+ *         clapArticle(articleId: $articleId) {
  *           clapCount
  *         }
  *       }
