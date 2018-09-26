@@ -126,8 +126,6 @@ Consider polyfilling:
     - [Examples](#examples-1)
   - [GraphQL instance property cache](#graphql-instance-property-cache)
     - [Examples](#examples-2)
-- [class GraphQLQuery](#class-graphqlquery)
-  - [GraphQLQuery instance method load](#graphqlquery-instance-method-load)
 - [function Consumer](#function-consumer)
   - [Examples](#examples-3)
 - [function preload](#function-preload)
@@ -207,28 +205,6 @@ _Export cache as JSON._
 > ```js
 > const exportedCache = JSON.stringify(graphql.cache)
 > ```
-
-### class GraphQLQuery
-
-A React component to manage a GraphQL query with a [`GraphQL`](#class-graphql) instance. See also the [`Query`](#function-query) component, which takes the [`GraphQL`](#class-graphql) instance from context instead of a prop.
-
-| Parameter                    | Type                                                | Description                                                                                      |
-| :--------------------------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
-| `props`                      | [Object](https://mdn.io/object)                     | Component props.                                                                                 |
-| `props.graphql`              | [GraphQL](#class-graphql)                           | [`GraphQL`](#class-graphql) instance.                                                            |
-| `props.variables`            | [Object](https://mdn.io/object)?                    | GraphQL query variables.                                                                         |
-| `props.query`                | [string](https://mdn.io/string)                     | GraphQL query.                                                                                   |
-| `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default fetch options for the GraphQL request.                                         |
-| `props.loadOnMount`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the component mounts.                                                 |
-| `props.loadOnReset`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when its [GraphQL cache](#graphql-instance-property-cache) entry is reset. |
-| `props.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
-| `props.children`             | [QueryRender](#type-queryrender)                    | Renders the query status.                                                                        |
-
-#### GraphQLQuery instance method load
-
-Loads the query, updating cache.
-
-**Returns:** [Promise](https://mdn.io/promise)&lt;[RequestCache](#type-requestcache)> — A promise that resolves the [request cache](#type-requestcache).
 
 ### function Consumer
 

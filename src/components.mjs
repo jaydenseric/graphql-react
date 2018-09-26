@@ -74,6 +74,7 @@ export const {
  * @param {boolean} [props.loadOnReset=false] Should the query load when its [GraphQL cache]{@link GraphQL#cache} entry is reset.
  * @param {boolean} [props.resetOnLoad=false] Should all other [GraphQL cache]{@link GraphQL#cache} reset when the query loads.
  * @param {QueryRender} props.children Renders the query status.
+ * @ignore
  */
 class GraphQLQuery extends React.Component {
   static propTypes = {
@@ -149,6 +150,7 @@ class GraphQLQuery extends React.Component {
    * @kind function
    * @name GraphQLQuery#load
    * @returns {Promise<RequestCache>} A promise that resolves the [request cache]{@link RequestCache}.
+   * @ignore
    */
   load = () => {
     const stateUpdate = { loading: true }

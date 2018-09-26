@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Remove the `GraphQLQuery` component from API documentation as it used internally and is not exported.
 - Regenerated the readme API docs using the latest [`jsdoc-md`](https://npm.im/jsdoc-md) version.
 - Added a new “Usage” readme section.
 - Fixed a link in the readme.
