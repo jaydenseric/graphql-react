@@ -69,9 +69,9 @@ export const PokemonViewer = ({ name }) => (
     fetchOptionsOverride={options => {
       options.url = 'https://graphql-pokemon.now.sh'
     }}
-    variables={{ name }}
-    query={
-      /* GraphQL */ `
+    operation={{
+      variables: { name },
+      query: /* GraphQL */ `
         query pokemon($name: String!) {
           pokemon(name: $name) {
             number
@@ -79,7 +79,7 @@ export const PokemonViewer = ({ name }) => (
           }
         }
       `
-    }
+    }}
   >
     {({ loading, data }) =>
       data ? (
