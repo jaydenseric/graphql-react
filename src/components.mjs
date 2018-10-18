@@ -75,7 +75,7 @@ class GraphQLQuery extends React.Component {
     children: propTypes.func.isRequired
   }
 
-  // eslint-disable-next-line
+  // eslint-disable-next-line require-jsdoc
   constructor(props) {
     super(props)
 

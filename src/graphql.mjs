@@ -15,7 +15,7 @@ import { extractFiles } from 'extract-files'
  * ```
  */
 export class GraphQL {
-  // eslint-disable-next-line
+  // eslint-disable-next-line require-jsdoc
   constructor({ cache = {} } = {}) {
     /**
      * GraphQL [request cache]{@link RequestCache} map, keyed by [fetch options]{@link FetchOptions} hashes.
