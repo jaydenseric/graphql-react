@@ -47,19 +47,6 @@ export const {
 } = React.createContext()
 
 /**
- * Renders a [`GraphQL`]{@link GraphQL} consumer.
- * @kind typedef
- * @name ConsumerRender
- * @type {function}
- * @param {GraphQL} graphql [`GraphQL`]{@link GraphQL} instance.
- * @returns {ReactElement} React virtual DOM element.
- * @example <caption>A button that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
- * ```jsx
- * graphql => <button onClick={graphql.reset}>Reset cache</button>
- * ```
- */
-
-/**
  * A React component to manage a GraphQL query with a [`GraphQL`]{@link GraphQL} instance.
  * See also the [`Query`]{@link Query} component, which takes the [`GraphQL`]{@link GraphQL}
  * instance from context instead of a prop.
@@ -363,6 +350,19 @@ Query.propTypes = {
   resetOnLoad: propTypes.bool,
   children: propTypes.func.isRequired
 }
+
+/**
+ * Renders a [`GraphQL`]{@link GraphQL} consumer.
+ * @kind typedef
+ * @name ConsumerRender
+ * @type {function}
+ * @param {GraphQL} graphql [`GraphQL`]{@link GraphQL} instance.
+ * @returns {ReactElement} React virtual DOM element.
+ * @example <caption>A button that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
+ * ```jsx
+ * graphql => <button onClick={graphql.reset}>Reset cache</button>
+ * ```
+ */
 
 /**
  * Renders the status of a query or mutation.
