@@ -58,8 +58,7 @@ export const {
  * @name GraphQLQuery
  * @param {Object} props Component props.
  * @param {GraphQL} props.graphql [`GraphQL`]{@link GraphQL} instance.
- * @param {Object} [props.variables] GraphQL query variables.
- * @param {string} props.query GraphQL query.
+ * @param {GraphQLOperation} props.operation GraphQL operation.
  * @param {FetchOptionsOverride} [props.fetchOptionsOverride] Overrides default fetch options for the GraphQL request.
  * @param {boolean} [props.loadOnMount=false] Should the query load when the component mounts.
  * @param {boolean} [props.loadOnReset=false] Should the query load when its [GraphQL cache]{@link GraphQL#cache} entry is reset.
@@ -71,8 +70,7 @@ class GraphQLQuery extends React.Component {
   static propTypes = {
     graphql: propTypes.instanceOf(GraphQL).isRequired,
     fetchOptionsOverride: propTypes.func,
-    variables: propTypes.object,
-    query: propTypes.string.isRequired,
+    operation: propTypes.object.isRequired,
     loadOnMount: propTypes.bool,
     loadOnReset: propTypes.bool,
     resetOnLoad: propTypes.bool,
@@ -87,7 +85,7 @@ class GraphQLQuery extends React.Component {
 
     if (props.loadOnMount) {
       const fetchOptions = props.graphql.constructor.fetchOptions(
-        this.operation()
+        props.operation
       )
 
       if (props.fetchOptionsOverride) props.fetchOptionsOverride(fetchOptions)
@@ -125,18 +123,6 @@ class GraphQLQuery extends React.Component {
   }
 
   /**
-   * Derives the GraphQL operation.
-   * @kind function
-   * @name GraphQLQuery#operation
-   * @returns {Operation} GraphQL operation object.
-   * @ignore
-   */
-  operation = () => ({
-    variables: this.props.variables,
-    query: this.props.query
-  })
-
-  /**
    * Loads the query, updating cache.
    * @kind function
    * @name GraphQLQuery#load
@@ -146,7 +132,7 @@ class GraphQLQuery extends React.Component {
   load = () => {
     const stateUpdate = { loading: true }
     const { fetchOptionsHash, cache, request } = this.props.graphql.query({
-      operation: this.operation(),
+      operation: this.props.operation,
       fetchOptionsOverride: this.props.fetchOptionsOverride,
       resetOnLoad: this.props.resetOnLoad
     })
@@ -199,16 +185,18 @@ class GraphQLQuery extends React.Component {
    * Invoked after the React component updates.
    * @kind function
    * @name GraphQLQuery#componentDidUpdate
+   * @param {Object} props New props.
+   * @param {GraphQLOperation} props.operation GraphQL operation.
    * @ignore
    */
-  componentDidUpdate({ query, variables }) {
+  componentDidUpdate({ operation }) {
     if (
       // Load on cache reset enabled and…
       this.props.loadOnReset &&
       // …a load has happened before and…
       this.state.fetchOptionsHash &&
       // …props that may affect the cache have changed.
-      (query !== this.props.query || !equal(variables, this.props.variables))
+      !equal(operation, this.props.operation)
     )
       this.load()
   }
@@ -248,8 +236,7 @@ class GraphQLQuery extends React.Component {
  * @kind function
  * @name Query
  * @param {Object} props Component props.
- * @param {Object} [props.variables] GraphQL query variables.
- * @param {string} props.query GraphQL query.
+ * @param {GraphQLOperation} props.operation GraphQL operation.
  * @param {FetchOptionsOverride} [props.fetchOptionsOverride] Overrides default GraphQL request [fetch options]{@link FetchOptions}.
  * @param {boolean} [props.loadOnMount=false] Should the query load when the component mounts.
  * @param {boolean} [props.loadOnReset=false] Should the query load when the [GraphQL cache]{@link GraphQL#cache} is reset.
@@ -267,14 +254,16 @@ class GraphQLQuery extends React.Component {
  *     fetchOptionsOverride={options => {
  *      options.url = 'https://api.example.com/graphql'
  *     }}
- *     variables={{ userId }}
- *     query={`
- *       query user($userId: ID!) {
- *         user(userId: $userId) {
- *           name
+ *     operation={
+ *       variables: { userId },
+ *       query: `
+ *         query user($userId: ID!) {
+ *           user(userId: $userId) {
+ *             name
+ *           }
  *         }
- *       }
- *     `}
+ *       `
+ *     }
  *   >
  *     {({
  *       load,
@@ -307,14 +296,16 @@ class GraphQLQuery extends React.Component {
  *     fetchOptionsOverride={options => {
  *       options.url = 'https://api.example.com/graphql'
  *     }}
- *     variables={{ articleId }}
- *     query={`
- *       mutation clapArticle($articleId: ID!) {
- *         clapArticle(articleId: $articleId) {
- *           clapCount
+ *     operation={
+ *       variables: { articleId },
+ *       query: `
+ *         mutation clapArticle($articleId: ID!) {
+ *           clapArticle(articleId: $articleId) {
+ *             clapCount
+ *           }
  *         }
- *       }
- *     `}
+ *       `
+ *     }
  *   >
  *     {({
  *       load,
@@ -347,8 +338,7 @@ export const Query = props => (
 
 Query.propTypes = {
   fetchOptionsOverride: propTypes.func,
-  variables: propTypes.object,
-  query: propTypes.string.isRequired,
+  operation: propTypes.object.isRequired,
   loadOnMount: propTypes.bool,
   loadOnReset: propTypes.bool,
   resetOnLoad: propTypes.bool,

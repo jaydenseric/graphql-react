@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- The `Query` (and the internal `GraphQLQuery`) component take an `operation` prop instead of separate `variables` and `query` props. This makes the implementation a little more elegant, is more consistent with the `GraphQL.query` API and allows sending custom GraphQL operation fields.
+
 ### Minor
 
 - Improved `Provider` and `Consumer` component display names in React dev tools:

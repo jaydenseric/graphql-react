@@ -119,15 +119,14 @@ const snapshotObject = object =>
 
 t.test('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
+  const operation = { query: EPOCH_QUERY }
 
   // Store and delete the global fetch polyfill.
   const { fetch } = global
   delete global.fetch
 
   // Run the query with fetch unavailable.
-  const requestCache = await graphql.query({
-    operation: { query: EPOCH_QUERY }
-  }).request
+  const requestCache = await graphql.query({ operation }).request
 
   // Restore the global fetch polyfill.
   global.fetch = fetch
@@ -139,7 +138,7 @@ t.test('Query SSR with fetch unavailable.', async t => {
 
   reactDom.renderToString(
     <Provider value={graphql}>
-      <Query loadOnMount query={EPOCH_QUERY}>
+      <Query loadOnMount operation={operation}>
         {function() {
           t.matchSnapshot(
             snapshotObject(arguments),
@@ -157,9 +156,8 @@ t.test('Query SSR with relative fetch URL.', async t => {
   // environment.
 
   const graphql = new GraphQL()
-  const requestCache = await graphql.query({
-    operation: { query: EPOCH_QUERY }
-  }).request
+  const operation = { query: EPOCH_QUERY }
+  const requestCache = await graphql.query({ operation }).request
 
   t.matchSnapshot(
     JSON.stringify(requestCache, null, 2),
@@ -168,7 +166,7 @@ t.test('Query SSR with relative fetch URL.', async t => {
 
   reactDom.renderToString(
     <Provider value={graphql}>
-      <Query loadOnMount query={EPOCH_QUERY}>
+      <Query loadOnMount operation={operation}>
         {function() {
           t.matchSnapshot(
             snapshotObject(arguments),
@@ -197,9 +195,10 @@ t.test('Query SSR with HTTP error.', async t => {
     options.url = `http://localhost:${port}`
   }
 
+  const operation = { query: EPOCH_QUERY }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
-    operation: { query: EPOCH_QUERY }
+    operation
   }).request
 
   // Prevent the dynamic port that appears in the error message from failing
@@ -217,7 +216,7 @@ t.test('Query SSR with HTTP error.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={EPOCH_QUERY}
+        operation={operation}
       >
         {function() {
           t.matchSnapshot(
@@ -247,9 +246,10 @@ t.test('Query SSR with response JSON invalid.', async t => {
     options.url = `http://localhost:${port}`
   }
 
+  const operation = { query: EPOCH_QUERY }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
-    operation: { query: EPOCH_QUERY }
+    operation
   }).request
 
   // Prevent the dynamic port that appears in the error message from failing
@@ -267,7 +267,7 @@ t.test('Query SSR with response JSON invalid.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={EPOCH_QUERY}
+        operation={operation}
       >
         {function() {
           t.matchSnapshot(
@@ -297,9 +297,10 @@ t.test('Query SSR with response payload malformed.', async t => {
     options.url = `http://localhost:${port}`
   }
 
+  const operation = { query: EPOCH_QUERY }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
-    operation: { query: EPOCH_QUERY }
+    operation
   }).request
 
   t.matchSnapshot(
@@ -312,7 +313,7 @@ t.test('Query SSR with response payload malformed.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={EPOCH_QUERY}
+        operation={operation}
       >
         {function() {
           t.matchSnapshot(
@@ -340,10 +341,10 @@ t.test('Query SSR with GraphQL errors.', async t => {
     options.url = `http://localhost:${port}`
   }
 
-  const query = '{ x }'
+  const operation = { query: '{ x }' }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
-    operation: { query }
+    operation
   }).request
 
   t.matchSnapshot(
@@ -356,7 +357,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={query}
+        operation={operation}
       >
         {function() {
           t.matchSnapshot(
@@ -385,10 +386,10 @@ t.test('Query SSR with variables.', async t => {
   }
 
   const variables = { date: '2018-01-01' }
-  const query = YEAR_QUERY
+  const operation = { variables, query: YEAR_QUERY }
   const requestCache = await graphql.query({
     fetchOptionsOverride,
-    operation: { variables, query }
+    operation
   }).request
 
   t.matchSnapshot(
@@ -401,8 +402,7 @@ t.test('Query SSR with variables.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        variables={variables}
-        query={query}
+        operation={operation}
       >
         {function() {
           t.matchSnapshot(
@@ -435,7 +435,7 @@ t.test('Query SSR with nested query.', async t => {
       <Query
         loadOnMount
         fetchOptionsOverride={fetchOptionsOverride}
-        query={EPOCH_QUERY}
+        operation={{ query: EPOCH_QUERY }}
       >
         {({
           data: {
@@ -445,9 +445,9 @@ t.test('Query SSR with nested query.', async t => {
           <Query
             loadOnMount
             fetchOptionsOverride={fetchOptionsOverride}
-            variables={{ isoDateFrom: iso }}
-            query={
-              /* GraphQL */ `
+            operation={{
+              variables: { isoDateFrom: iso },
+              query: /* GraphQL */ `
                 query($isoDateFrom: String!) {
                   daysBetween(
                     isoDateFrom: $isoDateFrom
@@ -455,7 +455,7 @@ t.test('Query SSR with nested query.', async t => {
                   )
                 }
               `
-            }
+            }}
           >
             {result => (
               <pre
@@ -595,8 +595,10 @@ t.test('Cache reset.', async t => {
     fetchOptionsOverride(options) {
       options.url = `http://localhost:${port}`
     },
-    variables: { date: '2018-01-02' },
-    query: YEAR_QUERY
+    operation: {
+      variables: { date: '2018-01-02' },
+      query: YEAR_QUERY
+    }
   })
 
   await request2

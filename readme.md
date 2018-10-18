@@ -297,8 +297,7 @@ A React component to manage a GraphQL query or mutation.
 | Parameter                    | Type                                                | Description                                                                                |
 | :--------------------------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------- |
 | `props`                      | [Object](https://mdn.io/object)                     | Component props.                                                                           |
-| `props.variables`            | [Object](https://mdn.io/object)?                    | GraphQL query variables.                                                                   |
-| `props.query`                | [string](https://mdn.io/string)                     | GraphQL query.                                                                             |
+| `props.operation`            | [GraphQLOperation](#type-graphqloperation)          | GraphQL operation.                                                                         |
 | `props.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default GraphQL request [fetch options](#type-fetchoptions).                     |
 | `props.loadOnMount`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the component mounts.                                           |
 | `props.loadOnReset`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the query load when the [GraphQL cache](#graphql-instance-property-cache) is reset. |
@@ -319,16 +318,18 @@ _A query to display a user profile._
 >     loadOnMount
 >     loadOnReset
 >     fetchOptionsOverride={options => {
->       options.url = 'https://api.example.com/graphql'
+>      options.url = 'https://api.example.com/graphql'
 >     }}
->     variables={{ userId }}
->     query={`
->       query user($userId: ID!) {
->         user(userId: $userId) {
->           name
+>     operation={
+>       variables: { userId },
+>       query: `
+>         query user($userId: ID!) {
+>           user(userId: $userId) {
+>             name
+>           }
 >         }
->       }
->     `}
+>       `
+>     }
 >   >
 >     {({
 >       load,
@@ -363,14 +364,16 @@ _A mutation to clap an article._
 >     fetchOptionsOverride={options => {
 >       options.url = 'https://api.example.com/graphql'
 >     }}
->     variables={{ articleId }}
->     query={`
->       mutation clapArticle($articleId: ID!) {
->         clapArticle(articleId: $articleId) {
->           clapCount
+>     operation={
+>       variables: { articleId },
+>       query: `
+>         mutation clapArticle($articleId: ID!) {
+>           clapArticle(articleId: $articleId) {
+>             clapCount
+>           }
 >         }
->       }
->     `}
+>       `
+>     }
 >   >
 >     {({
 >       load,
