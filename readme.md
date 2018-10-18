@@ -182,9 +182,9 @@ Queries a GraphQL server.
 
 Resets the [GraphQL cache](#graphql-instance-property-cache). Useful when a user logs out.
 
-| Parameter                | Type                             | Description                                                                                                                                                     |
-| :----------------------- | :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `exceptFetchOptionsHash` | [string](https://mdn.io/string)? | A [fetch options](#type-fetchoptions) hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
+| Parameter                | Type                             | Description                                                                                                                                               |
+| :----------------------- | :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `exceptFetchOptionsHash` | [string](https://mdn.io/string)? | A [fetch options](#type-fetchoptions) hash for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
 
 ##### Examples
 

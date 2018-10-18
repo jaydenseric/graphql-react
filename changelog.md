@@ -5,6 +5,7 @@
 ### Major
 
 - The `Query` (and the internal `GraphQLQuery`) component take an `operation` prop instead of separate `variables` and `query` props. This makes the implementation a little more elegant, is more consistent with the `GraphQL.query` API and allows sending custom GraphQL operation fields.
+- New internal event system, fixing [#10](https://github.com/jaydenseric/graphql-react/issues/10). Now the `loading` parameter of `Query` component render functions change when identical requests are loaded elsewhere in the app.
 
 ### Minor
 

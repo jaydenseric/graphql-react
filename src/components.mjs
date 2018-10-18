@@ -84,6 +84,9 @@ class GraphQLQuery extends React.Component {
     this.state = { loading: props.loadOnMount }
 
     if (props.loadOnMount) {
+      // Populate the request cache state to render data for SSR and while
+      // the load called in componentDidMount on the client fetches fresh data.
+
       const fetchOptions = props.graphql.constructor.fetchOptions(
         props.operation
       )
@@ -95,31 +98,55 @@ class GraphQLQuery extends React.Component {
       )
 
       this.state.requestCache = props.graphql.cache[this.state.fetchOptionsHash]
-
-      // Listen for changes to the request cache.
-      this.props.graphql.onCacheUpdate(
-        this.state.fetchOptionsHash,
-        this.handleCacheUpdate
-      )
     }
+
+    // Setup listeners.
+    this.props.graphql.on('fetch', this.onFetch)
+    this.props.graphql.on('cache', this.onCache)
+    this.props.graphql.on('reset', this.onReset)
   }
 
   /**
-   * Handles [request cache]{@link RequestCache} updates.
+   * Handles [GraphQL]{@link GraphQL} fetch
    * @kind function
-   * @name GraphQLQuery#handleCacheUpdate
-   * @param {RequestCache} requestCache Request cache.
+   * @name GraphQLQuery#onFetch
+   * @param {Object} details Event details.
+   * @param {string} [details.fetchOptionsHash] The [fetch options]{@link FetchOptions} hash.
    * @ignore
    */
-  handleCacheUpdate = requestCache => {
-    if (
-      // Cache has been reset and…
-      !requestCache &&
-      // …the component is to load on reset cache.
-      this.props.loadOnReset
-    )
-      this.load()
-    else this.setState({ requestCache })
+  onFetch = ({ fetchOptionsHash }) => {
+    if (fetchOptionsHash === this.state.fetchOptionsHash)
+      this.setState({ loading: true })
+  }
+
+  /**
+   * Handles [GraphQL]{@link GraphQL} cache
+   * @kind function
+   * @name GraphQLQuery#onCache
+   * @param {Object} details Event details.
+   * @param {string} [details.fetchOptionsHash] The cache [fetch options]{@link FetchOptions} hash.
+   * @ignore
+   */
+  onCache = ({ fetchOptionsHash }) => {
+    if (fetchOptionsHash === this.state.fetchOptionsHash)
+      this.setState({
+        loading: false,
+        requestCache: this.props.graphql.cache[fetchOptionsHash]
+      })
+  }
+
+  /**
+   * Handles [GraphQL]{@link GraphQL} reset
+   * @kind function
+   * @name GraphQLQuery#onReset
+   * @param {Object} details Event details.
+   * @param {string} [details.exceptFetchOptionsHash] A [fetch options]{@link FetchOptions} hash for cache exempt from deletion.
+   * @ignore
+   */
+  onReset = ({ exceptFetchOptionsHash }) => {
+    if (exceptFetchOptionsHash !== this.state.fetchOptionsHash)
+      if (this.props.loadOnReset) this.load()
+      else this.setState({ requestCache: null })
   }
 
   /**
@@ -130,43 +157,13 @@ class GraphQLQuery extends React.Component {
    * @ignore
    */
   load = () => {
-    const stateUpdate = { loading: true }
     const { fetchOptionsHash, cache, request } = this.props.graphql.query({
       operation: this.props.operation,
       fetchOptionsOverride: this.props.fetchOptionsOverride,
       resetOnLoad: this.props.resetOnLoad
     })
 
-    if (
-      // The fetch options hash has changed…
-      fetchOptionsHash !== this.state.fetchOptionsHash
-    ) {
-      stateUpdate.fetchOptionsHash = fetchOptionsHash
-
-      // Stop listening for the old request cache updates.
-      this.props.graphql.offCacheUpdate(
-        this.state.fetchOptionsHash, // Old hash.
-        this.handleCacheUpdate
-      )
-
-      // Listen for the new request cache updates.
-      this.props.graphql.onCacheUpdate(
-        fetchOptionsHash, // New hash.
-        this.handleCacheUpdate
-      )
-    }
-
-    if (cache)
-      // Use past cache for this request during load. It might not already
-      // be in state if the request was cached via another component.
-      stateUpdate.requestCache = cache
-
-    this.setState(stateUpdate, () =>
-      request.then(() =>
-        // Request done. Elsewhere a cache listener updates the state cache.
-        this.setState({ loading: false })
-      )
-    )
+    this.setState({ loading: true, fetchOptionsHash, cache })
 
     return request
   }
@@ -190,15 +187,13 @@ class GraphQLQuery extends React.Component {
    * @ignore
    */
   componentDidUpdate({ operation }) {
-    if (
-      // Load on cache reset enabled and…
-      this.props.loadOnReset &&
-      // …a load has happened before and…
-      this.state.fetchOptionsHash &&
-      // …props that may affect the cache have changed.
-      !equal(operation, this.props.operation)
-    )
-      this.load()
+    if (!equal(operation, this.props.operation))
+      if (this.props.loadOnMount) this.load()
+      else
+        this.setState({
+          fetchOptionsHash: null,
+          requestCache: null
+        })
   }
 
   /**
@@ -208,11 +203,9 @@ class GraphQLQuery extends React.Component {
    * @ignore
    */
   componentWillUnmount() {
-    if (this.state.fetchOptionsHash)
-      this.props.graphql.offCacheUpdate(
-        this.state.fetchOptionsHash,
-        this.handleCacheUpdate
-      )
+    this.props.graphql.off('fetch', this.onFetch)
+    this.props.graphql.off('cache', this.onCache)
+    this.props.graphql.off('reset', this.onReset)
   }
 
   /**

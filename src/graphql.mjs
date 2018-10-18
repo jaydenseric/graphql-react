@@ -1,5 +1,6 @@
-import fnv1a from 'fnv1a'
 import { extractFiles } from 'extract-files'
+import fnv1a from 'fnv1a'
+import mitt from 'mitt'
 
 /**
  * A lightweight GraphQL client that caches requests.
@@ -82,7 +83,8 @@ export class GraphQL {
   // eslint-disable-next-line require-jsdoc
   constructor({ cache = {} } = {}) {
     /**
-     * GraphQL [request cache]{@link RequestCache} map, keyed by [fetch options]{@link FetchOptions} hashes.
+     * GraphQL [request cache]{@link RequestCache} map, keyed by
+     * [fetch options]{@link FetchOptions} hashes.
      * @kind member
      * @name GraphQL#cache
      * @type {Object.<string, RequestCache>}
@@ -92,55 +94,47 @@ export class GraphQL {
      * ```
      */
     this.cache = cache
-  }
 
-  requests = {}
-  listeners = {}
+    /**
+     * Loading requests.
+     * @kind member
+     * @name GraphQL#requests
+     * @type {Promise<RequestCache>}
+     * @ignore
+     */
+    this.requests = {}
 
-  /**
-   * Adds a cache update listener for a request.
-   * @kind function
-   * @name GraphQL#onCacheUpdate
-   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
-   * @param {CacheUpdateCallback} callback Callback.
-   * @ignore
-   */
-  onCacheUpdate = (fetchOptionsHash, callback) => {
-    if (!this.listeners[fetchOptionsHash]) this.listeners[fetchOptionsHash] = []
-    this.listeners[fetchOptionsHash].push(callback)
-  }
+    const { on, off, emit } = mitt()
 
-  /**
-   * Removes a cache update listener for a request.
-   * @kind function
-   * @name GraphQL#offCacheUpdate
-   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
-   * @param {CacheUpdateCallback} callback Callback.
-   * @ignore
-   */
-  offCacheUpdate = (fetchOptionsHash, callback) => {
-    if (this.listeners[fetchOptionsHash]) {
-      this.listeners[fetchOptionsHash] = this.listeners[
-        fetchOptionsHash
-      ].filter(listenerCallback => listenerCallback !== callback)
-      if (!this.listeners[fetchOptionsHash].length)
-        delete this.listeners[fetchOptionsHash]
-    }
-  }
+    /**
+     * Adds an event listener.
+     * @kind function
+     * @name GraphQL#on
+     * @param {String} type Event type.
+     * @param {function} handler Event handler.
+     * @ignore
+     */
+    this.on = on
 
-  /**
-   * Triggers cache update listeners for a request.
-   * @kind function
-   * @name GraphQL#emitCacheUpdate
-   * @param {string} fetchOptionsHash [fetch options]{@link FetchOptions} hash.
-   * @param {RequestCache} requestCache Request cache.
-   * @ignore
-   */
-  emitCacheUpdate = (fetchOptionsHash, requestCache) => {
-    if (this.listeners[fetchOptionsHash])
-      this.listeners[fetchOptionsHash].forEach(callback =>
-        callback(requestCache)
-      )
+    /**
+     * Removes an event listener.
+     * @kind function
+     * @name GraphQL#off
+     * @param {String} type Event type.
+     * @param {function} handler Event handler.
+     * @ignore
+     */
+    this.off = off
+
+    /**
+     * Emits an event with details to listeners.
+     * @kind function
+     * @name GraphQL#emit
+     * @param {String} type Event type.
+     * @param {*} [details] Event details.
+     * @ignore
+     */
+    this.emit = emit
   }
 
   /**
@@ -148,7 +142,7 @@ export class GraphQL {
    * out.
    * @kind function
    * @name GraphQL#reset
-   * @param {string} [exceptFetchOptionsHash] A [fetch options]{@link FetchOptions} hash to exempt a request from cache deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * @param {string} [exceptFetchOptionsHash] A [fetch options]{@link FetchOptions} hash for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example <caption>Resetting the GraphQL cache.</caption>
    * ```js
    * graphql.reset()
@@ -168,9 +162,7 @@ export class GraphQL {
 
     // Emit cache updates after the entire cache has been updated, so logic in
     // listeners can assume cache for all requests is fresh and stable.
-    fetchOptionsHashes.forEach(fetchOptionsHash =>
-      this.emitCacheUpdate(fetchOptionsHash)
-    )
+    this.emit('reset', { exceptFetchOptionsHash })
   }
 
   /**
@@ -191,6 +183,8 @@ export class GraphQL {
             Promise.reject(
               new Error('Global fetch API or polyfill unavailable.')
             )
+
+    this.emit('fetch', { fetchOptionsHash })
 
     return (this.requests[fetchOptionsHash] = fetcher(url, options))
       .then(
@@ -222,10 +216,11 @@ export class GraphQL {
       .then(() => {
         // Cache the request.
         this.cache[fetchOptionsHash] = requestCache
-        this.emitCacheUpdate(fetchOptionsHash, requestCache)
 
         // Clear the done request.
         delete this.requests[fetchOptionsHash]
+
+        this.emit('cache', { fetchOptionsHash })
 
         return requestCache
       })

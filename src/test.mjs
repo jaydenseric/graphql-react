@@ -572,6 +572,7 @@ t.test('Cache reset.', async t => {
     .use(execute({ schema, rootValue }))
   const port = await startServer(t, app)
   const graphql = new GraphQL()
+
   const {
     fetchOptionsHash: fetchOptionsHash1,
     request: request1
@@ -588,10 +589,8 @@ t.test('Cache reset.', async t => {
   await request1
 
   const cacheBefore = JSON.stringify(graphql.cache)
-  const {
-    fetchOptionsHash: fetchOptionsHash2,
-    request: request2
-  } = graphql.query({
+
+  const { request: request2 } = graphql.query({
     fetchOptionsOverride(options) {
       options.url = `http://localhost:${port}`
     },
@@ -603,17 +602,13 @@ t.test('Cache reset.', async t => {
 
   await request2
 
-  graphql.onCacheUpdate(fetchOptionsHash1, () => t.fail())
+  t.plan(2)
 
-  const request2CacheListener = new Promise(resolve => {
-    graphql.onCacheUpdate(fetchOptionsHash2, resolve)
-  })
+  graphql.on('reset', () => t.pass('`reset` event.'))
 
   graphql.reset(fetchOptionsHash1)
 
   const cacheAfter = JSON.stringify(graphql.cache)
-
-  t.notOk(await request2CacheListener, 'On cache update listener didn’t run.')
 
   t.equals(cacheAfter, cacheBefore, 'Before and after reset cache match.')
 })
