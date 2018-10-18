@@ -140,8 +140,8 @@ Consider polyfilling:
 - [type FetchOptions](#type-fetchoptions)
 - [type FetchOptionsOverride](#type-fetchoptionsoverride)
   - [Examples](#examples-8)
+- [type GraphQLOperation](#type-graphqloperation)
 - [type HttpError](#type-httperror)
-- [type Operation](#type-operation)
 - [type QueryRender](#type-queryrender)
   - [Examples](#examples-9)
 - [type RequestCache](#type-requestcache)
@@ -172,7 +172,7 @@ Queries a GraphQL server.
 | Parameter                      | Type                                                | Description                                                                              |
 | :----------------------------- | :-------------------------------------------------- | :--------------------------------------------------------------------------------------- |
 | `options`                      | [Object](https://mdn.io/object)                     | Options.                                                                                 |
-| `options.operation`            | [Operation](#type-operation)                        | GraphQL operation object.                                                                |
+| `options.operation`            | [GraphQLOperation](#type-graphqloperation)          | GraphQL operation.                                                                       |
 | `options.fetchOptionsOverride` | [FetchOptionsOverride](#type-fetchoptionsoverride)? | Overrides default GraphQL request [fetch options](#type-fetchoptions).                   |
 | `options.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads. |
 
@@ -446,10 +446,10 @@ Overrides default GraphQL request [fetch options](#type-fetchoptions). Modify th
 
 **Type:** [function](https://mdn.io/function)
 
-| Parameter      | Type                               | Description                            |
-| :------------- | :--------------------------------- | :------------------------------------- |
-| `fetchOptions` | [FetchOptions](#type-fetchoptions) | Default GraphQL request fetch options. |
-| `operation`    | [Operation](#type-operation)?      | A GraphQL operation object.            |
+| Parameter      | Type                                        | Description                            |
+| :------------- | :------------------------------------------ | :------------------------------------- |
+| `fetchOptions` | [FetchOptions](#type-fetchoptions)          | Default GraphQL request fetch options. |
+| `operation`    | [GraphQLOperation](#type-graphqloperation)? | GraphQL operation.                     |
 
 #### Examples
 
@@ -462,6 +462,17 @@ _Setting [fetch options](#type-fetchoptions) for an example API._
 > }
 > ```
 
+### type GraphQLOperation
+
+A GraphQL operation. Additional properties may be used; all are sent to the GraphQL server.
+
+**Type:** [Object](https://mdn.io/object)
+
+| Property    | Type                            | Description                   |
+| :---------- | :------------------------------ | :---------------------------- |
+| `query`     | [string](https://mdn.io/string) | GraphQL queries or mutations. |
+| `variables` | [Object](https://mdn.io/object) | Variables used by the query.  |
+
 ### type HttpError
 
 Fetch HTTP error.
@@ -472,17 +483,6 @@ Fetch HTTP error.
 | :----------- | :------------------------------ | :---------------- |
 | `status`     | [number](https://mdn.io/number) | HTTP status code. |
 | `statusText` | [string](https://mdn.io/string) | HTTP status text. |
-
-### type Operation
-
-A GraphQL operation object. Additional properties may be used; all are sent to the GraphQL server.
-
-**Type:** [Object](https://mdn.io/object)
-
-| Property    | Type                            | Description                   |
-| :---------- | :------------------------------ | :---------------------------- |
-| `query`     | [string](https://mdn.io/string) | GraphQL queries or mutations. |
-| `variables` | [Object](https://mdn.io/object) | Variables used by the query.  |
 
 ### type QueryRender
 

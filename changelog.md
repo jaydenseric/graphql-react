@@ -12,6 +12,7 @@
 
 - Updated dependencies.
 - Updated package scripts and config for the new [`husky`](https://npm.im/husky) version.
+- Renamed the `Operation` type `GraphQLOperation`.
 
 ## 2.0.1
 

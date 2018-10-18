@@ -21,7 +21,7 @@ export class GraphQL {
    * object. See the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
    * @kind function
    * @name GraphQL.requestBody
-   * @param {Operation} operation GraphQL operation.
+   * @param {GraphQLOperation} operation GraphQL operation.
    * @returns {string|FormData} A JSON string, or for uploads a multipart form.
    * @ignore
    */
@@ -48,7 +48,7 @@ export class GraphQL {
    * Gets default [fetch options]{@link FetchOptions} for a GraphQL operation.
    * @kind function
    * @name GraphQL.fetchOptions
-   * @param {Operation} operation GraphQL operation.
+   * @param {GraphQLOperation} operation GraphQL operation.
    * @returns {FetchOptions} Fetch options.
    * @ignore
    */
@@ -236,7 +236,7 @@ export class GraphQL {
    * @kind function
    * @name GraphQL#query
    * @param {Object} options Options.
-   * @param {Operation} options.operation GraphQL operation object.
+   * @param {GraphQLOperation} options.operation GraphQL operation.
    * @param {FetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL request [fetch options]{@link FetchOptions}.
    * @param {boolean} [options.resetOnLoad=false] Should the [GraphQL cache]{@link GraphQL#cache} reset when the query loads.
    * @returns {ActiveQuery} Loading query details.
@@ -273,10 +273,10 @@ export class GraphQL {
  */
 
 /**
- * A GraphQL operation object. Additional properties may be used; all are sent
+ * A GraphQL operation. Additional properties may be used; all are sent
  * to the GraphQL server.
  * @kind typedef
- * @name Operation
+ * @name GraphQLOperation
  * @type {Object}
  * @prop {string} query GraphQL queries or mutations.
  * @prop {Object} variables Variables used by the query.
@@ -301,7 +301,7 @@ export class GraphQL {
  * @name FetchOptionsOverride
  * @type {function}
  * @param {FetchOptions} fetchOptions Default GraphQL request fetch options.
- * @param {Operation} [operation] A GraphQL operation object.
+ * @param {GraphQLOperation} [operation] GraphQL operation.
  * @example <caption>Setting [fetch options]{@link FetchOptions} for an example API.</caption>
  * ```js
  * options => {
