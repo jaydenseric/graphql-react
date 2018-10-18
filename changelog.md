@@ -2,6 +2,12 @@
 
 ## Next
 
+### Minor
+
+- Improved `Provider` and `Consumer` component display names in React dev tools:
+  - `Context.Provider` → `GraphQLContext.Provider`
+  - `Context.Consumer` → `GraphQLContext.Consumer`
+
 ### Patch
 
 - Updated dependencies.

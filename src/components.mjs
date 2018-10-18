@@ -3,6 +3,10 @@ import propTypes from 'prop-types'
 import equal from 'fast-deep-equal'
 import { GraphQL } from './graphql'
 
+const GraphQLContext = React.createContext()
+
+GraphQLContext.displayName = 'GraphQLContext'
+
 export const {
   /**
    * A React component that provides a [`GraphQL`]{@link GraphQL} instance in
@@ -44,7 +48,7 @@ export const {
    * ```
    */
   Consumer
-} = React.createContext()
+} = GraphQLContext
 
 /**
  * A React component to manage a GraphQL query with a [`GraphQL`]{@link GraphQL} instance.
