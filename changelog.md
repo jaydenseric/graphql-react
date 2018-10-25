@@ -2,10 +2,14 @@
 
 ## Next
 
+### Major
+
+- Updated the `react` peer dependency to `^16.6.0`.
+- Fixed `preload` broken due to the [React v16.6.0](https://github.com/facebook/react/releases/tag/v16.6.0) [context API change](https://github.com/facebook/react/pull/13829), fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11).
+
 ### Patch
 
-- Updated dependencies.
-- Adapt `preload` for the React v16.6 context API changes, fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11).
+- Updated dev dependencies.
 
 ## 3.0.0
 
