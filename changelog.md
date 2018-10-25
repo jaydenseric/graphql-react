@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Adapt `preload` for the React v16.6 context API changes, fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11).
 
 ## 3.0.0
 

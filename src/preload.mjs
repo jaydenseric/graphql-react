@@ -1,4 +1,28 @@
 /**
+ * Whether or not the runtime environment supports Symbol.for. Although all
+ * supported versions of Node.js (see package engines field) support Symbol,
+ * the preload function may be also be used in the browser.
+ * @kind constant
+ * @name hasSymbol
+ * @type {boolean}
+ * @see [React source](https://github.com/facebook/react/blob/v16.6.0/packages/shared/ReactSymbols.js#L12).
+ * @ignore
+ */
+const hasSymbol = typeof Symbol === 'function' && Symbol.for
+
+/**
+ * Symbol for React context consumer components. The bundle impact is too big to
+ * import it the propper way from [`react-is`](https://npm.im/react-is). Also
+ * [babel/babel#7998](https://github.com/babel/babel/issues/7998) would cause a
+ * CJS runtime error.
+ * @kind constant
+ * @name REACT_CONTEXT_TYPE
+ * @see [React source](https://github.com/facebook/react/blob/v16.6.0/packages/shared/ReactSymbols.js#L32).
+ * @ignore
+ */
+const REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace
+
+/**
  * Recursively preloads [`Query`]{@link Query} components that have the
  * `loadOnMount` prop in a React element tree. Useful for server side rendering
  * (SSR) or to preload components for a better user experience when they mount.
@@ -64,15 +88,16 @@ export function preload(element) {
         // The element is not a childless string or number and…
         element.type &&
         // …It’s a context consumer or a functional/class component…
-        (element.type.Consumer || typeof element.type === 'function')
+        (element.type.$$typeof === REACT_CONTEXT_TYPE ||
+          typeof element.type === 'function')
       ) {
         // Determine the component props.
         const props = { ...element.type.defaultProps, ...element.props }
 
-        if (element.type.Consumer)
+        if (element.type.$$typeof === REACT_CONTEXT_TYPE)
           // Context consumer element.
           recurse(
-            element.props.children(element.type.currentValue),
+            element.props.children(element.type._context.currentValue),
             legacyContext
           )
         else if (
