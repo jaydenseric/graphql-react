@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Remove redundant uses of `this` in the internal `GraphQLQuery` component constructor.
+
 ## 4.0.0
 
 ### Major

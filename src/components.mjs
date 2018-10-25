@@ -101,9 +101,9 @@ class GraphQLQuery extends React.Component {
     }
 
     // Setup listeners.
-    this.props.graphql.on('fetch', this.onFetch)
-    this.props.graphql.on('cache', this.onCache)
-    this.props.graphql.on('reset', this.onReset)
+    props.graphql.on('fetch', this.onFetch)
+    props.graphql.on('cache', this.onCache)
+    props.graphql.on('reset', this.onReset)
   }
 
   /**
