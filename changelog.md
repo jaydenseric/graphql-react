@@ -5,6 +5,7 @@
 ### Patch
 
 - Remove redundant uses of `this` in the internal `GraphQLQuery` component constructor.
+- Test the library with undefined and production `NODE_ENV`.
 
 ## 4.0.0
 

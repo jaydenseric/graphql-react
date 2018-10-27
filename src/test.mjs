@@ -9,6 +9,13 @@ import reactDom from 'react-dom/server'
 import t from 'tap'
 import { GraphQL, Provider, Query, preload } from '.'
 
+// eslint-disable-next-line no-console
+console.log(
+  `Testing ${
+    process.execArgv.includes('--experimental-modules') ? 'ESM' : 'CJS'
+  } library with ${process.env.NODE_ENV} NODE_ENV…\n\n`
+)
+
 const EPOCH_QUERY = /* GraphQL */ `
   {
     epoch {
