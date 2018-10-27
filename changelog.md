@@ -4,7 +4,7 @@
 
 ### Patch
 
-- Fixed preload for `production` `NODE_ENV`, fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11) and [#12](https://github.com/jaydenseric/graphql-react/issues/12).
+- Fixed `preload` for `production` `NODE_ENV`, fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11) and [#12](https://github.com/jaydenseric/graphql-react/issues/12).
 - `preload` now scopes context under providers.
 - Removed redundant uses of `this` in the internal `GraphQLQuery` component constructor.
 - Test the library with undefined and `production` `NODE_ENV`.
