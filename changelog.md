@@ -4,8 +4,9 @@
 
 ### Patch
 
-- Remove redundant uses of `this` in the internal `GraphQLQuery` component constructor.
-- Test the library with undefined and production `NODE_ENV`.
+- Fixed preload for `production` `NODE_ENV`, fixing [#11](https://github.com/jaydenseric/graphql-react/issues/11) and [#12](https://github.com/jaydenseric/graphql-react/issues/12).
+- Removed redundant uses of `this` in the internal `GraphQLQuery` component constructor.
+- Test the library with undefined and `production` `NODE_ENV`.
 
 ## 4.0.0
 

@@ -57,7 +57,8 @@ export function preload(element) {
    * @kind function
    * @name preload~recursePreload
    * @param {ReactElement} rootElement A React virtual DOM element.
-   * @param {Object} [rootLegacyContext={}] Legacy React context for the root element and children.
+   * @param {Object} [rootLegacyContext={}] React legacy context for the root element and children.
+   * @param {Object} [rootNewContext={}] React new context map for the root element and children.
    * @param {boolean} [loadRoot=true] Should the root element be loaded.
    * @returns {Promise} Resolves once loading is done.
    * @ignore
@@ -65,6 +66,7 @@ export function preload(element) {
   const recursePreload = (
     rootElement,
     rootLegacyContext = {},
+    rootNewContext = new Map(),
     loadRoot = true
   ) => {
     const loading = []
@@ -73,14 +75,15 @@ export function preload(element) {
      * @kind function
      * @name preload~recursePreload~recurse
      * @param {ReactElement} element A React virtual DOM element.
-     * @param {Object} [legacyContext] Legacy React context for the element and children.
+     * @param {Object} [legacyContext] React legacy context for the element and children.
+     * @param {Map} [newContext] React new context map for the element and children.
      * @ignore
      */
-    const recurse = (element, legacyContext) => {
+    const recurse = (element, legacyContext, newContext) => {
       if (!element) return
 
       if (Array.isArray(element)) {
-        element.forEach(item => recurse(item, legacyContext))
+        element.forEach(item => recurse(item, legacyContext, newContext))
         return
       }
 
@@ -94,13 +97,19 @@ export function preload(element) {
         // Determine the component props.
         const props = { ...element.type.defaultProps, ...element.props }
 
-        if (element.type.$$typeof === REACT_CONTEXT_TYPE)
+        if (element.type.$$typeof === REACT_CONTEXT_TYPE) {
           // Context consumer element.
-          recurse(
-            element.props.children(element.type._context.currentValue),
-            legacyContext
-          )
-        else if (
+
+          let value = element.type._currentValue
+          const Provider = element.type._context
+            ? element.type._context.Provider
+            : element.type.Provider
+
+          if (newContext && newContext.has(Provider))
+            value = newContext.get(Provider)
+
+          recurse(element.props.children(value), legacyContext, newContext)
+        } else if (
           // The element is a class component…
           element.type.prototype &&
           (element.type.prototype.isReactComponent ||
@@ -144,13 +153,13 @@ export function preload(element) {
               // Load this query.
               instance.load().then(() =>
                 // Preload children, without reloading this query as the root.
-                recursePreload(element, legacyContext, false)
+                recursePreload(element, legacyContext, newContext, false)
               )
             )
-          else recurse(instance.render(), legacyContext)
+          else recurse(instance.render(), legacyContext, newContext)
         }
         // The element is a functional component…
-        else recurse(element.type(props), legacyContext)
+        else recurse(element.type(props), legacyContext, newContext)
       } else if (
         // The element is a context provider or DOM element and…
         element.props &&
@@ -158,14 +167,20 @@ export function preload(element) {
         element.props.children
       ) {
         // If the element is a context provider first set the value.
-        if (element.type._context)
-          element.type._context.currentValue = element.props.value
+        if (element.type._context) {
+          // Clone the context map to scope mutations to this provider’s
+          // descendants.
+          newContext = new Map(newContext)
 
-        recurse(element.props.children, legacyContext)
+          // Set the context, keyed by the provider’s component type.
+          newContext.set(element.type, element.props.value)
+        }
+
+        recurse(element.props.children, legacyContext, newContext)
       }
     }
 
-    recurse(rootElement, rootLegacyContext)
+    recurse(rootElement, rootLegacyContext, rootNewContext)
 
     return Promise.all(loading)
   }
