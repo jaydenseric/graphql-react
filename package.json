@@ -84,7 +84,7 @@
     "prepare:js": "babel src -d lib",
     "prepare:jsdoc": "jsdoc-md",
     "prepare:prettier": "prettier 'lib/**/*.{mjs,js}' readme.md --write",
-    "test": "npm run test:eslint && npm run test:prettier && npm run test:lib && NODE_ENV=production npm run test:lib",
+    "test": "npm run test:eslint && npm run test:prettier && npm run test:size && npm run test:lib && NODE_ENV=production npm run test:lib",
     "test:eslint": "eslint . --ext mjs,js",
     "test:prettier": "prettier '**/*.{json,yml,md}' -l",
     "test:size": "size-limit",

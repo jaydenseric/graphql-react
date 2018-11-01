@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Add back the bundle size test accidentally removed in v4.0.1.
 
 ## 4.0.1
 
