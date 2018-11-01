@@ -2,9 +2,14 @@
 
 ## Next
 
+### Minor
+
+- Support more browsers by changing the [Browserslist](https://github.com/browserslist/browserslist) query from [`> 1%`](https://browserl.ist/?q=%3E+1%25) to [`> 0.5%, not dead`](https://browserl.ist/?q=%3E+0.5%25%2C+not+dead).
+
 ### Patch
 
 - Updated dependencies.
+- Fix Babel not reading from the package `browserslist` field due to [a sneaky `@babel/preset-env` breaking change](https://github.com/babel/babel/pull/8509).
 - Add back the bundle size test accidentally removed in v4.0.1.
 
 ## 4.0.1

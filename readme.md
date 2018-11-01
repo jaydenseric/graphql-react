@@ -107,8 +107,8 @@ See the [example GraphQL API and Next.js web app](https://github.com/jaydenseric
 
 ## Support
 
-- Node.js v8.5+.
-- Browsers [>1% usage](http://browserl.ist/?q=%3E1%25).
+- Node.js v8.5+
+- Browsers [`> 0.5%, not dead`](https://browserl.ist/?q=%3E+0.5%25%2C+not+dead)
 
 Consider polyfilling:
 
