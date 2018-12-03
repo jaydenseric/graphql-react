@@ -17,6 +17,9 @@ console.log(
   } library with ${process.env.NODE_ENV} NODE_ENV…\n\n`
 )
 
+const HASH_REPLACEMENT = '[hash]'
+const PORT_REPLACEMENT = '[port]'
+
 const EPOCH_QUERY = /* GraphQL */ `
   {
     epoch {
@@ -140,7 +143,10 @@ t.test('Query SSR with fetch unavailable.', async t => {
     delete global.fetch
 
     // Run the query with fetch unavailable.
-    var requestCache = await graphql.query({ operation }).request
+    var { fetchOptionsHash, request } = graphql.query({
+      operation
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
 
@@ -149,7 +155,10 @@ t.test('Query SSR with fetch unavailable.', async t => {
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText()).replace(
+      fetchOptionsHash,
+      HASH_REPLACEMENT
+    ),
     'Console log.'
   )
 
@@ -181,13 +190,19 @@ t.test('Query SSR with relative fetch URL.', async t => {
   captureStdout.startCapture()
 
   try {
-    var requestCache = await graphql.query({ operation }).request
+    var { fetchOptionsHash, request } = graphql.query({
+      operation
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText()).replace(
+      fetchOptionsHash,
+      HASH_REPLACEMENT
+    ),
     'Console log.'
   )
 
@@ -230,16 +245,19 @@ t.test('Query SSR with HTTP error.', async t => {
   captureStdout.startCapture()
 
   try {
-    var requestCache = await graphql.query({
+    var { fetchOptionsHash, request } = graphql.query({
       fetchOptionsOverride,
       operation
-    }).request
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText())
+      .replace(fetchOptionsHash, HASH_REPLACEMENT)
+      .replace(port, PORT_REPLACEMENT),
     'Console log.'
   )
 
@@ -291,16 +309,19 @@ t.test('Query SSR with response JSON invalid.', async t => {
   captureStdout.startCapture()
 
   try {
-    var requestCache = await graphql.query({
+    var { fetchOptionsHash, request } = graphql.query({
       fetchOptionsOverride,
       operation
-    }).request
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText())
+      .replace(fetchOptionsHash, HASH_REPLACEMENT)
+      .replace(port, PORT_REPLACEMENT),
     'Console log.'
   )
 
@@ -352,16 +373,19 @@ t.test('Query SSR with response payload malformed.', async t => {
   captureStdout.startCapture()
 
   try {
-    var requestCache = await graphql.query({
+    var { fetchOptionsHash, request } = graphql.query({
       fetchOptionsOverride,
       operation
-    }).request
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText())
+      .replace(fetchOptionsHash, HASH_REPLACEMENT)
+      .replace(port, PORT_REPLACEMENT),
     'Console log.'
   )
 
@@ -406,16 +430,19 @@ t.test('Query SSR with GraphQL errors.', async t => {
   captureStdout.startCapture()
 
   try {
-    var requestCache = await graphql.query({
+    var { fetchOptionsHash, request } = graphql.query({
       fetchOptionsOverride,
       operation
-    }).request
+    })
+    var requestCache = await request
   } finally {
     captureStdout.stopCapture()
   }
 
   t.matchSnapshot(
-    snapshotObject(captureStdout.getCapturedText()),
+    snapshotObject(captureStdout.getCapturedText())
+      .replace(fetchOptionsHash, HASH_REPLACEMENT)
+      .replace(port, PORT_REPLACEMENT),
     'Console log.'
   )
 

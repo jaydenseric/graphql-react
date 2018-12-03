@@ -7,7 +7,7 @@
 'use strict'
 exports[`lib/test TAP Query SSR with fetch unavailable. > Console log. 1`] = `
 [
-  "GraphQL request (hash “g3291x”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  Fetch:",
   "    Global fetch API or polyfill unavailable."
 ]
@@ -31,7 +31,7 @@ exports[`lib/test TAP Query SSR with fetch unavailable. > Query render function 
 
 exports[`lib/test TAP Query SSR with relative fetch URL. > Console log. 1`] = `
 [
-  "GraphQL request (hash “g3291x”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  Fetch:",
   "    Only absolute URLs are supported"
 ]
@@ -55,12 +55,12 @@ exports[`lib/test TAP Query SSR with relative fetch URL. > Query render function
 
 exports[`lib/test TAP Query SSR with HTTP error. > Console log. 1`] = `
 [
-  "GraphQL request (hash “1ig5zyh”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  HTTP:",
   "    Status: 404",
   "    Text: Not Found",
   "  Parse:",
-  "    invalid json response body at http://localhost:51908/ reason: Unexpected token N in JSON at position 0"
+  "    invalid json response body at http://localhost:[port]/ reason: Unexpected token N in JSON at position 0"
 ]
 `
 
@@ -90,9 +90,9 @@ exports[`lib/test TAP Query SSR with HTTP error. > Query render function argumen
 
 exports[`lib/test TAP Query SSR with response JSON invalid. > Console log. 1`] = `
 [
-  "GraphQL request (hash “1gk32na”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  Parse:",
-  "    invalid json response body at http://localhost:51910/ reason: Unexpected token N in JSON at position 0"
+  "    invalid json response body at http://localhost:[port]/ reason: Unexpected token N in JSON at position 0"
 ]
 `
 
@@ -114,7 +114,7 @@ exports[`lib/test TAP Query SSR with response JSON invalid. > Query render funct
 
 exports[`lib/test TAP Query SSR with response payload malformed. > Console log. 1`] = `
 [
-  "GraphQL request (hash “ab102o”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  Parse:",
   "    Malformed payload."
 ]
@@ -138,7 +138,7 @@ exports[`lib/test TAP Query SSR with response payload malformed. > Query render 
 
 exports[`lib/test TAP Query SSR with GraphQL errors. > Console log. 1`] = `
 [
-  "GraphQL request (hash “1mapdh0”) errors:",
+  "GraphQL request (hash “[hash]”) errors:",
   "  HTTP:",
   "    Status: 400",
   "    Text: Bad Request",
