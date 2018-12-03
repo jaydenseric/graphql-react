@@ -1,6 +1,6 @@
-export * from './graphql'
-export * from './components'
-export * from './preload'
+export { GraphQL } from './graphql'
+export { Provider, Consumer, Query } from './components'
+export { preload } from './preload'
 
 /**
  * Loading query details.

@@ -11,6 +11,7 @@
 - Updated dependencies.
 - Refactored `GraphQL` static methods to separate modules.
 - Moved JSDoc type definitions into the index file.
+- Manually composed package exports instead of relying on `*`.
 
 ## 4.1.0
 
