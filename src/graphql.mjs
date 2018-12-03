@@ -82,28 +82,6 @@ export class GraphQL {
 
   // eslint-disable-next-line require-jsdoc
   constructor({ cache = {} } = {}) {
-    /**
-     * GraphQL [request cache]{@link RequestCache} map, keyed by
-     * [fetch options]{@link FetchOptions} hashes.
-     * @kind member
-     * @name GraphQL#cache
-     * @type {Object.<string, RequestCache>}
-     * @example <caption>Export cache as JSON.</caption>
-     * ```js
-     * const exportedCache = JSON.stringify(graphql.cache)
-     * ```
-     */
-    this.cache = cache
-
-    /**
-     * Loading requests.
-     * @kind member
-     * @name GraphQL#requests
-     * @type {Promise<RequestCache>}
-     * @ignore
-     */
-    this.requests = {}
-
     const { on, off, emit } = mitt()
 
     /**
@@ -135,6 +113,28 @@ export class GraphQL {
      * @ignore
      */
     this.emit = emit
+
+    /**
+     * GraphQL [request cache]{@link RequestCache} map, keyed by
+     * [fetch options]{@link FetchOptions} hashes.
+     * @kind member
+     * @name GraphQL#cache
+     * @type {Object.<string, RequestCache>}
+     * @example <caption>Export cache as JSON.</caption>
+     * ```js
+     * const exportedCache = JSON.stringify(graphql.cache)
+     * ```
+     */
+    this.cache = cache
+
+    /**
+     * Loading requests.
+     * @kind member
+     * @name GraphQL#requests
+     * @type {Promise<RequestCache>}
+     * @ignore
+     */
+    this.requests = {}
   }
 
   /**
