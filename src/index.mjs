@@ -22,6 +22,19 @@ export { preload } from './preload'
  */
 
 /**
+ * Renders a [`GraphQL`]{@link GraphQL} consumer.
+ * @kind typedef
+ * @name ConsumerRender
+ * @type {function}
+ * @param {GraphQL} graphql [`GraphQL`]{@link GraphQL} instance.
+ * @returns {ReactElement} React virtual DOM element.
+ * @example <caption>A button that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
+ * ```jsx
+ * graphql => <button onClick={graphql.reset}>Reset cache</button>
+ * ```
+ */
+
+/**
  * [Polyfillable fetch options](https://github.github.io/fetch/#options) for a
  * GraphQL request.
  * @kind typedef
@@ -67,6 +80,32 @@ export { preload } from './preload'
  * @type {Object}
  * @prop {number} status HTTP status code.
  * @prop {string} statusText HTTP status text.
+ */
+
+/**
+ * Renders the status of a query or mutation.
+ * @kind typedef
+ * @name QueryRender
+ * @type {function}
+ * @param {function} load Loads the query on demand, updating cache.
+ * @param {boolean} loading Is the query loading.
+ * @param {string} [fetchError] Fetch error message.
+ * @param {HttpError} [httpError] Fetch response HTTP error.
+ * @param {string} [parseError] Parse error message.
+ * @param {Object} [graphQLErrors] GraphQL response errors.
+ * @param {Object} [data] GraphQL response data.
+ * @returns {ReactElement} React virtual DOM element.
+ * @example <caption>Rendering a user profile query.</caption>
+ * ```jsx
+ * ({ load, loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
+ *   <aside>
+ *     <button onClick={load}>Reload</button>
+ *     {loading && <span>Loading…</span>}
+ *     {(fetchError || httpError || parseError || graphQLErrors) && <strong>Error!</strong>}
+ *     {data && <h1>{data.user.name}</h1>}
+ *   </aside>
+ * )
+ * ```
  */
 
 /**
