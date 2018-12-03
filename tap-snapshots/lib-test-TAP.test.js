@@ -216,7 +216,13 @@ exports[`lib/test TAP Query SSR with variables. > Query render function argument
 `
 
 exports[`lib/test TAP Query SSR with nested query. > HTML displaying the nested query render function argument. 1`] = `
-<pre>{"loading":true,"data":{"daysBetween":17532}}</pre>
+<pre>{
+  "load": "[Function]",
+  "loading": true,
+  "data": {
+    "daysBetween": 17532
+  }
+}</pre>
 `
 
 exports[`lib/test TAP Preload legacy React context API components. > HTML. 1`] = `

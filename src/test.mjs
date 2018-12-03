@@ -153,10 +153,7 @@ t.test('Query SSR with fetch unavailable.', async t => {
     'Console log.'
   )
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -194,10 +191,7 @@ t.test('Query SSR with relative fetch URL.', async t => {
     'Console log.'
   )
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -254,10 +248,7 @@ t.test('Query SSR with HTTP error.', async t => {
   if (typeof requestCache.parseError === 'string')
     requestCache.parseError = requestCache.parseError.replace(port, '<port>')
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -318,10 +309,7 @@ t.test('Query SSR with response JSON invalid.', async t => {
   if (typeof requestCache.parseError === 'string')
     requestCache.parseError = requestCache.parseError.replace(port, '<port>')
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -377,10 +365,7 @@ t.test('Query SSR with response payload malformed.', async t => {
     'Console log.'
   )
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -434,10 +419,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
     'Console log.'
   )
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -479,10 +461,7 @@ t.test('Query SSR with variables.', async t => {
     operation
   }).request
 
-  t.matchSnapshot(
-    JSON.stringify(requestCache, null, 2),
-    'GraphQL request cache.'
-  )
+  t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
   reactDom.renderToString(
     <Provider value={graphql}>
@@ -547,7 +526,7 @@ t.test('Query SSR with nested query.', async t => {
             {result => (
               <pre
                 dangerouslySetInnerHTML={{
-                  __html: JSON.stringify(result)
+                  __html: snapshotObject(result)
                 }}
               />
             )}

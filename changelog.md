@@ -12,6 +12,7 @@
 - Refactored `GraphQL` static methods to separate modules.
 - Moved JSDoc type definitions into the index file.
 - Manually composed package exports instead of relying on `*`.
+- More consistent object snapshots in tests.
 
 ## 4.1.0
 
