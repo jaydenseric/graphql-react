@@ -1,6 +1,6 @@
-import React from 'react'
-import propTypes from 'prop-types'
 import equal from 'fast-deep-equal'
+import propTypes from 'prop-types'
+import React from 'react'
 import { GraphQL } from './graphql'
 
 const GraphQLContext = React.createContext()
