@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Updated dependencies.
+
 ## 4.1.0
 
 ### Minor
