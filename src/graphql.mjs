@@ -1,6 +1,6 @@
-import { extractFiles } from 'extract-files'
-import fnv1a from 'fnv1a'
 import mitt from 'mitt'
+import { graphqlFetchOptions } from './graphqlFetchOptions'
+import { hashObject } from './hashObject'
 
 /**
  * A lightweight GraphQL client that caches requests.
@@ -16,70 +16,6 @@ import mitt from 'mitt'
  * ```
  */
 export class GraphQL {
-  /**
-   * Derives a fetch request body from a GraphQL operation, accounting for file
-   * uploads. Files are extracted from the operation, modifying the operation
-   * object. See the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
-   * @kind function
-   * @name GraphQL.requestBody
-   * @param {GraphQLOperation} operation GraphQL operation.
-   * @returns {string|FormData} A JSON string, or for uploads a multipart form.
-   * @ignore
-   */
-  static requestBody(operation) {
-    const files = extractFiles(operation)
-    if (files.length) {
-      const form = new FormData()
-      form.append('operations', JSON.stringify(operation))
-      form.append(
-        'map',
-        JSON.stringify(
-          files.reduce((map, { path }, index) => {
-            map[`${index}`] = [path]
-            return map
-          }, {})
-        )
-      )
-      files.forEach(({ file }, index) => form.append(index, file, file.name))
-      return form
-    } else return JSON.stringify(operation)
-  }
-
-  /**
-   * Gets default [fetch options]{@link FetchOptions} for a GraphQL operation.
-   * @kind function
-   * @name GraphQL.fetchOptions
-   * @param {GraphQLOperation} operation GraphQL operation.
-   * @returns {FetchOptions} Fetch options.
-   * @ignore
-   */
-  static fetchOptions(operation) {
-    const fetchOptions = {
-      url: '/graphql',
-      method: 'POST',
-      headers: { Accept: 'application/json' }
-    }
-
-    fetchOptions.body = this.requestBody(operation)
-
-    // Body may be a JSON string or a FormData instance.
-    if (typeof fetchOptions.body === 'string')
-      fetchOptions.headers['Content-Type'] = 'application/json'
-
-    return fetchOptions
-  }
-
-  /**
-   * Hashes a [fetch options]{@link FetchOptions} object.
-   * @kind function
-   * @name GraphQL.hashFetchOptions
-   * @param {FetchOptions} fetchOptions Fetch options.
-   * @returns {string} A hash.
-   * @ignore
-   */
-  static hashFetchOptions = fetchOptions =>
-    fnv1a(JSON.stringify(fetchOptions)).toString(36)
-
   // eslint-disable-next-line require-jsdoc
   constructor({ cache = {} } = {}) {
     const { on, off, emit } = mitt()
@@ -237,9 +173,9 @@ export class GraphQL {
    * @returns {ActiveQuery} Loading query details.
    */
   query = ({ operation, fetchOptionsOverride, resetOnLoad }) => {
-    const fetchOptions = this.constructor.fetchOptions(operation)
+    const fetchOptions = graphqlFetchOptions(operation)
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
-    const fetchOptionsHash = this.constructor.hashFetchOptions(fetchOptions)
+    const fetchOptionsHash = hashObject(fetchOptions)
     const request =
       // Use an identical active request or…
       this.requests[fetchOptionsHash] ||

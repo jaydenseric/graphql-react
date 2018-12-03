@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Refactored `GraphQL` static methods to separate modules.
 
 ## 4.1.0
 

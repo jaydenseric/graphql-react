@@ -2,6 +2,8 @@ import equal from 'fast-deep-equal'
 import propTypes from 'prop-types'
 import React from 'react'
 import { GraphQL } from './graphql'
+import { graphqlFetchOptions } from './graphqlFetchOptions'
+import { hashObject } from './hashObject'
 
 const GraphQLContext = React.createContext()
 
@@ -87,16 +89,11 @@ class GraphQLQuery extends React.Component {
       // Populate the request cache state to render data for SSR and while
       // the load called in componentDidMount on the client fetches fresh data.
 
-      const fetchOptions = props.graphql.constructor.fetchOptions(
-        props.operation
-      )
+      const fetchOptions = graphqlFetchOptions(props.operation)
 
       if (props.fetchOptionsOverride) props.fetchOptionsOverride(fetchOptions)
 
-      this.state.fetchOptionsHash = props.graphql.constructor.hashFetchOptions(
-        fetchOptions
-      )
-
+      this.state.fetchOptionsHash = hashObject(fetchOptions)
       this.state.requestCache = props.graphql.cache[this.state.fetchOptionsHash]
     }
 
