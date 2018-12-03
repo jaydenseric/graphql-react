@@ -8,6 +8,7 @@ import { hashObject } from './hashObject'
  * @name GraphQL
  * @param {Object} [options={}] Options.
  * @param {Object} [options.cache={}] Cache to import; usually from a server side render.
+ * @param {boolean} [options.logErrors=true] Should GraphQL request errors be console logged for easy debugging.
  * @example <caption>Constructing a new GraphQL client.</caption>
  * ```js
  * import { GraphQL } from 'graphql-react'
@@ -17,7 +18,7 @@ import { hashObject } from './hashObject'
  */
 export class GraphQL {
   // eslint-disable-next-line require-jsdoc
-  constructor({ cache = {} } = {}) {
+  constructor({ cache = {}, logErrors = true } = {}) {
     const { on, off, emit } = mitt()
 
     /**
@@ -71,6 +72,14 @@ export class GraphQL {
      * @ignore
      */
     this.requests = {}
+
+    /**
+     * Should GraphQL request errors be logged. May be toggled at runtime.
+     * @kind member
+     * @name GraphQL#logErrors
+     * @type {Boolean}
+     */
+    this.logErrors = logErrors
   }
 
   /**
@@ -157,6 +166,75 @@ export class GraphQL {
         delete this.requests[fetchOptionsHash]
 
         this.emit('cache', { fetchOptionsHash })
+
+        const {
+          fetchError,
+          httpError,
+          parseError,
+          graphQLErrors
+        } = requestCache
+
+        if (
+          this.logErrors &&
+          (fetchError || httpError || parseError || graphQLErrors)
+        ) {
+          // eslint-disable-next-line no-console
+          console.groupCollapsed(
+            `GraphQL request (hash “${fetchOptionsHash}”) errors:`
+          )
+
+          if (fetchError) {
+            // eslint-disable-next-line no-console
+            console.groupCollapsed('Fetch:')
+
+            // eslint-disable-next-line no-console
+            console.log(fetchError)
+
+            // eslint-disable-next-line no-console
+            console.groupEnd()
+          }
+
+          if (httpError) {
+            // eslint-disable-next-line no-console
+            console.groupCollapsed('HTTP:')
+
+            // eslint-disable-next-line no-console
+            console.log(`Status: ${httpError.status}`)
+
+            // eslint-disable-next-line no-console
+            console.log(`Text: ${httpError.statusText}`)
+
+            // eslint-disable-next-line no-console
+            console.groupEnd()
+          }
+
+          if (parseError) {
+            // eslint-disable-next-line no-console
+            console.groupCollapsed('Parse:')
+
+            // eslint-disable-next-line no-console
+            console.log(parseError)
+
+            // eslint-disable-next-line no-console
+            console.groupEnd()
+          }
+
+          if (graphQLErrors) {
+            // eslint-disable-next-line no-console
+            console.groupCollapsed('GraphQL:')
+
+            graphQLErrors.forEach(({ message }) =>
+              // eslint-disable-next-line no-console
+              console.log(message)
+            )
+
+            // eslint-disable-next-line no-console
+            console.groupEnd()
+          }
+
+          // eslint-disable-next-line no-console
+          console.groupEnd()
+        }
 
         return requestCache
       })

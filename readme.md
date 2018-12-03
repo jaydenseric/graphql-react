@@ -126,6 +126,7 @@ Consider polyfilling:
     - [Examples](#examples-1)
   - [GraphQL instance property cache](#graphql-instance-property-cache)
     - [Examples](#examples-2)
+  - [GraphQL instance property logErrors](#graphql-instance-property-logerrors)
 - [function Consumer](#function-consumer)
   - [Examples](#examples-3)
 - [function preload](#function-preload)
@@ -150,10 +151,11 @@ Consider polyfilling:
 
 A lightweight GraphQL client that caches requests.
 
-| Parameter       | Type                                    | Description                                         |
-| :-------------- | :-------------------------------------- | :-------------------------------------------------- |
-| `options`       | [Object](https://mdn.io/object)? = `{}` | Options.                                            |
-| `options.cache` | [Object](https://mdn.io/object)? = `{}` | Cache to import; usually from a server side render. |
+| Parameter           | Type                                        | Description                                                         |
+| :------------------ | :------------------------------------------ | :------------------------------------------------------------------ |
+| `options`           | [Object](https://mdn.io/object)? = `{}`     | Options.                                                            |
+| `options.cache`     | [Object](https://mdn.io/object)? = `{}`     | Cache to import; usually from a server side render.                 |
+| `options.logErrors` | [boolean](https://mdn.io/boolean)? = `true` | Should GraphQL request errors be console logged for easy debugging. |
 
 #### Examples
 
@@ -205,6 +207,10 @@ _Export cache as JSON._
 > ```js
 > const exportedCache = JSON.stringify(graphql.cache)
 > ```
+
+#### GraphQL instance property logErrors
+
+Should GraphQL request errors be logged. May be toggled at runtime.
 
 ### function Consumer
 

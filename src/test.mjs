@@ -1,4 +1,5 @@
 import 'cross-fetch/polyfill'
+import CaptureStdout from 'capture-stdout'
 import { buildSchema } from 'graphql'
 import { errorHandler, execute } from 'graphql-api-koa'
 import Koa from 'koa'
@@ -127,16 +128,30 @@ const snapshotObject = object =>
 t.test('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
   const operation = { query: EPOCH_QUERY }
+  const captureStdout = new CaptureStdout()
 
-  // Store and delete the global fetch polyfill.
+  // Store the global fetch polyfill.
   const { fetch } = global
-  delete global.fetch
 
-  // Run the query with fetch unavailable.
-  const requestCache = await graphql.query({ operation }).request
+  captureStdout.startCapture()
 
-  // Restore the global fetch polyfill.
-  global.fetch = fetch
+  try {
+    // Delete the global fetch polyfill.
+    delete global.fetch
+
+    // Run the query with fetch unavailable.
+    var requestCache = await graphql.query({ operation }).request
+  } finally {
+    captureStdout.stopCapture()
+
+    // Restore the global fetch polyfill.
+    global.fetch = fetch
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   t.matchSnapshot(
     JSON.stringify(requestCache, null, 2),
@@ -164,7 +179,20 @@ t.test('Query SSR with relative fetch URL.', async t => {
 
   const graphql = new GraphQL()
   const operation = { query: EPOCH_QUERY }
-  const requestCache = await graphql.query({ operation }).request
+  const captureStdout = new CaptureStdout()
+
+  captureStdout.startCapture()
+
+  try {
+    var requestCache = await graphql.query({ operation }).request
+  } finally {
+    captureStdout.stopCapture()
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   t.matchSnapshot(
     JSON.stringify(requestCache, null, 2),
@@ -203,10 +231,23 @@ t.test('Query SSR with HTTP error.', async t => {
   }
 
   const operation = { query: EPOCH_QUERY }
-  const requestCache = await graphql.query({
-    fetchOptionsOverride,
-    operation
-  }).request
+  const captureStdout = new CaptureStdout()
+
+  captureStdout.startCapture()
+
+  try {
+    var requestCache = await graphql.query({
+      fetchOptionsOverride,
+      operation
+    }).request
+  } finally {
+    captureStdout.stopCapture()
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   // Prevent the dynamic port that appears in the error message from failing
   // snapshot comparisons.
@@ -254,10 +295,23 @@ t.test('Query SSR with response JSON invalid.', async t => {
   }
 
   const operation = { query: EPOCH_QUERY }
-  const requestCache = await graphql.query({
-    fetchOptionsOverride,
-    operation
-  }).request
+  const captureStdout = new CaptureStdout()
+
+  captureStdout.startCapture()
+
+  try {
+    var requestCache = await graphql.query({
+      fetchOptionsOverride,
+      operation
+    }).request
+  } finally {
+    captureStdout.stopCapture()
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   // Prevent the dynamic port that appears in the error message from failing
   // snapshot comparisons.
@@ -305,10 +359,23 @@ t.test('Query SSR with response payload malformed.', async t => {
   }
 
   const operation = { query: EPOCH_QUERY }
-  const requestCache = await graphql.query({
-    fetchOptionsOverride,
-    operation
-  }).request
+  const captureStdout = new CaptureStdout()
+
+  captureStdout.startCapture()
+
+  try {
+    var requestCache = await graphql.query({
+      fetchOptionsOverride,
+      operation
+    }).request
+  } finally {
+    captureStdout.stopCapture()
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   t.matchSnapshot(
     JSON.stringify(requestCache, null, 2),
@@ -349,10 +416,23 @@ t.test('Query SSR with GraphQL errors.', async t => {
   }
 
   const operation = { query: '{ x }' }
-  const requestCache = await graphql.query({
-    fetchOptionsOverride,
-    operation
-  }).request
+  const captureStdout = new CaptureStdout()
+
+  captureStdout.startCapture()
+
+  try {
+    var requestCache = await graphql.query({
+      fetchOptionsOverride,
+      operation
+    }).request
+  } finally {
+    captureStdout.stopCapture()
+  }
+
+  t.matchSnapshot(
+    snapshotObject(captureStdout.getCapturedText()),
+    'Console log.'
+  )
 
   t.matchSnapshot(
     JSON.stringify(requestCache, null, 2),

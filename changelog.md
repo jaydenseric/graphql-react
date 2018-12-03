@@ -2,6 +2,10 @@
 
 ## Next
 
+## Minor
+
+- Added a new `GraphQL` constructor option `logErrors` (default `true`) and instance property, controlling if GraphQL request errors should be console logged for easy debugging.
+
 ### Patch
 
 - Updated dependencies.
