@@ -6,6 +6,7 @@
 
 - Updated dependencies.
 - Removed a redundant `.prettierignore` entry.
+- Added tests for the internal `graphqlFetchOptions` function.
 
 ## 4.2.0
 

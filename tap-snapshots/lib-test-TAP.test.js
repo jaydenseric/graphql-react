@@ -5,6 +5,18 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
+exports[`lib/test TAP graphqlFetchOptions with a standard operation. > Fetch options. 1`] = `
+{
+  "url": "/graphql",
+  "method": "POST",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  },
+  "body": "{\\"query\\":\\"\\\\n  {\\\\n    epoch {\\\\n      iso\\\\n    }\\\\n  }\\\\n\\"}"
+}
+`
+
 exports[`lib/test TAP Query SSR with fetch unavailable. > Console log. 1`] = `
 [
   "GraphQL request (hash “[hash]”) errors:",

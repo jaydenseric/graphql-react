@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import reactDom from 'react-dom/server'
 import t from 'tap'
+import { graphqlFetchOptions } from './graphqlFetchOptions'
 import { GraphQL, Provider, Query, preload } from '.'
 
 // eslint-disable-next-line no-console
@@ -127,6 +128,14 @@ const snapshotObject = object =>
     (key, value) => (typeof value === 'function' ? '[Function]' : value),
     2
   )
+
+t.test('graphqlFetchOptions with a standard operation.', t => {
+  t.matchSnapshot(
+    snapshotObject(graphqlFetchOptions({ query: EPOCH_QUERY })),
+    'Fetch options.'
+  )
+  t.end()
+})
 
 t.test('Query SSR with fetch unavailable.', async t => {
   const graphql = new GraphQL()
