@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Removed a redundant `.prettierignore` entry.
 
 ## 4.2.0
 
