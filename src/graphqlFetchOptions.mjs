@@ -15,27 +15,29 @@ export function graphqlFetchOptions(operation) {
     headers: { Accept: 'application/json' }
   }
 
-  // Files are extracted from the operation, modifying the operation object.
-  const files = extractFiles(operation)
+  const { clone, files } = extractFiles(operation)
+  const operationJSON = JSON.stringify(clone)
 
-  // Done after files are extracted.
-  const operationJSON = JSON.stringify(operation)
-
-  if (files.length) {
+  if (files.size) {
     // See the GraphQL multipart request spec:
     // https://github.com/jaydenseric/graphql-multipart-request-spec
+
     const form = new FormData()
+
     form.append('operations', operationJSON)
-    form.append(
-      'map',
-      JSON.stringify(
-        files.reduce((map, { path }, index) => {
-          map[`${index}`] = [path]
-          return map
-        }, {})
-      )
-    )
-    files.forEach(({ file }, index) => form.append(index, file, file.name))
+
+    const map = {}
+    let i = 0
+    files.forEach(paths => {
+      map[++i] = paths
+    })
+    form.append('map', JSON.stringify(map))
+
+    i = 0
+    files.forEach((paths, file) => {
+      form.append(++i, file, file.name)
+    })
+
     fetchOptions.body = form
   } else {
     fetchOptions.headers['Content-Type'] = 'application/json'

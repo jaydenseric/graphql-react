@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.2.0",
-    "extract-files": "^4.1.0",
+    "extract-files": "^5.0.0",
     "fast-deep-equal": "^2.0.1",
     "fnv1a": "^1.0.1",
     "mitt": "^1.1.3",
