@@ -5,6 +5,10 @@
 ### Patch
 
 - Updated dev dependencies.
+- Improved [`size-limit`](https://npm.im/size-limit) tests:
+  - Drop the CJS entrypoint; modern bundlers don’t use it and nested module imports revert resolve ESM anyway.
+  - Ignore [`prop-types`](https://npm.im/prop-types) since it’s likely to already be present in a React project, and most frameworks strip it out in production bundles anyway.
+  - Separately limit and test server and client bundles.
 
 ## 5.0.0
 

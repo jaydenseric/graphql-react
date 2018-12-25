@@ -121,19 +121,21 @@
   },
   "size-limit": [
     {
-      "name": "ESM",
-      "path": "lib/index.mjs",
-      "limit": "3.5 KB",
+      "name": "Server",
+      "path": "size-limit-entries/server.mjs",
+      "limit": "3 KB",
       "ignore": [
-        "object-assign"
+        "object-assign",
+        "prop-types"
       ]
     },
     {
-      "name": "CJS",
-      "path": "lib/index.js",
-      "limit": "3.5 KB",
+      "name": "Client",
+      "path": "size-limit-entries/client.mjs",
+      "limit": "2.5 KB",
       "ignore": [
-        "object-assign"
+        "object-assign",
+        "prop-types"
       ]
     }
   ]
