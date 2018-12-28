@@ -57,7 +57,7 @@
     "babel-plugin-transform-replace-object-assign": "^2.0.0",
     "capture-stdout": "^1.0.0",
     "cross-fetch": "^3.0.0",
-    "eslint": "^5.11.0",
+    "eslint": "^5.11.1",
     "eslint-config-env": "^2.0.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
@@ -75,7 +75,7 @@
     "prettier": "^1.15.3",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "size-limit": "^0.21.0",
+    "size-limit": "^0.21.1",
     "tap": "^12.1.1",
     "watch": "^1.0.2"
   },
