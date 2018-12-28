@@ -29,7 +29,7 @@ const REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace
  * @kind function
  * @name preload
  * @param {ReactElement} element A React virtual DOM element.
- * @returns {Promise} Resolves once loading is done and cache is ready to be exported from the [`GraphQL`]{@link GraphQL} instance. Cache can be imported when constructing new [`GraphQL`]{@link GraphQL} instances.
+ * @returns {Promise<void>} Resolves once loading is done and cache is ready to be exported from the [`GraphQL`]{@link GraphQL} instance. Cache can be imported when constructing new [`GraphQL`]{@link GraphQL} instances.
  * @example <caption>An async SSR function that returns a HTML string and cache JSON for client hydration.</caption>
  * ```jsx
  * import { GraphQL, preload, Provider } from 'graphql-react'
@@ -52,138 +52,139 @@ const REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace
  * }
  * ```
  */
-export function preload(element) {
-  /**
-   * @kind function
-   * @name preload~recursePreload
-   * @param {ReactElement} rootElement A React virtual DOM element.
-   * @param {Object} [rootLegacyContext={}] React legacy context for the root element and children.
-   * @param {Object} [rootNewContext={}] React new context map for the root element and children.
-   * @param {boolean} [loadRoot=true] Should the root element be loaded.
-   * @returns {Promise} Resolves once loading is done.
-   * @ignore
-   */
-  const recursePreload = (
-    rootElement,
-    rootLegacyContext = {},
-    rootNewContext = new Map(),
-    loadRoot = true
-  ) => {
-    const loading = []
-
+export const preload = element =>
+  new Promise(resolve => {
     /**
      * @kind function
-     * @name preload~recursePreload~recurse
-     * @param {ReactElement} element A React virtual DOM element.
-     * @param {Object} [legacyContext] React legacy context for the element and children.
-     * @param {Map} [newContext] React new context map for the element and children.
+     * @name preload~recursePreload
+     * @param {ReactElement} rootElement A React virtual DOM element.
+     * @param {Object} [rootLegacyContext={}] React legacy context for the root element and children.
+     * @param {Object} [rootNewContext={}] React new context map for the root element and children.
+     * @param {boolean} [loadRoot=true] Should the root element be loaded.
+     * @returns {Promise<void>} Resolves once loading is done.
      * @ignore
      */
-    const recurse = (element, legacyContext, newContext) => {
-      if (!element) return
+    const recursePreload = (
+      rootElement,
+      rootLegacyContext = {},
+      rootNewContext = new Map(),
+      loadRoot = true
+    ) => {
+      const loading = []
 
-      if (Array.isArray(element)) {
-        element.forEach(item => recurse(item, legacyContext, newContext))
-        return
-      }
+      /**
+       * @kind function
+       * @name preload~recursePreload~recurse
+       * @param {ReactElement} element A React virtual DOM element.
+       * @param {Object} [legacyContext] React legacy context for the element and children.
+       * @param {Map} [newContext] React new context map for the element and children.
+       * @ignore
+       */
+      const recurse = (element, legacyContext, newContext) => {
+        if (!element) return
 
-      if (
-        // The element is not a childless string or number and…
-        element.type &&
-        // …It’s a context consumer or a functional/class component…
-        (element.type.$$typeof === REACT_CONTEXT_TYPE ||
-          typeof element.type === 'function')
-      ) {
-        // Determine the component props.
-        const props = { ...element.type.defaultProps, ...element.props }
+        if (Array.isArray(element)) {
+          element.forEach(item => recurse(item, legacyContext, newContext))
+          return
+        }
 
-        if (element.type.$$typeof === REACT_CONTEXT_TYPE) {
-          // Context consumer element.
-
-          let value = element.type._currentValue
-          const Provider = element.type._context
-            ? element.type._context.Provider
-            : element.type.Provider
-
-          if (newContext && newContext.has(Provider))
-            value = newContext.get(Provider)
-
-          recurse(element.props.children(value), legacyContext, newContext)
-        } else if (
-          // The element is a class component…
-          element.type.prototype &&
-          (element.type.prototype.isReactComponent ||
-            element.type.prototype.isPureReactComponent)
+        if (
+          // The element is not a childless string or number and…
+          element.type &&
+          // …It’s a context consumer or a functional/class component…
+          (element.type.$$typeof === REACT_CONTEXT_TYPE ||
+            typeof element.type === 'function')
         ) {
-          const instance = new element.type(props, legacyContext)
+          // Determine the component props.
+          const props = { ...element.type.defaultProps, ...element.props }
 
-          // Match React API for default state.
-          instance.state = instance.state || null
+          if (element.type.$$typeof === REACT_CONTEXT_TYPE) {
+            // Context consumer element.
 
-          // Support setState.
-          instance.setState = newState => {
-            if (typeof newState === 'function')
-              newState = newState(instance.state, instance.props)
-            instance.state = { ...instance.state, ...newState }
-          }
+            let value = element.type._currentValue
+            const Provider = element.type._context
+              ? element.type._context.Provider
+              : element.type.Provider
 
-          // Deprecated componentWillMount and legacy context APIs must be
-          // supported until removal from React, likely in v17:
-          // https://github.com/facebook/react/issues/12152
+            if (newContext && newContext.has(Provider))
+              value = newContext.get(Provider)
 
-          // Support componentWillMount.
-          if (instance.componentWillMount) instance.componentWillMount()
+            recurse(element.props.children(value), legacyContext, newContext)
+          } else if (
+            // The element is a class component…
+            element.type.prototype &&
+            (element.type.prototype.isReactComponent ||
+              element.type.prototype.isPureReactComponent)
+          ) {
+            const instance = new element.type(props, legacyContext)
 
-          // Support legacy context.
-          if (instance.getChildContext)
-            legacyContext = {
-              ...legacyContext,
-              ...instance.getChildContext()
+            // Match React API for default state.
+            instance.state = instance.state || null
+
+            // Support setState.
+            instance.setState = newState => {
+              if (typeof newState === 'function')
+                newState = newState(instance.state, instance.props)
+              instance.state = { ...instance.state, ...newState }
             }
 
-          if (
-            // The element is a GraphQL query component and…
-            instance.constructor.name === 'GraphQLQuery' &&
-            // …It’s to load on mount and…
-            element.props.loadOnMount &&
-            // …It’s not a root query already loaded…
-            (element !== rootElement || loadRoot)
-          )
-            loading.push(
-              // Load this query.
-              instance.load().then(() =>
-                // Preload children, without reloading this query as the root.
-                recursePreload(element, legacyContext, newContext, false)
-              )
+            // Deprecated componentWillMount and legacy context APIs must be
+            // supported until removal from React, likely in v17:
+            // https://github.com/facebook/react/issues/12152
+
+            // Support componentWillMount.
+            if (instance.componentWillMount) instance.componentWillMount()
+
+            // Support legacy context.
+            if (instance.getChildContext)
+              legacyContext = {
+                ...legacyContext,
+                ...instance.getChildContext()
+              }
+
+            if (
+              // The element is a GraphQL query component and…
+              instance.constructor.name === 'GraphQLQuery' &&
+              // …It’s to load on mount and…
+              element.props.loadOnMount &&
+              // …It’s not a root query already loaded…
+              (element !== rootElement || loadRoot)
             )
-          else recurse(instance.render(), legacyContext, newContext)
-        }
-        // The element is a functional component…
-        else recurse(element.type(props), legacyContext, newContext)
-      } else if (
-        // The element is a context provider or DOM element and…
-        element.props &&
-        // …It has children…
-        element.props.children
-      ) {
-        // If the element is a context provider first set the value.
-        if (element.type._context) {
-          // Clone the context map to scope mutations to this provider’s
-          // descendants.
-          newContext = new Map(newContext)
+              loading.push(
+                // Load this query.
+                instance.load().then(() =>
+                  // Preload children, without reloading this query as the root.
+                  recursePreload(element, legacyContext, newContext, false)
+                )
+              )
+            else recurse(instance.render(), legacyContext, newContext)
+          }
+          // The element is a functional component…
+          else recurse(element.type(props), legacyContext, newContext)
+        } else if (
+          // The element is a context provider or DOM element and…
+          element.props &&
+          // …It has children…
+          element.props.children
+        ) {
+          // If the element is a context provider first set the value.
+          if (element.type._context) {
+            // Clone the context map to scope mutations to this provider’s
+            // descendants.
+            newContext = new Map(newContext)
 
-          // Set the context, keyed by the provider’s component type.
-          newContext.set(element.type, element.props.value)
-        }
+            // Set the context, keyed by the provider’s component type.
+            newContext.set(element.type, element.props.value)
+          }
 
-        recurse(element.props.children, legacyContext, newContext)
+          recurse(element.props.children, legacyContext, newContext)
+        }
       }
+
+      recurse(rootElement, rootLegacyContext, rootNewContext)
+
+      return Promise.all(loading).then(() => {})
     }
 
-    recurse(rootElement, rootLegacyContext, rootNewContext)
-
-    return Promise.all(loading)
-  }
-
-  return recursePreload(element)
-}
+    recursePreload(element).then(resolve)
+  })

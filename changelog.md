@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Made `preload` reject upon render errors instead of throwing.
+
 ### Patch
 
 - Updated dev dependencies.

@@ -580,6 +580,20 @@ t.test('Query SSR with nested query.', async t => {
   )
 })
 
+t.test('Preload with render error.', async t => {
+  const error = new Error('Message.')
+
+  /**
+   * A React component that throws a render error.
+   * @ignore
+   */
+  const Component = () => {
+    throw error
+  }
+
+  await t.rejects(preload(<Component />), error, 'Error.')
+})
+
 t.test('Preload legacy React context API components.', async t => {
   /**
    * A test legacy context provider component.

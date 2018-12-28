@@ -244,7 +244,7 @@ Recursively preloads [`Query`](#function-query) components that have the `loadOn
 | :-------- | :----------- | :--------------------------- |
 | `element` | ReactElement | A React virtual DOM element. |
 
-**Returns:** [Promise](https://mdn.io/promise) — Resolves once loading is done and cache is ready to be exported from the [`GraphQL`](#class-graphql) instance. Cache can be imported when constructing new [`GraphQL`](#class-graphql) instances.
+**Returns:** [Promise](https://mdn.io/promise)&lt;void> — Resolves once loading is done and cache is ready to be exported from the [`GraphQL`](#class-graphql) instance. Cache can be imported when constructing new [`GraphQL`](#class-graphql) instances.
 
 #### Examples
 
