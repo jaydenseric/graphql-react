@@ -606,8 +606,8 @@ t.test('Preload legacy React context API components.', async t => {
 
     /**
      * Renders the component.
-     * @ignore
      * @returns {ReactElement} React virtual DOM element.
+     * @ignore
      */
     render() {
       return <div>{this.props.children}</div>
@@ -625,8 +625,8 @@ t.test('Preload legacy React context API components.', async t => {
 
     /**
      * Renders the component.
-     * @ignore
      * @returns {ReactElement} React virtual DOM element.
+     * @ignore
      */
     render() {
       return <p>{this.context.value}</p>
