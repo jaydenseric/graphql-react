@@ -6,6 +6,10 @@
 
 - Made `preload` reject upon render errors instead of throwing.
 
+### Minor
+
+- Made `Query` component throw a helpful render error if the GraphQL context is missing.
+
 ### Patch
 
 - Updated dev dependencies.

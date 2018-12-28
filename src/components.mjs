@@ -322,7 +322,10 @@ class GraphQLQuery extends React.Component {
  */
 export const Query = props => (
   <Consumer>
-    {graphql => <GraphQLQuery graphql={graphql} {...props} />}
+    {graphql => {
+      if (!graphql) throw new Error('GraphQL context provider missing.')
+      return <GraphQLQuery graphql={graphql} {...props} />
+    }}
   </Consumer>
 )
 
