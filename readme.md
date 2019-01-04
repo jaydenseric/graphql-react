@@ -84,9 +84,9 @@ export const PokemonViewer = ({ name }) => (
     {({ loading, data }) =>
       data ? (
         <figure>
-          <img src={data.image} alt={name} />
+          <img src={data.pokemon.image} alt={name} />
           <figcaption>
-            Pokémon #{data.number}: {name}
+            Pokémon #{data.pokemon.number}: {name}
           </figcaption>
         </figure>
       ) : loading ? (

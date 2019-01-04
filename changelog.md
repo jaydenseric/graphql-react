@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Fixed example code typos in the readme “Usage” section.
+
 ## 6.0.0
 
 ### Major
