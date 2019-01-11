@@ -92,7 +92,7 @@ export { preload } from './preload'
  * @param {string} [fetchError] Fetch error message.
  * @param {HttpError} [httpError] Fetch response HTTP error.
  * @param {string} [parseError] Parse error message.
- * @param {Object} [graphQLErrors] GraphQL response errors.
+ * @param {Array<Object>} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
  * @returns {ReactElement} React virtual DOM element.
  * @example <caption>Rendering a user profile query.</caption>
@@ -117,6 +117,6 @@ export { preload } from './preload'
  * @prop {string} [fetchError] Fetch error message.
  * @prop {HttpError} [httpError] Fetch response HTTP error.
  * @prop {string} [parseError] Parse error message.
- * @prop {Object} [graphQLErrors] GraphQL response errors.
+ * @prop {Array<Object>} [graphQLErrors] GraphQL response errors.
  * @prop {Object} [data] GraphQL response data.
  */

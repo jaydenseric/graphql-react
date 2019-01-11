@@ -5,6 +5,7 @@
 ### Patch
 
 - Fixed example code typos in the readme “Usage” section.
+- Fixed incorrect `graphQLErrors` JSDoc type.
 
 ## 6.0.0
 

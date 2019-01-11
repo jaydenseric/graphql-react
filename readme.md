@@ -499,15 +499,15 @@ Renders the status of a query or mutation.
 
 **Type:** [function](https://mdn.io/function)
 
-| Parameter       | Type                                | Description                                |
-| :-------------- | :---------------------------------- | :----------------------------------------- |
-| `load`          | [function](https://mdn.io/function) | Loads the query on demand, updating cache. |
-| `loading`       | [boolean](https://mdn.io/boolean)   | Is the query loading.                      |
-| `fetchError`    | [string](https://mdn.io/string)?    | Fetch error message.                       |
-| `httpError`     | [HttpError](#type-httperror)?       | Fetch response HTTP error.                 |
-| `parseError`    | [string](https://mdn.io/string)?    | Parse error message.                       |
-| `graphQLErrors` | [Object](https://mdn.io/object)?    | GraphQL response errors.                   |
-| `data`          | [Object](https://mdn.io/object)?    | GraphQL response data.                     |
+| Parameter       | Type                                                               | Description                                |
+| :-------------- | :----------------------------------------------------------------- | :----------------------------------------- |
+| `load`          | [function](https://mdn.io/function)                                | Loads the query on demand, updating cache. |
+| `loading`       | [boolean](https://mdn.io/boolean)                                  | Is the query loading.                      |
+| `fetchError`    | [string](https://mdn.io/string)?                                   | Fetch error message.                       |
+| `httpError`     | [HttpError](#type-httperror)?                                      | Fetch response HTTP error.                 |
+| `parseError`    | [string](https://mdn.io/string)?                                   | Parse error message.                       |
+| `graphQLErrors` | [Array](https://mdn.io/array)&lt;[Object](https://mdn.io/object)>? | GraphQL response errors.                   |
+| `data`          | [Object](https://mdn.io/object)?                                   | GraphQL response data.                     |
 
 **Returns:** ReactElement — React virtual DOM element.
 
@@ -542,10 +542,10 @@ JSON serializable result of a GraphQL request (including all errors and data) su
 
 **Type:** [Object](https://mdn.io/object)
 
-| Property        | Type                             | Description                |
-| :-------------- | :------------------------------- | :------------------------- |
-| `fetchError`    | [string](https://mdn.io/string)? | Fetch error message.       |
-| `httpError`     | [HttpError](#type-httperror)?    | Fetch response HTTP error. |
-| `parseError`    | [string](https://mdn.io/string)? | Parse error message.       |
-| `graphQLErrors` | [Object](https://mdn.io/object)? | GraphQL response errors.   |
-| `data`          | [Object](https://mdn.io/object)? | GraphQL response data.     |
+| Property        | Type                                                               | Description                |
+| :-------------- | :----------------------------------------------------------------- | :------------------------- |
+| `fetchError`    | [string](https://mdn.io/string)?                                   | Fetch error message.       |
+| `httpError`     | [HttpError](#type-httperror)?                                      | Fetch response HTTP error. |
+| `parseError`    | [string](https://mdn.io/string)?                                   | Parse error message.       |
+| `graphQLErrors` | [Array](https://mdn.io/array)&lt;[Object](https://mdn.io/object)>? | GraphQL response errors.   |
+| `data`          | [Object](https://mdn.io/object)?                                   | GraphQL response data.     |
