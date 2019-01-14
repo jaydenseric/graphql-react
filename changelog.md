@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Removed the [`watch`](https://npm.im/watch) dev dependency and `watch` package script.
 - Fixed example code typos in the readme “Usage” section.
 - Fixed incorrect `graphQLErrors` JSDoc type.
 

@@ -76,8 +76,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "size-limit": "^0.21.1",
-    "tap": "^12.1.1",
-    "watch": "^1.0.2"
+    "tap": "^12.1.1"
   },
   "scripts": {
     "prepare": "npm run prepare:clean && npm run prepare:mjs && npm run prepare:js && npm run prepare:jsdoc && npm run prepare:prettier",
@@ -93,8 +92,7 @@
     "test:lib": "npm run test:lib:mjs && npm run test:lib:js",
     "test:lib:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
     "test:lib:js": "node  lib/test | tap-mocha-reporter spec",
-    "prepublishOnly": "npm run prepare && npm test",
-    "watch": "watch 'npm run prepublishOnly --silent' src --interval 1"
+    "prepublishOnly": "npm run prepare && npm test"
   },
   "husky": {
     "hooks": {
