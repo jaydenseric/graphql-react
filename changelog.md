@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 6.0.1
 
 ### Patch
 
