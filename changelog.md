@@ -6,7 +6,7 @@
 
 - Updated dev dependencies.
 - Removed the [`watch`](https://npm.im/watch) dev dependency and `watch` package script.
-- Render errors nested under `Query` components are now caught properly by `preload`.
+- `preload` now properly catches render errors nested under `Query` components.
 - Fixed example code typos in the readme “Usage” section.
 - Fixed incorrect `graphQLErrors` JSDoc type.
 
