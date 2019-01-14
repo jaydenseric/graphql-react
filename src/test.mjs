@@ -641,6 +641,69 @@ t.test('Preload with render error within Query.', async t => {
   await t.rejects(preload(tree), error, 'Error.')
 })
 
+t.test(
+  'Preload with class component that doesn’t call base constructor with props.',
+  async t => {
+    const app = new Koa()
+      .use(errorHandler())
+      .use(bodyParser())
+      .use(execute({ schema, rootValue }))
+
+    const port = await startServer(t, app)
+    const graphql = new GraphQL()
+
+    // eslint-disable-next-line require-jsdoc
+    const fetchOptionsOverride = options => {
+      options.url = `http://localhost:${port}`
+    }
+
+    /**
+     * A React component that doesn’t call the base constructor with props.
+     * @ignore
+     */
+    class Component extends React.Component {
+      static propTypes = {
+        date: PropTypes.string.isRequired
+      }
+
+      // eslint-disable-next-line require-jsdoc
+      constructor() {
+        super()
+      }
+
+      /**
+       * Renders the component.
+       * @returns {ReactElement} React virtual DOM element.
+       * @ignore
+       */
+      render() {
+        return (
+          <Query
+            loadOnMount
+            fetchOptionsOverride={fetchOptionsOverride}
+            operation={{
+              variables: { date: this.props.date },
+              query: YEAR_QUERY
+            }}
+          >
+            {({ data }) => data.date.year}
+          </Query>
+        )
+      }
+    }
+
+    const tree = (
+      <Provider value={graphql}>
+        <Component date="2018-01-01" />
+      </Provider>
+    )
+
+    await preload(tree)
+
+    t.equals(reactDom.renderToString(tree), '2018', 'HTML.')
+  }
+)
+
 t.test('Preload legacy React context API components.', async t => {
   /**
    * A test legacy context provider component.

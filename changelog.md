@@ -7,6 +7,7 @@
 - Updated dev dependencies.
 - Removed the [`watch`](https://npm.im/watch) dev dependency and `watch` package script.
 - `preload` now properly catches render errors nested under `Query` components.
+- `preload` now supports class components that don’t call their base constructor with `props`, fixing [#17](https://github.com/jaydenseric/graphql-react/issues/17).
 - Fixed example code typos in the readme “Usage” section.
 - Fixed incorrect `graphQLErrors` JSDoc type.
 

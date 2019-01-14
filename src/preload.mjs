@@ -118,6 +118,11 @@ export const preload = element =>
           ) {
             const instance = new element.type(props, legacyContext)
 
+            // A class component with a constructor should call super(props).
+            // This matches React’s fault tolerance, see:
+            // https://github.com/facebook/react/blob/v16.7.0/packages/react-dom/src/server/ReactPartialRenderer.js#L532
+            instance.props = instance.props || props
+
             // Match React API for default state.
             instance.state = instance.state || null
 
