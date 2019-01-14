@@ -602,6 +602,45 @@ t.test('Preload with render error.', async t => {
   await t.rejects(preload(<Component />), error, 'Error.')
 })
 
+t.test('Preload with render error within Query.', async t => {
+  const app = new Koa()
+    .use(errorHandler())
+    .use(bodyParser())
+    .use(execute({ schema, rootValue }))
+
+  const port = await startServer(t, app)
+  const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}`
+  }
+
+  const error = new Error('Message.')
+
+  /**
+   * A React component that throws a render error.
+   * @ignore
+   */
+  const Component = () => {
+    throw error
+  }
+
+  const tree = (
+    <Provider value={graphql}>
+      <Query
+        loadOnMount
+        fetchOptionsOverride={fetchOptionsOverride}
+        operation={{ query: EPOCH_QUERY }}
+      >
+        {() => <Component />}
+      </Query>
+    </Provider>
+  )
+
+  await t.rejects(preload(tree), error, 'Error.')
+})
+
 t.test('Preload legacy React context API components.', async t => {
   /**
    * A test legacy context provider component.

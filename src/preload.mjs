@@ -53,7 +53,7 @@ const REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace
  * ```
  */
 export const preload = element =>
-  new Promise(resolve => {
+  new Promise((resolve, reject) => {
     /**
      * @kind function
      * @name preload~recursePreload
@@ -186,5 +186,7 @@ export const preload = element =>
       return Promise.all(loading).then(() => {})
     }
 
-    recursePreload(element).then(resolve)
+    recursePreload(element)
+      .then(resolve)
+      .catch(reject)
   })
