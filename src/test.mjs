@@ -582,7 +582,11 @@ t.test('Query SSR with nested query.', async t => {
 
 t.test('Query SSR with GraphQL context provider missing.', async t => {
   await t.rejects(
-    preload(<Query loadOnMount operation={{ query: EPOCH_QUERY }} />),
+    preload(
+      <Query loadOnMount operation={{ query: EPOCH_QUERY }}>
+        {() => null}
+      </Query>
+    ),
     new Error('GraphQL context provider missing.'),
     'Error.'
   )
