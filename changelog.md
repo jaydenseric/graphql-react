@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Handle exceptions outside tests (see [tapjs/node-tap#463 (comment)](https://github.com/tapjs/node-tap/issues/463#issuecomment-456701261)).
 
 ## 6.0.1
 

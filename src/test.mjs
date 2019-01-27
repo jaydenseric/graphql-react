@@ -11,6 +11,10 @@ import t from 'tap'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
 import { GraphQL, Provider, Query, preload } from '.'
 
+// Handle exceptions outside tests:
+// https://github.com/tapjs/node-tap/issues/463#issuecomment-456701261
+t.patchProcess()
+
 // eslint-disable-next-line no-console
 console.log(
   `Testing ${
