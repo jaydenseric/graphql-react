@@ -101,9 +101,10 @@ export const PokemonViewer = ({ name }) => (
 
 To make queries and mutations without a component, use the [`GraphQL` instance method `query`](#graphql-instance-method-query).
 
-## Example
+## Examples
 
-See the [example GraphQL API and Next.js web app](https://github.com/jaydenseric/graphql-react-examples), deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
+- [The official Next.js example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react).
+- [The Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
 ## Support
 
@@ -385,7 +386,8 @@ Asynchronously server side renders a [React node](#type-reactnode), preloading a
 
 #### See
 
-- [ReactDOMServer docs](https://reactjs.org/docs/react-dom-server).
+- [`ReactDOMServer` docs](https://reactjs.org/docs/react-dom-server).
+- [`next-graphql-react`](https://npm.im/next-graphql-react) makes it easy to use this API in a [Next.js](https://nextjs.org) project.
 
 #### Examples
 

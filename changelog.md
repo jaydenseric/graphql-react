@@ -19,6 +19,7 @@
 - Handle exceptions outside tests (see [tapjs/node-tap#463 (comment)](https://github.com/tapjs/node-tap/issues/463#issuecomment-456701261)).
 - Added a `ReactNode` JSDoc type, replacing `ReactElement` types.
 - Removed tests made redundant by the removal of the `preload` function.
+- Document [the official Next.js example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react).
 
 ## 6.0.1
 
