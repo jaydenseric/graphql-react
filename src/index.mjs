@@ -1,5 +1,6 @@
-export { GraphQL } from './graphql'
-export { Provider, Consumer, Query } from './components'
+export { GraphQL } from './GraphQL'
+export { Provider, Consumer } from './GraphQLContext'
+export { Query } from './Query'
 
 /**
  * Loading query details.

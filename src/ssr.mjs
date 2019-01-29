@@ -1,5 +1,5 @@
 import ReactDOMServer from 'react-dom/server'
-import { GraphQL } from './graphql'
+import { GraphQL } from './GraphQL'
 
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},
