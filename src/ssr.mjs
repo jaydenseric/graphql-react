@@ -14,7 +14,8 @@ import { GraphQL } from './GraphQL'
  * @param {ReactNode} node React virtual DOM node.
  * @param {function} [render=ReactDOMServer.renderToStaticMarkup] Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring).
  * @returns {Promise<string>} Promise resolving the rendered HTML string.
- * @see [ReactDOMServer docs](https://reactjs.org/docs/react-dom-server).
+ * @see [`ReactDOMServer` docs](https://reactjs.org/docs/react-dom-server).
+ * @see [`next-graphql-react`](https://npm.im/next-graphql-react) makes it easy to use this API in a [Next.js](https://nextjs.org) project.
  * @example <caption>SSR function that resolves a HTML string and cache JSON for client hydration.</caption>
  * ```jsx
  * import { GraphQL, Provider } from 'graphql-react'
