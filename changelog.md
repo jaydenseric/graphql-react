@@ -2,7 +2,7 @@
 
 ## Next
 
-### Breaking
+### Major
 
 - Removed the `preload` function. It was not going to work with React hooks.
 - Added the [`react-dom`](https://npm.im/react-dom) peer dependency.
