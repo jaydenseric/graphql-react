@@ -1,6 +1,5 @@
 export { GraphQL } from './graphql'
 export { Provider, Consumer, Query } from './components'
-export { preload } from './preload'
 
 /**
  * Loading query details.
@@ -27,7 +26,7 @@ export { preload } from './preload'
  * @name ConsumerRender
  * @type {function}
  * @param {GraphQL} graphql [`GraphQL`]{@link GraphQL} instance.
- * @returns {ReactElement} React virtual DOM element.
+ * @returns {ReactNode} React virtual DOM node.
  * @example <caption>A button that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
  * ```jsx
  * graphql => <button onClick={graphql.reset}>Reset cache</button>
@@ -94,7 +93,7 @@ export { preload } from './preload'
  * @param {string} [parseError] Parse error message.
  * @param {Array<Object>} [graphQLErrors] GraphQL response errors.
  * @param {Object} [data] GraphQL response data.
- * @returns {ReactElement} React virtual DOM element.
+ * @returns {ReactNode} React virtual DOM node.
  * @example <caption>Rendering a user profile query.</caption>
  * ```jsx
  * ({ load, loading, fetchError, httpError, parseError, graphQLErrors, data }) => (
@@ -106,6 +105,13 @@ export { preload } from './preload'
  *   </aside>
  * )
  * ```
+ */
+
+/**
+ * React virtual DOM node; anything React can render.
+ * @kind typedef
+ * @name ReactNode
+ * @type {undefined|null|boolean|number|string|React.Element|Array<ReactNode>}
  */
 
 /**

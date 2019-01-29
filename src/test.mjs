@@ -6,10 +6,11 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import PropTypes from 'prop-types'
 import React from 'react'
-import reactDom from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server'
 import t from 'tap'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
-import { GraphQL, Provider, Query, preload } from '.'
+import { ssr } from './ssr'
+import { GraphQL, Provider, Query } from '.'
 
 // Handle exceptions outside tests:
 // https://github.com/tapjs/node-tap/issues/463#issuecomment-456701261
@@ -141,7 +142,38 @@ t.test('graphqlFetchOptions with a standard operation.', t => {
   t.end()
 })
 
-t.test('Query SSR with fetch unavailable.', async t => {
+t.test('SSR argument validation.', async t => {
+  const graphql = new GraphQL()
+
+  await t.test('Argument 1.', async t => {
+    const error = new Error('ssr() argument 1 must be a GraphQL instance.')
+    await t.rejects(ssr(), error, 'Rejection error if missing.')
+    await t.rejects(ssr(true), error, 'Rejection error if wrong type.')
+  })
+
+  await t.test('Argument 2.', async t => {
+    const error = new Error('ssr() argument 2 must be a React node.')
+    await t.rejects(ssr(graphql), error, 'Rejection error if missing.')
+    await t.resolveMatch(
+      ssr(graphql, undefined),
+      '',
+      'Resolves if undefined is passed.'
+    )
+  })
+
+  await t.test('Argument 3.', async t => {
+    const error = new Error('ssr() argument 3 must be a function.')
+    const node = 'a'
+    await t.resolveMatch(ssr(graphql, node), node, 'Defaults if missing.')
+    await t.rejects(
+      ssr(graphql, node, false),
+      error,
+      'Rejection error if wrong type.'
+    )
+  })
+})
+
+t.test('SSR Query with fetch unavailable.', async t => {
   const graphql = new GraphQL()
   const operation = { query: EPOCH_QUERY }
   const captureStdout = new CaptureStdout()
@@ -177,7 +209,7 @@ t.test('Query SSR with fetch unavailable.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query loadOnMount operation={operation}>
         {function() {
@@ -192,7 +224,7 @@ t.test('Query SSR with fetch unavailable.', async t => {
   )
 })
 
-t.test('Query SSR with relative fetch URL.', async t => {
+t.test('SSR Query with relative fetch URL.', async t => {
   // The relative default fetch options URL causes a fetch error in a server
   // environment.
 
@@ -221,7 +253,7 @@ t.test('Query SSR with relative fetch URL.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query loadOnMount operation={operation}>
         {function() {
@@ -236,7 +268,7 @@ t.test('Query SSR with relative fetch URL.', async t => {
   )
 })
 
-t.test('Query SSR with HTTP error.', async t => {
+t.test('SSR Query with HTTP error.', async t => {
   const app = new Koa().use(async (ctx, next) => {
     ctx.response.status = 404
     ctx.response.type = 'text/plain'
@@ -281,7 +313,7 @@ t.test('Query SSR with HTTP error.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -300,7 +332,7 @@ t.test('Query SSR with HTTP error.', async t => {
   )
 })
 
-t.test('Query SSR with response JSON invalid.', async t => {
+t.test('SSR Query with response JSON invalid.', async t => {
   const app = new Koa().use(async (ctx, next) => {
     ctx.response.status = 200
     ctx.response.type = 'text'
@@ -345,7 +377,7 @@ t.test('Query SSR with response JSON invalid.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -364,7 +396,7 @@ t.test('Query SSR with response JSON invalid.', async t => {
   )
 })
 
-t.test('Query SSR with response payload malformed.', async t => {
+t.test('SSR Query with response payload malformed.', async t => {
   const app = new Koa().use(async (ctx, next) => {
     ctx.response.status = 200
     ctx.response.type = 'json'
@@ -404,7 +436,7 @@ t.test('Query SSR with response payload malformed.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -423,7 +455,7 @@ t.test('Query SSR with response payload malformed.', async t => {
   )
 })
 
-t.test('Query SSR with GraphQL errors.', async t => {
+t.test('SSR Query with GraphQL errors.', async t => {
   const app = new Koa()
     .use(errorHandler())
     .use(bodyParser())
@@ -461,7 +493,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -480,7 +512,7 @@ t.test('Query SSR with GraphQL errors.', async t => {
   )
 })
 
-t.test('Query SSR with variables.', async t => {
+t.test('SSR Query with variables.', async t => {
   const app = new Koa()
     .use(errorHandler())
     .use(bodyParser())
@@ -503,7 +535,7 @@ t.test('Query SSR with variables.', async t => {
 
   t.matchSnapshot(snapshotObject(requestCache), 'GraphQL request cache.')
 
-  reactDom.renderToString(
+  ReactDOMServer.renderToString(
     <Provider value={graphql}>
       <Query
         loadOnMount
@@ -522,7 +554,7 @@ t.test('Query SSR with variables.', async t => {
   )
 })
 
-t.test('Query SSR with nested query.', async t => {
+t.test('SSR Query with nested query.', async t => {
   const app = new Koa()
     .use(errorHandler())
     .use(bodyParser())
@@ -576,17 +608,18 @@ t.test('Query SSR with nested query.', async t => {
     </Provider>
   )
 
-  await preload(tree)
+  await ssr(graphql, tree)
 
   t.matchSnapshot(
-    reactDom.renderToString(tree),
+    ReactDOMServer.renderToString(tree),
     'HTML displaying the nested query render function argument.'
   )
 })
 
-t.test('Query SSR with GraphQL context provider missing.', async t => {
+t.test('SSR Query with GraphQL context provider missing.', async t => {
   await t.rejects(
-    preload(
+    ssr(
+      new GraphQL(),
       <Query loadOnMount operation={{ query: EPOCH_QUERY }}>
         {() => null}
       </Query>
@@ -596,7 +629,8 @@ t.test('Query SSR with GraphQL context provider missing.', async t => {
   )
 })
 
-t.test('Preload with render error.', async t => {
+t.test('SSR with render error.', async t => {
+  const graphql = new GraphQL()
   const error = new Error('Message.')
 
   /**
@@ -607,10 +641,10 @@ t.test('Preload with render error.', async t => {
     throw error
   }
 
-  await t.rejects(preload(<Component />), error, 'Error.')
+  await t.rejects(ssr(graphql, <Component />), error, 'Error.')
 })
 
-t.test('Preload with render error within Query.', async t => {
+t.test('SSR with render error within Query.', async t => {
   const app = new Koa()
     .use(errorHandler())
     .use(bodyParser())
@@ -646,11 +680,11 @@ t.test('Preload with render error within Query.', async t => {
     </Provider>
   )
 
-  await t.rejects(preload(tree), error, 'Error.')
+  await t.rejects(ssr(graphql, tree), error, 'Error.')
 })
 
 t.test(
-  'Preload with class component that doesn’t call base constructor with props.',
+  'SSR with class component that doesn’t call base constructor with props.',
   async t => {
     const app = new Koa()
       .use(errorHandler())
@@ -681,7 +715,7 @@ t.test(
 
       /**
        * Renders the component.
-       * @returns {ReactElement} React virtual DOM element.
+       * @returns {ReactNode} React virtual DOM node.
        * @ignore
        */
       render() {
@@ -706,13 +740,15 @@ t.test(
       </Provider>
     )
 
-    await preload(tree)
+    await ssr(graphql, tree)
 
-    t.equals(reactDom.renderToString(tree), '2018', 'HTML.')
+    t.equals(ReactDOMServer.renderToString(tree), '2018', 'HTML.')
   }
 )
 
-t.test('Preload legacy React context API components.', async t => {
+t.test('SSR legacy React context API components.', async t => {
+  const graphql = new GraphQL()
+
   /**
    * A test legacy context provider component.
    * @ignore
@@ -738,7 +774,7 @@ t.test('Preload legacy React context API components.', async t => {
 
     /**
      * Renders the component.
-     * @returns {ReactElement} React virtual DOM element.
+     * @returns {ReactNode} React virtual DOM node.
      * @ignore
      */
     render() {
@@ -757,7 +793,7 @@ t.test('Preload legacy React context API components.', async t => {
 
     /**
      * Renders the component.
-     * @returns {ReactElement} React virtual DOM element.
+     * @returns {ReactNode} React virtual DOM node.
      * @ignore
      */
     render() {
@@ -773,9 +809,9 @@ t.test('Preload legacy React context API components.', async t => {
     </LegacyContextProvider>
   )
 
-  t.matchSnapshot(reactDom.renderToString(tree), 'HTML.')
+  t.matchSnapshot(ReactDOMServer.renderToString(tree), 'HTML.')
 
-  await preload(tree)
+  await ssr(graphql, tree)
 })
 
 t.test('Cache export & import.', async t => {

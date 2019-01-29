@@ -17,7 +17,7 @@ export const {
    * @name Provider
    * @param {GraphQL} value A [`GraphQL`]{@link GraphQL} instance.
    * @param {ReactNode} children A React node.
-   * @returns {ReactElement} React virtual DOM element.
+   * @returns {ReactNode} React virtual DOM node.
    * @example <caption>Using the `Provider` component for a page.</caption>
    * ```jsx
    * import { GraphQL, Provider } from 'graphql-react'
@@ -37,7 +37,7 @@ export const {
    * @kind function
    * @name Consumer
    * @param {ConsumerRender} children Render function that receives a [`GraphQL`]{@link GraphQL} instance.
-   * @returns {ReactElement} React virtual DOM element.
+   * @returns {ReactNode} React virtual DOM node.
    * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
    * ```jsx
    * import { Consumer } from 'graphql-react'
@@ -147,21 +147,29 @@ class GraphQLQuery extends React.Component {
   }
 
   /**
-   * Loads the query, updating cache.
+   * Loads the query.
+   * @kind function
+   * @name GraphQLQuery#query
+   * @returns {ActiveQuery} Loading query details.
+   * @ignore
+   */
+  query = () =>
+    this.props.graphql.query({
+      operation: this.props.operation,
+      fetchOptionsOverride: this.props.fetchOptionsOverride,
+      resetOnLoad: this.props.resetOnLoad
+    })
+
+  /**
+   * Loads the query, updating state.
    * @kind function
    * @name GraphQLQuery#load
    * @returns {Promise<RequestCache>} A promise that resolves the [request cache]{@link RequestCache}.
    * @ignore
    */
   load = () => {
-    const { fetchOptionsHash, cache, request } = this.props.graphql.query({
-      operation: this.props.operation,
-      fetchOptionsOverride: this.props.fetchOptionsOverride,
-      resetOnLoad: this.props.resetOnLoad
-    })
-
+    const { fetchOptionsHash, cache, request } = this.query()
     this.setState({ loading: true, fetchOptionsHash, cache })
-
     return request
   }
 
@@ -209,10 +217,19 @@ class GraphQLQuery extends React.Component {
    * Renders the component.
    * @kind function
    * @name GraphQLQuery#render
-   * @returns {ReactElement} React virtual DOM element.
+   * @returns {ReactElement|null} React virtual DOM element, or `null` if loading when server side rendering.
    * @ignore
    */
   render() {
+    if (
+      this.props.graphql.ssr &&
+      this.props.loadOnMount &&
+      !this.state.requestCache
+    ) {
+      this.query()
+      return null
+    }
+
     return this.props.children({
       load: this.load,
       loading: this.state.loading,
@@ -232,7 +249,7 @@ class GraphQLQuery extends React.Component {
  * @param {boolean} [props.loadOnReset=false] Should the query load when the [GraphQL cache]{@link GraphQL#cache} is reset.
  * @param {boolean} [props.resetOnLoad=false] Should the [GraphQL cache]{@link GraphQL#cache} reset when the query loads.
  * @param {QueryRender} props.children Renders the query status.
- * @returns {ReactElement} React virtual DOM element.
+ * @returns {ReactNode} React virtual DOM node.
  * @example <caption>A query to display a user profile.</caption>
  * ```jsx
  * import { Query } from 'graphql-react'

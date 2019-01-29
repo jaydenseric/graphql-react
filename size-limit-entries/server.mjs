@@ -1,1 +1,2 @@
-export { GraphQL, Provider, Consumer, Query, preload } from '..'
+export { GraphQL, Provider, Consumer, Query } from '..'
+export { ssr } from '../lib/ssr'

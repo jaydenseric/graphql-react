@@ -129,11 +129,12 @@ Consider polyfilling:
   - [GraphQL instance property logErrors](#graphql-instance-property-logerrors)
 - [function Consumer](#function-consumer)
   - [Examples](#examples-3)
-- [function preload](#function-preload)
-  - [Examples](#examples-4)
 - [function Provider](#function-provider)
-  - [Examples](#examples-5)
+  - [Examples](#examples-4)
 - [function Query](#function-query)
+  - [Examples](#examples-5)
+- [function ssr](#function-ssr)
+  - [See](#see)
   - [Examples](#examples-6)
 - [type ActiveQuery](#type-activequery)
 - [type ConsumerRender](#type-consumerrender)
@@ -145,6 +146,7 @@ Consider polyfilling:
 - [type HttpError](#type-httperror)
 - [type QueryRender](#type-queryrender)
   - [Examples](#examples-9)
+- [type ReactNode](#type-reactnode)
 - [type RequestCache](#type-requestcache)
 
 ### class GraphQL
@@ -220,7 +222,7 @@ A React component that gets the [`GraphQL`](#class-graphql) instance from contex
 | :--------- | :------------------------------------- | :-------------------------------------------------------------------- |
 | `children` | [ConsumerRender](#type-consumerrender) | Render function that receives a [`GraphQL`](#class-graphql) instance. |
 
-**Returns:** ReactElement — React virtual DOM element.
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
 #### Examples
 
@@ -236,51 +238,16 @@ _A button component that resets the [GraphQL cache](#graphql-instance-property-c
 > )
 > ```
 
-### function preload
-
-Recursively preloads [`Query`](#function-query) components that have the `loadOnMount` prop in a React element tree. Useful for server side rendering (SSR) or to preload components for a better user experience when they mount.
-
-| Parameter | Type         | Description                  |
-| :-------- | :----------- | :--------------------------- |
-| `element` | ReactElement | A React virtual DOM element. |
-
-**Returns:** [Promise](https://mdn.io/promise)&lt;void> — Resolves once loading is done and cache is ready to be exported from the [`GraphQL`](#class-graphql) instance. Cache can be imported when constructing new [`GraphQL`](#class-graphql) instances.
-
-#### Examples
-
-_An async SSR function that returns a HTML string and cache JSON for client hydration._
-
-> ```jsx
-> import { GraphQL, preload, Provider } from 'graphql-react'
-> import { renderToString } from 'react-dom/server'
-> import { App } from './components'
->
-> const graphql = new GraphQL()
-> const page = (
->   <Provider value={graphql}>
->     <App />
->   </Provider>
-> )
->
-> export async function ssr() {
->   await preload(page)
->   return {
->     cache: JSON.stringify(graphql.cache),
->     html: renderToString(page)
->   }
-> }
-> ```
-
 ### function Provider
 
 A React component that provides a [`GraphQL`](#class-graphql) instance in context for nested [`Consumer`](#function-consumer) components to use.
 
-| Parameter  | Type                      | Description                             |
-| :--------- | :------------------------ | :-------------------------------------- |
-| `value`    | [GraphQL](#class-graphql) | A [`GraphQL`](#class-graphql) instance. |
-| `children` | ReactNode                 | A React node.                           |
+| Parameter  | Type                         | Description                             |
+| :--------- | :--------------------------- | :-------------------------------------- |
+| `value`    | [GraphQL](#class-graphql)    | A [`GraphQL`](#class-graphql) instance. |
+| `children` | [ReactNode](#type-reactnode) | A React node.                           |
 
-**Returns:** ReactElement — React virtual DOM element.
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
 #### Examples
 
@@ -310,7 +277,7 @@ A React component to manage a GraphQL query or mutation.
 | `props.resetOnLoad`          | [boolean](https://mdn.io/boolean)? = `false`        | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the query loads.   |
 | `props.children`             | [QueryRender](#type-queryrender)                    | Renders the query status.                                                                  |
 
-**Returns:** ReactElement — React virtual DOM element.
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
 #### Examples
 
@@ -404,6 +371,63 @@ _A mutation to clap an article._
 > )
 > ```
 
+### function ssr
+
+Asynchronously server side renders a [React node](#type-reactnode), preloading all [`Query`](#function-query) components that have the `loadOnMount` prop. After resolving, cache can be exported from the [`GraphQL` instance property `cache`](#graphql-instance-property-cache) for serialization (usually as JSON) and transport to the client for hydration via the [`GraphQL` constructor parameter `options.cache`](#class-graphql).
+
+| Parameter | Type                                                                         | Description                                                                                                                                                                                                                                                                                              |
+| :-------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `graphql` | [GraphQL](#class-graphql)                                                    | [`GraphQL`](#class-graphql) instance.                                                                                                                                                                                                                                                                    |
+| `node`    | [ReactNode](#type-reactnode)                                                 | React virtual DOM node.                                                                                                                                                                                                                                                                                  |
+| `render`  | [function](https://mdn.io/function)? = `ReactDOMServer.renderToStaticMarkup` | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
+
+**Returns:** [Promise](https://mdn.io/promise)&lt;[string](https://mdn.io/string)> — Promise resolving the rendered HTML string.
+
+#### See
+
+- [ReactDOMServer docs](https://reactjs.org/docs/react-dom-server).
+
+#### Examples
+
+_SSR function that resolves a HTML string and cache JSON for client hydration._
+
+> ```jsx
+> import { GraphQL, Provider } from 'graphql-react'
+> import { ssr } from 'graphql-react/lib/ssr'
+> import ReactDOMServer from 'react-dom/server'
+> import { App } from './components'
+>
+> async function render() {
+>   const graphql = new GraphQL()
+>   const page = (
+>     <Provider value={graphql}>
+>       <App />
+>     </Provider>
+>   )
+>   const html = await ssr(graphql, page, ReactDOMServer.renderToString)
+>   const cache = JSON.stringify(graphql.cache)
+>   return { html, cache }
+> }
+> ```
+
+_SSR function that resolves a HTML string suitable for a static page._
+
+> ```jsx
+> import { GraphQL, Provider } from 'graphql-react'
+> import { ssr } from 'graphql-react/lib/ssr'
+> import { App } from './components'
+>
+> function render() {
+>   const graphql = new GraphQL()
+>   const page = (
+>     <Provider value={graphql}>
+>       <App />
+>     </Provider>
+>   )
+>   return ssr(graphql, page)
+> }
+> ```
+
 ### type ActiveQuery
 
 Loading query details.
@@ -426,7 +450,7 @@ Renders a [`GraphQL`](#class-graphql) consumer.
 | :-------- | :------------------------ | :------------------------------------ |
 | `graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
 
-**Returns:** ReactElement — React virtual DOM element.
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
 #### Examples
 
@@ -509,7 +533,7 @@ Renders the status of a query or mutation.
 | `graphQLErrors` | [Array](https://mdn.io/array)&lt;[Object](https://mdn.io/object)>? | GraphQL response errors.                   |
 | `data`          | [Object](https://mdn.io/object)?                                   | GraphQL response data.                     |
 
-**Returns:** ReactElement — React virtual DOM element.
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
 #### Examples
 
@@ -535,6 +559,12 @@ _Rendering a user profile query._
 >   </aside>
 > )
 > ```
+
+### type ReactNode
+
+React virtual DOM node; anything React can render.
+
+**Type:** undefined | null | [boolean](https://mdn.io/boolean) | [number](https://mdn.io/number) | [string](https://mdn.io/string) | React.Element | [Array](https://mdn.io/array)&lt;[ReactNode](#type-reactnode)>
 
 ### type RequestCache
 

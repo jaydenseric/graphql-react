@@ -129,9 +129,7 @@ export class GraphQL {
               new Error('Global fetch API or polyfill unavailable.')
             )
 
-    this.emit('fetch', { fetchOptionsHash })
-
-    return (this.requests[fetchOptionsHash] = fetcher(url, options))
+    const cache = (this.requests[fetchOptionsHash] = fetcher(url, options))
       .then(
         response => {
           if (!response.ok)
@@ -238,6 +236,10 @@ export class GraphQL {
 
         return requestCache
       })
+
+    this.emit('fetch', { fetchOptionsHash, cache })
+
+    return cache
   }
 
   /**
