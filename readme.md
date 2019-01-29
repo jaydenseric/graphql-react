@@ -8,27 +8,23 @@ A lightweight GraphQL client for React; the first Relay and Apollo alternative w
 
 ### Easy 🔥
 
-- Add 1 dependency to get started with GraphQL in a React project.
-- No Webpack or Babel setup.
-- Simple components, no decorators.
-- Query components fetch on mount and when props change. While loading, cache from the last identical request is available to display.
+- Add 1 dependency to a React project to get started.
+- No [webpack](https://webpack.js.org) or [Babel](https://babeljs.io) setup.
+- Write queries without [`gql`](https://github.com/apollographql/graphql-tag#gql).
+- Use file input values as mutation arguments to upload files; [compatible with a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
 - Automatically fresh cache, even after mutations.
-- Use file input values as mutation arguments to upload files; compatible with [a variety of servers](https://github.com/jaydenseric/graphql-multipart-request-spec#server).
-- [Template literal](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals) queries; no need for [`gql`](https://github.com/apollographql/graphql-tag#gql).
-- Query multiple GraphQL APIs.
 
 ### Smart 💡
 
-- Adds only a few KB to a typical min+gzip bundle.
-- [Native ESM in Node.js](https://nodejs.org/api/esm.html) via `.mjs`.
-- [Package `module` entry](https://github.com/rollup/rollup/wiki/pkg.module) for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers.
-- Server side rendering for crawlable pages and a better UX.
-- Components use the [React v16.3 context API](https://github.com/facebook/react/pull/11818).
-- **_All_** fetch options overridable per request.
-- GraphQL request fetch options hash based cache:
-  - No data denormalization or need to query `id` fields.
+- &lt; 2.5 KB min+gzip bundle size, guaranteed by [`size-limit`](https://npm.im/size-limit) tests. That’s around 40 KB less than [Apollo](https://www.apollographql.com)!
+- Native ESM via `.mjs` for [Node.js in `--experimental-modules` mode](https://nodejs.org/api/esm.html#esm_enabling) and [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org).
+- Server side rendering for better UX and SEO.
+- Uses the [React v16.3 context API](https://github.com/facebook/react/pull/11818).
+- All fetch options overridable per request.
+- GraphQL requests are cached under hashes of their `fetch` options:
+  - No data normalization or need to query `id` fields.
   - No tampering with queries or `__typename` insertion.
-  - Errors are cached and can be server side rendered.
+  - Errors cache and can be server side rendered.
   - Query multiple GraphQL APIs without stitching data.
 
 ## Setup

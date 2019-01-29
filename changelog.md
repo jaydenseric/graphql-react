@@ -10,7 +10,7 @@
 
 ### Minor
 
-- Added the `ssr` function, which is for server use only and is React hooks ready. It is simpler and more future-proof than the removed `preload` function as it leverages [`ReactDOMServer`](https://reactjs.org/docs/react-dom-server) for rendering.
+- Added a `ssr` function, which is for server use only and is React hooks ready. It is simpler and more future-proof than the removed `preload` function as it leverages [`ReactDOMServer`](https://reactjs.org/docs/react-dom-server) for rendering.
 - `GraphQL` now emits a `cache` promise in the `fetch` event payload. These events are undocumented, so this could be considered an internal change.
 
 ### Patch
@@ -20,6 +20,7 @@
 - Added a `ReactNode` JSDoc type, replacing `ReactElement` types.
 - Removed tests made redundant by the removal of the `preload` function.
 - Document [the official Next.js example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react).
+- Improved documentation.
 
 ## 6.0.1
 
@@ -128,7 +129,7 @@
 
 - Updated dependencies.
 - Updated package scripts and config for the new [`husky`](https://npm.im/husky) version.
-- Removed the package `module` field. Webpack by default resolves extensionless paths the same way Node.js in `--experimental-modules` mode does; `.mjs` files are preferred. Tools misconfigured or unable to resolve `.mjs` can get confused when `module` points to an `.mjs` ESM file and they attempt to resolve named imports from `.js` CJS files.
+- Removed the package `module` field. By default webpack resolves extensionless paths the same way Node.js in `--experimental-modules` mode does; `.mjs` files are preferred. Tools misconfigured or unable to resolve `.mjs` can get confused when `module` points to an `.mjs` ESM file and they attempt to resolve named imports from `.js` CJS files.
 - Renamed the `Operation` type `GraphQLOperation`.
 - Use [jsDelivr](https://jsdelivr.com) for the readme logo instead of [RawGit](https://rawgit.com) as they are shutting down.
 
