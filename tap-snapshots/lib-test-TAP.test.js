@@ -236,7 +236,3 @@ exports[`lib/test TAP SSR Query with nested query. > HTML displaying the nested 
   }
 }</pre>
 `
-
-exports[`lib/test TAP SSR legacy React context API components. > HTML. 1`] = `
-<div data-reactroot=""><div><p>Context value.</p></div></div>
-`
