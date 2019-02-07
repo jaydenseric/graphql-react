@@ -87,13 +87,14 @@ export { Query } from './Query'
  * @kind typedef
  * @name QueryRender
  * @type {function}
- * @param {function} load Loads the query on demand, updating cache.
- * @param {boolean} loading Is the query loading.
- * @param {string} [fetchError] Fetch error message.
- * @param {HttpError} [httpError] Fetch response HTTP error.
- * @param {string} [parseError] Parse error message.
- * @param {Array<Object>} [graphQLErrors] GraphQL response errors.
- * @param {Object} [data] GraphQL response data.
+ * @param {Object} options Options.
+ * @param {function} options.load Loads the query on demand, updating cache.
+ * @param {boolean} options.loading Is the query loading.
+ * @param {string} [options.fetchError] Fetch error message.
+ * @param {HttpError} [options.httpError] Fetch response HTTP error.
+ * @param {string} [options.parseError] Parse error message.
+ * @param {Array<Object>} [options.graphQLErrors] GraphQL response errors.
+ * @param {Object} [options.data] GraphQL response data.
  * @returns {ReactNode} React virtual DOM node.
  * @example <caption>Rendering a user profile query.</caption>
  * ```jsx

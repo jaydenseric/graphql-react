@@ -521,15 +521,16 @@ Renders the status of a query or mutation.
 
 **Type:** function
 
-| Parameter       | Type                          | Description                                |
-| :-------------- | :---------------------------- | :----------------------------------------- |
-| `load`          | function                      | Loads the query on demand, updating cache. |
-| `loading`       | boolean                       | Is the query loading.                      |
-| `fetchError`    | string?                       | Fetch error message.                       |
-| `httpError`     | [HttpError](#type-httperror)? | Fetch response HTTP error.                 |
-| `parseError`    | string?                       | Parse error message.                       |
-| `graphQLErrors` | Array&lt;Object>?             | GraphQL response errors.                   |
-| `data`          | Object?                       | GraphQL response data.                     |
+| Parameter               | Type                          | Description                                |
+| :---------------------- | :---------------------------- | :----------------------------------------- |
+| `options`               | Object                        | Options.                                   |
+| `options.load`          | function                      | Loads the query on demand, updating cache. |
+| `options.loading`       | boolean                       | Is the query loading.                      |
+| `options.fetchError`    | string?                       | Fetch error message.                       |
+| `options.httpError`     | [HttpError](#type-httperror)? | Fetch response HTTP error.                 |
+| `options.parseError`    | string?                       | Parse error message.                       |
+| `options.graphQLErrors` | Array&lt;Object>?             | GraphQL response errors.                   |
+| `options.data`          | Object?                       | GraphQL response data.                     |
 
 **Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 

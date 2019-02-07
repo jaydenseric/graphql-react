@@ -57,7 +57,7 @@ export class GraphQLQuery extends React.Component {
   }
 
   /**
-   * Handles [GraphQL]{@link GraphQL} fetch
+   * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
    * @kind function
    * @name GraphQLQuery#onFetch
    * @param {Object} details Event details.
@@ -70,7 +70,7 @@ export class GraphQLQuery extends React.Component {
   }
 
   /**
-   * Handles [GraphQL]{@link GraphQL} cache
+   * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
    * @kind function
    * @name GraphQLQuery#onCache
    * @param {Object} details Event details.
@@ -86,7 +86,7 @@ export class GraphQLQuery extends React.Component {
   }
 
   /**
-   * Handles [GraphQL]{@link GraphQL} reset
+   * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
    * @kind function
    * @name GraphQLQuery#onReset
    * @param {Object} details Event details.
