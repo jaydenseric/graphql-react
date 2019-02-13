@@ -93,7 +93,7 @@
     "test:lib": "npm run test:lib:mjs && npm run test:lib:js",
     "test:lib:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
     "test:lib:js": "node  lib/test | tap-mocha-reporter spec",
-    "prepublishOnly": "npm run prepare && npm test"
+    "prepublishOnly": "npm test"
   },
   "husky": {
     "hooks": {

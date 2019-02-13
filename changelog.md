@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Simplified the `prepublishOnly` script.
 
 ## 7.0.0
 
