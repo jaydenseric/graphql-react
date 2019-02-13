@@ -5,10 +5,10 @@ module.exports = {
     [
       '@babel/env',
       {
+        targets: '> 0.5%, not dead, node 8.5',
         modules: process.env.BABEL_ESM ? false : 'commonjs',
         shippedProposals: true,
-        loose: true,
-        exclude: ['transform-async-to-generator', 'transform-regenerator']
+        loose: true
       }
     ],
     ['@babel/react', { useBuiltIns: true }]

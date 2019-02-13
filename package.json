@@ -1,7 +1,7 @@
 {
   "name": "graphql-react",
   "version": "7.0.0",
-  "description": "A lightweight GraphQL client for React.",
+  "description": "A lightweight but powerful GraphQL client for React using modern context and hooks APIs; the first Relay and Apollo alternative with server side rendering.",
   "license": "MIT",
   "author": {
     "name": "Jayden Seric",
@@ -13,38 +13,38 @@
   "bugs": "https://github.com/jaydenseric/graphql-react/issues",
   "keywords": [
     "graphql",
-    "react",
     "client",
     "query",
     "mutation",
     "file",
     "upload",
     "multipart",
+    "react",
+    "hooks",
+    "ssr",
     "esm",
     "mjs"
   ],
   "files": [
-    "lib",
-    "!lib/test.*"
+    "universal",
+    "server"
   ],
-  "main": "lib",
+  "main": "universal",
   "sideEffects": false,
   "engines": {
     "node": ">=8.5"
   },
   "browserslist": "> 0.5%, not dead, node 8.5",
   "peerDependencies": {
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "extract-files": "^5.0.1",
-    "fast-deep-equal": "^2.0.1",
     "fnv1a": "^1.0.1",
     "mitt": "^1.1.3",
-    "object-assign": "^4.1.1",
-    "prop-types": "^15.6.1"
+    "object-assign": "^4.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -56,43 +56,42 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-transform-replace-object-assign": "^2.0.0",
-    "capture-stdout": "^1.0.0",
     "cross-fetch": "^3.0.1",
     "eslint": "^5.13.0",
-    "eslint-config-env": "^2.0.0",
+    "eslint-config-env": "^3.0.0",
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-import-order-alphabetical": "^0.0.1",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^1.0.1",
+    "formdata-node": "github:jaydenseric/form-data#native-esm",
     "graphql": "^14.1.1",
     "graphql-api-koa": "^2.0.0",
     "husky": "^1.3.1",
-    "jsdoc-md": "^1.7.1",
+    "jsdoc-md": "^2.1.0",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "lint-staged": "^8.1.3",
     "prettier": "^1.16.4",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "size-limit": "^0.21.1",
-    "tap": "^12.5.1"
+    "tap": "^12.5.2"
   },
   "scripts": {
     "prepare": "npm run prepare:clean && npm run prepare:mjs && npm run prepare:js && npm run prepare:jsdoc && npm run prepare:prettier",
-    "prepare:clean": "rm -rf lib",
-    "prepare:mjs": "BABEL_ESM=1 babel src -d lib --keep-file-extension",
-    "prepare:js": "babel src -d lib",
+    "prepare:clean": "rm -rf universal server test",
+    "prepare:mjs": "BABEL_ESM=1 babel src -d . --keep-file-extension",
+    "prepare:js": "babel src -d .",
     "prepare:jsdoc": "jsdoc-md",
-    "prepare:prettier": "prettier 'lib/**/*.{mjs,js}' readme.md --write",
-    "test": "npm run test:eslint && npm run test:prettier && npm run test:size && npm run test:lib && NODE_ENV=production npm run test:lib",
+    "prepare:prettier": "prettier '{universal,server,test}/**/*.{mjs,js}' readme.md --write",
+    "test": "npm run test:eslint && npm run test:prettier && npm run test:tap && npm run test:size",
     "test:eslint": "eslint . --ext mjs,js",
     "test:prettier": "prettier '**/*.{json,yml,md}' -l",
     "test:size": "size-limit",
-    "test:lib": "npm run test:lib:mjs && npm run test:lib:js",
-    "test:lib:mjs": "node --experimental-modules --no-warnings lib/test | tap-mocha-reporter spec",
-    "test:lib:js": "node  lib/test | tap-mocha-reporter spec",
+    "test:tap": "tap test/*.{mjs,js}",
     "prepublishOnly": "npm test"
   },
   "husky": {
@@ -105,7 +104,11 @@
     "*.{json,yml,md}": "prettier -l"
   },
   "eslintIgnore": [
-    "lib",
+    "!.*",
+    "node_modules",
+    "/universal",
+    "/server",
+    "/test",
     "tap-snapshots"
   ],
   "eslintConfig": {
@@ -122,19 +125,14 @@
     {
       "name": "Server",
       "path": "size-limit-entries/server.mjs",
-      "limit": "3 KB",
-      "ignore": [
-        "object-assign",
-        "prop-types"
-      ]
+      "limit": "2.5 KB"
     },
     {
       "name": "Client",
       "path": "size-limit-entries/client.mjs",
-      "limit": "2.5 KB",
+      "limit": "2 KB",
       "ignore": [
-        "object-assign",
-        "prop-types"
+        "object-assign"
       ]
     }
   ]

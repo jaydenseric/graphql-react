@@ -1,1 +1,1 @@
-export { GraphQL, Provider, Consumer, Query } from '..'
+export { GraphQL, GraphQLContext, useGraphQL, reportCacheErrors } from '..'

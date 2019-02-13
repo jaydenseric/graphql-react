@@ -1,11 +1,9 @@
 import { extractFiles } from 'extract-files'
 
 /**
- * Gets default [fetch options]{@link FetchOptions} for a GraphQL operation.
- * @kind function
- * @name graphqlFetchOptions
+ * Gets default [`fetch` options]{@link GraphQLFetchOptions} for a [GraphQL operation]{@link GraphQLOperation}.
  * @param {GraphQLOperation} operation GraphQL operation.
- * @returns {FetchOptions} Fetch options.
+ * @returns {GraphQLFetchOptions} `fetch` options.
  * @ignore
  */
 export function graphqlFetchOptions(operation) {

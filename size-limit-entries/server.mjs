@@ -1,2 +1,2 @@
-export { GraphQL, Provider, Consumer, Query } from '..'
-export { ssr } from '../lib/ssr'
+export { GraphQL, GraphQLContext, useGraphQL, reportCacheErrors } from '..'
+export { ssr } from '../server'
