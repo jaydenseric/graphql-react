@@ -93,7 +93,7 @@ export const useGraphQL = ({
    * @ignore
    */
   const onFetch = ({ cacheKey: fetchingCacheKey }) => {
-    if (fetchingCacheKey === cacheKey) setLoading(true)
+    if (cacheKey === fetchingCacheKey) setLoading(true)
   }
 
   /**
@@ -101,7 +101,7 @@ export const useGraphQL = ({
    * @ignore
    */
   const onCache = ({ cacheKey: cachedCacheKey, cacheValue }) => {
-    if (cachedCacheKey === cacheKey) {
+    if (cacheKey === cachedCacheKey) {
       setLoading(false)
       setCacheValue(cacheValue)
     }
@@ -112,7 +112,7 @@ export const useGraphQL = ({
    * @ignore
    */
   const onReset = ({ exceptCacheKey }) => {
-    if (exceptCacheKey !== cacheKey)
+    if (cacheKey !== exceptCacheKey)
       if (loadOnReset) load()
       else setCacheValue(graphql.cache[cacheKey])
   }
