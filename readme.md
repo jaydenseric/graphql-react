@@ -351,7 +351,7 @@ A map of loading GraphQL operations. You probably don’t need to interact with 
 
 ### function reportCacheErrors
 
-A [`GraphQL`](#class-graphql) `cache` event handler that reports `fetch`, HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
+A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
 
 | Parameter         | Type                                     | Description                                                                         |
 | :---------------- | :--------------------------------------- | :---------------------------------------------------------------------------------- |
@@ -441,7 +441,7 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 | Parameter                      | Type                                                              | Description                                                                                                                     |
 | :----------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
 | `options`                      | Object                                                            | Options.                                                                                                                        |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default `fetch` options for the GraphQL operation.                                                                    |
+| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation.                                       |
 | `options.loadOnMount`          | boolean? = `true`                                                 | Should the operation load when the component mounts.                                                                            |
 | `options.loadOnReset`          | boolean? = `true`                                                 | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset. |
 | `options.resetOnLoad`          | boolean? = `false`                                                | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the operation loads.                              |

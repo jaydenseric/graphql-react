@@ -109,7 +109,7 @@ export class GraphQL {
 
   /**
    * Fetches a GraphQL operation.
-   * @param {GraphQLFetchOptions} fetchOptions URL and options for `fetch`.
+   * @param {GraphQLFetchOptions} fetchOptions URL and options for [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API).
    * @param {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
    * @returns {Promise<GraphQLCacheValue>} A promise that resolves the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
    * @ignore

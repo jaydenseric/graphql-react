@@ -10,7 +10,7 @@ import { hashObject } from './hashObject'
  * @kind function
  * @name useGraphQL
  * @param {Object} options Options.
- * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default `fetch` options for the GraphQL operation.
+ * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation.
  * @param {boolean} [options.loadOnMount=true] Should the operation load when the component mounts.
  * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset.
  * @param {boolean} [options.resetOnLoad=false] Should all other [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.

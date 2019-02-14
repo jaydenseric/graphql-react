@@ -1,7 +1,8 @@
 /**
- * A [`GraphQL`]{@link GraphQL} `cache` event handler that reports `fetch`, HTTP,
- * parse and GraphQL errors via `console.log()`. In a browser environment the
- * grouped error details are expandable.
+ * A [`GraphQL`]{@link GraphQL} `cache` event handler that reports
+ * [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse
+ * and GraphQL errors via `console.log()`. In a browser environment the grouped
+ * error details are expandable.
  * @kind function
  * @name reportCacheErrors
  * @param {Object} data [`GraphQL`]{@link GraphQL} `cache` event data.
