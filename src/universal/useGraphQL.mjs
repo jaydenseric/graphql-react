@@ -114,7 +114,7 @@ export const useGraphQL = ({
   const onReset = ({ exceptCacheKey }) => {
     if (exceptCacheKey !== cacheKey)
       if (loadOnReset) load()
-      else setCacheValue(null)
+      else setCacheValue(graphql.cache[cacheKey])
   }
 
   react.useEffect(() => {
