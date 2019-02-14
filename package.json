@@ -66,7 +66,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^1.0.1",
-    "formdata-node": "github:jaydenseric/form-data#native-esm",
+    "formdata-node": "^1.4.0",
     "graphql": "^14.1.1",
     "graphql-api-koa": "^2.0.0",
     "husky": "^1.3.1",
