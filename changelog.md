@@ -2,10 +2,45 @@
 
 ## Next
 
+### Major
+
+- Updated the `react` and `react-dom` peer dependencies to `^16.8.0`.
+- Removed the `Query` component.
+- No longer exporting `Provider` and `Consumer`; now `GraphQLContext` is exported.
+- The `GraphQL` instance method `query` has been renamed `operate`.
+- The `GraphQL` constructor no longer has the `logErrors` option, and GraphQL operation errors are no longer console logged by default.
+- The `ssr` function is now exported from `graphql-react/server` instead of `graphql-react/lib/ssr`.
+- The `ssr` function is now implemented using `async`/`await` syntax.
+- Browser (and less commonly server) environments that fetch GraphQL operations with file uploads must now support (natively or by polyfill) the [`FormData.entries()`](https://developer.mozilla.org/docs/Web/API/FormData/entries) API.
+
+  Caching of [GraphQL multipart requests](https://github.com/jaydenseric/graphql-multipart-request-spec) when the `fetch` options `body` is a `FormData` instance has been improved. Previously they would overwrite each other in the cache even if the GraphQL operations were different, depending if the `FormData` instance was native or from a polyfill that could be JSON serialized.
+
+  There is still room to improve as `FormData` field values that are `File` or `Blob` instances don’t influence the cache key hashing.
+
+- `GraphQL` event properties have been renamed or added:
+  - The `fetch` event property `fetchOptionsHash` was renamed `cacheKey`, and the property `cache` was renamed `cacheValuePromise`.
+  - The `cache` event property `fetchOptionsHash` was renamed `cacheKey`, and the property `cacheValue` was added.
+  - The `reset` event property `exceptFetchOptionsHash` was renamed `exceptCacheKey`.
+
+### Minor
+
+- Added the `useGraphQL` React hook, which assumes the role of the removed `Query` component.
+- Documented the `GraphQL` `on` and `off` methods for managing event listeners.
+- Added the `reportCacheErrors` function, a `GraphQL` `cache` event handler that can be setup to report GraphQL operation errors via `console.log()`.
+
 ### Patch
 
 - Updated dev dependencies.
+- Updated the package description and keywords.
 - Simplified the `prepublishOnly` script.
+- Use the [`tap`](https://npm.im/tap) CLI and default reporter for tests.
+- New project directory structure.
+- Separate Babel configs for optimal universal, server, and test environment code.
+- Much improved tests.
+- Run size limit tests last in the package `test` script as they are the slowest.
+- Smaller package size limits for server (3 KB down to 2.5 KB) and browser (2.5 KB down to 2 KB) environments.
+- Improved JSDoc types and API documentation.
+- Updated the readme intro and added a new “Apollo comparison” section.
 
 ## 7.0.0
 
