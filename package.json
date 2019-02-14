@@ -128,8 +128,8 @@
       "limit": "2.5 KB"
     },
     {
-      "name": "Client",
-      "path": "size-limit-entries/client.mjs",
+      "name": "Browser",
+      "path": "size-limit-entries/browser.mjs",
       "limit": "2 KB",
       "ignore": [
         "object-assign"
