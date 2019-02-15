@@ -4,7 +4,7 @@
 
 ### Major
 
-- Updated the `react` and `react-dom` peer dependencies to `^16.8.0`.
+- Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `^16.8.0`.
 - Removed the `Query` component.
 - No longer exporting `Provider` and `Consumer`; now `GraphQLContext` is exported.
 - The `GraphQL` instance method `query` has been renamed `operate`.
