@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Improved `hashObject()` tests.
 
 ## 8.0.0
 

@@ -5,17 +5,27 @@ import { hashObject } from '../universal/hashObject'
 // Global FormData polyfill.
 global.FormData = FormData
 
-t.test('hashObject() determinism', t => {
+t.test('hashObject() with an object', t => {
   const object = { a: 1, b: 2 }
+
   const hash1 = hashObject(object)
-  const hash2 = hashObject(object)
 
   t.type(hash1, 'string', 'Hash type')
+
+  const hash2 = hashObject(object)
+
   t.equals(hash1, hash2, 'Deterministic hash')
+
+  object.b = 3
+
+  const hash3 = hashObject(object)
+
+  t.notEquals(hash2, hash3, 'Property values affect the hash')
+
   t.end()
 })
 
-t.test('hashObject() with FormData', t => {
+t.test('hashObject() with a FormData instance', t => {
   const form1 = new FormData()
   const form2 = new FormData()
 
@@ -28,6 +38,6 @@ t.test('hashObject() with FormData', t => {
 
   t.type(hash1, 'string', 'Hash type')
   t.equals(hash1, hash2, 'Deterministic hash')
-  t.notEqual(hash2, hash3, 'Fields determine hash')
+  t.notEquals(hash2, hash3, 'Fields determine hash')
   t.end()
 })
