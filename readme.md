@@ -438,14 +438,15 @@ _SSR function that resolves a HTML string suitable for a static page._
 
 A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operation in a component.
 
-| Parameter                      | Type                                                              | Description                                                                                                                     |
-| :----------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
-| `options`                      | Object                                                            | Options.                                                                                                                        |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation.                                       |
-| `options.loadOnMount`          | boolean? = `true`                                                 | Should the operation load when the component mounts.                                                                            |
-| `options.loadOnReset`          | boolean? = `true`                                                 | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset. |
-| `options.resetOnLoad`          | boolean? = `false`                                                | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the operation loads.                              |
-| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                                                              |
+| Parameter                      | Type                                                              | Description                                                                                                                                                             |
+| :----------------------------- | :---------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`                      | Object                                                            | Options.                                                                                                                                                                |
+| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation.                                                                               |
+| `options.loadOnMount`          | boolean? = `true`                                                 | Should the operation load when the component mounts.                                                                                                                    |
+| `options.loadOnReset`          | boolean? = `true`                                                 | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset.                                         |
+| `options.resetOnLoad`          | boolean? = `false`                                                | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the operation loads.                                                                      |
+| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                                                                                                      |
+| `options.graphql`              | [GraphQL](#class-graphql)                                         | Optional [GraphQL](#class-graphql) client. If not supplied, `useGraphQL` will attempt to use the value supplied by [`GraphQLContext`](#type-graphqlcontext) `Provider`. |
 
 **Returns:** [GraphQLOperationStatus](#type-graphqloperationstatus) — GraphQL operation status.
 

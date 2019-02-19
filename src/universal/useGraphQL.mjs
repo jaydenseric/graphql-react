@@ -15,7 +15,7 @@ import { hashObject } from './hashObject'
  * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset.
  * @param {boolean} [options.resetOnLoad=false] Should all other [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.
  * @param {GraphQLOperation} options.operation GraphQL operation.
- * @param {GraphQL} options.graphql Optional GraphQL server. If not supplied, `useGraphQL` will attempt to use the value supplied by [`GraphQLContext`]{@link GraphQLContext} `Provider`.
+ * @param {GraphQL} options.graphql Optional [GraphQL]{@link GraphQL} client. If not supplied, `useGraphQL` will attempt to use the value supplied by [`GraphQLContext`]{@link GraphQLContext} `Provider`.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
  * @example <caption>A component that displays a Pokémon image.</caption>
  * ```jsx
