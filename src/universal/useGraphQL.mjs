@@ -15,8 +15,8 @@ import { hashObject } from './hashObject'
  * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset.
  * @param {boolean} [options.resetOnLoad=false] Should all other [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.
  * @param {GraphQLOperation} options.operation GraphQL operation.
+ * @param {GraphQL} options.graphql Optional GraphQL server. If not supplied, `useGraphQL` will attempt to use the value supplied by [`GraphQLContext`]{@link GraphQLContext} `Provider`.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
- * @see [`GraphQLContext`]{@link GraphQLContext} `Provider`; required for [`useGraphQL`]{@link useGraphQL} to work.
  * @example <caption>A component that displays a Pokémon image.</caption>
  * ```jsx
  * import { useGraphQL } from 'graphql-react'
@@ -46,13 +46,18 @@ export const useGraphQL = ({
   loadOnMount = true,
   loadOnReset = true,
   resetOnLoad = false,
-  operation
+  operation,
+  graphql
 }) => {
-  const graphql = react.useContext(GraphQLContext)
+  const context = react.useContext(GraphQLContext)
+  graphql = graphql || context
+
   if (typeof graphql === 'undefined')
-    throw new Error('GraphQL context missing.')
+    throw new Error(
+      'The `graphql` option must be provided or supplied in a GraphQL context.'
+    )
   if (!(graphql instanceof GraphQL))
-    throw new Error('GraphQL context must be a GraphQL instance.')
+    throw new Error('The `graphql` option must be a GraphQL instance.')
 
   const fetchOptions = graphqlFetchOptions(operation)
   if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)

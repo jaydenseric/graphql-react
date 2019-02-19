@@ -130,7 +130,23 @@ t.test('useGraphQL()', async t => {
     })
   })
 
-  await t.test('GraphQL context missing', t => {
+  await t.test('The `graphql` option can be supplied directly.', t => {
+    const graphql = new GraphQL()
+
+    // eslint-disable-next-line require-jsdoc
+    const Component = () => {
+      useGraphQL({ operation: { query: '{ echo }' }, graphql })
+      return null
+    }
+
+    t.doesNotThrow(() => {
+      ReactDOMServer.renderToString(<Component />)
+    })
+
+    t.end()
+  })
+
+  await t.test('The `graphql` option is missing', t => {
     // eslint-disable-next-line require-jsdoc
     const Component = () => {
       useGraphQL({ operation: { query: '{ echo }' } })
@@ -139,12 +155,12 @@ t.test('useGraphQL()', async t => {
 
     t.throws(() => {
       ReactDOMServer.renderToString(<Component />)
-    }, new Error('GraphQL context missing.'))
+    }, new Error('The `graphql` option must be provided or supplied in a GraphQL context.'))
 
     t.end()
   })
 
-  await t.test('GraphQL context not a GraphQL instance', t => {
+  await t.test('The `graphql` option is not a GraphQL instance', t => {
     // eslint-disable-next-line require-jsdoc
     const Component = () => {
       useGraphQL({ operation: { query: '{ echo }' } })
@@ -157,7 +173,7 @@ t.test('useGraphQL()', async t => {
           <Component />
         </GraphQLContext.Provider>
       )
-    }, new Error('GraphQL context must be a GraphQL instance.'))
+    }, new Error('The `graphql` option must be a GraphQL instance.'))
 
     t.end()
   })
