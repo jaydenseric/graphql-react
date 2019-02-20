@@ -5,9 +5,12 @@
 ### Patch
 
 - Updated dev dependencies.
-- Improved `hashObject()` tests.
+- `useGraphQL` React hook bug fixes for when arguments change after the initial render:
+  - Changes that cause the `cacheKey` to change trigger a reload if the `loadOnMount` option is `true`, fixing [#23](https://github.com/jaydenseric/graphql-react/issues/23).
+  - Fixed stale operation status properties being returned.
+- Use [`react-test-renderer`](https://npm.im/react-test-renderer) to test `useGraphQL` with a lot more detail.
 - Capitalized the `React` namespace in `useGraphQL`.
-- Use [`react-test-renderer`](https://npm.im/react-test-renderer) to test `useGraphQL`.
+- Improved `hashObject()` tests.
 
 ## 8.0.0
 
