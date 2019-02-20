@@ -1,4 +1,4 @@
-import react from 'react'
+import React from 'react'
 import { GraphQL } from './GraphQL'
 import { GraphQLContext } from './GraphQLContext'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
@@ -48,7 +48,7 @@ export const useGraphQL = ({
   resetOnLoad = false,
   operation
 }) => {
-  const graphql = react.useContext(GraphQLContext)
+  const graphql = React.useContext(GraphQLContext)
   if (typeof graphql === 'undefined')
     throw new Error('GraphQL context missing.')
   if (!(graphql instanceof GraphQL))
@@ -57,9 +57,9 @@ export const useGraphQL = ({
   const fetchOptions = graphqlFetchOptions(operation)
   if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
 
-  const [cacheKey, setCacheKey] = react.useState(hashObject(fetchOptions))
-  const [cacheValue, setCacheValue] = react.useState(graphql.cache[cacheKey])
-  const [loading, setLoading] = react.useState(loadOnMount)
+  const [cacheKey, setCacheKey] = React.useState(hashObject(fetchOptions))
+  const [cacheValue, setCacheValue] = React.useState(graphql.cache[cacheKey])
+  const [loading, setLoading] = React.useState(loadOnMount)
 
   /**
    * Loads the GraphQL query.
@@ -117,7 +117,7 @@ export const useGraphQL = ({
       else setCacheValue(graphql.cache[cacheKey])
   }
 
-  react.useEffect(() => {
+  React.useEffect(() => {
     // Component mount…
 
     graphql.on('fetch', onFetch)

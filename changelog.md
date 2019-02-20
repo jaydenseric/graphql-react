@@ -6,6 +6,7 @@
 
 - Updated dev dependencies.
 - Improved `hashObject()` tests.
+- Capitalized the `React` namespace in `useGraphQL`.
 
 ## 8.0.0
 
