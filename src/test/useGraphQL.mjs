@@ -1,6 +1,7 @@
 import 'cross-fetch/polyfill'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import ReactTestRenderer from 'react-test-renderer'
 import t from 'tap'
 import { GraphQL } from '../universal/GraphQL'
 import { GraphQLContext } from '../universal/GraphQLContext'
@@ -10,133 +11,103 @@ import { startServer } from './helpers/startServer'
 
 t.test('useGraphQL()', async t => {
   const port = await startServer(t, createGraphQLKoaApp())
+  const graphql = new GraphQL()
+
+  // eslint-disable-next-line require-jsdoc
+  const fetchOptionsOverride = options => {
+    options.url = `http://localhost:${port}`
+  }
+
+  const operation1Options = {
+    operation: { query: '{ echo }' },
+    fetchOptionsOverride
+  }
+  const {
+    cacheKey: operation1CacheKey,
+    cacheValuePromise: operation1CacheValuePromise
+  } = graphql.operate(operation1Options)
+  const operation1CacheValue = await operation1CacheValuePromise
+  const { cache: cache1 } = graphql
 
   // eslint-disable-next-line require-jsdoc, react/prop-types
-  const Component = ({ loadOnMount, onResult }) => {
-    const result = useGraphQL({
-      fetchOptionsOverride(options) {
-        options.url = `http://localhost:${port}`
-      },
-      loadOnMount,
-      operation: { query: '{ echo }' }
-    })
-
-    onResult(result)
-
-    return null
+  const Component = ({ loadOnMount, operationOptions = operation1Options }) => {
+    const result = useGraphQL({ loadOnMount, ...operationOptions })
+    return JSON.stringify(result)
   }
 
   await t.test('Without initial cache', async t => {
     await t.test('`loadOnMount` true (default)', t => {
-      t.plan(4)
-
       const graphql = new GraphQL()
-
-      // eslint-disable-next-line require-jsdoc
-      const onResult = ({ load, loading, cacheKey, cacheValue }) => {
-        t.type(load, 'function')
-        t.equals(loading, true)
-        t.type(cacheKey, 'string')
-        t.equals(cacheValue, undefined)
-        t.end()
-      }
-
-      ReactDOMServer.renderToString(
+      const testRenderer = ReactTestRenderer.create(
         <GraphQLContext.Provider value={graphql}>
-          <Component onResult={onResult} />
+          <Component />
         </GraphQLContext.Provider>
       )
+      const { loading, cacheKey, cacheValue } = JSON.parse(
+        testRenderer.toJSON()
+      )
+
+      t.equals(loading, true)
+      t.equals(cacheKey, operation1CacheKey)
+      t.equals(cacheValue, undefined)
+      t.end()
     })
 
     await t.test('`loadOnMount` false', t => {
-      t.plan(4)
-
       const graphql = new GraphQL()
-
-      // eslint-disable-next-line require-jsdoc
-      const onResult = ({ load, loading, cacheKey, cacheValue }) => {
-        t.type(load, 'function')
-        t.equals(loading, false)
-        t.type(cacheKey, 'string')
-        t.equals(cacheValue, undefined)
-        t.end()
-      }
-
-      ReactDOMServer.renderToString(
+      const testRenderer = ReactTestRenderer.create(
         <GraphQLContext.Provider value={graphql}>
-          <Component loadOnMount={false} onResult={onResult} />
+          <Component loadOnMount={false} />
         </GraphQLContext.Provider>
       )
+      const { loading, cacheKey, cacheValue } = JSON.parse(
+        testRenderer.toJSON()
+      )
+
+      t.equals(loading, false)
+      t.equals(cacheKey, operation1CacheKey)
+      t.equals(cacheValue, undefined)
+      t.end()
     })
   })
 
   await t.test('With initial cache', async t => {
-    const graphql = new GraphQL()
-    const operation = { query: '{ echo }' }
-
-    // eslint-disable-next-line require-jsdoc
-    const fetchOptionsOverride = options => {
-      options.url = `http://localhost:${port}`
-    }
-
-    const { cacheKey: queryCacheKey, cacheValuePromise } = graphql.operate({
-      operation,
-      fetchOptionsOverride
-    })
-
-    const queryCacheValue = await cacheValuePromise
-    const { cache } = graphql
-
     await t.test('`loadOnMount` true (default)', t => {
-      t.plan(4)
-
-      const graphql = new GraphQL({ cache })
-
-      // eslint-disable-next-line require-jsdoc
-      const onResult = ({ load, loading, cacheKey, cacheValue }) => {
-        t.type(load, 'function')
-        t.equals(loading, true)
-        t.equals(cacheKey, queryCacheKey)
-        t.deepEquals(cacheValue, queryCacheValue)
-        t.end()
-      }
-
-      ReactDOMServer.renderToString(
+      const graphql = new GraphQL({ cache: cache1 })
+      const testRenderer = ReactTestRenderer.create(
         <GraphQLContext.Provider value={graphql}>
-          <Component onResult={onResult} />
+          <Component />
         </GraphQLContext.Provider>
       )
+      const { loading, cacheKey, cacheValue } = JSON.parse(
+        testRenderer.toJSON()
+      )
+
+      t.equals(loading, true)
+      t.equals(cacheKey, operation1CacheKey)
+      t.deepEquals(cacheValue, operation1CacheValue)
+      t.end()
     })
 
     await t.test('`loadOnMount` false', t => {
-      t.plan(4)
-
-      const graphql = new GraphQL({ cache })
-
-      // eslint-disable-next-line require-jsdoc
-      const onResult = ({ load, loading, cacheKey, cacheValue }) => {
-        t.type(load, 'function')
-        t.equals(loading, false)
-        t.equals(cacheKey, queryCacheKey)
-        t.deepEquals(cacheValue, queryCacheValue)
-        t.end()
-      }
-
-      ReactDOMServer.renderToString(
+      const graphql = new GraphQL({ cache: cache1 })
+      const testRenderer = ReactTestRenderer.create(
         <GraphQLContext.Provider value={graphql}>
-          <Component loadOnMount={false} onResult={onResult} />
+          <Component loadOnMount={false} />
         </GraphQLContext.Provider>
       )
+      const { loading, cacheKey, cacheValue } = JSON.parse(
+        testRenderer.toJSON()
+      )
+
+      t.equals(loading, false)
+      t.equals(cacheKey, operation1CacheKey)
+      t.deepEquals(cacheValue, operation1CacheValue)
+      t.end()
     })
   })
 
   await t.test('GraphQL context missing', t => {
-    // eslint-disable-next-line require-jsdoc
-    const Component = () => {
-      useGraphQL({ operation: { query: '{ echo }' } })
-      return null
-    }
-
     t.throws(() => {
       ReactDOMServer.renderToString(<Component />)
     }, new Error('GraphQL context missing.'))
@@ -145,12 +116,6 @@ t.test('useGraphQL()', async t => {
   })
 
   await t.test('GraphQL context not a GraphQL instance', t => {
-    // eslint-disable-next-line require-jsdoc
-    const Component = () => {
-      useGraphQL({ operation: { query: '{ echo }' } })
-      return null
-    }
-
     t.throws(() => {
       ReactDOMServer.renderToString(
         <GraphQLContext.Provider value={false}>

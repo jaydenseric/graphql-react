@@ -7,6 +7,7 @@
 - Updated dev dependencies.
 - Improved `hashObject()` tests.
 - Capitalized the `React` namespace in `useGraphQL`.
+- Use [`react-test-renderer`](https://npm.im/react-test-renderer) to test `useGraphQL`.
 
 ## 8.0.0
 
