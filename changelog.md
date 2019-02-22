@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- `useGraphQL` React hook bug fix for when arguments change after the initial render and the `load` function is called: `loading` and `cacheValue` now update correctly after the operation loads.
 
 ## 8.0.1
 

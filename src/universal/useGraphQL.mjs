@@ -134,19 +134,16 @@ export const useGraphQL = ({
     graphql.on('cache', onCache)
     graphql.on('reset', onReset)
 
+    if (loadOnMount) load()
+
     return () => {
       graphql.off('fetch', onFetch)
       graphql.off('cache', onCache)
       graphql.off('reset', onReset)
     }
   }, [
-    // Setup on component mount and cleanup on component unmount.
-  ])
-
-  React.useEffect(() => {
-    if (loadOnMount) load()
-  }, [
-    // Reload (if intended) if the cacheKey changes.
+    // Setup on component mount and cleanup on component unmount, but also if
+    // the cacheKey changes so that the callbacks run in the right closure.
     cacheKey
   ])
 
