@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 8.0.2
 
 ### Patch
 
