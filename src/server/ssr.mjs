@@ -79,7 +79,7 @@ export async function ssr( // eslint-disable-line require-await
    * @ignore
    */
   async function recurse() {
-    const string = render(node)
+    const string = await render(node)
     const operations = Object.values(graphql.operations)
 
     if (operations.length) {
