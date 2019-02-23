@@ -79,7 +79,7 @@ export const useGraphQL = ({
    * @ignore
    */
   const operate = () =>
-    graphql.operate({
+    throw graphql.operate({
       operation,
       fetchOptionsOverride,
       resetOnLoad
@@ -97,7 +97,7 @@ export const useGraphQL = ({
     setCacheKey(cacheKey)
     setCacheValue(cacheValue)
 
-    return cacheValuePromise
+    throw cacheValuePromise
   }
 
   /**
