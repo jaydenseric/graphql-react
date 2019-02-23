@@ -78,6 +78,7 @@ export async function ssr( // eslint-disable-line require-await
    * @returns {Promise<string>} Resolves the final rendered HTML string.
    * @ignore
    */
+  /*
   async function recurse() {
     const string = await render(node)
     const operations = Object.values(graphql.operations)
@@ -90,6 +91,8 @@ export async function ssr( // eslint-disable-line require-await
       return string
     }
   }
+  */
+  const string = await render(node)
 
-  return recurse()
+  return string
 }
