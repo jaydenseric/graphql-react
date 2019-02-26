@@ -392,6 +392,31 @@ t.test('Concurrent identical queries share a request', async t => {
 
 t.test('GraphQL.reset()', async t => {
   await t.test('Without `exceptCacheKey` parameter', async t => {
+    const graphql = new GraphQL({
+      cache: {
+        abcdefg: {
+          data: {
+            echo: 'hello'
+          }
+        }
+      }
+    })
+
+    const resetEvent = promisifyEvent(graphql, 'reset')
+
+    graphql.reset()
+
+    const resetEventData = await resetEvent
+    t.equals(
+      resetEventData.exceptCacheKey,
+      undefined,
+      'GraphQL `reset` event data property `exceptCacheKey`'
+    )
+
+    t.deepEquals(graphql.cache, {}, 'GraphQL.cache')
+  })
+
+  await t.test('With `exceptCacheKey` parameter', async t => {
     const cache1 = {
       abcdefg: {
         data: {
@@ -429,30 +454,5 @@ t.test('GraphQL.reset()', async t => {
     )
 
     t.deepEquals(graphql.cache, cache1, 'GraphQL.cache')
-  })
-
-  await t.test('With `exceptCacheKey` parameter', async t => {
-    const graphql = new GraphQL({
-      cache: {
-        abcdefg: {
-          data: {
-            echo: 'hello'
-          }
-        }
-      }
-    })
-
-    const resetEvent = promisifyEvent(graphql, 'reset')
-
-    graphql.reset()
-
-    const resetEventData = await resetEvent
-    t.equals(
-      resetEventData.exceptCacheKey,
-      undefined,
-      'GraphQL `reset` event data property `exceptCacheKey`'
-    )
-
-    t.deepEquals(graphql.cache, {}, 'GraphQL.cache')
   })
 })
