@@ -88,7 +88,7 @@ export const useGraphQL = ({
    * @returns {Promise<GraphQLCacheValue>} Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
    * @ignore
    */
-  const load = () => {
+  function load() {
     const { cacheKey, cacheValue, cacheValuePromise } = operate()
 
     setLoading(true)
@@ -102,7 +102,7 @@ export const useGraphQL = ({
    * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
    * @ignore
    */
-  const onFetch = ({ cacheKey: fetchingCacheKey }) => {
+  function onFetch({ cacheKey: fetchingCacheKey }) {
     if (cacheKey === fetchingCacheKey) setLoading(true)
   }
 
@@ -110,7 +110,7 @@ export const useGraphQL = ({
    * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
    * @ignore
    */
-  const onCache = ({ cacheKey: cachedCacheKey, cacheValue }) => {
+  function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
     if (cacheKey === cachedCacheKey) {
       setLoading(false)
       setCacheValue(cacheValue)
@@ -121,7 +121,7 @@ export const useGraphQL = ({
    * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
    * @ignore
    */
-  const onReset = ({ exceptCacheKey }) => {
+  function onReset({ exceptCacheKey }) {
     if (cacheKey !== exceptCacheKey)
       if (loadOnReset) load()
       else setCacheValue(graphql.cache[cacheKey])

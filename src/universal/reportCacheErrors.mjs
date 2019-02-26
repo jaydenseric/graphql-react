@@ -16,10 +16,10 @@
  * graphql.on('cache', reportCacheErrors)
  * ```
  */
-export const reportCacheErrors = ({
+export function reportCacheErrors({
   cacheKey,
   cacheValue: { fetchError, httpError, parseError, graphQLErrors }
-}) => {
+}) {
   if (fetchError || httpError || parseError || graphQLErrors) {
     // eslint-disable-next-line no-console
     console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`)
