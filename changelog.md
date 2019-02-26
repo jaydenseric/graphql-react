@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- More reliable `useGraphQL` React hook `loadOnMount` option implementation that fixes ESLint `react-hooks/exhaustive-deps` rule errors.
 
 ## 8.0.2
 

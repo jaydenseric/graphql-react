@@ -61,16 +61,14 @@ export const useGraphQL = ({
 
   let [cacheKey, setCacheKey] = React.useState(fetchOptionsHash)
   let [cacheValue, setCacheValue] = React.useState(graphql.cache[cacheKey])
-  let [loading, setLoading] = React.useState(
-    cacheKey in graphql.operations || loadOnMount
-  )
+  let [loading, setLoading] = React.useState(cacheKey in graphql.operations)
 
   // If the GraphQL operation or its fetch options change after the initial
   // render the state has to be re-initialized.
   if (cacheKey !== fetchOptionsHash) {
     setCacheKey((cacheKey = fetchOptionsHash))
     setCacheValue((cacheValue = graphql.cache[cacheKey]))
-    setLoading((loading = cacheKey in graphql.operations || loadOnMount))
+    setLoading((loading = cacheKey in graphql.operations))
   }
 
   /**
@@ -134,18 +132,21 @@ export const useGraphQL = ({
     graphql.on('cache', onCache)
     graphql.on('reset', onReset)
 
-    if (loadOnMount) load()
-
     return () => {
       graphql.off('fetch', onFetch)
       graphql.off('cache', onCache)
       graphql.off('reset', onReset)
     }
-  }, [
-    // Setup on component mount and cleanup on component unmount, but also if
-    // the cacheKey changes so that the callbacks run in the right closure.
-    cacheKey
-  ])
+  }, [graphql, onFetch, onCache, onReset])
+
+  const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
+
+  React.useEffect(() => {
+    if (loadOnMount && cacheKey !== loadedOnMountCacheKey) {
+      setLoadedOnMountCacheKey(cacheKey)
+      load()
+    }
+  }, [loadOnMount, cacheKey, loadedOnMountCacheKey, load])
 
   if (graphql.ssr && loadOnMount && !cacheValue) operate()
 
