@@ -390,6 +390,37 @@ t.test('Concurrent identical queries share a request', async t => {
   await Promise.all([cacheValuePromise1, cacheValuePromise2])
 })
 
+t.test('GraphQL.reload()', async t => {
+  await t.test('With `exceptCacheKey` parameter', async t => {
+    const graphql = new GraphQL()
+    const exceptCacheKey = 'abcdefg'
+    const reloadEvent = promisifyEvent(graphql, 'reload')
+
+    graphql.reload(exceptCacheKey)
+
+    const reloadEventData = await reloadEvent
+    t.equals(
+      reloadEventData.exceptCacheKey,
+      exceptCacheKey,
+      'GraphQL `reload` event data property `exceptCacheKey`'
+    )
+  })
+
+  await t.test('Without `exceptCacheKey` parameter', async t => {
+    const graphql = new GraphQL()
+    const reloadEvent = promisifyEvent(graphql, 'reload')
+
+    graphql.reload()
+
+    const reloadEventData = await reloadEvent
+    t.equals(
+      reloadEventData.exceptCacheKey,
+      undefined,
+      'GraphQL `reload` event data property `exceptCacheKey`'
+    )
+  })
+})
+
 t.test('GraphQL.reset()', async t => {
   await t.test('Without `exceptCacheKey` parameter', async t => {
     const graphql = new GraphQL({

@@ -12,8 +12,10 @@ import { hashObject } from './hashObject'
  * @param {Object} options Options.
  * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation.
  * @param {boolean} [options.loadOnMount=true] Should the operation load when the component mounts.
- * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset.
- * @param {boolean} [options.resetOnLoad=false] Should all other [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.
+ * @param {boolean} [options.loadOnReload=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires, if the operation was not the one that caused the reload.
+ * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset, if the operation was not the one that caused the reset.
+ * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
+ * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
  * @param {GraphQLOperation} options.operation GraphQL operation.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
  * @see [`GraphQLContext`]{@link GraphQLContext} `Provider`; required for [`useGraphQL`]{@link useGraphQL} to work.
@@ -44,7 +46,9 @@ import { hashObject } from './hashObject'
 export const useGraphQL = ({
   fetchOptionsOverride,
   loadOnMount = true,
+  loadOnReload = true,
   loadOnReset = true,
+  reloadOnLoad = false,
   resetOnLoad = false,
   operation
 }) => {
@@ -53,6 +57,11 @@ export const useGraphQL = ({
     throw new Error('GraphQL context missing.')
   if (!(graphql instanceof GraphQL))
     throw new Error('GraphQL context must be a GraphQL instance.')
+
+  if (reloadOnLoad && resetOnLoad)
+    throw new Error(
+      'useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
+    )
 
   const fetchOptions = graphqlFetchOptions(operation)
   if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
@@ -80,6 +89,7 @@ export const useGraphQL = ({
     graphql.operate({
       operation,
       fetchOptionsOverride,
+      reloadOnLoad,
       resetOnLoad
     })
 
@@ -118,6 +128,14 @@ export const useGraphQL = ({
   }
 
   /**
+   * Handles a [`GraphQL`]{@link GraphQL} `reload` event.
+   * @ignore
+   */
+  function onReload({ exceptCacheKey }) {
+    if (cacheKey !== exceptCacheKey && loadOnReload) load()
+  }
+
+  /**
    * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
    * @ignore
    */
@@ -130,14 +148,16 @@ export const useGraphQL = ({
   React.useEffect(() => {
     graphql.on('fetch', onFetch)
     graphql.on('cache', onCache)
+    graphql.on('reload', onReload)
     graphql.on('reset', onReset)
 
     return () => {
       graphql.off('fetch', onFetch)
       graphql.off('cache', onCache)
+      graphql.off('reload', onReload)
       graphql.off('reset', onReset)
     }
-  }, [graphql, onFetch, onCache, onReset])
+  }, [graphql, onFetch, onCache, onReload, onReset])
 
   const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
 

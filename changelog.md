@@ -2,12 +2,20 @@
 
 ## Next
 
+### Minor
+
+- Added the `GraphQL` instance method `reload` which fires a `reload` event signaling that GraphQL cache subscribers such as the `useGraphQL` React hook should reload their GraphQL operation, fixing [#26](https://github.com/jaydenseric/graphql-react/issues/26).
+- Added the `useGraphQL` React hook `reloadOnLoad` option.
+
 ### Patch
 
 - Updated dependencies.
 - More reliable `useGraphQL` React hook `loadOnMount` option implementation that fixes ESLint `react-hooks/exhaustive-deps` rule errors.
 - Use `function` instead of `const` declarations in places to simplify transpiled output.
 - `GraphQL.reset()` test name typo fix.
+- Added tests for the `useGraphQL` React hook `reloadOnLoad` and `resetOnLoad` options.
+- Increased the browser bundle size limit to 2.5 KB as the new features grew the bundle size from ~1.95 KB to ~2.13 KB.
+- Improved `GraphQL` instance event documentation.
 
 ## 8.0.2
 

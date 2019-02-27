@@ -84,8 +84,24 @@ export class GraphQL {
   }
 
   /**
-   * Resets the [GraphQL cache]{@link GraphQL#cache}. Useful when a user logs
-   * out.
+   * Signals that [GraphQL cache]{@link GraphQL#cache} subscribers such as the
+   * [`useGraphQL`]{@link useGraphQL} React hook should reload their GraphQL
+   * operation. Emits a [`GraphQL`]{@link GraphQL} instance `reload` event.
+   * @kind function
+   * @name GraphQL#reload
+   * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from reloading.
+   * @example <caption>Reloading the [GraphQL cache]{@link GraphQL#cache}.</caption>
+   * ```js
+   * graphql.reload()
+   * ```
+   */
+  reload = exceptCacheKey => {
+    this.emit('reload', { exceptCacheKey })
+  }
+
+  /**
+   * Resets the [GraphQL cache]{@link GraphQL#cache}, useful when a user logs
+   * out. Emits a [`GraphQL`]{@link GraphQL} instance `reset` event.
    * @kind function
    * @name GraphQL#reset
    * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
@@ -169,7 +185,11 @@ export class GraphQL {
   }
 
   /**
-   * Loads or reuses an already loading GraphQL operation.
+   * Loads or reuses an already loading GraphQL operation in
+   * [GraphQL operations]{@link GraphQL#operations}. Emits a
+   * [`GraphQL`]{@link GraphQL} instance `fetch` event if an already loading
+   * operation isn’t reused, and a `cache` event once it’s loaded into the
+   * [GraphQL cache]{@link GraphQL#cache}.
    * @kind function
    * @name GraphQL#operate
    * @param {Object} options Options.
@@ -178,7 +198,17 @@ export class GraphQL {
    * @param {boolean} [options.resetOnLoad=false] Should the [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
    */
-  operate = ({ operation, fetchOptionsOverride, resetOnLoad }) => {
+  operate = ({
+    operation,
+    fetchOptionsOverride,
+    reloadOnLoad,
+    resetOnLoad
+  }) => {
+    if (reloadOnLoad && resetOnLoad)
+      throw new Error(
+        'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
+      )
+
     const fetchOptions = graphqlFetchOptions(operation)
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
     const cacheKey = hashObject(fetchOptions)
@@ -190,7 +220,10 @@ export class GraphQL {
 
     // Potential edge-case issue: Multiple identical queries with resetOnLoad
     // enabled will cause excessive resets.
-    if (resetOnLoad) cacheValuePromise.then(() => this.reset(cacheKey))
+    cacheValuePromise.then(() => {
+      if (reloadOnLoad) this.reload(cacheKey)
+      else if (resetOnLoad) this.reset(cacheKey)
+    })
 
     return {
       cacheKey,

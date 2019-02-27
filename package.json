@@ -131,7 +131,7 @@
     {
       "name": "Browser",
       "path": "size-limit-entries/browser.mjs",
-      "limit": "2 KB",
+      "limit": "2.5 KB",
       "ignore": [
         "object-assign"
       ]

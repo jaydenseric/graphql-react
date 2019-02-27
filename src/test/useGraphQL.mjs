@@ -7,6 +7,7 @@ import { GraphQL } from '../universal/GraphQL'
 import { GraphQLContext } from '../universal/GraphQLContext'
 import { useGraphQL } from '../universal/useGraphQL'
 import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp'
+import { promisifyEvent } from './helpers/promisifyEvent'
 import { startServer } from './helpers/startServer'
 
 t.test('useGraphQL()', async t => {
@@ -125,7 +126,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLContext.Provider value={graphql}>
-              <Component loadOnMount={false} {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={false} />
             </GraphQLContext.Provider>
           )
         })
@@ -145,7 +146,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLContext.Provider value={graphql}>
-              <Component loadOnMount={false} {...operation2Options} />
+              <Component {...operation2Options} loadOnMount={false} />
             </GraphQLContext.Provider>
           )
         })
@@ -251,7 +252,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLContext.Provider value={graphql}>
-              <Component loadOnMount={false} {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={false} />
             </GraphQLContext.Provider>
           )
         })
@@ -275,7 +276,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLContext.Provider value={graphql}>
-              <Component loadOnMount={false} {...operation2Options} />
+              <Component {...operation2Options} loadOnMount={false} />
             </GraphQLContext.Provider>
           )
         })
@@ -295,6 +296,80 @@ t.test('useGraphQL()', async t => {
         t.end()
       })
     })
+  })
+
+  await t.test('With “reloadOnLoad” true', async t => {
+    const graphql = new GraphQL()
+    const reloadEvent = promisifyEvent(graphql, 'reload')
+    const testRenderer = ReactTestRenderer.create(null)
+
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        <GraphQLContext.Provider value={graphql}>
+          <Component
+            {...operation1Options}
+            loadOnMount={true}
+            reloadOnLoad={true}
+          />
+        </GraphQLContext.Provider>
+      )
+    })
+
+    const { cacheKey } = JSON.parse(testRenderer.toJSON())
+    const reloadEventData = await reloadEvent
+
+    t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+    t.equals(
+      reloadEventData.exceptCacheKey,
+      operation1CacheKey,
+      'GraphQL `reload` event data property `exceptCacheKey`'
+    )
+  })
+
+  await t.test('With “reloadOnLoad” true', async t => {
+    const graphql = new GraphQL()
+    const resetEvent = promisifyEvent(graphql, 'reset')
+    const testRenderer = ReactTestRenderer.create(null)
+
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        <GraphQLContext.Provider value={graphql}>
+          <Component
+            {...operation1Options}
+            loadOnMount={true}
+            resetOnLoad={true}
+          />
+        </GraphQLContext.Provider>
+      )
+    })
+
+    const { cacheKey } = JSON.parse(testRenderer.toJSON())
+    const resetEventData = await resetEvent
+
+    t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+    t.equals(
+      resetEventData.exceptCacheKey,
+      operation1CacheKey,
+      'GraphQL `reset` event data property `exceptCacheKey`'
+    )
+  })
+
+  await t.test('With both “reloadOnLoad” and “resetOnLoad” options true', t => {
+    const graphql = new GraphQL()
+
+    t.throws(() => {
+      ReactDOMServer.renderToString(
+        <GraphQLContext.Provider value={graphql}>
+          <Component
+            {...operation1Options}
+            reloadOnLoad={true}
+            resetOnLoad={true}
+          />
+        </GraphQLContext.Provider>
+      )
+    }, new Error('useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
+
+    t.end()
   })
 
   await t.test('GraphQL context missing', t => {

@@ -19,7 +19,7 @@ A lightweight but powerful GraphQL client for React using modern [context](https
 
 #### graphql-react
 
-A &lt; 2 KB bundle impact is guaranteed by [`size-limit`](https://npm.im/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
+A &lt; 2.5 KB bundle impact is guaranteed by [`size-limit`](https://npm.im/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
 
 | Dependency                                      | Install size                                                                                                                                 | Bundle size                                                                                                                              |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -205,22 +205,24 @@ Consider polyfilling:
   - [GraphQL instance method on](#graphql-instance-method-on)
     - [See](#see-1)
   - [GraphQL instance method operate](#graphql-instance-method-operate)
-  - [GraphQL instance method reset](#graphql-instance-method-reset)
+  - [GraphQL instance method reload](#graphql-instance-method-reload)
     - [Examples](#examples-1)
-  - [GraphQL instance property cache](#graphql-instance-property-cache)
+  - [GraphQL instance method reset](#graphql-instance-method-reset)
     - [Examples](#examples-2)
+  - [GraphQL instance property cache](#graphql-instance-property-cache)
+    - [Examples](#examples-3)
   - [GraphQL instance property operations](#graphql-instance-property-operations)
 - [function reportCacheErrors](#function-reportcacheerrors)
-  - [Examples](#examples-3)
+  - [Examples](#examples-4)
 - [function ssr](#function-ssr)
   - [See](#see-2)
-  - [Examples](#examples-4)
+  - [Examples](#examples-5)
 - [function useGraphQL](#function-usegraphql)
   - [See](#see-3)
-  - [Examples](#examples-5)
+  - [Examples](#examples-6)
 - [constant GraphQLContext](#constant-graphqlcontext)
   - [See](#see-4)
-  - [Examples](#examples-6)
+  - [Examples](#examples-7)
 - [type GraphQLCache](#type-graphqlcache)
   - [See](#see-5)
 - [type GraphQLCacheKey](#type-graphqlcachekey)
@@ -229,7 +231,7 @@ Consider polyfilling:
   - [See](#see-6)
 - [type GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)
   - [See](#see-7)
-  - [Examples](#examples-7)
+  - [Examples](#examples-8)
 - [type GraphQLOperation](#type-graphqloperation)
   - [See](#see-8)
 - [type GraphQLOperationLoading](#type-graphqloperationloading)
@@ -286,7 +288,7 @@ Adds an event listener.
 
 #### GraphQL instance method operate
 
-Loads or reuses an already loading GraphQL operation.
+Loads or reuses an already loading GraphQL operation in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) instance `fetch` event if an already loading operation isn’t reused, and a `cache` event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
 
 | Parameter                      | Type                                                              | Description                                                                                  |
 | :----------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
@@ -297,9 +299,25 @@ Loads or reuses an already loading GraphQL operation.
 
 **Returns:** [GraphQLOperationLoading](#type-graphqloperationloading) — Loading GraphQL operation details.
 
+#### GraphQL instance method reload
+
+Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation. Emits a [`GraphQL`](#class-graphql) instance `reload` event.
+
+| Parameter        | Type                                      | Description                                                                                                          |
+| :--------------- | :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from reloading. |
+
+##### Examples
+
+_Reloading the [GraphQL cache](#graphql-instance-property-cache)._
+
+> ```js
+> graphql.reload()
+> ```
+
 #### GraphQL instance method reset
 
-Resets the [GraphQL cache](#graphql-instance-property-cache). Useful when a user logs out.
+Resets the [GraphQL cache](#graphql-instance-property-cache), useful when a user logs out. Emits a [`GraphQL`](#class-graphql) instance `reset` event.
 
 | Parameter        | Type                                      | Description                                                                                                                                                                                     |
 | :--------------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -438,14 +456,16 @@ _SSR function that resolves a HTML string suitable for a static page._
 
 A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operation in a component.
 
-| Parameter                      | Type                                                              | Description                                                                                                                     |
-| :----------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
-| `options`                      | Object                                                            | Options.                                                                                                                        |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation.                                       |
-| `options.loadOnMount`          | boolean? = `true`                                                 | Should the operation load when the component mounts.                                                                            |
-| `options.loadOnReset`          | boolean? = `true`                                                 | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset. |
-| `options.resetOnLoad`          | boolean? = `false`                                                | Should all other [GraphQL cache](#graphql-instance-property-cache) reset when the operation loads.                              |
-| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                                                              |
+| Parameter                      | Type                                                              | Description                                                                                                                                                                             |
+| :----------------------------- | :---------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`                      | Object                                                            | Options.                                                                                                                                                                                |
+| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation.                                                                                               |
+| `options.loadOnMount`          | boolean? = `true`                                                 | Should the operation load when the component mounts.                                                                                                                                    |
+| `options.loadOnReload`         | boolean? = `true`                                                 | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires, if the operation was not the one that caused the reload.                                           |
+| `options.loadOnReset`          | boolean? = `true`                                                 | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset, if the operation was not the one that caused the reset. |
+| `options.reloadOnLoad`         | boolean? = `false`                                                | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache.                                                      |
+| `options.resetOnLoad`          | boolean? = `false`                                                | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache.                                                        |
+| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                                                                                                                      |
 
 **Returns:** [GraphQLOperationStatus](#type-graphqloperationstatus) — GraphQL operation status.
 
