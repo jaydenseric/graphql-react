@@ -108,50 +108,54 @@ export const useGraphQL = ({
     return cacheValuePromise
   }
 
-  /**
-   * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
-   * @ignore
-   */
-  function onFetch({ cacheKey: fetchingCacheKey }) {
-    if (cacheKey === fetchingCacheKey) setLoading(true)
-  }
-
-  /**
-   * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
-   * @ignore
-   */
-  function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
-    if (cacheKey === cachedCacheKey) {
-      setLoading(false)
-      setCacheValue(cacheValue)
-    }
-  }
-
-  /**
-   * Handles a [`GraphQL`]{@link GraphQL} `reload` event.
-   * @ignore
-   */
-  function onReload({ exceptCacheKey }) {
-    if (cacheKey !== exceptCacheKey && loadOnReload) load()
-  }
-
-  /**
-   * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
-   * @ignore
-   */
-  function onReset({ exceptCacheKey }) {
-    if (cacheKey !== exceptCacheKey)
-      if (loadOnReset) load()
-      else setCacheValue(graphql.cache[cacheKey])
-  }
-
   React.useEffect(() => {
+    let mounted = true
+
+    /**
+     * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
+     * @ignore
+     */
+    function onFetch({ cacheKey: fetchingCacheKey }) {
+      if (cacheKey === fetchingCacheKey && mounted) setLoading(true)
+    }
+
+    /**
+     * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
+     * @ignore
+     */
+    function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
+      if (cacheKey === cachedCacheKey && mounted) {
+        setLoading(false)
+        setCacheValue(cacheValue)
+      }
+    }
+
+    /**
+     * Handles a [`GraphQL`]{@link GraphQL} `reload` event.
+     * @ignore
+     */
+    function onReload({ exceptCacheKey }) {
+      if (cacheKey !== exceptCacheKey && loadOnReload && mounted) load()
+    }
+
+    /**
+     * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
+     * @ignore
+     */
+    function onReset({ exceptCacheKey }) {
+      if (cacheKey !== exceptCacheKey && mounted)
+        if (loadOnReset) load()
+        else setCacheValue(graphql.cache[cacheKey])
+    }
+
     graphql.on('fetch', onFetch)
     graphql.on('cache', onCache)
     graphql.on('reload', onReload)
     graphql.on('reset', onReset)
 
     return () => {
+      mounted = false
+
       graphql.off('fetch', onFetch)
       graphql.off('cache', onCache)
       graphql.off('reload', onReload)
