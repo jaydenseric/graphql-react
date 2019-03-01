@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated a dev dependency.
 - Removed redundant `useGraphQL` internal `useEffect` React hook second arguments.
 - Fixed “Can't perform a React state update on an unmounted component” warnings if the component using the `useGraphQL` React hook is unmounted soon after an `GraphQL` instance event such as `reset` is emitted.
 
