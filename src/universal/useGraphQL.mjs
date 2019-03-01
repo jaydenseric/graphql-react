@@ -157,7 +157,7 @@ export const useGraphQL = ({
       graphql.off('reload', onReload)
       graphql.off('reset', onReset)
     }
-  }, [graphql, onFetch, onCache, onReload, onReset])
+  })
 
   const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
 
@@ -166,7 +166,7 @@ export const useGraphQL = ({
       setLoadedOnMountCacheKey(cacheKey)
       load()
     }
-  }, [loadOnMount, cacheKey, loadedOnMountCacheKey, load])
+  })
 
   if (graphql.ssr && loadOnMount && !cacheValue) operate()
 

@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Removed redundant `useGraphQL` internal `useEffect` React hook second arguments.
+
 ## 8.1.0
 
 ### Minor
