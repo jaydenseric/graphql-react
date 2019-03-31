@@ -91,8 +91,8 @@
     "test": "npm run test:eslint && npm run test:prettier && npm run test:tap && npm run test:size",
     "test:eslint": "eslint . --ext mjs,js",
     "test:prettier": "prettier '**/*.{json,yml,md}' -l",
-    "test:size": "size-limit",
     "test:tap": "tap test/*.{mjs,js}",
+    "test:size": "size-limit",
     "prepublishOnly": "npm test"
   },
   "husky": {
