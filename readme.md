@@ -40,6 +40,8 @@ Several dependencies must be installed for a minimal Apollo project.
 
 [Tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers will eliminate unused [`graphql`](https://npm.im/graphql) exports.
 
+In addition, [fragment matcher](https://www.apollographql.com/docs/react/advanced/fragments#fragment-matcher) config impacts bundle size relative to the number and complexity of schema unions and interfaces; see [**_Cache strategy_**](#cache-strategy).
+
 ### Native ESM
 
 #### graphql-react
@@ -101,6 +103,8 @@ Apollo Client is configured for one GraphQL API per app.
 GraphQL operation data is deconstructed based upon `id` and `__typename` fields into a “[normalized](https://apollographql.com/docs/react/advanced/caching#normalization)” cache. These fields must be queried even if they aren’t used in components.
 
 [Errors aren’t cached](https://github.com/apollographql/apollo-client/issues/3897#issuecomment-432982170), and therefore can’t be server side rendered and transported to the client for hydration and initial render.
+
+Apollo Client must be configured with schema knowledge extracted at build time for a [“fragment matcher”](https://apollographql.com/docs/react/advanced/fragments#fragment-matcher) to cache fragments on unions and interfaces properly. It’s challenging to reconfigure and redeploy clients whenever the GraphQL schema updates. Also, the config increases the client bundle size; see [**_Bundle impact_**](#bundle-impact).
 
 ### Stale cache
 

@@ -7,6 +7,7 @@
 - Updated dependencies.
 - Updated `useGraphQL` to use `useCallback` and added hook dependency arrays, to fix a recently appearing `react-hooks/exhaustive-deps` lint error and hopefully reduce render work.
 - Reduced the size of the published `package.json` by moving dev tool config to files. This also prevents editor extensions such as Prettier and ESLint from detecting config and attempting to operate when opening package files installed in `node_modules`.
+- Discuss Apollo Client fragment matcher config in the “Apollo comparison” readme section.
 
 ## 8.1.1
 
