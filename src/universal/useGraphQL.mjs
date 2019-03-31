@@ -81,32 +81,24 @@ export const useGraphQL = ({
   }
 
   /**
-   * Loads the GraphQL query.
-   * @returns {GraphQLOperationLoading} Loading operation details.
+   * Loads the GraphQL query, updating state.
+   * @returns {Promise<GraphQLCacheValue>} Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
    * @ignore
    */
-  const operate = () =>
-    graphql.operate({
+  const load = React.useCallback(() => {
+    const { cacheKey, cacheValue, cacheValuePromise } = graphql.operate({
       operation,
       fetchOptionsOverride,
       reloadOnLoad,
       resetOnLoad
     })
 
-  /**
-   * Loads the GraphQL query, updating state.
-   * @returns {Promise<GraphQLCacheValue>} Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
-   * @ignore
-   */
-  function load() {
-    const { cacheKey, cacheValue, cacheValuePromise } = operate()
-
     setLoading(true)
     setCacheKey(cacheKey)
     setCacheValue(cacheValue)
 
     return cacheValuePromise
-  }
+  }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad])
 
   React.useEffect(() => {
     let mounted = true
@@ -161,7 +153,7 @@ export const useGraphQL = ({
       graphql.off('reload', onReload)
       graphql.off('reset', onReset)
     }
-  })
+  }, [cacheKey, graphql, load, loadOnReload, loadOnReset])
 
   const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
 
@@ -170,9 +162,15 @@ export const useGraphQL = ({
       setLoadedOnMountCacheKey(cacheKey)
       load()
     }
-  })
+  }, [cacheKey, load, loadOnMount, loadedOnMountCacheKey])
 
-  if (graphql.ssr && loadOnMount && !cacheValue) operate()
+  if (graphql.ssr && loadOnMount && !cacheValue)
+    graphql.operate({
+      operation,
+      fetchOptionsOverride,
+      reloadOnLoad,
+      resetOnLoad
+    })
 
   return { load, loading, cacheKey, cacheValue }
 }

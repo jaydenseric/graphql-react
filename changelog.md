@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Updated `useGraphQL` to use `useCallback` and added hook dependency arrays, to fix a recently appearing `react-hooks/exhaustive-deps` lint error and hopefully reduce render work.
 
 ## 8.1.1
 
