@@ -6,6 +6,7 @@
 
 - Updated dependencies.
 - Updated `useGraphQL` to use `useCallback` and added hook dependency arrays, to fix a recently appearing `react-hooks/exhaustive-deps` lint error and hopefully reduce render work.
+- Reduced the size of the published `package.json` by moving dev tool config to files.
 
 ## 8.1.1
 

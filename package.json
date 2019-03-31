@@ -94,47 +94,5 @@
     "test:tap": "tap test/*.{mjs,js}",
     "test:size": "size-limit",
     "prepublishOnly": "npm test"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{mjs,js}": "eslint",
-    "*.{json,yml,md}": "prettier -l"
-  },
-  "eslintIgnore": [
-    "!.*",
-    "node_modules",
-    "/universal",
-    "/server",
-    "/test",
-    "tap-snapshots"
-  ],
-  "eslintConfig": {
-    "extends": [
-      "env"
-    ]
-  },
-  "prettier": {
-    "proseWrap": "never",
-    "singleQuote": true,
-    "semi": false
-  },
-  "size-limit": [
-    {
-      "name": "Server",
-      "path": "size-limit-entries/server.mjs",
-      "limit": "2.5 KB"
-    },
-    {
-      "name": "Browser",
-      "path": "size-limit-entries/browser.mjs",
-      "limit": "2.5 KB",
-      "ignore": [
-        "object-assign"
-      ]
-    }
-  ]
+  }
 }

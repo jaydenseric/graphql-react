@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Server",
+    "path": "size-limit-entries/server.mjs",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "Browser",
+    "path": "size-limit-entries/browser.mjs",
+    "limit": "2.5 KB",
+    "ignore": ["object-assign"]
+  }
+]
