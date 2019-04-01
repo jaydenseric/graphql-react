@@ -104,7 +104,7 @@ GraphQL operation data is deconstructed based upon `id` and `__typename` fields 
 
 [Errors aren’t cached](https://github.com/apollographql/apollo-client/issues/3897#issuecomment-432982170), and therefore can’t be server side rendered and transported to the client for hydration and initial render.
 
-Apollo Client must be configured with schema knowledge extracted at build time for a [“fragment matcher”](https://apollographql.com/docs/react/advanced/fragments#fragment-matcher) to cache fragments on unions and interfaces properly. It’s challenging to reconfigure and redeploy clients whenever the GraphQL schema updates. Also, the config increases the client bundle size; see [**_Bundle impact_**](#bundle-impact).
+Apollo Client must be configured with schema knowledge extracted at build time for a “[fragment matcher](https://apollographql.com/docs/react/advanced/fragments#fragment-matcher)” to cache fragments on unions and interfaces properly. It’s challenging to reconfigure and redeploy clients whenever the GraphQL schema updates. Also, the config increases the client bundle size; see [**_Bundle impact_**](#bundle-impact).
 
 ### Stale cache
 

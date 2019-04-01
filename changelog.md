@@ -6,6 +6,7 @@
 
 - Updated dev dependencies.
 - Adopted the new [`size-limit`](https://npm.im/size-limit) config file name.
+- Minor readme quotes consistency tweak.
 
 ## 8.1.2
 
