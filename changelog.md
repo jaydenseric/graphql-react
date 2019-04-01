@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Adopted the new [`size-limit`](https://npm.im/size-limit) config file name.
 
 ## 8.1.2
 
