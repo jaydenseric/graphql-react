@@ -195,7 +195,8 @@ export class GraphQL {
    * @param {Object} options Options.
    * @param {GraphQLOperation} options.operation GraphQL operation.
    * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL operation [`fetch` options]{@link GraphQLFetchOptions}.
-   * @param {boolean} [options.resetOnLoad=false] Should the [GraphQL cache]{@link GraphQL#cache} reset when the operation loads.
+   * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
+   * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
    */
   operate = ({

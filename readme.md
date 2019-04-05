@@ -294,12 +294,13 @@ Adds an event listener.
 
 Loads or reuses an already loading GraphQL operation in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) instance `fetch` event if an already loading operation isn’t reused, and a `cache` event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
 
-| Parameter                      | Type                                                              | Description                                                                                  |
-| :----------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
-| `options`                      | Object                                                            | Options.                                                                                     |
-| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                           |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default GraphQL operation [`fetch` options](#type-graphqlfetchoptions).            |
-| `options.resetOnLoad`          | boolean? = `false`                                                | Should the [GraphQL cache](#graphql-instance-property-cache) reset when the operation loads. |
+| Parameter                      | Type                                                              | Description                                                                                                                        |
+| :----------------------------- | :---------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `options`                      | Object                                                            | Options.                                                                                                                           |
+| `options.operation`            | [GraphQLOperation](#type-graphqloperation)                        | GraphQL operation.                                                                                                                 |
+| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default GraphQL operation [`fetch` options](#type-graphqlfetchoptions).                                                  |
+| `options.reloadOnLoad`         | boolean? = `false`                                                | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
+| `options.resetOnLoad`          | boolean? = `false`                                                | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache.   |
 
 **Returns:** [GraphQLOperationLoading](#type-graphqloperationloading) — Loading GraphQL operation details.
 
