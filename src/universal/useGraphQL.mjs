@@ -102,15 +102,18 @@ export const useGraphQL = ({
     return cacheValuePromise
   }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad])
 
+  const isMountedRef = React.useRef(false)
+
   React.useEffect(() => {
-    let mounted = true
+    isMountedRef.current = true
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
      * @ignore
      */
     function onFetch({ cacheKey: fetchingCacheKey }) {
-      if (cacheKey === fetchingCacheKey && mounted) setLoading(true)
+      if (cacheKey === fetchingCacheKey && isMountedRef.current)
+        setLoading(true)
     }
 
     /**
@@ -118,7 +121,7 @@ export const useGraphQL = ({
      * @ignore
      */
     function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
-      if (cacheKey === cachedCacheKey && mounted) {
+      if (cacheKey === cachedCacheKey && isMountedRef.current) {
         setLoading(false)
         setCacheValue(cacheValue)
       }
@@ -129,7 +132,8 @@ export const useGraphQL = ({
      * @ignore
      */
     function onReload({ exceptCacheKey }) {
-      if (cacheKey !== exceptCacheKey && loadOnReload && mounted) load()
+      if (cacheKey !== exceptCacheKey && loadOnReload && isMountedRef.current)
+        load()
     }
 
     /**
@@ -137,7 +141,7 @@ export const useGraphQL = ({
      * @ignore
      */
     function onReset({ exceptCacheKey }) {
-      if (cacheKey !== exceptCacheKey && mounted)
+      if (cacheKey !== exceptCacheKey && isMountedRef.current)
         if (loadOnReset) load()
         else setCacheValue(graphql.cache[cacheKey])
     }
@@ -148,7 +152,7 @@ export const useGraphQL = ({
     graphql.on('reset', onReset)
 
     return () => {
-      mounted = false
+      isMountedRef.current = false
 
       graphql.off('fetch', onFetch)
       graphql.off('cache', onCache)
