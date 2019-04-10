@@ -8,6 +8,7 @@
 - Adopted the new [`size-limit`](https://npm.im/size-limit) config file name.
 - Minor readme quotes consistency tweak.
 - Document the `GraphQL` instance method `operate` option `reloadOnLoad`.
+- Slightly faster `useGraphQL` render error when options `reloadOnLoad` and `resetOnLoad` are both `true`.
 
 ## 8.1.2
 

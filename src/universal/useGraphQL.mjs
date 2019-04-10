@@ -52,16 +52,18 @@ export const useGraphQL = ({
   resetOnLoad = false,
   operation
 }) => {
-  const graphql = React.useContext(GraphQLContext)
-  if (typeof graphql === 'undefined')
-    throw new Error('GraphQL context missing.')
-  if (!(graphql instanceof GraphQL))
-    throw new Error('GraphQL context must be a GraphQL instance.')
-
   if (reloadOnLoad && resetOnLoad)
     throw new Error(
       'useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
     )
+
+  const graphql = React.useContext(GraphQLContext)
+
+  if (typeof graphql === 'undefined')
+    throw new Error('GraphQL context missing.')
+
+  if (!(graphql instanceof GraphQL))
+    throw new Error('GraphQL context must be a GraphQL instance.')
 
   const fetchOptions = graphqlFetchOptions(operation)
   if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
