@@ -74,7 +74,7 @@
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "lint-staged": "^8.1.5",
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6",
