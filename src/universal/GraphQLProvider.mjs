@@ -5,12 +5,13 @@ import { GraphQL } from './GraphQL'
 import { GraphQLContext } from './GraphQLContext'
 
 /**
- * A React component to provide a [`GraphQL`]{@link GraphQL} instance to an app.
+ * A React component that provides a [`GraphQL`]{@link GraphQL} instance for an
+ * app.
  * @kind function
  * @name GraphQLProvider
  * @param {Object} props Component props.
- * @prop {GraphQL} props.graphql [`GraphQL`]{@link GraphQL} instance.
- * @prop {ReactNode} [props.children] React children.
+ * @param {GraphQL} props.graphql [`GraphQL`]{@link GraphQL} instance.
+ * @param {ReactNode} [props.children] React children.
  * @returns {ReactNode} React virtual DOM node.
  * @see [`GraphQLContext`]{@link GraphQLContext} is provided via this component.
  * @see [`useGraphQL`]{@link useGraphQL} React hook requires this component to be an ancestor to work.

@@ -377,16 +377,13 @@ A map of loading GraphQL operations. You probably don’t need to interact with 
 
 ### function GraphQLProvider
 
-A React component to provide a [`GraphQL`](#class-graphql) instance to an app.
+A React component that provides a [`GraphQL`](#class-graphql) instance for an app.
 
-| Property | Type | Description |
+| Parameter | Type | Description |
 | :-- | :-- | :-- |
+| `props` | Object | Component props. |
 | `props.graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
 | `props.children` | [ReactNode](#type-reactnode)? | React children. |
-
-| Parameter | Type   | Description      |
-| :-------- | :----- | :--------------- |
-| `props`   | Object | Component props. |
 
 **Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
