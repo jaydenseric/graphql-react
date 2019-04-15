@@ -5,9 +5,11 @@ import ReactTestRenderer from 'react-test-renderer'
 import t from 'tap'
 import { GraphQL } from '../universal/GraphQL'
 import { GraphQLContext } from '../universal/GraphQLContext'
+import { GraphQLProvider } from '../universal/GraphQLProvider'
 import { useGraphQL } from '../universal/useGraphQL'
 import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp'
 import { promisifyEvent } from './helpers/promisifyEvent'
+import { sleep } from './helpers/sleep'
 import { startServer } from './helpers/startServer'
 
 t.test('useGraphQL()', async t => {
@@ -60,9 +62,9 @@ t.test('useGraphQL()', async t => {
 
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation1Options} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -90,9 +92,9 @@ t.test('useGraphQL()', async t => {
 
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation2Options} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -125,9 +127,9 @@ t.test('useGraphQL()', async t => {
       await t.test('First render', t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation1Options} loadOnMount={false} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -145,9 +147,9 @@ t.test('useGraphQL()', async t => {
       await t.test('Second render with different props', t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation2Options} loadOnMount={false} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -170,6 +172,69 @@ t.test('useGraphQL()', async t => {
       const testRenderer = ReactTestRenderer.create(null)
 
       await t.test('First render', t => {
+        let fetched = false
+
+        graphql.on('fetch', () => {
+          fetched = true
+        })
+
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation1Options} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, false, 'Hook return `loading`')
+        t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(
+          cacheValue,
+          operation1CacheValue,
+          'Hook return `cacheValue`'
+        )
+        t.equals(fetched, false, 'Didn’t load')
+        t.end()
+      })
+
+      await t.test('Second render with different props', t => {
+        let fetched = false
+
+        graphql.on('fetch', () => {
+          fetched = true
+        })
+
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation2Options} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, false, 'Hook return `loading`')
+        t.equals(cacheKey, operation2CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(
+          cacheValue,
+          operation2CacheValue,
+          'Hook return `cacheValue`'
+        )
+        t.equals(fetched, false, 'Didn’t load')
+        t.end()
+      })
+
+      // Exceed the 500ms duration considered the first render hydration period.
+      await sleep(600)
+
+      await t.test('Third render with original props again', t => {
         let cacheKeyFetched
 
         graphql.on('fetch', ({ cacheKey }) => {
@@ -178,9 +243,9 @@ t.test('useGraphQL()', async t => {
 
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation1Options} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -202,40 +267,6 @@ t.test('useGraphQL()', async t => {
         )
         t.end()
       })
-
-      await t.test('Second render with different props', t => {
-        let cacheKeyFetched
-
-        graphql.on('fetch', ({ cacheKey }) => {
-          cacheKeyFetched = cacheKey
-        })
-
-        ReactTestRenderer.act(() => {
-          testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
-              <Component {...operation2Options} />
-            </GraphQLContext.Provider>
-          )
-        })
-
-        const { loading, cacheKey, cacheValue } = JSON.parse(
-          testRenderer.toJSON()
-        )
-
-        t.equals(loading, true, 'Hook return `loading`')
-        t.equals(cacheKey, operation2CacheKey, 'Hook return `cacheKey`')
-        t.deepEquals(
-          cacheValue,
-          operation2CacheValue,
-          'Hook return `cacheValue`'
-        )
-        t.equals(
-          cacheKeyFetched,
-          operation2CacheKey,
-          'GraphQL `fetch` event data property `cacheKey`'
-        )
-        t.end()
-      })
     })
 
     await t.test('`loadOnMount` false', async t => {
@@ -251,9 +282,9 @@ t.test('useGraphQL()', async t => {
       await t.test('First render', t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation1Options} loadOnMount={false} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -275,9 +306,9 @@ t.test('useGraphQL()', async t => {
       await t.test('Second render with different props', t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
+            <GraphQLProvider graphql={graphql}>
               <Component {...operation2Options} loadOnMount={false} />
-            </GraphQLContext.Provider>
+            </GraphQLProvider>
           )
         })
 
@@ -298,6 +329,132 @@ t.test('useGraphQL()', async t => {
     })
   })
 
+  await t.test('With initial cache (partial)', async t => {
+    await t.test('`loadOnMount` true (default)', async t => {
+      const graphql = new GraphQL({
+        cache: { [operation1CacheKey]: operation1CacheValue }
+      })
+      const testRenderer = ReactTestRenderer.create(null)
+
+      await t.test('First render with cache', t => {
+        let fetched = false
+
+        graphql.on('fetch', () => {
+          fetched = true
+        })
+
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation1Options} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, false, 'Hook return `loading`')
+        t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(
+          cacheValue,
+          operation1CacheValue,
+          'Hook return `cacheValue`'
+        )
+        t.equals(fetched, false, 'Didn’t load')
+        t.end()
+      })
+
+      await t.test('Second render with different props, no cache', t => {
+        let cacheKeyFetched
+
+        graphql.on('fetch', ({ cacheKey }) => {
+          cacheKeyFetched = cacheKey
+        })
+
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation2Options} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, true, 'Hook return `loading`')
+        t.equals(cacheKey, operation2CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(cacheValue, undefined, 'Hook return `cacheValue`')
+        t.equals(
+          cacheKeyFetched,
+          operation2CacheKey,
+          'GraphQL `fetch` event data property `cacheKey`'
+        )
+        t.end()
+      })
+    })
+
+    await t.test('`loadOnMount` false', async t => {
+      const graphql = new GraphQL({
+        cache: { [operation1CacheKey]: operation1CacheValue }
+      })
+      const testRenderer = ReactTestRenderer.create(null)
+
+      let fetched = false
+
+      graphql.on('fetch', () => {
+        fetched = true
+      })
+
+      await t.test('First render', t => {
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation1Options} loadOnMount={false} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, false, 'Hook return `loading`')
+        t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(
+          cacheValue,
+          operation1CacheValue,
+          'Hook return `cacheValue`'
+        )
+        t.equals(fetched, false, 'Didn’t load')
+        t.end()
+      })
+
+      await t.test('Second render with different props', t => {
+        ReactTestRenderer.act(() => {
+          testRenderer.update(
+            <GraphQLProvider graphql={graphql}>
+              <Component {...operation2Options} loadOnMount={false} />
+            </GraphQLProvider>
+          )
+        })
+
+        const { loading, cacheKey, cacheValue } = JSON.parse(
+          testRenderer.toJSON()
+        )
+
+        t.equals(loading, false, 'Hook return `loading`')
+        t.equals(cacheKey, operation2CacheKey, 'Hook return `cacheKey`')
+        t.deepEquals(cacheValue, undefined, 'Hook return `cacheValue`')
+        t.equals(fetched, false, 'Didn’t load')
+        t.end()
+      })
+    })
+  })
+
   await t.test('With “reloadOnLoad” true', async t => {
     const graphql = new GraphQL()
     const reloadEvent = promisifyEvent(graphql, 'reload')
@@ -305,13 +462,13 @@ t.test('useGraphQL()', async t => {
 
     ReactTestRenderer.act(() => {
       testRenderer.update(
-        <GraphQLContext.Provider value={graphql}>
+        <GraphQLProvider graphql={graphql}>
           <Component
             {...operation1Options}
             loadOnMount={true}
             reloadOnLoad={true}
           />
-        </GraphQLContext.Provider>
+        </GraphQLProvider>
       )
     })
 
@@ -333,13 +490,13 @@ t.test('useGraphQL()', async t => {
 
     ReactTestRenderer.act(() => {
       testRenderer.update(
-        <GraphQLContext.Provider value={graphql}>
+        <GraphQLProvider graphql={graphql}>
           <Component
             {...operation1Options}
             loadOnMount={true}
             resetOnLoad={true}
           />
-        </GraphQLContext.Provider>
+        </GraphQLProvider>
       )
     })
 
@@ -359,16 +516,47 @@ t.test('useGraphQL()', async t => {
 
     t.throws(() => {
       ReactDOMServer.renderToString(
-        <GraphQLContext.Provider value={graphql}>
+        <GraphQLProvider graphql={graphql}>
           <Component
             {...operation1Options}
             reloadOnLoad={true}
             resetOnLoad={true}
           />
-        </GraphQLContext.Provider>
+        </GraphQLProvider>
       )
     }, new Error('useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
 
+    t.end()
+  })
+
+  await t.test('First render date context missing', t => {
+    const graphql = new GraphQL({ cache })
+    const testRenderer = ReactTestRenderer.create(null)
+
+    let cacheKeyFetched
+
+    graphql.on('fetch', ({ cacheKey }) => {
+      cacheKeyFetched = cacheKey
+    })
+
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        <GraphQLContext.Provider value={graphql}>
+          <Component {...operation1Options} />
+        </GraphQLContext.Provider>
+      )
+    })
+
+    const { loading, cacheKey, cacheValue } = JSON.parse(testRenderer.toJSON())
+
+    t.equals(loading, true, 'Hook return `loading`')
+    t.equals(cacheKey, operation1CacheKey, 'Hook return `cacheKey`')
+    t.deepEquals(cacheValue, operation1CacheValue, 'Hook return `cacheValue`')
+    t.equals(
+      cacheKeyFetched,
+      operation1CacheKey,
+      'GraphQL `fetch` event data property `cacheKey`'
+    )
     t.end()
   })
 

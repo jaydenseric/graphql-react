@@ -1,2 +1,8 @@
-export { GraphQL, GraphQLContext, useGraphQL, reportCacheErrors } from '..'
+export {
+  GraphQL,
+  GraphQLContext,
+  GraphQLProvider,
+  useGraphQL,
+  reportCacheErrors
+} from '..'
 export { ssr } from '../server'

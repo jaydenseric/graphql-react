@@ -6,21 +6,10 @@ import React from 'react'
  * @kind constant
  * @name GraphQLContext
  * @type {Object}
- * @prop {function} Provider [React context provider component](https://reactjs.org/docs/context#contextprovider). Enables use of the [`useGraphQL`]{@link useGraphQL} hook in descendant components.
+ * @prop {function} Provider [React context provider component](https://reactjs.org/docs/context#contextprovider).
  * @prop {function} Consumer [React context consumer component](https://reactjs.org/docs/context#contextconsumer).
- * @see [`useGraphQL`]{@link useGraphQL} React hook requires a [`GraphQLContext`]{@link GraphQLContext} `Provider` to work.
- * @example <caption>Provide a [`GraphQL`]{@link GraphQL} instance for an app.</caption>
- * ```jsx
- * import { GraphQL, GraphQLContext } from 'graphql-react'
- *
- * const graphql = new GraphQL()
- *
- * const App = ({ children }) => (
- *   <GraphQLContext.Provider value={graphql}>
- *     {children}
- *   </GraphQLContext.Provider>
- * )
- * ```
+ * @see [`GraphQLProvider`]{@link GraphQLProvider} is used to provide this context.
+ * @see [`useGraphQL`]{@link useGraphQL} React hook requires an ancestor [`GraphQLContext`]{@link GraphQLContext} `Provider` to work.
  * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
  * ```jsx
  * import React from 'react'

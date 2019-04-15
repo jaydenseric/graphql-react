@@ -1,5 +1,6 @@
 export { GraphQL } from './GraphQL'
 export { GraphQLContext } from './GraphQLContext'
+export { GraphQLProvider } from './GraphQLProvider'
 export { useGraphQL } from './useGraphQL'
 export { reportCacheErrors } from './reportCacheErrors'
 

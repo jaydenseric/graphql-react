@@ -174,7 +174,7 @@ To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://np
 npm install graphql-react
 ```
 
-Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLContext`](#constant-graphqlcontext) to provide it for your app.
+Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLProvider`](#function-graphqlprovider) to provide it for your app.
 
 For server side rendering see [`ssr()`](#function-ssr).
 
@@ -216,32 +216,35 @@ Consider polyfilling:
   - [GraphQL instance property cache](#graphql-instance-property-cache)
     - [Examples](#examples-3)
   - [GraphQL instance property operations](#graphql-instance-property-operations)
-- [function reportCacheErrors](#function-reportcacheerrors)
-  - [Examples](#examples-4)
-- [function ssr](#function-ssr)
+- [function GraphQLProvider](#function-graphqlprovider)
   - [See](#see-2)
+  - [Examples](#examples-4)
+- [function reportCacheErrors](#function-reportcacheerrors)
   - [Examples](#examples-5)
-- [function useGraphQL](#function-usegraphql)
+- [function ssr](#function-ssr)
   - [See](#see-3)
   - [Examples](#examples-6)
-- [constant GraphQLContext](#constant-graphqlcontext)
+- [function useGraphQL](#function-usegraphql)
   - [See](#see-4)
   - [Examples](#examples-7)
-- [type GraphQLCache](#type-graphqlcache)
+- [constant GraphQLContext](#constant-graphqlcontext)
   - [See](#see-5)
+  - [Examples](#examples-8)
+- [type GraphQLCache](#type-graphqlcache)
+  - [See](#see-6)
 - [type GraphQLCacheKey](#type-graphqlcachekey)
 - [type GraphQLCacheValue](#type-graphqlcachevalue)
 - [type GraphQLFetchOptions](#type-graphqlfetchoptions)
-  - [See](#see-6)
-- [type GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)
   - [See](#see-7)
-  - [Examples](#examples-8)
-- [type GraphQLOperation](#type-graphqloperation)
+- [type GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)
   - [See](#see-8)
-- [type GraphQLOperationLoading](#type-graphqloperationloading)
+  - [Examples](#examples-9)
+- [type GraphQLOperation](#type-graphqloperation)
   - [See](#see-9)
-- [type GraphQLOperationStatus](#type-graphqloperationstatus)
+- [type GraphQLOperationLoading](#type-graphqloperationloading)
   - [See](#see-10)
+- [type GraphQLOperationStatus](#type-graphqloperationstatus)
+  - [See](#see-11)
 - [type HttpError](#type-httperror)
 - [type ReactNode](#type-reactnode)
 
@@ -372,6 +375,42 @@ A map of loading GraphQL operations. You probably don’t need to interact with 
 
 ---
 
+### function GraphQLProvider
+
+A React component to provide a [`GraphQL`](#class-graphql) instance to an app.
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `props.graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
+| `props.children` | [ReactNode](#type-reactnode)? | React children. |
+
+| Parameter | Type   | Description      |
+| :-------- | :----- | :--------------- |
+| `props`   | Object | Component props. |
+
+**Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
+
+#### See
+
+- [`GraphQLContext`](#constant-graphqlcontext) is provided via this component.
+- [`useGraphQL`](#function-usegraphql) React hook requires this component to be an ancestor to work.
+
+#### Examples
+
+_Provide a [`GraphQL`](#class-graphql) instance for an app._
+
+> ```jsx
+> import { GraphQL, GraphQLProvider } from 'graphql-react'
+>
+> const graphql = new GraphQL()
+>
+> const App = ({ children }) => (
+>   <GraphQLProvider graphql={graphql}>{children}</GraphQLProvider>
+> )
+> ```
+
+---
+
 ### function reportCacheErrors
 
 A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
@@ -419,7 +458,7 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 _SSR function that resolves a HTML string and cache JSON for client hydration._
 
 > ```jsx
-> import { GraphQL, GraphQLContext } from 'graphql-react'
+> import { GraphQL, GraphQLProvider } from 'graphql-react'
 > import { ssr } from 'graphql-react/server'
 > import ReactDOMServer from 'react-dom/server'
 > import { App } from './components'
@@ -427,9 +466,9 @@ _SSR function that resolves a HTML string and cache JSON for client hydration._
 > async function render() {
 >   const graphql = new GraphQL()
 >   const page = (
->     <GraphQLContext.Provider value={graphql}>
+>     <GraphQLProvider graphql={graphql}>
 >       <App />
->     </GraphQLContext.Provider>
+>     </GraphQLProvider>
 >   )
 >   const html = await ssr(graphql, page, ReactDOMServer.renderToString)
 >   const cache = JSON.stringify(graphql.cache)
@@ -440,16 +479,16 @@ _SSR function that resolves a HTML string and cache JSON for client hydration._
 _SSR function that resolves a HTML string suitable for a static page._
 
 > ```jsx
-> import { GraphQL, GraphQLContext } from 'graphql-react'
+> import { GraphQL, GraphQLProvider } from 'graphql-react'
 > import { ssr } from 'graphql-react/server'
 > import { App } from './components'
 >
 > function render() {
 >   const graphql = new GraphQL()
 >   const page = (
->     <GraphQLContext.Provider value={graphql}>
+>     <GraphQLProvider graphql={graphql}>
 >       <App />
->     </GraphQLContext.Provider>
+>     </GraphQLProvider>
 >   )
 >   return ssr(graphql, page)
 > }
@@ -476,7 +515,7 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 
 #### See
 
-- [`GraphQLContext`](#constant-graphqlcontext) `Provider`; required for [`useGraphQL`](#function-usegraphql) to work.
+- [`GraphQLContext`](#constant-graphqlcontext) is required for this hook to work.
 
 #### Examples
 
@@ -515,28 +554,15 @@ _A component that displays a Pokémon image._
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `Provider` | function | [React context provider component](https://reactjs.org/docs/context#contextprovider). Enables use of the [`useGraphQL`](#function-usegraphql) hook in descendant components. |
+| `Provider` | function | [React context provider component](https://reactjs.org/docs/context#contextprovider). |
 | `Consumer` | function | [React context consumer component](https://reactjs.org/docs/context#contextconsumer). |
 
 #### See
 
-- [`useGraphQL`](#function-usegraphql) React hook requires a [`GraphQLContext`](#constant-graphqlcontext) `Provider` to work.
+- [`GraphQLProvider`](#function-graphqlprovider) is used to provide this context.
+- [`useGraphQL`](#function-usegraphql) React hook requires an ancestor [`GraphQLContext`](#constant-graphqlcontext) `Provider` to work.
 
 #### Examples
-
-_Provide a [`GraphQL`](#class-graphql) instance for an app._
-
-> ```jsx
-> import { GraphQL, GraphQLContext } from 'graphql-react'
->
-> const graphql = new GraphQL()
->
-> const App = ({ children }) => (
->   <GraphQLContext.Provider value={graphql}>
->     {children}
->   </GraphQLContext.Provider>
-> )
-> ```
 
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
 

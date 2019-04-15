@@ -2,6 +2,10 @@
 
 ## Next
 
+### Minor
+
+- Added a new `GraphQLProvider` component that prevents unnecessary loading on the client after SSR, fixing [#4](https://github.com/jaydenseric/graphql-react/issues/4). This component should be used instead of using `GraphQLContext.Provider` directly. The old way still works, but with the old behavior.
+
 ### Patch
 
 - Updated dev dependencies.

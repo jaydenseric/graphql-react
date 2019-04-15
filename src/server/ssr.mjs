@@ -20,7 +20,7 @@ import { GraphQL } from '../universal/GraphQL'
  * @see [`next-graphql-react`](https://npm.im/next-graphql-react) to use this API in a [Next.js](https://nextjs.org) project.
  * @example <caption>SSR function that resolves a HTML string and cache JSON for client hydration.</caption>
  * ```jsx
- * import { GraphQL, GraphQLContext } from 'graphql-react'
+ * import { GraphQL, GraphQLProvider } from 'graphql-react'
  * import { ssr } from 'graphql-react/server'
  * import ReactDOMServer from 'react-dom/server'
  * import { App } from './components'
@@ -28,9 +28,9 @@ import { GraphQL } from '../universal/GraphQL'
  * async function render() {
  *   const graphql = new GraphQL()
  *   const page = (
- *     <GraphQLContext.Provider value={graphql}>
+ *     <GraphQLProvider graphql={graphql}>
  *       <App />
- *     </GraphQLContext.Provider>
+ *     </GraphQLProvider>
  *   )
  *   const html = await ssr(graphql, page, ReactDOMServer.renderToString)
  *   const cache = JSON.stringify(graphql.cache)
@@ -39,16 +39,16 @@ import { GraphQL } from '../universal/GraphQL'
  * ```
  * @example <caption>SSR function that resolves a HTML string suitable for a static page.</caption>
  * ```jsx
- * import { GraphQL, GraphQLContext } from 'graphql-react'
+ * import { GraphQL, GraphQLProvider } from 'graphql-react'
  * import { ssr } from 'graphql-react/server'
  * import { App } from './components'
  *
  * function render() {
  *   const graphql = new GraphQL()
  *   const page = (
- *     <GraphQLContext.Provider value={graphql}>
+ *     <GraphQLProvider graphql={graphql}>
  *       <App />
- *     </GraphQLContext.Provider>
+ *     </GraphQLProvider>
  *   )
  *   return ssr(graphql, page)
  * }

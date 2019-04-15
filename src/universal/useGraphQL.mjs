@@ -1,4 +1,5 @@
 import React from 'react'
+import { FirstRenderDateContext } from './FirstRenderDateContext'
 import { GraphQL } from './GraphQL'
 import { GraphQLContext } from './GraphQLContext'
 import { graphqlFetchOptions } from './graphqlFetchOptions'
@@ -18,7 +19,7 @@ import { hashObject } from './hashObject'
  * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
  * @param {GraphQLOperation} options.operation GraphQL operation.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
- * @see [`GraphQLContext`]{@link GraphQLContext} `Provider`; required for [`useGraphQL`]{@link useGraphQL} to work.
+ * @see [`GraphQLContext`]{@link GraphQLContext} is required for this hook to work.
  * @example <caption>A component that displays a Pokémon image.</caption>
  * ```jsx
  * import { useGraphQL } from 'graphql-react'
@@ -163,12 +164,32 @@ export const useGraphQL = ({
 
   const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
 
+  // Note: Allowed to be undefined for apps that don’t provide this context.
+  const firstRenderDate = React.useContext(FirstRenderDateContext)
+
   React.useEffect(() => {
-    if (loadOnMount && cacheKey !== loadedOnMountCacheKey) {
+    if (
+      loadOnMount &&
+      // The load on mount hasn’t been triggered yet.
+      cacheKey !== loadedOnMountCacheKey &&
+      !(
+        cacheValue &&
+        // Within a short enough time since the GraphQL provider first rendered
+        // to be considered post SSR hydration.
+        new Date() - firstRenderDate < 500
+      )
+    ) {
       setLoadedOnMountCacheKey(cacheKey)
       load()
     }
-  }, [cacheKey, load, loadOnMount, loadedOnMountCacheKey])
+  }, [
+    cacheKey,
+    cacheValue,
+    firstRenderDate,
+    load,
+    loadOnMount,
+    loadedOnMountCacheKey
+  ])
 
   if (graphql.ssr && loadOnMount && !cacheValue)
     graphql.operate({
