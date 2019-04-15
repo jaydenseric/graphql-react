@@ -541,13 +541,13 @@ _Provide a [`GraphQL`](#class-graphql) instance for an app._
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
 
 > ```jsx
+> import React from 'react'
 > import { GraphQLContext } from 'graphql-react'
 >
-> const ResetCacheButton = () => (
->   <GraphQLContext.Consumer>
->     {graphql => <button onClick={graphql.reset}>Reset cache</button>}
->   </GraphQLContext.Consumer>
-> )
+> const ResetCacheButton = () => {
+>   const graphql = React.useContext(GraphQLContext)
+>   return <button onClick={graphql.reset}>Reset cache</button>
+> }
 > ```
 
 ---

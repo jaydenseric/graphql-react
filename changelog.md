@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Updated the `GraphQLContext.Consumer` example to use React hooks.
 
 ## 8.1.3
 
