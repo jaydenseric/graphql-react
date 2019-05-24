@@ -1,7 +1,7 @@
 import {
-  GraphQLSchema,
-  GraphQLObjectType,
   GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
   GraphQLString
 } from 'graphql'
 import { errorHandler, execute } from 'graphql-api-koa'
