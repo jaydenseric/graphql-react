@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Add a test for `GraphQL.operate()` with both `reloadOnLoad` and `resetOnLoad` options true.
 
 ## 8.2.0
 

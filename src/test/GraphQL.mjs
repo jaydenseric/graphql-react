@@ -336,6 +336,20 @@ t.test('GraphQL.operate()', async t => {
       })
     )
   })
+
+  await t.test('With both “reloadOnLoad” and “resetOnLoad” options true', t => {
+    const graphql = new GraphQL()
+
+    t.throws(() => {
+      graphql.operate({
+        operation: { query: '' },
+        reloadOnLoad: true,
+        resetOnLoad: true
+      })
+    }, new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
+
+    t.end()
+  })
 })
 
 t.test('Concurrent identical queries share a request', async t => {
