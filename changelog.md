@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Updated dependencies.
+
 ## 8.2.0
 
 ### Minor
