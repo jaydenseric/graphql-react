@@ -7,7 +7,7 @@ import { graphqlFetchOptions } from '../universal/graphqlFetchOptions'
 global.FormData = FormData
 
 t.test('graphqlFetchOptions', async t => {
-  await t.test('Without files.', t => {
+  await t.test('Without files', t => {
     t.deepEquals(
       graphqlFetchOptions({ query: '' }),
       {
@@ -19,12 +19,12 @@ t.test('graphqlFetchOptions', async t => {
         },
         body: '{"query":""}'
       },
-      'Fetch options.'
+      'Fetch options'
     )
     t.end()
   })
 
-  await t.test('With files.', t => {
+  await t.test('With files', t => {
     const file = new ReactNativeFile({
       uri: '',
       name: 'a.jpg',
@@ -38,7 +38,7 @@ t.test('graphqlFetchOptions', async t => {
     // See the GraphQL multipart request spec:
     // https://github.com/jaydenseric/graphql-multipart-request-spec
 
-    t.type(options.body, FormData, 'Fetch options `body` type.')
+    t.type(options.body, FormData, 'Fetch options `body` type')
     t.deepEquals(
       options,
       {
@@ -53,7 +53,7 @@ t.test('graphqlFetchOptions', async t => {
           ['1', '[object Object]']
         ]
       },
-      'Fetch options.'
+      'Fetch options'
     )
     t.end()
   })
