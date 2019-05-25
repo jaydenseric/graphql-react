@@ -9,6 +9,7 @@
 - Use string `FormData` field names, as some `FormData` polyfills don't coerce numbers like native implementations do.
 - Test files in variables result in appropriate fetch options for a valid [GraphQL multipart request](https://github.com/jaydenseric/graphql-multipart-request-spec).
 - Tidied test names.
+- Nicer Browserslist syntax for supported Node.js versions.
 
 ## 8.2.0
 
