@@ -34,7 +34,7 @@ export function graphqlFetchOptions(operation) {
 
     i = 0
     files.forEach((paths, file) => {
-      form.append(++i, file, file.name)
+      form.append(`${++i}`, file, file.name)
     })
 
     fetchOptions.body = form

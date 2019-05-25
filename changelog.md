@@ -6,6 +6,7 @@
 
 - Updated dependencies.
 - Add a test for `GraphQL.operate()` with both `reloadOnLoad` and `resetOnLoad` options true.
+- Use string `FormData` field names, as some `FormData` polyfills don't coerce numbers like native implementations do.
 
 ## 8.2.0
 
