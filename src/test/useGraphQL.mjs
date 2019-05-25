@@ -455,7 +455,7 @@ t.test('useGraphQL()', async t => {
     })
   })
 
-  await t.test('With “reloadOnLoad” true', async t => {
+  await t.test('With `reloadOnLoad` true', async t => {
     const graphql = new GraphQL()
     const reloadEvent = promisifyEvent(graphql, 'reload')
     const testRenderer = ReactTestRenderer.create(null)
@@ -483,7 +483,7 @@ t.test('useGraphQL()', async t => {
     )
   })
 
-  await t.test('With “reloadOnLoad” true', async t => {
+  await t.test('With `resetOnLoad` true', async t => {
     const graphql = new GraphQL()
     const resetEvent = promisifyEvent(graphql, 'reset')
     const testRenderer = ReactTestRenderer.create(null)
@@ -511,7 +511,7 @@ t.test('useGraphQL()', async t => {
     )
   })
 
-  await t.test('With both “reloadOnLoad” and “resetOnLoad” options true', t => {
+  await t.test('With both `reloadOnLoad` and `resetOnLoad` options true', t => {
     const graphql = new GraphQL()
 
     t.throws(() => {

@@ -337,7 +337,7 @@ t.test('GraphQL.operate()', async t => {
     )
   })
 
-  await t.test('With both “reloadOnLoad” and “resetOnLoad” options true', t => {
+  await t.test('With both `reloadOnLoad` and `resetOnLoad` options true', t => {
     const graphql = new GraphQL()
 
     t.throws(() => {
