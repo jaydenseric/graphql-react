@@ -231,8 +231,8 @@ t.test('useGraphQL()', async t => {
         t.end()
       })
 
-      // Exceed the 500ms duration considered the first render hydration period.
-      await sleep(600)
+      // Exceed the 1000ms duration considered the first render hydration period.
+      await sleep(1100)
 
       await t.test('Third render with original props again', t => {
         let cacheKeyFetched

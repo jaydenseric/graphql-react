@@ -176,7 +176,7 @@ export const useGraphQL = ({
         cacheValue &&
         // Within a short enough time since the GraphQL provider first rendered
         // to be considered post SSR hydration.
-        new Date() - firstRenderDate < 500
+        new Date() - firstRenderDate < 1000
       )
     ) {
       setLoadedOnMountCacheKey(cacheKey)

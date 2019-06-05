@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Increased the post SSR hydration time from 500 to 1000 milliseconds, closing [#37](https://github.com/jaydenseric/graphql-react/issues/37).
 - Test `GraphQL.operate()` with both `reloadOnLoad` and `resetOnLoad` options true.
 - Use string `FormData` field names, as some `FormData` polyfills don't coerce numbers like native implementations do.
 - Test files in variables result in appropriate fetch options for a valid [GraphQL multipart request](https://github.com/jaydenseric/graphql-multipart-request-spec).
