@@ -541,6 +541,19 @@ _A component that displays a Pokémon image._
 > }
 > ```
 
+_Options guide for common situations._
+
+> The defaults are suitable for typical query use, as apps tend to have more queries than mutations.
+>
+> | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |
+> | :-- | :-: | :-: | :-: | :-: | :-: |
+> | Profile query | ✔️ | ✔️ | ✔️ |  |  |
+> | Login mutation |  |  |  |  | ✔️ |
+> | Logout mutation |  |  |  |  | ✔️ |
+> | Change password mutation |  |  |  |  |  |
+> | Change name mutation |  |  |  | ✔️ |  |
+> | Like a post mutation |  |  |  | ✔️ |  |
+
 ---
 
 ### constant GraphQLContext

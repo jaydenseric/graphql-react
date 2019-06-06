@@ -43,6 +43,17 @@ import { hashObject } from './hashObject'
  *  )
  *}
  * ```
+ * @example <caption>Options guide for common situations.</caption>
+ * The defaults are suitable for typical query use, as apps tend to have more queries than mutations.
+ *
+ * | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |
+ * | :-- | :-: | :-: | :-: | :-: | :-: |
+ * | Profile query | ✔️ | ✔️ | ✔️ |  |  |
+ * | Login mutation |  |  |  |  | ✔️ |
+ * | Logout mutation |  |  |  |  | ✔️ |
+ * | Change password mutation |  |  |  |  |  |
+ * | Change name mutation |  |  |  | ✔️ |  |
+ * | Like a post mutation |  |  |  | ✔️ |  |
  */
 export const useGraphQL = ({
   fetchOptionsOverride,
