@@ -9,7 +9,7 @@ import { GraphQLContext } from './GraphQLContext'
  * app.
  * @kind function
  * @name GraphQLProvider
- * @param {Object} props Component props.
+ * @param {object} props Component props.
  * @param {GraphQL} props.graphql [`GraphQL`]{@link GraphQL} instance.
  * @param {ReactNode} [props.children] React children.
  * @returns {ReactNode} React virtual DOM node.

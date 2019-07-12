@@ -10,8 +10,8 @@ import bodyParser from 'koa-bodyparser'
 
 /**
  * Creates a GraphQL Koa app.
- * @param {Object} fields GraphQL `query` fields.
- * @returns {Object} Koa instance.
+ * @param {object} fields GraphQL `query` fields.
+ * @returns {object} Koa instance.
  */
 export const createGraphQLKoaApp = (
   fields = {

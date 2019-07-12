@@ -8,7 +8,7 @@ export { reportCacheErrors } from './reportCacheErrors'
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.
  * @kind typedef
  * @name GraphQLCache
- * @type {Object.<GraphQLCacheKey, GraphQLCacheValue>}
+ * @type {object.<GraphQLCacheKey, GraphQLCacheValue>}
  * @see [`GraphQL`]{@link GraphQL} constructor accepts this type in `options.cache`.
  * @see [`GraphQL` instance property `cache`]{@link GraphQL#cache} is this type.
  */
@@ -26,12 +26,12 @@ export { reportCacheErrors } from './reportCacheErrors'
  * JSON serializable GraphQL operation result that includes errors and data.
  * @kind typedef
  * @name GraphQLCacheValue
- * @type {Object}
+ * @type {object}
  * @prop {string} [fetchError] `fetch` error message.
  * @prop {HttpError} [httpError] `fetch` response HTTP error.
  * @prop {string} [parseError] Parse error message.
- * @prop {Array<Object>} [graphQLErrors] GraphQL response errors.
- * @prop {Object} [data] GraphQL response data.
+ * @prop {Array<object>} [graphQLErrors] GraphQL response errors.
+ * @prop {object} [data] GraphQL response data.
  */
 
 /**
@@ -41,10 +41,10 @@ export { reportCacheErrors } from './reportCacheErrors'
  * [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
  * @kind typedef
  * @name GraphQLFetchOptions
- * @type {Object}
+ * @type {object}
  * @prop {string} url GraphQL API URL.
  * @prop {string|FormData} body HTTP request body.
- * @prop {Object} headers HTTP request headers.
+ * @prop {object} headers HTTP request headers.
  * @prop {string} [credentials] Authentication credentials mode.
  * @see [`GraphQLFetchOptionsOverride` functions]{@link GraphQLFetchOptionsOverride} accept this type.
  */
@@ -54,7 +54,7 @@ export { reportCacheErrors } from './reportCacheErrors'
  * Mutate the provided options object; there is no need to return it.
  * @kind typedef
  * @name GraphQLFetchOptionsOverride
- * @type {function}
+ * @type {Function}
  * @param {GraphQLFetchOptions} options [GraphQL `fetch` options]{@link GraphQLFetchOptions} tailored to the [GraphQL operation]{@link GraphQLOperation}, e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
  * @see [`GraphQL` instance method `operate`]{@link GraphQL#operate} accepts this type in `options.fetchOptionsOverride`.
  * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.fetchOptionsOverride`.
@@ -72,9 +72,9 @@ export { reportCacheErrors } from './reportCacheErrors'
  * GraphQL server.
  * @kind typedef
  * @name GraphQLOperation
- * @type {Object}
+ * @type {object}
  * @prop {string} query GraphQL queries/mutations.
- * @prop {Object} variables Variables used in the `query`.
+ * @prop {object} variables Variables used in the `query`.
  * @see [`GraphQL` instance method `operate`]{@link GraphQL#operate} accepts this type in `options.operation`.
  * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.operation`.
  */
@@ -83,7 +83,7 @@ export { reportCacheErrors } from './reportCacheErrors'
  * A loading GraphQL operation.
  * @kind typedef
  * @name GraphQLOperationLoading
- * @type {Object}
+ * @type {object}
  * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
  * @prop {GraphQLCacheValue} [cacheValue] [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue} from the last identical query.
  * @prop {Promise<GraphQLCacheValue>} cacheValuePromise Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
@@ -94,8 +94,8 @@ export { reportCacheErrors } from './reportCacheErrors'
  * The status of a GraphQL operation.
  * @kind typedef
  * @name GraphQLOperationStatus
- * @type {Object}
- * @prop {function} load Loads the GraphQL operation on demand, updating the [GraphQL cache]{@link GraphQL#cache}.
+ * @type {object}
+ * @prop {Function} load Loads the GraphQL operation on demand, updating the [GraphQL cache]{@link GraphQL#cache}.
  * @prop {boolean} loading Is the GraphQL operation loading.
  * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
  * @prop {GraphQLCacheValue} cacheValue [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
@@ -106,7 +106,7 @@ export { reportCacheErrors } from './reportCacheErrors'
  * [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) HTTP error.
  * @kind typedef
  * @name HttpError
- * @type {Object}
+ * @type {object}
  * @prop {number} status HTTP status code.
  * @prop {string} statusText HTTP status text.
  */

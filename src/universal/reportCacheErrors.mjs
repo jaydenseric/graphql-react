@@ -5,7 +5,7 @@
  * error details are expandable.
  * @kind function
  * @name reportCacheErrors
- * @param {Object} data [`GraphQL`]{@link GraphQL} `cache` event data.
+ * @param {object} data [`GraphQL`]{@link GraphQL} `cache` event data.
  * @param {GraphQLCacheKey} data.cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
  * @param {GraphQLCacheKey} data.cacheValue [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
  * @example <caption>[`GraphQL`]{@link GraphQL} initialized to report cache errors.</caption>

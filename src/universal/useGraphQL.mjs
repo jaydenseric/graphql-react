@@ -10,7 +10,7 @@ import { hashObject } from './hashObject'
  * operation in a component.
  * @kind function
  * @name useGraphQL
- * @param {Object} options Options.
+ * @param {object} options Options.
  * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation.
  * @param {boolean} [options.loadOnMount=true] Should the operation load when the component mounts.
  * @param {boolean} [options.loadOnReload=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires, if the operation was not the one that caused the reload.
@@ -121,6 +121,7 @@ export const useGraphQL = ({
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
+     * @param {object} event Event data.
      * @ignore
      */
     function onFetch({ cacheKey: fetchingCacheKey }) {
@@ -130,6 +131,7 @@ export const useGraphQL = ({
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
+     * @param {object} event Event data.
      * @ignore
      */
     function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
@@ -141,6 +143,7 @@ export const useGraphQL = ({
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `reload` event.
+     * @param {object} event Event data.
      * @ignore
      */
     function onReload({ exceptCacheKey }) {
@@ -150,6 +153,7 @@ export const useGraphQL = ({
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
+     * @param {object} event Event data.
      * @ignore
      */
     function onReset({ exceptCacheKey }) {

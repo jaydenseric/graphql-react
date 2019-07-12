@@ -25,14 +25,14 @@ t.test('GraphQL.cache population via `cache` constructor option', t => {
 t.test('GraphQL.operate()', async t => {
   /**
    * Tests [`GraphQL.operate()`]{@link GraphQL#query} under certain conditions.
-   * @param {Object} options Options.
+   * @param {object} options Options.
    * @param {number} options.port GraphQL server port.
    * @param {GraphQLOperation} [options.operation] [GraphQL operation]{@link GraphQLOperation}.
    * @param {boolean} [options.resetOnLoad] Should the [GraphQL cache]{@link GraphQL#cache} reset once the query loads.
    * @param {GraphQLCache} [options.initialGraphQLCache] Initial [GraphQL cache]{@link GraphQL#cache}.
    * @param {GraphQL} [options.graphql] [`GraphQL`]{@link GraphQL} instance.
    * @param {GraphQLCacheValue} options.expectedResolvedCacheValue Expected [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
-   * @param {function} [options.callback] Callback that accepts result metadata.
+   * @param {Function} [options.callback] Callback that accepts result metadata.
    * @returns {Promise} Resolves the test.
    * @ignore
    */

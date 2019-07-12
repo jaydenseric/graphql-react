@@ -5,9 +5,9 @@ import React from 'react'
  * [`GraphQL`]{@link GraphQL} instance.
  * @kind constant
  * @name GraphQLContext
- * @type {Object}
- * @prop {function} Provider [React context provider component](https://reactjs.org/docs/context#contextprovider).
- * @prop {function} Consumer [React context consumer component](https://reactjs.org/docs/context#contextconsumer).
+ * @type {object}
+ * @prop {Function} Provider [React context provider component](https://reactjs.org/docs/context#contextprovider).
+ * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context#contextconsumer).
  * @see [`GraphQLProvider`]{@link GraphQLProvider} is used to provide this context.
  * @see [`useGraphQL`]{@link useGraphQL} React hook requires an ancestor [`GraphQLContext`]{@link GraphQLContext} `Provider` to work.
  * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>

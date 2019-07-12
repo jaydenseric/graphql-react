@@ -6,7 +6,7 @@ import { hashObject } from './hashObject'
  * A lightweight GraphQL client that caches queries and mutations.
  * @kind class
  * @name GraphQL
- * @param {Object} [options={}] Options.
+ * @param {object} [options={}] Options.
  * @param {GraphQLCache} [options.cache={}] Cache to import; usually from a server side render.
  * @see [`reportCacheErrors`]{@link reportCacheErrors} to setup error reporting.
  * @example <caption>Construct a GraphQL client.</caption>
@@ -25,8 +25,8 @@ export class GraphQL {
      * Adds an event listener.
      * @kind function
      * @name GraphQL#on
-     * @param {String} type Event type.
-     * @param {function} handler Event handler.
+     * @param {string} type Event type.
+     * @param {Function} handler Event handler.
      * @see [`reportCacheErrors`]{@link reportCacheErrors} can be used with this to setup error reporting.
      */
     this.on = on
@@ -35,14 +35,14 @@ export class GraphQL {
      * Removes an event listener.
      * @kind function
      * @name GraphQL#off
-     * @param {String} type Event type.
-     * @param {function} handler Event handler.
+     * @param {string} type Event type.
+     * @param {Function} handler Event handler.
      */
     this.off = off
 
     /**
      * Emits an event with details to listeners.
-     * @param {String} type Event type.
+     * @param {string} type Event type.
      * @param {*} [details] Event details.
      * @ignore
      */
@@ -78,7 +78,7 @@ export class GraphQL {
      * with this unless you’re implementing a server side rendering framework.
      * @kind member
      * @name GraphQL#operations
-     * @type {Object.<GraphQLCacheKey, Promise<GraphQLCacheValue>>}
+     * @type {object.<GraphQLCacheKey, Promise<GraphQLCacheValue>>}
      */
     this.operations = {}
   }
@@ -192,7 +192,7 @@ export class GraphQL {
    * [GraphQL cache]{@link GraphQL#cache}.
    * @kind function
    * @name GraphQL#operate
-   * @param {Object} options Options.
+   * @param {object} options Options.
    * @param {GraphQLOperation} options.operation GraphQL operation.
    * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL operation [`fetch` options]{@link GraphQLFetchOptions}.
    * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.

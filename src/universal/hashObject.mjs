@@ -51,7 +51,7 @@ function hashObjectReplacer(key, value) {
 
 /**
  * Hashes an object.
- * @param {Object} object A JSON serializable object that may contain [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instances.
+ * @param {object} object A JSON serializable object that may contain [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instances.
  * @returns {string} A hash.
  * @ignore
  */

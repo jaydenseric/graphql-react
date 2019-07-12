@@ -1,6 +1,6 @@
 /**
  * Promisifies an event.
- * @param {Object} emitter An event emitter with `on` and `off` methods.
+ * @param {object} emitter An event emitter with `on` and `off` methods.
  * @param {string} event The event name.
  * @param {number} [timeout=1000] How many milliseconds to wait for the event.
  * @returns {Promise<*>} Event data.

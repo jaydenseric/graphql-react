@@ -254,7 +254,7 @@ A lightweight GraphQL client that caches queries and mutations.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | Object? = `{}` | Options. |
+| `options` | object? = `{}` | Options. |
 | `options.cache` | [GraphQLCache](#type-graphqlcache)? = `{}` | Cache to import; usually from a server side render. |
 
 #### See
@@ -277,8 +277,8 @@ Removes an event listener.
 
 | Parameter | Type     | Description    |
 | :-------- | :------- | :------------- |
-| `type`    | String   | Event type.    |
-| `handler` | function | Event handler. |
+| `type`    | string   | Event type.    |
+| `handler` | Function | Event handler. |
 
 #### GraphQL instance method on
 
@@ -286,8 +286,8 @@ Adds an event listener.
 
 | Parameter | Type     | Description    |
 | :-------- | :------- | :------------- |
-| `type`    | String   | Event type.    |
-| `handler` | function | Event handler. |
+| `type`    | string   | Event type.    |
+| `handler` | Function | Event handler. |
 
 ##### See
 
@@ -299,7 +299,7 @@ Loads or reuses an already loading GraphQL operation in [GraphQL operations](#gr
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | Object | Options. |
+| `options` | object | Options. |
 | `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default GraphQL operation [`fetch` options](#type-graphqlfetchoptions). |
 | `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
@@ -371,7 +371,7 @@ _Example cache JSON._
 
 A map of loading GraphQL operations. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
 
-**Type:** Object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>
+**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>
 
 ---
 
@@ -381,7 +381,7 @@ A React component that provides a [`GraphQL`](#class-graphql) instance for an ap
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `props` | Object | Component props. |
+| `props` | object | Component props. |
 | `props.graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
 | `props.children` | [ReactNode](#type-reactnode)? | React children. |
 
@@ -414,7 +414,7 @@ A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `data` | Object | [`GraphQL`](#class-graphql) `cache` event data. |
+| `data` | object | [`GraphQL`](#class-graphql) `cache` event data. |
 | `data.cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
 | `data.cacheValue` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue). |
 
@@ -441,7 +441,7 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 | :-- | :-- | :-- |
 | `graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
 | `node` | [ReactNode](#type-reactnode) | React virtual DOM node. |
-| `render` | function? = `ReactDOMServer.renderToStaticMarkup` | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
+| `render` | Function? = `ReactDOMServer.renderToStaticMarkup` | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
 
 **Returns:** Promise&lt;string> — Promise resolving the rendered HTML string.
 
@@ -499,7 +499,7 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | Object | Options. |
+| `options` | object | Options. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation. |
 | `options.loadOnMount` | boolean? = `true` | Should the operation load when the component mounts. |
 | `options.loadOnReload` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires, if the operation was not the one that caused the reload. |
@@ -560,12 +560,12 @@ _Options guide for common situations._
 
 [React context object](https://reactjs.org/docs/context#api) for a [`GraphQL`](#class-graphql) instance.
 
-**Type:** Object
+**Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `Provider` | function | [React context provider component](https://reactjs.org/docs/context#contextprovider). |
-| `Consumer` | function | [React context consumer component](https://reactjs.org/docs/context#contextconsumer). |
+| `Provider` | Function | [React context provider component](https://reactjs.org/docs/context#contextprovider). |
+| `Consumer` | Function | [React context consumer component](https://reactjs.org/docs/context#contextconsumer). |
 
 #### See
 
@@ -592,7 +592,7 @@ _A button component that resets the [GraphQL cache](#graphql-instance-property-c
 
 A [GraphQL cache](#graphql-instance-property-cache) map of GraphQL operation results.
 
-**Type:** Object&lt;[GraphQLCacheKey](#type-graphqlcachekey), [GraphQLCacheValue](#type-graphqlcachevalue)>
+**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), [GraphQLCacheValue](#type-graphqlcachevalue)>
 
 #### See
 
@@ -613,15 +613,15 @@ A [GraphQL cache](#type-graphqlcache) key, derived from a hash of the [`fetch` o
 
 JSON serializable GraphQL operation result that includes errors and data.
 
-**Type:** Object
+**Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
 | `fetchError` | string? | `fetch` error message. |
 | `httpError` | [HttpError](#type-httperror)? | `fetch` response HTTP error. |
 | `parseError` | string? | Parse error message. |
-| `graphQLErrors` | Array&lt;Object>? | GraphQL response errors. |
-| `data` | Object? | GraphQL response data. |
+| `graphQLErrors` | Array&lt;object>? | GraphQL response errors. |
+| `data` | object? | GraphQL response data. |
 
 ---
 
@@ -629,13 +629,13 @@ JSON serializable GraphQL operation result that includes errors and data.
 
 GraphQL API URL and [polyfillable `fetch` options](https://github.github.io/fetch/#options). The `url` property gets extracted and the rest are used as [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
 
-**Type:** Object
+**Type:** object
 
 | Property      | Type               | Description                      |
 | :------------ | :----------------- | :------------------------------- |
 | `url`         | string             | GraphQL API URL.                 |
 | `body`        | string \| FormData | HTTP request body.               |
-| `headers`     | Object             | HTTP request headers.            |
+| `headers`     | object             | HTTP request headers.            |
 | `credentials` | string?            | Authentication credentials mode. |
 
 #### See
@@ -648,7 +648,7 @@ GraphQL API URL and [polyfillable `fetch` options](https://github.github.io/fetc
 
 Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate the provided options object; there is no need to return it.
 
-**Type:** function
+**Type:** Function
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
@@ -676,12 +676,12 @@ _Setting [GraphQL `fetch` options](#type-graphqlfetchoptions) for an imaginary A
 
 A GraphQL operation. Additional properties may be used; all are sent to the GraphQL server.
 
-**Type:** Object
+**Type:** object
 
 | Property    | Type   | Description                    |
 | :---------- | :----- | :----------------------------- |
 | `query`     | string | GraphQL queries/mutations.     |
-| `variables` | Object | Variables used in the `query`. |
+| `variables` | object | Variables used in the `query`. |
 
 #### See
 
@@ -694,7 +694,7 @@ A GraphQL operation. Additional properties may be used; all are sent to the Grap
 
 A loading GraphQL operation.
 
-**Type:** Object
+**Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
@@ -712,11 +712,11 @@ A loading GraphQL operation.
 
 The status of a GraphQL operation.
 
-**Type:** Object
+**Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `load` | function | Loads the GraphQL operation on demand, updating the [GraphQL cache](#graphql-instance-property-cache). |
+| `load` | Function | Loads the GraphQL operation on demand, updating the [GraphQL cache](#graphql-instance-property-cache). |
 | `loading` | boolean | Is the GraphQL operation loading. |
 | `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
 | `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
@@ -731,7 +731,7 @@ The status of a GraphQL operation.
 
 [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) HTTP error.
 
-**Type:** Object
+**Type:** object
 
 | Property     | Type   | Description       |
 | :----------- | :----- | :---------------- |
