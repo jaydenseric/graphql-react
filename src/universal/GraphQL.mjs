@@ -131,6 +131,8 @@ export class GraphQL {
    * @ignore
    */
   fetch = ({ url, ...options }, cacheKey) => {
+    let fetchResponse
+
     const fetcher =
       typeof fetch === 'function'
         ? fetch
@@ -142,6 +144,8 @@ export class GraphQL {
     const cacheValuePromise = fetcher(url, options)
       .then(
         response => {
+          fetchResponse = response
+
           if (!response.ok)
             cacheValue.httpError = {
               status: response.status,
@@ -172,7 +176,13 @@ export class GraphQL {
         // Clear the loaded operation.
         delete this.operations[cacheKey]
 
-        this.emit('cache', { cacheKey, cacheValue })
+        this.emit('cache', {
+          cacheKey,
+          cacheValue,
+
+          // May be undefined if there was a fetch error.
+          response: fetchResponse
+        })
 
         return cacheValue
       })

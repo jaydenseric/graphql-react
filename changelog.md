@@ -2,6 +2,10 @@
 
 ## Next
 
+### Minor
+
+- Added a `response` property to the `GraphQL` instance `cache` event payload, containing the original `fetch` [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) instance the `cacheValue` was derived from.
+
 ### Patch
 
 - Updated dependencies.

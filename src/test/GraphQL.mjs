@@ -48,6 +48,7 @@ t.test('GraphQL.operate()', async t => {
       }
     }),
     expectedResolvedCacheValue,
+    expectedResponseType = Response,
     callback
   }) => async t => {
     const fetchEvent = promisifyEvent(graphql, 'fetch')
@@ -125,6 +126,12 @@ t.test('GraphQL.operate()', async t => {
       'GraphQL `cache` event data property `cacheValue`'
     )
 
+    t.type(
+      cacheEventData.response,
+      expectedResponseType,
+      'GraphQL `cache` event data property `response`'
+    )
+
     if (resetEvent) {
       const resetEventData = await resetEvent
       t.equals(
@@ -193,7 +200,8 @@ t.test('GraphQL.operate()', async t => {
         port,
         expectedResolvedCacheValue: {
           fetchError: 'Global fetch API or polyfill unavailable.'
-        }
+        },
+        expectedResponseType: 'undefined'
       })
     )
 
