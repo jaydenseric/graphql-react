@@ -34,7 +34,7 @@
   "engines": {
     "node": ">=8.10"
   },
-  "browserslist": "node >= 8.10, > 0.5%, not dead",
+  "browserslist": "Node >= 8.10, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"

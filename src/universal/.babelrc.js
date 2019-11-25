@@ -5,7 +5,7 @@ module.exports = {
     [
       '@babel/env',
       {
-        targets: 'node >= 8.10, > 0.5%, not dead',
+        targets: 'Node >= 8.10, > 0.5%, not OperaMini all, not dead',
         modules: process.env.BABEL_ESM ? false : 'commonjs',
         shippedProposals: true,
         loose: true
