@@ -14,6 +14,7 @@
 - Removed redundant ESLint ignore comments.
 - Use GitHub Actions instead of Travis for CI.
 - Cleaner readme “API” section table of contents with “See” and “Examples” headings excluded, thanks to [`jsdoc-md` v3.1.0](https://github.com/jaydenseric/jsdoc-md/releases/tag/v3.1.0).
+- Updated the readme “Apollo comparison” section “Bundle impact” subsection for the new Apollo React hooks API.
 
 ## 8.3.0
 

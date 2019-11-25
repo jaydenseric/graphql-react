@@ -34,8 +34,7 @@ Several dependencies must be installed for a minimal Apollo project.
 | Dependency | Install size | Bundle size |
 | --- | --- | --- |
 | [`apollo-boost`](https://npm.im/apollo-boost) | [![apollo-boost install size](https://badgen.net/packagephobia/install/apollo-boost)](https://packagephobia.now.sh/result?p=apollo-boost) | [![apollo-boost minzipped size](https://badgen.net/bundlephobia/minzip/apollo-boost)](https://bundlephobia.com/result?p=apollo-boost) |
-| [`react-apollo`](https://npm.im/react-apollo) | [![react-apollo install size](https://badgen.net/packagephobia/install/react-apollo)](https://packagephobia.now.sh/result?p=react-apollo) | [![react-apollo minzipped size](https://badgen.net/bundlephobia/minzip/react-apollo)](https://bundlephobia.com/result?p=react-apollo) |
-| [`graphql-tag`](https://npm.im/graphql-tag) | [![graphql-tag install size](https://badgen.net/packagephobia/install/graphql-tag)](https://packagephobia.now.sh/result?p=graphql-tag) | [![graphql-tag minzipped size](https://badgen.net/bundlephobia/minzip/graphql-tag)](https://bundlephobia.com/result?p=graphql-tag) |
+| [`@apollo/react-hooks`](https://npm.im/@apollo/react-hooks) | [![@apollo/react-hooks install size](https://badgen.net/packagephobia/install/@apollo/react-hooks)](https://packagephobia.now.sh/result?p=@apollo/react-hooks) | [![@apollo/react-hooks minzipped size](https://badgen.net/bundlephobia/minzip/@apollo/react-hooks)](https://bundlephobia.com/result?p=@apollo/react-hooks) |
 | [`graphql`](https://npm.im/graphql) | [![graphql install size](https://badgen.net/packagephobia/install/graphql)](https://packagephobia.now.sh/result?p=graphql) | [![graphql minzipped size](https://badgen.net/bundlephobia/minzip/graphql)](https://bundlephobia.com/result?p=graphql) |
 
 [Tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers will eliminate unused [`graphql`](https://npm.im/graphql) exports.
