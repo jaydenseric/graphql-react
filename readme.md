@@ -232,8 +232,8 @@ A lightweight GraphQL client that caches queries and mutations.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | object? = `{}` | Options. |
-| `options.cache` | [GraphQLCache](#type-graphqlcache)? = `{}` | Cache to import; usually from a server side render. |
+| `options` | object? = {} | Options. |
+| `options.cache` | [GraphQLCache](#type-graphqlcache)? = {} | Cache to import; usually from a server side render. |
 
 #### See
 
@@ -419,7 +419,7 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 | :-- | :-- | :-- |
 | `graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
 | `node` | [ReactNode](#type-reactnode) | React virtual DOM node. |
-| `render` | Function? = `ReactDOMServer.renderToStaticMarkup` | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
+| `render` | Function? = ReactDOMServer.renderToStaticMarkup | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
 
 **Returns:** Promise&lt;string> — Promise resolving the rendered HTML string.
 
@@ -722,4 +722,4 @@ The status of a GraphQL operation.
 
 A React virtual DOM node; anything that can be rendered.
 
-**Type:** undefined | null | boolean | number | string | React.Element | Array&lt;[ReactNode](#type-reactnode)>
+**Type:** `undefined` | `null` | boolean | number | string | React.Element | Array&lt;[ReactNode](#type-reactnode)>
