@@ -189,7 +189,7 @@ Use the [`useGraphQL`](#function-usegraphql) React hook in your components to ma
 
 ## Support
 
-- Node.js v8.5+
+- Node.js v8.10+
 - Browsers [`> 0.5%, not dead`](https://browserl.ist/?q=%3E+0.5%25%2C+not+dead)
 
 Consider polyfilling:

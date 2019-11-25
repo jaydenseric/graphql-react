@@ -32,9 +32,9 @@
   "main": "universal",
   "sideEffects": false,
   "engines": {
-    "node": ">=8.5"
+    "node": ">=8.10"
   },
-  "browserslist": "> 0.5%, not dead, node >= 8.5",
+  "browserslist": "node >= 8.10, > 0.5%, not dead",
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
