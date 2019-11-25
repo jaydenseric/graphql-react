@@ -17,7 +17,6 @@ import { hashObject } from './hashObject'
  * ```
  */
 export class GraphQL {
-  // eslint-disable-next-line require-jsdoc
   constructor({ cache = {} } = {}) {
     const { on, off, emit } = mitt()
 

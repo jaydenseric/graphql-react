@@ -42,7 +42,7 @@ t.test('ssr() argument validation', async t => {
 t.test('ssr() query', async t => {
   const port = await startServer(t, createGraphQLKoaApp())
 
-  // eslint-disable-next-line require-jsdoc, react/prop-types
+  // eslint-disable-next-line react/prop-types
   const Component = ({ phrase, children }) => {
     const { loading, cacheValue } = useGraphQL({
       loadOnMount: true,

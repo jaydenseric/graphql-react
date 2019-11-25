@@ -16,7 +16,6 @@ t.test('useGraphQL()', async t => {
   const port = await startServer(t, createGraphQLKoaApp())
   const graphql = new GraphQL()
 
-  // eslint-disable-next-line require-jsdoc
   const fetchOptionsOverride = options => {
     options.url = `http://localhost:${port}`
   }
@@ -42,7 +41,7 @@ t.test('useGraphQL()', async t => {
   const operation2CacheValue = await operation2CacheValuePromise
   const { cache } = graphql
 
-  // eslint-disable-next-line require-jsdoc, react/prop-types
+  // eslint-disable-next-line react/prop-types
   const Component = ({ loadOnMount, ...operationOptions }) => {
     const result = useGraphQL({ loadOnMount, ...operationOptions })
     return JSON.stringify(result)
