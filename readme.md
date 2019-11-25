@@ -479,8 +479,8 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 | `options` | object | Options. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation. |
 | `options.loadOnMount` | boolean? = `true` | Should the operation load when the component mounts. |
-| `options.loadOnReload` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires, if the operation was not the one that caused the reload. |
-| `options.loadOnReset` | boolean? = `true` | Should the operation load when its [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is reset, if the operation was not the one that caused the reset. |
+| `options.loadOnReload` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
+| `options.loadOnReset` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reset` event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
 | `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
 | `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
 | `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |

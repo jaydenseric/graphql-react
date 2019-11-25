@@ -13,8 +13,8 @@ import { hashObject } from './hashObject'
  * @param {object} options Options.
  * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation.
  * @param {boolean} [options.loadOnMount=true] Should the operation load when the component mounts.
- * @param {boolean} [options.loadOnReload=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires, if the operation was not the one that caused the reload.
- * @param {boolean} [options.loadOnReset=true] Should the operation load when its [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is reset, if the operation was not the one that caused the reset.
+ * @param {boolean} [options.loadOnReload=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires and there is a [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} to reload, but only if the operation was not the one that caused the reload.
+ * @param {boolean} [options.loadOnReset=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reset` event fires and the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is deleted, but only if the operation was not the one that caused the reset.
  * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
  * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
  * @param {GraphQLOperation} options.operation GraphQL operation.
@@ -147,7 +147,12 @@ export const useGraphQL = ({
      * @ignore
      */
     function onReload({ exceptCacheKey }) {
-      if (cacheKey !== exceptCacheKey && loadOnReload && isMountedRef.current)
+      if (
+        cacheKey !== exceptCacheKey &&
+        loadOnReload &&
+        cacheValue &&
+        isMountedRef.current
+      )
         load()
     }
 
@@ -175,7 +180,7 @@ export const useGraphQL = ({
       graphql.off('reload', onReload)
       graphql.off('reset', onReset)
     }
-  }, [cacheKey, graphql, load, loadOnReload, loadOnReset])
+  }, [cacheKey, cacheValue, graphql, load, loadOnReload, loadOnReset])
 
   const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
 

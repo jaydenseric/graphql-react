@@ -10,6 +10,8 @@
 
 - Updated dependencies.
 - Replaced the [`size-limit`](https://npm.im/size-limit) dev dependency with [`@size-limit/preset-small-lib`](https://npm.im/@size-limit/preset-small-lib).
+- Fixed the `useGraphQL` enabled option `loadOnReload` causing a load when the global `GraphQL` cache is reloaded even if there was no previously cached data to reload.
+- Tweaked the `useGraphQL` option `loadOnReset` documentation.
 - Removed `package-lock.json` from `.gitignore` and `.prettierignore` as it’s disabled in `.npmrc` anyway.
 - Removed redundant ESLint ignore comments.
 - Use GitHub Actions instead of Travis for CI.
