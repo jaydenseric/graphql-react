@@ -15,9 +15,12 @@
 - Removed `package-lock.json` from `.gitignore` and `.prettierignore` as it’s disabled in `.npmrc` anyway.
 - Removed redundant ESLint ignore comments.
 - Use GitHub Actions instead of Travis for CI.
-- Cleaner readme “API” section table of contents with “See” and “Examples” headings excluded, thanks to [`jsdoc-md` v3.1.0](https://github.com/jaydenseric/jsdoc-md/releases/tag/v3.1.0).
-- Updated the readme “Apollo comparison” section “Bundle impact” subsection for the new Apollo React hooks API.
-- Clarify that Opera Mini isn’t supported in the Browserslist queries and readme “Support” section.
+- Documentation improvements, fixing [#35](https://github.com/jaydenseric/graphql-react/issues/35):
+  - Updated the project description with better phrasing that includes the bundle size.
+  - Moved the readme “Apollo comparison” section to the end, and updated the “Bundle impact” subsection for the new Apollo React hooks API.
+  - Added a basic example of the core API features working together to the “Examples” section, with tips commented.
+  - Clarified that Opera Mini isn’t supported in the Browserslist queries and readme “Support” section.
+  - Cleaner readme “API” section table of contents with “See” and “Examples” headings excluded, thanks to [`jsdoc-md` v3.1.0](https://github.com/jaydenseric/jsdoc-md/releases/tag/v3.1.0).
 
 ## 8.3.0
 
