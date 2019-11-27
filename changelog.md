@@ -5,6 +5,7 @@
 ### Major
 
 - Updated Node.js support from v8.5+ to v8.10+, to match what the [`eslint`](https://npm.im/eslint) dev dependency now supports. This is unlikely to be a breaking change for the published package.
+- The `useGraphQL` React hook `loadOnMount`, `loadOnReload`, and `loadOnReset` options now default to `false` instead of `true`. The loading related options are now all opt-in, which is easier to remember and simpler to configure for situations that previously required manual reversal of certain option defaults. It's also safer when working with mutations you don't want to accidentally load.
 
 ### Patch
 

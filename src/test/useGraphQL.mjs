@@ -48,7 +48,7 @@ t.test('useGraphQL()', async t => {
   }
 
   await t.test('Without initial cache', async t => {
-    await t.test('`loadOnMount` true (default)', async t => {
+    await t.test('`loadOnMount` true', async t => {
       const graphql = new GraphQL()
       const testRenderer = ReactTestRenderer.create(null)
 
@@ -62,7 +62,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -92,7 +92,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} />
+              <Component {...operation2Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -113,7 +113,7 @@ t.test('useGraphQL()', async t => {
       })
     })
 
-    await t.test('`loadOnMount` false', async t => {
+    await t.test('`loadOnMount` false (default)', async t => {
       const graphql = new GraphQL()
       const testRenderer = ReactTestRenderer.create(null)
 
@@ -127,7 +127,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} loadOnMount={false} />
+              <Component {...operation1Options} />
             </GraphQLProvider>
           )
         })
@@ -147,7 +147,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} loadOnMount={false} />
+              <Component {...operation2Options} />
             </GraphQLProvider>
           )
         })
@@ -166,7 +166,7 @@ t.test('useGraphQL()', async t => {
   })
 
   await t.test('With initial cache', async t => {
-    await t.test('`loadOnMount` true (default)', async t => {
+    await t.test('`loadOnMount` true', async t => {
       const graphql = new GraphQL({ cache })
       const testRenderer = ReactTestRenderer.create(null)
 
@@ -180,7 +180,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -210,7 +210,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} />
+              <Component {...operation2Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -243,7 +243,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -268,7 +268,7 @@ t.test('useGraphQL()', async t => {
       })
     })
 
-    await t.test('`loadOnMount` false', async t => {
+    await t.test('`loadOnMount` false (default)', async t => {
       const graphql = new GraphQL({ cache })
       const testRenderer = ReactTestRenderer.create(null)
 
@@ -282,7 +282,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} loadOnMount={false} />
+              <Component {...operation1Options} />
             </GraphQLProvider>
           )
         })
@@ -306,7 +306,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} loadOnMount={false} />
+              <Component {...operation2Options} />
             </GraphQLProvider>
           )
         })
@@ -329,7 +329,7 @@ t.test('useGraphQL()', async t => {
   })
 
   await t.test('With initial cache (partial)', async t => {
-    await t.test('`loadOnMount` true (default)', async t => {
+    await t.test('`loadOnMount` true', async t => {
       const graphql = new GraphQL({
         cache: { [operation1CacheKey]: operation1CacheValue }
       })
@@ -345,7 +345,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} />
+              <Component {...operation1Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -375,7 +375,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} />
+              <Component {...operation2Options} loadOnMount={true} />
             </GraphQLProvider>
           )
         })
@@ -396,7 +396,7 @@ t.test('useGraphQL()', async t => {
       })
     })
 
-    await t.test('`loadOnMount` false', async t => {
+    await t.test('`loadOnMount` false (default)', async t => {
       const graphql = new GraphQL({
         cache: { [operation1CacheKey]: operation1CacheValue }
       })
@@ -412,7 +412,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation1Options} loadOnMount={false} />
+              <Component {...operation1Options} />
             </GraphQLProvider>
           )
         })
@@ -436,7 +436,7 @@ t.test('useGraphQL()', async t => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <Component {...operation2Options} loadOnMount={false} />
+              <Component {...operation2Options} />
             </GraphQLProvider>
           )
         })
@@ -541,7 +541,7 @@ t.test('useGraphQL()', async t => {
     ReactTestRenderer.act(() => {
       testRenderer.update(
         <GraphQLContext.Provider value={graphql}>
-          <Component {...operation1Options} />
+          <Component {...operation1Options} loadOnMount={true} />
         </GraphQLContext.Provider>
       )
     })

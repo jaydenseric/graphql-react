@@ -12,9 +12,9 @@ import { hashObject } from './hashObject'
  * @name useGraphQL
  * @param {object} options Options.
  * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation.
- * @param {boolean} [options.loadOnMount=true] Should the operation load when the component mounts.
- * @param {boolean} [options.loadOnReload=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires and there is a [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} to reload, but only if the operation was not the one that caused the reload.
- * @param {boolean} [options.loadOnReset=true] Should the operation load when the [`GraphQL`]{@link GraphQL} `reset` event fires and the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is deleted, but only if the operation was not the one that caused the reset.
+ * @param {boolean} [options.loadOnMount=false] Should the operation load when the component mounts.
+ * @param {boolean} [options.loadOnReload=false] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires and there is a [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} to reload, but only if the operation was not the one that caused the reload.
+ * @param {boolean} [options.loadOnReset=false] Should the operation load when the [`GraphQL`]{@link GraphQL} `reset` event fires and the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is deleted, but only if the operation was not the one that caused the reset.
  * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
  * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
  * @param {GraphQLOperation} options.operation GraphQL operation.
@@ -31,7 +31,10 @@ import { hashObject } from './hashObject'
  *    },
  *    operation: {
  *      query: `{ pokemon(name: "${name}") { image } }`
- *    }
+ *    },
+ *    loadOnMount: true,
+ *    loadOnReload: true,
+ *    loadOnReset: true
  *  })
  *
  *  return cacheValue.data ? (
@@ -44,8 +47,6 @@ import { hashObject } from './hashObject'
  *}
  * ```
  * @example <caption>Options guide for common situations.</caption>
- * The defaults are suitable for typical query use, as apps tend to have more queries than mutations.
- *
  * | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |
  * | :-- | :-: | :-: | :-: | :-: | :-: |
  * | Profile query | ✔️ | ✔️ | ✔️ |  |  |
@@ -57,11 +58,11 @@ import { hashObject } from './hashObject'
  */
 export const useGraphQL = ({
   fetchOptionsOverride,
-  loadOnMount = true,
-  loadOnReload = true,
-  loadOnReset = true,
-  reloadOnLoad = false,
-  resetOnLoad = false,
+  loadOnMount,
+  loadOnReload,
+  loadOnReset,
+  reloadOnLoad,
+  resetOnLoad,
   operation
 }) => {
   if (reloadOnLoad && resetOnLoad)

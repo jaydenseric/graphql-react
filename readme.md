@@ -67,7 +67,19 @@ const PokemonImage = ({ name }) => {
     // GraphQL server in the fetch request body.
     operation: {
       query: `{ pokemon(name: "${name}") { image } }`
-    }
+    },
+
+    // Load the query whenever the component mounts. This is desirable for
+    // queries to display content, but not for on demand situations like
+    // pagination view more buttons or forms that submit mutations.
+    loadOnMount: true,
+
+    // Reload the query whenever a global cache reload is signaled.
+    loadOnReload: true,
+
+    // Reload the query whenever the global cache is reset. Resets immediately
+    // delete the cache and are mostly only used when logging out the user.
+    loadOnReset: true
   })
 
   return cacheValue.data ? (
@@ -383,9 +395,9 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 | :-- | :-- | :-- |
 | `options` | object | Options. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation. |
-| `options.loadOnMount` | boolean? = `true` | Should the operation load when the component mounts. |
-| `options.loadOnReload` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
-| `options.loadOnReset` | boolean? = `true` | Should the operation load when the [`GraphQL`](#class-graphql) `reset` event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
+| `options.loadOnMount` | boolean? = `false` | Should the operation load when the component mounts. |
+| `options.loadOnReload` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
+| `options.loadOnReset` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) `reset` event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
 | `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
 | `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
 | `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
@@ -410,7 +422,10 @@ _A component that displays a Pokémon image._
 >     },
 >     operation: {
 >       query: `{ pokemon(name: "${name}") { image } }`
->     }
+>     },
+>     loadOnMount: true,
+>     loadOnReload: true,
+>     loadOnReset: true
 >   })
 >
 >   return cacheValue.data ? (
@@ -425,8 +440,6 @@ _A component that displays a Pokémon image._
 
 _Options guide for common situations._
 
-> The defaults are suitable for typical query use, as apps tend to have more queries than mutations.
->
 > | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |
 > | :-- | :-: | :-: | :-: | :-: | :-: |
 > | Profile query | ✔️ | ✔️ | ✔️ |  |  |
