@@ -16,6 +16,7 @@
 - Removed `package-lock.json` from `.gitignore` and `.prettierignore` as it’s disabled in `.npmrc` anyway.
 - Removed redundant ESLint ignore comments.
 - Use GitHub Actions instead of Travis for CI.
+- Minor simplification in `useGraphQL` tests.
 - Documentation improvements, fixing [#35](https://github.com/jaydenseric/graphql-react/issues/35):
   - Updated the project description with better phrasing that includes the bundle size.
   - Moved the readme “Apollo comparison” section to the end, and updated the “Bundle impact” subsection for the new Apollo React hooks API.

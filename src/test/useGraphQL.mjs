@@ -42,8 +42,8 @@ t.test('useGraphQL()', async t => {
   const { cache } = graphql
 
   // eslint-disable-next-line react/prop-types
-  const Component = ({ loadOnMount, ...operationOptions }) => {
-    const result = useGraphQL({ loadOnMount, ...operationOptions })
+  const Component = operationOptions => {
+    const result = useGraphQL(operationOptions)
     return JSON.stringify(result)
   }
 
