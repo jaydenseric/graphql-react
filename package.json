@@ -11,6 +11,7 @@
   "repository": "github:jaydenseric/graphql-react",
   "homepage": "https://github.com/jaydenseric/graphql-react#readme",
   "bugs": "https://github.com/jaydenseric/graphql-react/issues",
+  "funding": "https://github.com/sponsors/jaydenseric",
   "keywords": [
     "graphql",
     "client",
