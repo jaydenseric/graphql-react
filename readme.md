@@ -783,6 +783,8 @@ Written in TypeScript; types are exported.
 
 Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which provides easy to install custom [`App`](https://nextjs.org/docs/#custom-app) and [config](https://nextjs.org/docs/#custom-configuration) decorators to enable server side rendered GraphQL queries.
 
+Also has [more detailed examples](https://github.com/jaydenseric/graphql-react-examples), deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
+
 #### Apollo
 
 Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-apollo), but it consists of over 100 lines of complicated copy-paste boilerplate code across multiple files.
