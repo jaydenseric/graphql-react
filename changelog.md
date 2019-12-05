@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Readme “Apollo comparison” section corrections and tweaks.
+
 ## 9.1.0
 
 ### Minor

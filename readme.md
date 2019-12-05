@@ -737,13 +737,13 @@ Apollo Client must be configured with schema knowledge extracted at build time f
 
 #### graphql-react
 
-By default, cache is refreshed for mounting components.
+Typically, cache is refreshed for mounting components.
 
 GraphQL operations can optionally refresh all cache except their own fresh cache; handy for mutations.
 
 #### Apollo
 
-By default, cache isn’t refreshed for mounting components.
+Typically, cache isn’t refreshed for mounting components.
 
 GraphQL mutations only update the cache with the contents of their payload. The prescribed approach is to try to manually update other normalized cache after mutations using complicated and often buggy APIs. Resetting all cache is possible, but it also wipes the result of the last operation.
 
@@ -751,7 +751,7 @@ GraphQL mutations only update the cache with the contents of their payload. The 
 
 #### graphql-react
 
-Out of the box file uploads compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is supported by popular GraphQL servers including [Apollo Server](https://apollographql.com/docs/apollo-server). File input values can be used as query or mutation arguments.
+Supports file uploads out of the box, compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is supported by popular GraphQL servers including [Apollo Server](https://apollographql.com/docs/apollo-server). File input values can be used as query or mutation arguments.
 
 #### Apollo
 
@@ -781,7 +781,7 @@ Written in TypeScript; types are exported.
 
 #### graphql-react
 
-Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which provides easy an easy to install [`App`](https://nextjs.org/docs/#custom-app) decorator and [plugin](https://nextjs.org/docs/#custom-configuration) to enable server side rendered GraphQL queries.
+Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which provides easy to install custom [`App`](https://nextjs.org/docs/#custom-app) and [config](https://nextjs.org/docs/#custom-configuration) decorators to enable server side rendered GraphQL queries.
 
 #### Apollo
 
