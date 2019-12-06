@@ -1,6 +1,6 @@
 import FormData from 'formdata-node'
 import t from 'tap'
-import { hashObject } from '../universal/hashObject'
+import { hashObject } from '../universal/hashObject.mjs'
 
 // Global FormData polyfill.
 global.FormData = FormData

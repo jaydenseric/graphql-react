@@ -1,7 +1,7 @@
 import { ReactNativeFile } from 'extract-files'
 import FormData from 'formdata-node'
 import t from 'tap'
-import { graphqlFetchOptions } from '../universal/graphqlFetchOptions'
+import { graphqlFetchOptions } from '../universal/graphqlFetchOptions.mjs'
 
 // Global FormData polyfill.
 global.FormData = FormData

@@ -1,6 +1,6 @@
 import mitt from 'mitt'
-import { graphqlFetchOptions } from './graphqlFetchOptions'
-import { hashObject } from './hashObject'
+import { graphqlFetchOptions } from './graphqlFetchOptions.mjs'
+import { hashObject } from './hashObject.mjs'
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.

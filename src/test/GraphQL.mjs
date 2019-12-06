@@ -2,10 +2,10 @@ import 'cross-fetch/polyfill'
 import { GraphQLInt } from 'graphql'
 import Koa from 'koa'
 import t from 'tap'
-import { GraphQL } from '../universal/GraphQL'
-import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp'
-import { promisifyEvent } from './helpers/promisifyEvent'
-import { startServer } from './helpers/startServer'
+import { GraphQL } from '../universal/GraphQL.mjs'
+import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp.mjs'
+import { promisifyEvent } from './helpers/promisifyEvent.mjs'
+import { startServer } from './helpers/startServer.mjs'
 
 t.test('GraphQL.cache population via `cache` constructor option', t => {
   const cache = {

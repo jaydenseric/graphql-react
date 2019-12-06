@@ -1,9 +1,9 @@
 import React from 'react'
-import { FirstRenderDateContext } from './FirstRenderDateContext'
-import { GraphQL } from './GraphQL'
-import { GraphQLContext } from './GraphQLContext'
-import { graphqlFetchOptions } from './graphqlFetchOptions'
-import { hashObject } from './hashObject'
+import { FirstRenderDateContext } from './FirstRenderDateContext.mjs'
+import { GraphQL } from './GraphQL.mjs'
+import { GraphQLContext } from './GraphQLContext.mjs'
+import { graphqlFetchOptions } from './graphqlFetchOptions.mjs'
+import { hashObject } from './hashObject.mjs'
 
 /**
  * A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL

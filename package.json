@@ -59,6 +59,7 @@
     "@size-limit/preset-small-lib": "^2.2.2",
     "babel-eslint": "^10.0.2",
     "babel-plugin-transform-replace-object-assign": "^2.0.0",
+    "babel-plugin-transform-require-extensions": "^1.0.1",
     "cross-fetch": "^3.0.4",
     "eslint": "^6.7.2",
     "eslint-config-env": "^11.0.1",

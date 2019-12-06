@@ -12,5 +12,5 @@ module.exports = {
     ],
     '@babel/react'
   ],
-  plugins: ['@babel/transform-runtime']
+  plugins: ['@babel/transform-runtime', 'transform-require-extensions']
 }

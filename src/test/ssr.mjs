@@ -1,12 +1,12 @@
 import 'cross-fetch/polyfill'
 import React from 'react'
 import t from 'tap'
-import { ssr } from '../server/ssr'
-import { GraphQL } from '../universal/GraphQL'
-import { GraphQLContext } from '../universal/GraphQLContext'
-import { useGraphQL } from '../universal/useGraphQL'
-import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp'
-import { startServer } from './helpers/startServer'
+import { ssr } from '../server/ssr.mjs'
+import { GraphQL } from '../universal/GraphQL.mjs'
+import { GraphQLContext } from '../universal/GraphQLContext.mjs'
+import { useGraphQL } from '../universal/useGraphQL.mjs'
+import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp.mjs'
+import { startServer } from './helpers/startServer.mjs'
 
 t.test('ssr() argument validation', async t => {
   const graphql = new GraphQL()

@@ -11,5 +11,5 @@ module.exports = {
       }
     ]
   ],
-  plugins: ['@babel/transform-runtime']
+  plugins: ['@babel/transform-runtime', 'transform-require-extensions']
 }

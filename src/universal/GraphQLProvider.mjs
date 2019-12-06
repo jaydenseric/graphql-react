@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { FirstRenderDateContext } from './FirstRenderDateContext'
-import { GraphQL } from './GraphQL'
-import { GraphQLContext } from './GraphQLContext'
+import { FirstRenderDateContext } from './FirstRenderDateContext.mjs'
+import { GraphQL } from './GraphQL.mjs'
+import { GraphQLContext } from './GraphQLContext.mjs'
 
 /**
  * A React component that provides a [`GraphQL`]{@link GraphQL} instance for an
