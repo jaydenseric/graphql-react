@@ -1,4 +1,4 @@
-import 'cross-fetch/polyfill'
+import 'cross-fetch/dist/node-polyfill.js'
 import React from 'react'
 import t from 'tap'
 import { ssr } from '../server/ssr.mjs'

@@ -1,4 +1,4 @@
-import ReactDOMServer from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server.node.js'
 import { GraphQL } from '../universal/GraphQL.mjs'
 
 /**

@@ -1,4 +1,4 @@
-import 'cross-fetch/polyfill'
+import 'cross-fetch/dist/node-polyfill.js'
 import { GraphQLInt } from 'graphql'
 import Koa from 'koa'
 import t from 'tap'

@@ -1,6 +1,6 @@
-import 'cross-fetch/polyfill'
+import 'cross-fetch/dist/node-polyfill.js'
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server.node.js'
 import ReactTestRenderer from 'react-test-renderer'
 import t from 'tap'
 import { GraphQL } from '../universal/GraphQL.mjs'
