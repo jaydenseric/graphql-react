@@ -1,12 +1,12 @@
 module.exports = {
   comments: false,
   presets: [
-    { plugins: ['babel-plugin-transform-replace-object-assign'] },
+    { plugins: ['transform-replace-object-assign'] },
     [
       '@babel/env',
       {
         targets: 'Node >= 8.10, > 0.5%, not OperaMini all, not dead',
-        modules: process.env.BABEL_ESM ? false : 'commonjs',
+        modules: process.env.BABEL_ESM ? false : 'cjs',
         shippedProposals: true,
         loose: true
       }
