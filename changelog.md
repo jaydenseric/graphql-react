@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated dependencies.
 - Readme “Apollo comparison” section corrections and tweaks.
 
 ## 9.1.0
