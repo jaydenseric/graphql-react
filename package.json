@@ -33,9 +33,9 @@
   "main": "universal",
   "sideEffects": false,
   "engines": {
-    "node": ">=8.10"
+    "node": ">=10"
   },
-  "browserslist": "Node >= 8.10, > 0.5%, not OperaMini all, not dead",
+  "browserslist": "Node >= 10, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
