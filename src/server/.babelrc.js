@@ -2,6 +2,7 @@
 
 module.exports = {
   comments: false,
+  plugins: ['@babel/transform-runtime', 'transform-require-extensions'],
   presets: [
     [
       '@babel/env',
@@ -12,6 +13,5 @@ module.exports = {
         loose: true
       }
     ]
-  ],
-  plugins: ['@babel/transform-runtime', 'transform-require-extensions']
+  ]
 }
