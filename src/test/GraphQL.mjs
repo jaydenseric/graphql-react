@@ -1,11 +1,13 @@
 import 'cross-fetch/dist/node-polyfill.js'
-import { GraphQLInt } from 'graphql'
 import Koa from 'koa'
 import t from 'tap'
 import { GraphQL } from '../universal/GraphQL.mjs'
 import { createGraphQLKoaApp } from './helpers/createGraphQLKoaApp.mjs'
+import graphql from './helpers/graphql.js'
 import { promisifyEvent } from './helpers/promisifyEvent.mjs'
 import { startServer } from './helpers/startServer.mjs'
+
+const { GraphQLInt } = graphql
 
 t.test('GraphQL.cache population via `cache` constructor option', t => {
   const cache = {

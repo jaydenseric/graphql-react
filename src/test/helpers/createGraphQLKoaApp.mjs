@@ -1,12 +1,14 @@
-import {
+import graphqlApiKoa from 'graphql-api-koa'
+import Koa from 'koa'
+import bodyParser from 'koa-bodyparser'
+import graphql from './graphql.js'
+
+const {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString
-} from 'graphql'
-import { errorHandler, execute } from 'graphql-api-koa'
-import Koa from 'koa'
-import bodyParser from 'koa-bodyparser'
+} = graphql
 
 /**
  * Creates a GraphQL Koa app.
@@ -28,10 +30,10 @@ export const createGraphQLKoaApp = (
   }
 ) =>
   new Koa()
-    .use(errorHandler())
+    .use(graphqlApiKoa.errorHandler())
     .use(bodyParser())
     .use(
-      execute({
+      graphqlApiKoa.execute({
         schema: new GraphQLSchema({
           query: new GraphQLObjectType({
             name: 'Query',

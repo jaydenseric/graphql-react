@@ -2,7 +2,7 @@ import FormData from 'formdata-node'
 import t from 'tap'
 import { hashObject } from '../universal/hashObject.mjs'
 
-// Global FormData polyfill.
+// Global polyfill.
 global.FormData = FormData
 
 t.test('hashObject() with an object', t => {
