@@ -5,4 +5,4 @@ export {
   useGraphQL,
   reportCacheErrors
 } from '..'
-export { ssr } from '../server'
+export { ssr } from '../server/index.mjs'
