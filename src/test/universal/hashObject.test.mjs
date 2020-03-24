@@ -5,7 +5,7 @@ import { hashObject } from '../../universal/hashObject.mjs'
 // Global polyfill.
 global.FormData = FormData
 
-export default tests => {
+export default (tests) => {
   tests.add('`hashObject` with an object', () => {
     const object = { a: 1, b: 2 }
     const hash1 = hashObject(object)

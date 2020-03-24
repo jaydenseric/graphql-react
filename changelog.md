@@ -14,6 +14,7 @@
 - Removed the [`object-assign`](https://npm.im/object-assign) dependency and several Babel dev dependencies after simplifying the Babel config.
 - Added a new [`babel-plugin-transform-require-extensions`](https://npm.im/babel-plugin-transform-require-extensions) dev dependency and ensured ESM import specifiers in both source and published `.mjs` files contain file names with extensions, which [are mandatory in the final Node.js ESM implementation](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions). Published CJS `.js` files now also have file extensions in `require` paths.
 - Stop using [`husky`](https://npm.im/husky) and [`lint-staged`](https://npm.im/lint-staged).
+- Lint fixes for [`prettier`](https://npm.im/prettier) v2.
 - Tidied Babel configs.
 - Ensure GitHub Actions run on pull request.
 - Use strict mode for scripts.

@@ -63,7 +63,7 @@ export const useGraphQL = ({
   loadOnReset,
   reloadOnLoad,
   resetOnLoad,
-  operation
+  operation,
 }) => {
   if (reloadOnLoad && resetOnLoad)
     throw new Error(
@@ -105,7 +105,7 @@ export const useGraphQL = ({
       operation,
       fetchOptionsOverride,
       reloadOnLoad,
-      resetOnLoad
+      resetOnLoad,
     })
 
     setLoading(true)
@@ -209,7 +209,7 @@ export const useGraphQL = ({
     firstRenderDate,
     load,
     loadOnMount,
-    loadedOnMountCacheKey
+    loadedOnMountCacheKey,
   ])
 
   if (graphql.ssr && loadOnMount && !cacheValue)
@@ -217,7 +217,7 @@ export const useGraphQL = ({
       operation,
       fetchOptionsOverride,
       reloadOnLoad,
-      resetOnLoad
+      resetOnLoad,
     })
 
   return { load, loading, cacheKey, cacheValue }

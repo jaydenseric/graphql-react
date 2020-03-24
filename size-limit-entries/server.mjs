@@ -3,6 +3,6 @@ export {
   GraphQLContext,
   GraphQLProvider,
   useGraphQL,
-  reportCacheErrors
+  reportCacheErrors,
 } from '..'
 export { ssr } from '../server/index.mjs'

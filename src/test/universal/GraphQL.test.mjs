@@ -10,14 +10,14 @@ import { testGraphQLOperation } from '../testGraphQLOperation.mjs'
 
 const { GraphQLInt } = graphql
 
-export default tests => {
+export default (tests) => {
   tests.add('`GraphQL` option `cache`', () => {
     const cache = {
       abcdefg: {
         data: {
-          echo: 'hello'
-        }
-      }
+          echo: 'hello',
+        },
+      },
     }
 
     const graphql = new GraphQL({ cache })
@@ -41,16 +41,16 @@ export default tests => {
           expectedResolvedCacheValue,
           callback({ cacheKey }) {
             hash = cacheKey
-          }
+          },
         })
 
         // With initial cache.
         await testGraphQLOperation({
           port,
           initialGraphQLCache: {
-            [hash]: expectedResolvedCacheValue
+            [hash]: expectedResolvedCacheValue,
           },
-          expectedResolvedCacheValue
+          expectedResolvedCacheValue,
         })
       } finally {
         close()
@@ -73,9 +73,9 @@ export default tests => {
         await testGraphQLOperation({
           port,
           expectedResolvedCacheValue: {
-            fetchError: 'Global fetch API or polyfill unavailable.'
+            fetchError: 'Global fetch API or polyfill unavailable.',
           },
-          responseExpected: false
+          responseExpected: false,
         })
 
         // Restore the global fetch polyfill.
@@ -104,10 +104,10 @@ export default tests => {
           expectedResolvedCacheValue: {
             httpError: {
               status: 404,
-              statusText: 'Not Found'
+              statusText: 'Not Found',
             },
-            parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`
-          }
+            parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
+          },
         })
       } finally {
         close()
@@ -129,8 +129,8 @@ export default tests => {
       await testGraphQLOperation({
         port,
         expectedResolvedCacheValue: {
-          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`
-        }
+          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
+        },
       })
     } finally {
       close()
@@ -153,8 +153,8 @@ export default tests => {
         await testGraphQLOperation({
           port,
           expectedResolvedCacheValue: {
-            parseError: 'Malformed payload.'
-          }
+            parseError: 'Malformed payload.',
+          },
         })
       } finally {
         close()
@@ -174,7 +174,7 @@ export default tests => {
           expectedResolvedCacheValue: {
             httpError: {
               status: 400,
-              statusText: 'Bad Request'
+              statusText: 'Bad Request',
             },
             graphQLErrors: [
               {
@@ -182,12 +182,12 @@ export default tests => {
                 locations: [
                   {
                     line: 1,
-                    column: 3
-                  }
-                ]
-              }
-            ]
-          }
+                    column: 3,
+                  },
+                ],
+              },
+            ],
+          },
         })
       } finally {
         close()
@@ -204,28 +204,28 @@ export default tests => {
         const initialGraphQLCache = {
           abcdefg: {
             data: {
-              b: true
-            }
-          }
+              b: true,
+            },
+          },
         }
 
         const expectedResolvedCacheValue = {
           data: {
-            echo: 'hello'
-          }
+            echo: 'hello',
+          },
         }
 
         await testGraphQLOperation({
           port,
           initialGraphQLCache,
-          expectedResolvedCacheValue
+          expectedResolvedCacheValue,
         })
 
         await testGraphQLOperation({
           port,
           resetOnLoad: true,
           initialGraphQLCache,
-          expectedResolvedCacheValue
+          expectedResolvedCacheValue,
         })
       } finally {
         close()
@@ -241,7 +241,7 @@ export default tests => {
         graphql.operate({
           operation: { query: '' },
           reloadOnLoad: true,
-          resetOnLoad: true
+          resetOnLoad: true,
         })
       }, new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'))
     }
@@ -256,8 +256,8 @@ export default tests => {
         createGraphQLKoaApp({
           requestCount: {
             type: GraphQLInt,
-            resolve: () => ++requestCount
-          }
+            resolve: () => ++requestCount,
+          },
         })
       )
 
@@ -268,17 +268,17 @@ export default tests => {
             options.url = `http://localhost:${port}`
           },
           operation: {
-            query: '{ requestCount }'
-          }
+            query: '{ requestCount }',
+          },
         }
 
         const {
           cacheKey: cacheKey1,
-          cacheValuePromise: cacheValuePromise1
+          cacheValuePromise: cacheValuePromise1,
         } = graphql.operate(queryOptions)
         const {
           cacheKey: cacheKey2,
-          cacheValuePromise: cacheValuePromise2
+          cacheValuePromise: cacheValuePromise2,
         } = graphql.operate(queryOptions)
 
         strictEqual(cacheKey1, cacheKey2)
@@ -329,10 +329,10 @@ export default tests => {
         cache: {
           abcdefg: {
             data: {
-              echo: 'hello'
-            }
-          }
-        }
+              echo: 'hello',
+            },
+          },
+        },
       })
 
       const resetEvent = promisifyEvent(graphql, 'reset')
@@ -353,22 +353,22 @@ export default tests => {
       const cache1 = {
         [exceptCacheKey]: {
           data: {
-            echo: 'hello'
-          }
-        }
+            echo: 'hello',
+          },
+        },
       }
       const cache2 = {
         ghijkl: {
           data: {
-            echo: 'hello'
-          }
-        }
+            echo: 'hello',
+          },
+        },
       }
       const graphql = new GraphQL({
         cache: {
           ...cache1,
-          ...cache2
-        }
+          ...cache2,
+        },
       })
       const resetEvent = promisifyEvent(graphql, 'reset')
 

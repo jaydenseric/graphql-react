@@ -7,7 +7,7 @@ const {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
-  GraphQLString
+  GraphQLString,
 } = graphql
 
 /**
@@ -23,11 +23,11 @@ export const createGraphQLKoaApp = (
       args: {
         phrase: {
           type: GraphQLString,
-          defaultValue: 'hello'
-        }
+          defaultValue: 'hello',
+        },
       },
-      resolve: (root, { phrase }) => phrase
-    }
+      resolve: (root, { phrase }) => phrase,
+    },
   }
 ) =>
   new Koa()
@@ -38,8 +38,8 @@ export const createGraphQLKoaApp = (
         schema: new GraphQLSchema({
           query: new GraphQLObjectType({
             name: 'Query',
-            fields
-          })
-        })
+            fields,
+          }),
+        }),
       })
     )

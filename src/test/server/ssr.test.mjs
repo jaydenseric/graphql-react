@@ -8,7 +8,7 @@ import { useGraphQL } from '../../universal/useGraphQL.mjs'
 import { createGraphQLKoaApp } from '../createGraphQLKoaApp.mjs'
 import { listen } from '../listen.mjs'
 
-export default tests => {
+export default (tests) => {
   tests.add('`ssr` argument 1 validation', async () => {
     const error = new Error('ssr() argument 1 must be a GraphQL instance.')
 
@@ -50,7 +50,7 @@ export default tests => {
             options.url = `http://localhost:${port}`
           },
           operation: { query: `{ echo(phrase: "${phrase}") }` },
-          loadOnMount: true
+          loadOnMount: true,
         })
 
         return cacheValue && cacheValue.data ? (

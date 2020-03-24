@@ -75,7 +75,7 @@
     "jsdoc-md": "^5.0.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.3.0",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",

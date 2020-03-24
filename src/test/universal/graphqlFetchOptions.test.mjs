@@ -7,16 +7,16 @@ import { graphqlFetchOptions } from '../../universal/graphqlFetchOptions.mjs'
 global.Blob = Blob
 global.FormData = FormData
 
-export default tests => {
+export default (tests) => {
   tests.add('`graphqlFetchOptions` without files', () => {
     deepStrictEqual(graphqlFetchOptions({ query: '' }), {
       url: '/graphql',
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: '{"query":""}'
+      body: '{"query":""}',
     })
   })
 
@@ -24,7 +24,7 @@ export default tests => {
     const filetype = 'text/plain'
     const options = graphqlFetchOptions({
       query: '',
-      variables: { a: new Blob(['a'], { type: filetype }) }
+      variables: { a: new Blob(['a'], { type: filetype }) },
     })
 
     // See the GraphQL multipart request spec:
@@ -40,7 +40,7 @@ export default tests => {
     strictEqual(formDataEntries.length, 3)
     deepStrictEqual(formDataEntries[0], [
       'operations',
-      '{"query":"","variables":{"a":null}}'
+      '{"query":"","variables":{"a":null}}',
     ])
     deepStrictEqual(formDataEntries[1], ['map', '{"1":["variables.a"]}'])
     strictEqual(formDataEntries[2][0], '1')

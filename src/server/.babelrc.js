@@ -15,8 +15,8 @@ module.exports = {
         targets: 'Node >= 10',
         modules: process.env.BABEL_ESM ? false : 'cjs',
         shippedProposals: true,
-        loose: true
-      }
-    ]
-  ]
+        loose: true,
+      },
+    ],
+  ],
 }

@@ -24,12 +24,12 @@ export async function testGraphQLOperation({
   graphql = new GraphQL({
     cache: {
       // Spread so that cache updates don’t mutate the original object.
-      ...initialGraphQLCache
-    }
+      ...initialGraphQLCache,
+    },
   }),
   expectedResolvedCacheValue,
   responseExpected = true,
-  callback
+  callback,
 }) {
   const fetchEvent = promisifyEvent(graphql, 'fetch')
   const cacheEvent = promisifyEvent(graphql, 'cache')
@@ -41,7 +41,7 @@ export async function testGraphQLOperation({
       options.url = `http://localhost:${port}`
     },
     resetOnLoad,
-    operation
+    operation,
   })
 
   strictEqual(typeof cacheKey, 'string')
@@ -85,7 +85,7 @@ export async function testGraphQLOperation({
     // last query. Otherwise, the new cache value should be merged into the
     // initial GraphQL cache.
     ...(resetOnLoad ? {} : initialGraphQLCache),
-    [cacheKey]: expectedResolvedCacheValue
+    [cacheKey]: expectedResolvedCacheValue,
   })
 
   if (callback) callback({ cacheKey })

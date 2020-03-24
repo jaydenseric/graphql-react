@@ -15,9 +15,9 @@ module.exports = {
         targets: { node: true },
         modules: process.env.BABEL_ESM ? false : 'cjs',
         shippedProposals: true,
-        loose: true
-      }
+        loose: true,
+      },
     ],
-    '@babel/react'
-  ]
+    '@babel/react',
+  ],
 }

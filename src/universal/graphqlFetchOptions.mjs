@@ -11,7 +11,7 @@ export function graphqlFetchOptions(operation) {
   const fetchOptions = {
     url: '/graphql',
     method: 'POST',
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json' },
   }
 
   const { clone, files } = extractFiles(operation)
@@ -27,7 +27,7 @@ export function graphqlFetchOptions(operation) {
 
     const map = {}
     let i = 0
-    files.forEach(paths => {
+    files.forEach((paths) => {
       map[++i] = paths
     })
     form.append('map', JSON.stringify(map))

@@ -20,7 +20,7 @@ module.exports = function babelPluginAddBabelRuntimeFileExtensions({ types }) {
           path
             .get('source')
             .replaceWith(types.stringLiteral(`${path.node.source.value}.js`))
-      }
-    }
+      },
+    },
   }
 }

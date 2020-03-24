@@ -13,10 +13,10 @@ import { promisifyEvent } from '../promisifyEvent.mjs'
 import { sleep } from '../sleep.mjs'
 
 // eslint-disable-next-line react/prop-types
-const RenderUseGraphQL = operationOptions =>
+const RenderUseGraphQL = (operationOptions) =>
   JSON.stringify(useGraphQL(operationOptions))
 
-export default tests => {
+export default (tests) => {
   tests.add(
     '`useGraphQL` option `loadOnMount` false (default) with no initial cache',
     async () => {
@@ -24,13 +24,13 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const { cacheKey: operation1CacheKey } = graphql.operate(
           operation1Options
@@ -38,7 +38,7 @@ export default tests => {
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const { cacheKey: operation2CacheKey } = graphql.operate(
           operation2Options
@@ -102,31 +102,31 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation1CacheKey,
-          cacheValuePromise: operation1CacheValuePromise
+          cacheValuePromise: operation1CacheValuePromise,
         } = graphql.operate(operation1Options)
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation2CacheKey,
-          cacheValuePromise: operation2CacheValuePromise
+          cacheValuePromise: operation2CacheValuePromise,
         } = graphql.operate(operation2Options)
 
         const [operation1CacheValue] = await Promise.all([
           operation1CacheValuePromise,
-          operation2CacheValuePromise
+          operation2CacheValuePromise,
         ])
 
         // Ensure only the first operation is cached.
@@ -186,31 +186,31 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation1CacheKey,
-          cacheValuePromise: operation1CacheValuePromise
+          cacheValuePromise: operation1CacheValuePromise,
         } = graphql.operate(operation1Options)
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation2CacheKey,
-          cacheValuePromise: operation2CacheValuePromise
+          cacheValuePromise: operation2CacheValuePromise,
         } = graphql.operate(operation2Options)
 
         const [operation1CacheValue, operation2CacheValue] = await Promise.all([
           operation1CacheValuePromise,
-          operation2CacheValuePromise
+          operation2CacheValuePromise,
         ])
 
         let fetched = false
@@ -267,13 +267,13 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const { cacheKey: operation1CacheKey } = graphql.operate(
           operation1Options
@@ -281,7 +281,7 @@ export default tests => {
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const { cacheKey: operation2CacheKey } = graphql.operate(
           operation2Options
@@ -345,31 +345,31 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation1CacheKey,
-          cacheValuePromise: operation1CacheValuePromise
+          cacheValuePromise: operation1CacheValuePromise,
         } = graphql.operate(operation1Options)
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation2CacheKey,
-          cacheValuePromise: operation2CacheValuePromise
+          cacheValuePromise: operation2CacheValuePromise,
         } = graphql.operate(operation2Options)
 
         const [operation1CacheValue] = await Promise.all([
           operation1CacheValuePromise,
-          operation2CacheValuePromise
+          operation2CacheValuePromise,
         ])
 
         // Ensure only the first operation is cached.
@@ -429,31 +429,31 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operation1Options = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation1CacheKey,
-          cacheValuePromise: operation1CacheValuePromise
+          cacheValuePromise: operation1CacheValuePromise,
         } = graphql.operate(operation1Options)
 
         const operation2Options = {
           operation: { query: '{ b: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operation2CacheKey,
-          cacheValuePromise: operation2CacheValuePromise
+          cacheValuePromise: operation2CacheValuePromise,
         } = graphql.operate(operation2Options)
 
         const [operation1CacheValue, operation2CacheValue] = await Promise.all([
           operation1CacheValuePromise,
-          operation2CacheValuePromise
+          operation2CacheValuePromise,
         ])
 
         let fetched = false
@@ -510,17 +510,17 @@ export default tests => {
 
       try {
         const graphql = new GraphQL()
-        const fetchOptionsOverride = options => {
+        const fetchOptionsOverride = (options) => {
           options.url = `http://localhost:${port}`
         }
 
         const operationOptions = {
           operation: { query: '{ a: echo }' },
-          fetchOptionsOverride
+          fetchOptionsOverride,
         }
         const {
           cacheKey: operationCacheKey,
-          cacheValuePromise: operationCacheValuePromise
+          cacheValuePromise: operationCacheValuePromise,
         } = graphql.operate(operationOptions)
 
         const operationCacheValue = await operationCacheValuePromise
@@ -577,7 +577,7 @@ export default tests => {
           <GraphQLProvider graphql={graphql}>
             <RenderUseGraphQL
               operation={{ query: '{ echo }' }}
-              fetchOptionsOverride={options => {
+              fetchOptionsOverride={(options) => {
                 options.url = `http://localhost:${port}`
               }}
               loadOnMount={true}
@@ -609,7 +609,7 @@ export default tests => {
           <GraphQLProvider graphql={graphql}>
             <RenderUseGraphQL
               operation={{ query: '{ echo }' }}
-              fetchOptionsOverride={options => {
+              fetchOptionsOverride={(options) => {
                 options.url = `http://localhost:${port}`
               }}
               loadOnMount={true}
@@ -650,17 +650,17 @@ export default tests => {
 
     try {
       const graphql = new GraphQL()
-      const fetchOptionsOverride = options => {
+      const fetchOptionsOverride = (options) => {
         options.url = `http://localhost:${port}`
       }
 
       const operationOptions = {
         operation: { query: '{ a: echo }' },
-        fetchOptionsOverride
+        fetchOptionsOverride,
       }
       const {
         cacheKey: operationCacheKey,
-        cacheValuePromise: operationCacheValuePromise
+        cacheValuePromise: operationCacheValuePromise,
       } = graphql.operate(operationOptions)
 
       const operationCacheValue = await operationCacheValuePromise

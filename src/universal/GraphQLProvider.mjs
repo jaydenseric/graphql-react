@@ -40,5 +40,5 @@ export const GraphQLProvider = ({ graphql, children }) => {
 
 GraphQLProvider.propTypes = {
   graphql: PropTypes.instanceOf(GraphQL).isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
 }
