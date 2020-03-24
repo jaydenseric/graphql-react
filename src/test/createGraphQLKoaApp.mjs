@@ -14,6 +14,7 @@ const {
  * Creates a GraphQL Koa app.
  * @param {object} fields GraphQL `query` fields.
  * @returns {object} Koa instance.
+ * @ignore
  */
 export const createGraphQLKoaApp = (
   fields = {

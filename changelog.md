@@ -6,6 +6,7 @@
 
 - Updated Node.js support from v8.10+ to v10+.
 - Updated dependencies, some of which require Node.js v10+.
+- Replaced the [`tap`](https://npm.im/tap) dev dependency with [`test-director`](https://npm.im/test-director) and [`hard-rejection`](https://npm.im/hard-rejection), and refactored tests accordingly. This improves the dev experience and reduced the dev install size by ~75.5 MB.
 
 ### Patch
 

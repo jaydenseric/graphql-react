@@ -71,6 +71,7 @@
     "formdata-node": "^2.1.1",
     "graphql": "^14.6.0",
     "graphql-api-koa": "^4.1.1",
+    "hard-rejection": "^2.1.0",
     "jsdoc-md": "^5.0.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.3.0",
@@ -79,7 +80,7 @@
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",
     "size-limit": "^4.4.0",
-    "tap": "^14.10.7"
+    "test-director": "^4.0.0"
   },
   "scripts": {
     "prepare": "npm run prepare:clean && npm run prepare:mjs && npm run prepare:js && npm run prepare:jsdoc && npm run prepare:prettier",
@@ -88,10 +89,11 @@
     "prepare:js": "babel src -d .",
     "prepare:jsdoc": "jsdoc-md",
     "prepare:prettier": "prettier '{universal,server,test}/**/*.{mjs,js}' readme.md --write",
-    "test": "npm run test:eslint && npm run test:prettier && npm run test:tap && npm run test:size",
+    "test": "npm run test:eslint && npm run test:prettier && npm run test:esm && npm run test:cjs && npm run test:size",
     "test:eslint": "eslint . --ext mjs,js",
     "test:prettier": "prettier '**/*.{json,yml,md}' -l",
-    "test:tap": "tap test/*.{mjs,js}",
+    "test:esm": "if node --input-type=module -e '' > /dev/null 2>&1; then node -r hard-rejection/register test/index.mjs; fi",
+    "test:cjs": "node -r hard-rejection/register test",
     "test:size": "size-limit",
     "prepublishOnly": "npm test"
   }
