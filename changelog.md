@@ -7,6 +7,7 @@
 - Updated Node.js support from v8.10+ to v10+.
 - Updated dependencies, some of which require Node.js v10+.
 - Replaced the [`tap`](https://npm.im/tap) dev dependency with [`test-director`](https://npm.im/test-director) and [`hard-rejection`](https://npm.im/hard-rejection), and refactored tests accordingly. This improves the dev experience and reduced the dev install size by ~75.5 MB.
+- Use `ReactDOM.unstable_batchedUpdates` in the `useGraphQL` React hook to reduce the number of renders when loading completes, fixing [#38](https://github.com/jaydenseric/graphql-react/issues/38) via [#42](https://github.com/jaydenseric/graphql-react/pull/42). Although [`react-dom`](https://npm.im/react-dom) was already a peer dependency, this is the first time it's being used in the client API; potentially a breaking change for atypical projects.
 
 ### Patch
 
