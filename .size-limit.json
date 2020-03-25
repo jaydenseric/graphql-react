@@ -2,13 +2,13 @@
   {
     "name": "Server",
     "path": "size-limit-entries/server.mjs",
-    "limit": "2.5 KB",
+    "limit": "2.6 KB",
     "ignore": ["prop-types"]
   },
   {
     "name": "Browser",
     "path": "size-limit-entries/browser.mjs",
-    "limit": "2.5 KB",
+    "limit": "2.6 KB",
     "ignore": ["prop-types"]
   }
 ]

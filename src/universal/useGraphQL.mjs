@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { FirstRenderDateContext } from './FirstRenderDateContext.mjs'
 import { GraphQL } from './GraphQL.mjs'
 import { GraphQLContext } from './GraphQLContext.mjs'
@@ -136,10 +137,11 @@ export const useGraphQL = ({
      * @ignore
      */
     function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
-      if (cacheKey === cachedCacheKey && isMountedRef.current) {
-        setLoading(false)
-        setCacheValue(cacheValue)
-      }
+      if (cacheKey === cachedCacheKey && isMountedRef.current)
+        ReactDOM.unstable_batchedUpdates(() => {
+          setLoading(false)
+          setCacheValue(cacheValue)
+        })
     }
 
     /**
