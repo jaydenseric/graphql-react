@@ -66,7 +66,7 @@ const PokemonImage = ({ name }) => {
     // additional properties can be used; all are JSON encoded and sent to the
     // GraphQL server in the fetch request body.
     operation: {
-      query: `{ pokemon(name: "${name}") { image } }`
+      query: `{ pokemon(name: "${name}") { image } }`,
     },
 
     // Load the query whenever the component mounts. This is desirable for
@@ -79,7 +79,7 @@ const PokemonImage = ({ name }) => {
 
     // Reload the query whenever the global cache is reset. Resets immediately
     // delete the cache and are mostly only used when logging out the user.
-    loadOnReset: true
+    loadOnReset: true,
   })
 
   return cacheValue.data ? (
@@ -105,7 +105,7 @@ const App = () => (
 
 ## Support
 
-- Node.js v8.10+
+- Node.js v10+
 - Browsers [`> 0.5%, not OperaMini all, not dead`](https://browserl.ist/?q=%3E+0.5%25%2C+not+OperaMini+all%2C+not+dead)
 
 Consider polyfilling:
@@ -421,11 +421,11 @@ _A component that displays a Pokémon image._
 >       options.url = 'https://graphql-pokemon.now.sh'
 >     },
 >     operation: {
->       query: `{ pokemon(name: "${name}") { image } }`
+>       query: `{ pokemon(name: "${name}") { image } }`,
 >     },
 >     loadOnMount: true,
 >     loadOnReload: true,
->     loadOnReset: true
+>     loadOnReset: true,
 >   })
 >
 >   return cacheValue.data ? (
@@ -559,7 +559,7 @@ Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate t
 _Setting [GraphQL `fetch` options](#type-graphqlfetchoptions) for an imaginary API._
 
 > ```js
-> options => {
+> ;(options) => {
 >   options.url = 'https://api.example.com/graphql'
 >   options.credentials = 'include'
 > }

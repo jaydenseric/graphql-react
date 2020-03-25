@@ -18,7 +18,7 @@
  */
 export function reportCacheErrors({
   cacheKey,
-  cacheValue: { fetchError, httpError, parseError, graphQLErrors }
+  cacheValue: { fetchError, httpError, parseError, graphQLErrors },
 }) {
   if (fetchError || httpError || parseError || graphQLErrors) {
     console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`)

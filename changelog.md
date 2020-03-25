@@ -2,11 +2,22 @@
 
 ## Next
 
+### Major
+
+- Updated Node.js support from v8.10+ to v10+.
+- Updated dependencies, some of which require Node.js v10+.
+- Replaced the [`tap`](https://npm.im/tap) dev dependency with [`test-director`](https://npm.im/test-director) and [`hard-rejection`](https://npm.im/hard-rejection), and refactored tests accordingly. This improves the dev experience and reduced the dev install size by ~75.5 MB.
+
 ### Patch
 
-- Updated dependencies.
+- Updated tests for compatibility with updated dependencies.
+- Removed the [`object-assign`](https://npm.im/object-assign) dependency and several Babel dev dependencies after simplifying the Babel config.
 - Added a new [`babel-plugin-transform-require-extensions`](https://npm.im/babel-plugin-transform-require-extensions) dev dependency and ensured ESM import specifiers in both source and published `.mjs` files contain file names with extensions, which [are mandatory in the final Node.js ESM implementation](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions). Published CJS `.js` files now also have file extensions in `require` paths.
+- Stop using [`husky`](https://npm.im/husky) and [`lint-staged`](https://npm.im/lint-staged).
+- Lint fixes for [`prettier`](https://npm.im/prettier) v2.
 - Tidied Babel configs.
+- Ensure GitHub Actions run on pull request.
+- Use strict mode for scripts.
 - Readme “Apollo comparison” section corrections and tweaks.
 
 ## 9.1.0

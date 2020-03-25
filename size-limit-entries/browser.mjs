@@ -3,5 +3,5 @@ export {
   GraphQLContext,
   GraphQLProvider,
   useGraphQL,
-  reportCacheErrors
-} from '..'
+  reportCacheErrors,
+} from '../universal/index.mjs'

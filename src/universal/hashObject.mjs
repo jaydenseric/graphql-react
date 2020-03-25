@@ -55,5 +55,5 @@ function hashObjectReplacer(key, value) {
  * @returns {string} A hash.
  * @ignore
  */
-export const hashObject = object =>
+export const hashObject = (object) =>
   fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36)
