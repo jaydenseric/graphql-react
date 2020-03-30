@@ -1,6 +1,6 @@
-import { deepStrictEqual, strictEqual } from 'assert'
-import { GraphQL } from '../universal/GraphQL.mjs'
-import { promisifyEvent } from './promisifyEvent.mjs'
+import { deepStrictEqual, strictEqual } from 'assert';
+import { GraphQL } from '../universal/GraphQL.mjs';
+import { promisifyEvent } from './promisifyEvent.mjs';
 
 /**
  * Tests [`GraphQL.operate()`]{@link GraphQL#operate} under certain conditions.
@@ -31,53 +31,53 @@ export async function testGraphQLOperation({
   responseExpected = true,
   callback,
 }) {
-  const fetchEvent = promisifyEvent(graphql, 'fetch')
-  const cacheEvent = promisifyEvent(graphql, 'cache')
+  const fetchEvent = promisifyEvent(graphql, 'fetch');
+  const cacheEvent = promisifyEvent(graphql, 'cache');
 
-  if (resetOnLoad) var resetEvent = promisifyEvent(graphql, 'reset')
+  if (resetOnLoad) var resetEvent = promisifyEvent(graphql, 'reset');
 
   const { cacheKey, cacheValue, cacheValuePromise } = graphql.operate({
     fetchOptionsOverride(options) {
-      options.url = `http://localhost:${port}`
+      options.url = `http://localhost:${port}`;
     },
     resetOnLoad,
     operation,
-  })
+  });
 
-  strictEqual(typeof cacheKey, 'string')
+  strictEqual(typeof cacheKey, 'string');
   deepStrictEqual(
     cacheValue,
     initialGraphQLCache ? initialGraphQLCache[cacheKey] : undefined,
     'Initial cache value'
-  )
-  strictEqual(cacheKey in graphql.operations, true)
-  strictEqual(cacheValuePromise instanceof Promise, true)
-  strictEqual(cacheValuePromise, graphql.operations[cacheKey])
+  );
+  strictEqual(cacheKey in graphql.operations, true);
+  strictEqual(cacheValuePromise instanceof Promise, true);
+  strictEqual(cacheValuePromise, graphql.operations[cacheKey]);
 
-  const cacheValueResolved = await graphql.operations[cacheKey]
+  const cacheValueResolved = await graphql.operations[cacheKey];
 
-  strictEqual(cacheKey in graphql.operations, false)
-  deepStrictEqual(cacheValueResolved, expectedResolvedCacheValue)
+  strictEqual(cacheKey in graphql.operations, false);
+  deepStrictEqual(cacheValueResolved, expectedResolvedCacheValue);
 
-  const fetchEventData = await fetchEvent
+  const fetchEventData = await fetchEvent;
 
-  strictEqual(typeof fetchEventData, 'object')
-  strictEqual(fetchEventData.cacheKey, cacheKey)
-  strictEqual(fetchEventData.cacheValuePromise, cacheValuePromise)
+  strictEqual(typeof fetchEventData, 'object');
+  strictEqual(fetchEventData.cacheKey, cacheKey);
+  strictEqual(fetchEventData.cacheValuePromise, cacheValuePromise);
 
-  const cacheEventData = await cacheEvent
+  const cacheEventData = await cacheEvent;
 
-  strictEqual(typeof cacheEventData, 'object')
-  strictEqual(cacheEventData.cacheKey, cacheKey)
-  deepStrictEqual(cacheEventData.cacheValue, expectedResolvedCacheValue)
+  strictEqual(typeof cacheEventData, 'object');
+  strictEqual(cacheEventData.cacheKey, cacheKey);
+  deepStrictEqual(cacheEventData.cacheValue, expectedResolvedCacheValue);
 
   responseExpected
     ? strictEqual(cacheEventData.response instanceof Response, true)
-    : strictEqual(cacheEventData.response, undefined)
+    : strictEqual(cacheEventData.response, undefined);
 
   if (resetEvent) {
-    const resetEventData = await resetEvent
-    strictEqual(resetEventData.exceptCacheKey, cacheKey)
+    const resetEventData = await resetEvent;
+    strictEqual(resetEventData.exceptCacheKey, cacheKey);
   }
 
   deepStrictEqual(graphql.cache, {
@@ -86,7 +86,7 @@ export async function testGraphQLOperation({
     // initial GraphQL cache.
     ...(resetOnLoad ? {} : initialGraphQLCache),
     [cacheKey]: expectedResolvedCacheValue,
-  })
+  });
 
-  if (callback) callback({ cacheKey })
+  if (callback) callback({ cacheKey });
 }

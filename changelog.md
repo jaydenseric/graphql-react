@@ -1,5 +1,13 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Improved the package `prepare:prettier` and `test:prettier` scripts.
+- Reordered the package `test:eslint` script args for consistency with `test:prettier`.
+- Configured Prettier option `semi` to the default, `true`.
+
 ## 10.0.0
 
 ### Major

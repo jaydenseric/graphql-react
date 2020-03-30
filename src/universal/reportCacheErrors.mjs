@@ -21,49 +21,49 @@ export function reportCacheErrors({
   cacheValue: { fetchError, httpError, parseError, graphQLErrors },
 }) {
   if (fetchError || httpError || parseError || graphQLErrors) {
-    console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`)
+    console.groupCollapsed(`GraphQL cache errors for key “${cacheKey}”:`);
 
     if (fetchError) {
-      console.groupCollapsed('Fetch:')
+      console.groupCollapsed('Fetch:');
 
       // eslint-disable-next-line no-console
-      console.log(fetchError)
+      console.log(fetchError);
 
-      console.groupEnd()
+      console.groupEnd();
     }
 
     if (httpError) {
-      console.groupCollapsed('HTTP:')
+      console.groupCollapsed('HTTP:');
 
       // eslint-disable-next-line no-console
-      console.log(`Status: ${httpError.status}`)
+      console.log(`Status: ${httpError.status}`);
 
       // eslint-disable-next-line no-console
-      console.log(`Text: ${httpError.statusText}`)
+      console.log(`Text: ${httpError.statusText}`);
 
-      console.groupEnd()
+      console.groupEnd();
     }
 
     if (parseError) {
-      console.groupCollapsed('Parse:')
+      console.groupCollapsed('Parse:');
 
       // eslint-disable-next-line no-console
-      console.log(parseError)
+      console.log(parseError);
 
-      console.groupEnd()
+      console.groupEnd();
     }
 
     if (graphQLErrors) {
-      console.groupCollapsed('GraphQL:')
+      console.groupCollapsed('GraphQL:');
 
       graphQLErrors.forEach(({ message }) =>
         // eslint-disable-next-line no-console
         console.log(message)
-      )
+      );
 
-      console.groupEnd()
+      console.groupEnd();
     }
 
-    console.groupEnd()
+    console.groupEnd();
   }
 }

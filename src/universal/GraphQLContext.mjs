@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * [React context object](https://reactjs.org/docs/context#api) for a
@@ -21,6 +21,6 @@ import React from 'react'
  * }
  * ```
  */
-export const GraphQLContext = React.createContext()
+export const GraphQLContext = React.createContext();
 
-GraphQLContext.displayName = 'GraphQLContext'
+GraphQLContext.displayName = 'GraphQLContext';

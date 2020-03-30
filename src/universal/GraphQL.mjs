@@ -1,6 +1,6 @@
-import mitt from 'mitt'
-import { graphqlFetchOptions } from './graphqlFetchOptions.mjs'
-import { hashObject } from './hashObject.mjs'
+import mitt from 'mitt';
+import { graphqlFetchOptions } from './graphqlFetchOptions.mjs';
+import { hashObject } from './hashObject.mjs';
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.
@@ -18,7 +18,7 @@ import { hashObject } from './hashObject.mjs'
  */
 export class GraphQL {
   constructor({ cache = {} } = {}) {
-    const { on, off, emit } = mitt()
+    const { on, off, emit } = mitt();
 
     /**
      * Adds an event listener.
@@ -28,7 +28,7 @@ export class GraphQL {
      * @param {Function} handler Event handler.
      * @see [`reportCacheErrors`]{@link reportCacheErrors} can be used with this to setup error reporting.
      */
-    this.on = on
+    this.on = on;
 
     /**
      * Removes an event listener.
@@ -37,7 +37,7 @@ export class GraphQL {
      * @param {string} type Event type.
      * @param {Function} handler Event handler.
      */
-    this.off = off
+    this.off = off;
 
     /**
      * Emits an event with details to listeners.
@@ -45,7 +45,7 @@ export class GraphQL {
      * @param {*} [details] Event details.
      * @ignore
      */
-    this.emit = emit
+    this.emit = emit;
 
     /**
      * Cache of loaded GraphQL operations. You probably don’t need to interact
@@ -70,7 +70,7 @@ export class GraphQL {
      * }
      * ```
      */
-    this.cache = cache
+    this.cache = cache;
 
     /**
      * A map of loading GraphQL operations. You probably don’t need to interact
@@ -79,7 +79,7 @@ export class GraphQL {
      * @name GraphQL#operations
      * @type {object.<GraphQLCacheKey, Promise<GraphQLCacheValue>>}
      */
-    this.operations = {}
+    this.operations = {};
   }
 
   /**
@@ -95,8 +95,8 @@ export class GraphQL {
    * ```
    */
   reload = (exceptCacheKey) => {
-    this.emit('reload', { exceptCacheKey })
-  }
+    this.emit('reload', { exceptCacheKey });
+  };
 
   /**
    * Resets the [GraphQL cache]{@link GraphQL#cache}, useful when a user logs
@@ -110,17 +110,17 @@ export class GraphQL {
    * ```
    */
   reset = (exceptCacheKey) => {
-    let cacheKeys = Object.keys(this.cache)
+    let cacheKeys = Object.keys(this.cache);
 
     if (exceptCacheKey)
-      cacheKeys = cacheKeys.filter((hash) => hash !== exceptCacheKey)
+      cacheKeys = cacheKeys.filter((hash) => hash !== exceptCacheKey);
 
-    cacheKeys.forEach((cacheKey) => delete this.cache[cacheKey])
+    cacheKeys.forEach((cacheKey) => delete this.cache[cacheKey]);
 
     // Emit cache updates after the entire cache has been updated, so logic in
     // listeners can assume cache for all queries is fresh and stable.
-    this.emit('reset', { exceptCacheKey })
-  }
+    this.emit('reset', { exceptCacheKey });
+  };
 
   /**
    * Fetches a GraphQL operation.
@@ -130,7 +130,7 @@ export class GraphQL {
    * @ignore
    */
   fetch = ({ url, ...options }, cacheKey) => {
-    let fetchResponse
+    let fetchResponse;
 
     const fetcher =
       typeof fetch === 'function'
@@ -138,42 +138,43 @@ export class GraphQL {
         : () =>
             Promise.reject(
               new Error('Global fetch API or polyfill unavailable.')
-            )
-    const cacheValue = {}
+            );
+    const cacheValue = {};
     const cacheValuePromise = fetcher(url, options)
       .then(
         (response) => {
-          fetchResponse = response
+          fetchResponse = response;
 
           if (!response.ok)
             cacheValue.httpError = {
               status: response.status,
               statusText: response.statusText,
-            }
+            };
 
           return response.json().then(
             ({ errors, data }) => {
               // JSON parse ok.
-              if (!errors && !data) cacheValue.parseError = 'Malformed payload.'
-              if (errors) cacheValue.graphQLErrors = errors
-              if (data) cacheValue.data = data
+              if (!errors && !data)
+                cacheValue.parseError = 'Malformed payload.';
+              if (errors) cacheValue.graphQLErrors = errors;
+              if (data) cacheValue.data = data;
             },
             ({ message }) => {
               // JSON parse error.
-              cacheValue.parseError = message
+              cacheValue.parseError = message;
             }
-          )
+          );
         },
         ({ message }) => {
-          cacheValue.fetchError = message
+          cacheValue.fetchError = message;
         }
       )
       .then(() => {
         // Cache the operation.
-        this.cache[cacheKey] = cacheValue
+        this.cache[cacheKey] = cacheValue;
 
         // Clear the loaded operation.
-        delete this.operations[cacheKey]
+        delete this.operations[cacheKey];
 
         this.emit('cache', {
           cacheKey,
@@ -181,17 +182,17 @@ export class GraphQL {
 
           // May be undefined if there was a fetch error.
           response: fetchResponse,
-        })
+        });
 
-        return cacheValue
-      })
+        return cacheValue;
+      });
 
-    this.operations[cacheKey] = cacheValuePromise
+    this.operations[cacheKey] = cacheValuePromise;
 
-    this.emit('fetch', { cacheKey, cacheValuePromise })
+    this.emit('fetch', { cacheKey, cacheValuePromise });
 
-    return cacheValuePromise
-  }
+    return cacheValuePromise;
+  };
 
   /**
    * Loads or reuses an already loading GraphQL operation in
@@ -217,28 +218,28 @@ export class GraphQL {
     if (reloadOnLoad && resetOnLoad)
       throw new Error(
         'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
-      )
+      );
 
-    const fetchOptions = graphqlFetchOptions(operation)
-    if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
-    const cacheKey = hashObject(fetchOptions)
+    const fetchOptions = graphqlFetchOptions(operation);
+    if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
+    const cacheKey = hashObject(fetchOptions);
     const cacheValuePromise =
       // Use an identical existing request or…
       this.operations[cacheKey] ||
       // …make a fresh request.
-      this.fetch(fetchOptions, cacheKey)
+      this.fetch(fetchOptions, cacheKey);
 
     // Potential edge-case issue: Multiple identical queries with resetOnLoad
     // enabled will cause excessive resets.
     cacheValuePromise.then(() => {
-      if (reloadOnLoad) this.reload(cacheKey)
-      else if (resetOnLoad) this.reset(cacheKey)
-    })
+      if (reloadOnLoad) this.reload(cacheKey);
+      else if (resetOnLoad) this.reset(cacheKey);
+    });
 
     return {
       cacheKey,
       cacheValue: this.cache[cacheKey],
       cacheValuePromise,
-    }
-  }
+    };
+  };
 }

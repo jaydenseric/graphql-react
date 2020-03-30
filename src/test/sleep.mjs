@@ -4,4 +4,4 @@
  * @returns {Promise<void>} Resolves once the duration is up.
  * @ignore
  */
-export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

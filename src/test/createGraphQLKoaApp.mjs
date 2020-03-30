@@ -1,14 +1,14 @@
-import graphqlApiKoa from 'graphql-api-koa'
-import Koa from 'koa'
-import bodyParser from 'koa-bodyparser'
-import graphql from './graphql.js'
+import graphqlApiKoa from 'graphql-api-koa';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import graphql from './graphql.js';
 
 const {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-} = graphql
+} = graphql;
 
 /**
  * Creates a GraphQL Koa app.
@@ -42,4 +42,4 @@ export const createGraphQLKoaApp = (
           }),
         }),
       })
-    )
+    );

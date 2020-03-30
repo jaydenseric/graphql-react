@@ -1,8 +1,8 @@
-export { GraphQL } from './GraphQL.mjs'
-export { GraphQLContext } from './GraphQLContext.mjs'
-export { GraphQLProvider } from './GraphQLProvider.mjs'
-export { useGraphQL } from './useGraphQL.mjs'
-export { reportCacheErrors } from './reportCacheErrors.mjs'
+export { GraphQL } from './GraphQL.mjs';
+export { GraphQLContext } from './GraphQLContext.mjs';
+export { GraphQLProvider } from './GraphQLProvider.mjs';
+export { useGraphQL } from './useGraphQL.mjs';
+export { reportCacheErrors } from './reportCacheErrors.mjs';
 
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.

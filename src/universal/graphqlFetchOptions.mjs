@@ -1,4 +1,4 @@
-import { extractFiles } from 'extract-files'
+import { extractFiles } from 'extract-files';
 
 /**
  * Gets default [`fetch` options]{@link GraphQLFetchOptions} for a
@@ -12,36 +12,36 @@ export function graphqlFetchOptions(operation) {
     url: '/graphql',
     method: 'POST',
     headers: { Accept: 'application/json' },
-  }
+  };
 
-  const { clone, files } = extractFiles(operation)
-  const operationJSON = JSON.stringify(clone)
+  const { clone, files } = extractFiles(operation);
+  const operationJSON = JSON.stringify(clone);
 
   if (files.size) {
     // See the GraphQL multipart request spec:
     // https://github.com/jaydenseric/graphql-multipart-request-spec
 
-    const form = new FormData()
+    const form = new FormData();
 
-    form.append('operations', operationJSON)
+    form.append('operations', operationJSON);
 
-    const map = {}
-    let i = 0
+    const map = {};
+    let i = 0;
     files.forEach((paths) => {
-      map[++i] = paths
-    })
-    form.append('map', JSON.stringify(map))
+      map[++i] = paths;
+    });
+    form.append('map', JSON.stringify(map));
 
-    i = 0
+    i = 0;
     files.forEach((paths, file) => {
-      form.append(`${++i}`, file, file.name)
-    })
+      form.append(`${++i}`, file, file.name);
+    });
 
-    fetchOptions.body = form
+    fetchOptions.body = form;
   } else {
-    fetchOptions.headers['Content-Type'] = 'application/json'
-    fetchOptions.body = operationJSON
+    fetchOptions.headers['Content-Type'] = 'application/json';
+    fetchOptions.body = operationJSON;
   }
 
-  return fetchOptions
+  return fetchOptions;
 }

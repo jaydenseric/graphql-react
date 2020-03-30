@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /**
  * A Babel plugin that adds missing `.js` file extensions to Babel runtime
@@ -19,8 +19,8 @@ module.exports = function babelPluginAddBabelRuntimeFileExtensions({ types }) {
         )
           path
             .get('source')
-            .replaceWith(types.stringLiteral(`${path.node.source.value}.js`))
+            .replaceWith(types.stringLiteral(`${path.node.source.value}.js`));
       },
     },
-  }
-}
+  };
+};

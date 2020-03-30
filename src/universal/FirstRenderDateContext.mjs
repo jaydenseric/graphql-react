@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * [React context object](https://reactjs.org/docs/context#api) for a `Date`
@@ -9,6 +9,6 @@ import React from 'react'
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context#contextconsumer).
  * @ignore
  */
-export const FirstRenderDateContext = React.createContext()
+export const FirstRenderDateContext = React.createContext();
 
-FirstRenderDateContext.displayName = 'FirstRenderDateContext'
+FirstRenderDateContext.displayName = 'FirstRenderDateContext';

@@ -1,1 +1,1 @@
-export { ssr } from './ssr.mjs'
+export { ssr } from './ssr.mjs';

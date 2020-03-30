@@ -1,4 +1,4 @@
-import fnv1a from 'fnv1a'
+import fnv1a from 'fnv1a';
 
 /**
  * `JSON.stringify()` replacer that converts
@@ -16,7 +16,7 @@ function hashObjectReplacer(key, value) {
   // instances in browsers do not have a .toJSON() method, but some polyfill
   // implementations might.
   // See: https://github.com/octet-stream/form-data/issues/2
-  const originalValue = this[key]
+  const originalValue = this[key];
 
   if (typeof FormData !== 'undefined' && originalValue instanceof FormData) {
     // Value is a FormData instance. The idea is to return a string representing
@@ -24,29 +24,29 @@ function hashObjectReplacer(key, value) {
     // string. Note that FormData forms can have multiple fields with the same
     // name and that the order of form fields also determines the signature.
 
-    let signature = ''
+    let signature = '';
 
-    const fields = originalValue.entries()
+    const fields = originalValue.entries();
 
     // Iterate manually using next() to avoid bulky for … of syntax
     // transpilation.
-    let field = fields.next()
+    let field = fields.next();
     while (!field.done) {
-      const [name, value] = field.value
+      const [name, value] = field.value;
 
       // If the value is a File or Blob instance, it should cast to a string
       // like `[object File]`. It would be good if there was a way to signature
       // File or Blob instances.
-      signature += `${name}${value}`
+      signature += `${name}${value}`;
 
-      field = fields.next()
+      field = fields.next();
     }
 
-    return signature
+    return signature;
   }
 
   // Let JSON.stringify() stringify the value as normal.
-  return value
+  return value;
 }
 
 /**
@@ -56,4 +56,4 @@ function hashObjectReplacer(key, value) {
  * @ignore
  */
 export const hashObject = (object) =>
-  fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36)
+  fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36);

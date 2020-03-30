@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
-const plugins = ['@babel/transform-runtime', 'transform-require-extensions']
+const plugins = ['@babel/transform-runtime', 'transform-require-extensions'];
 
 if (process.env.BABEL_ESM)
-  plugins.push(require('../../babelPluginAddBabelRuntimeFileExtensions.js'))
+  plugins.push(require('../../babelPluginAddBabelRuntimeFileExtensions.js'));
 
 module.exports = {
   comments: false,
@@ -19,4 +19,4 @@ module.exports = {
       },
     ],
   ],
-}
+};

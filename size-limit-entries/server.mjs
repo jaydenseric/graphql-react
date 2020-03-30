@@ -4,5 +4,5 @@ export {
   GraphQLProvider,
   useGraphQL,
   reportCacheErrors,
-} from '..'
-export { ssr } from '../server/index.mjs'
+} from '..';
+export { ssr } from '../server/index.mjs';

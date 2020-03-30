@@ -1,5 +1,5 @@
-import ReactDOMServer from 'react-dom/server.node.js'
-import { GraphQL } from '../universal/GraphQL.mjs'
+import ReactDOMServer from 'react-dom/server.node.js';
+import { GraphQL } from '../universal/GraphQL.mjs';
 
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},
@@ -60,18 +60,18 @@ export async function ssr( // eslint-disable-line require-await
   render = ReactDOMServer.renderToStaticMarkup
 ) {
   if (!(graphql instanceof GraphQL))
-    throw new Error('ssr() argument 1 must be a GraphQL instance.')
+    throw new Error('ssr() argument 1 must be a GraphQL instance.');
 
   // Check argument 2 exists, allowing an undefined value as that is a valid
   // React node.
   if (arguments.length < 2)
-    throw new Error('ssr() argument 2 must be a React node.')
+    throw new Error('ssr() argument 2 must be a React node.');
 
   if (typeof render !== 'function')
-    throw new Error('ssr() argument 3 must be a function.')
+    throw new Error('ssr() argument 3 must be a function.');
 
   // Signal that queries should load at render.
-  graphql.ssr = true
+  graphql.ssr = true;
 
   /**
    * Repeatedly renders the node until all queries within are cached.
@@ -79,17 +79,17 @@ export async function ssr( // eslint-disable-line require-await
    * @ignore
    */
   async function recurse() {
-    const string = render(node)
-    const operations = Object.values(graphql.operations)
+    const string = render(node);
+    const operations = Object.values(graphql.operations);
 
     if (operations.length) {
-      await Promise.all(operations)
-      return recurse()
+      await Promise.all(operations);
+      return recurse();
     } else {
-      delete graphql.ssr
-      return string
+      delete graphql.ssr;
+      return string;
     }
   }
 
-  return recurse()
+  return recurse();
 }

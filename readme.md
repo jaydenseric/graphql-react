@@ -43,10 +43,10 @@ Use the [`useGraphQL`](#function-usegraphql) React hook in your components to ma
 Here is a basic example that displays a Pokemon image, with tips commented:
 
 ```jsx
-import { GraphQL, GraphQLProvider, useGraphQL } from 'graphql-react'
+import { GraphQL, GraphQLProvider, useGraphQL } from 'graphql-react';
 
 // Zero config GraphQL client that manages the cache.
-const graphql = new GraphQL()
+const graphql = new GraphQL();
 
 const PokemonImage = ({ name }) => {
   // The useGraphQL hook can be used just the same for queries or mutations.
@@ -59,7 +59,7 @@ const PokemonImage = ({ name }) => {
     // body is JSON but if there are files in the variables it will be a
     // FormData instance for a GraphQL multipart request.
     fetchOptionsOverride(options) {
-      options.url = 'https://graphql-pokemon.now.sh'
+      options.url = 'https://graphql-pokemon.now.sh';
     },
 
     // The operation typically contains `query` and sometimes `variables`, but
@@ -80,7 +80,7 @@ const PokemonImage = ({ name }) => {
     // Reload the query whenever the global cache is reset. Resets immediately
     // delete the cache and are mostly only used when logging out the user.
     loadOnReset: true,
-  })
+  });
 
   return cacheValue.data ? (
     <img src={cacheValue.data.pokemon.image} alt={name} />
@@ -93,14 +93,14 @@ const PokemonImage = ({ name }) => {
     // of errors is possible, and an error doesn’t necessarily mean data is
     // unavailable.
     'Error!'
-  )
-}
+  );
+};
 
 const App = () => (
   <GraphQLProvider graphql={graphql}>
     <PokemonImage name="pikachu" />
   </GraphQLProvider>
-)
+);
 ```
 
 ## Support
@@ -160,9 +160,9 @@ A lightweight GraphQL client that caches queries and mutations.
 _Construct a GraphQL client._
 
 > ```js
-> import { GraphQL } from 'graphql-react'
+> import { GraphQL } from 'graphql-react';
 >
-> const graphql = new GraphQL()
+> const graphql = new GraphQL();
 > ```
 
 #### GraphQL instance method off
@@ -214,7 +214,7 @@ Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such 
 _Reloading the [GraphQL cache](#graphql-instance-property-cache)._
 
 > ```js
-> graphql.reload()
+> graphql.reload();
 > ```
 
 #### GraphQL instance method reset
@@ -230,7 +230,7 @@ Resets the [GraphQL cache](#graphql-instance-property-cache), useful when a user
 _Resetting the [GraphQL cache](#graphql-instance-property-cache)._
 
 > ```js
-> graphql.reset()
+> graphql.reset();
 > ```
 
 #### GraphQL instance property cache
@@ -244,7 +244,7 @@ Cache of loaded GraphQL operations. You probably don’t need to interact with t
 _Export cache as JSON._
 
 > ```js
-> const exportedCache = JSON.stringify(graphql.cache)
+> const exportedCache = JSON.stringify(graphql.cache);
 > ```
 
 _Example cache JSON._
@@ -291,13 +291,13 @@ A React component that provides a [`GraphQL`](#class-graphql) instance for an ap
 _Provide a [`GraphQL`](#class-graphql) instance for an app._
 
 > ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react'
+> import { GraphQL, GraphQLProvider } from 'graphql-react';
 >
-> const graphql = new GraphQL()
+> const graphql = new GraphQL();
 >
 > const App = ({ children }) => (
 >   <GraphQLProvider graphql={graphql}>{children}</GraphQLProvider>
-> )
+> );
 > ```
 
 ---
@@ -317,10 +317,10 @@ A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https
 _[`GraphQL`](#class-graphql) initialized to report cache errors._
 
 > ```js
-> import { GraphQL, reportCacheErrors } from 'graphql-react'
+> import { GraphQL, reportCacheErrors } from 'graphql-react';
 >
-> const graphql = new GraphQL()
-> graphql.on('cache', reportCacheErrors)
+> const graphql = new GraphQL();
+> graphql.on('cache', reportCacheErrors);
 > ```
 
 ---
@@ -349,39 +349,39 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 _SSR function that resolves a HTML string and cache JSON for client hydration._
 
 > ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react'
-> import { ssr } from 'graphql-react/server'
-> import ReactDOMServer from 'react-dom/server'
-> import { App } from './components'
+> import { GraphQL, GraphQLProvider } from 'graphql-react';
+> import { ssr } from 'graphql-react/server';
+> import ReactDOMServer from 'react-dom/server';
+> import { App } from './components';
 >
 > async function render() {
->   const graphql = new GraphQL()
+>   const graphql = new GraphQL();
 >   const page = (
 >     <GraphQLProvider graphql={graphql}>
 >       <App />
 >     </GraphQLProvider>
->   )
->   const html = await ssr(graphql, page, ReactDOMServer.renderToString)
->   const cache = JSON.stringify(graphql.cache)
->   return { html, cache }
+>   );
+>   const html = await ssr(graphql, page, ReactDOMServer.renderToString);
+>   const cache = JSON.stringify(graphql.cache);
+>   return { html, cache };
 > }
 > ```
 
 _SSR function that resolves a HTML string suitable for a static page._
 
 > ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react'
-> import { ssr } from 'graphql-react/server'
-> import { App } from './components'
+> import { GraphQL, GraphQLProvider } from 'graphql-react';
+> import { ssr } from 'graphql-react/server';
+> import { App } from './components';
 >
 > function render() {
->   const graphql = new GraphQL()
+>   const graphql = new GraphQL();
 >   const page = (
 >     <GraphQLProvider graphql={graphql}>
 >       <App />
 >     </GraphQLProvider>
->   )
->   return ssr(graphql, page)
+>   );
+>   return ssr(graphql, page);
 > }
 > ```
 
@@ -413,12 +413,12 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 _A component that displays a Pokémon image._
 
 > ```jsx
-> import { useGraphQL } from 'graphql-react'
+> import { useGraphQL } from 'graphql-react';
 >
 > const PokemonImage = ({ name }) => {
 >   const { loading, cacheValue = {} } = useGraphQL({
 >     fetchOptionsOverride(options) {
->       options.url = 'https://graphql-pokemon.now.sh'
+>       options.url = 'https://graphql-pokemon.now.sh';
 >     },
 >     operation: {
 >       query: `{ pokemon(name: "${name}") { image } }`,
@@ -426,7 +426,7 @@ _A component that displays a Pokémon image._
 >     loadOnMount: true,
 >     loadOnReload: true,
 >     loadOnReset: true,
->   })
+>   });
 >
 >   return cacheValue.data ? (
 >     <img src={cacheValue.data.pokemon.image} alt={name} />
@@ -434,8 +434,8 @@ _A component that displays a Pokémon image._
 >     'Loading…'
 >   ) : (
 >     'Error!'
->   )
-> }
+>   );
+> };
 > ```
 
 _Options guide for common situations._
@@ -472,13 +472,13 @@ _Options guide for common situations._
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
 
 > ```jsx
-> import React from 'react'
-> import { GraphQLContext } from 'graphql-react'
+> import React from 'react';
+> import { GraphQLContext } from 'graphql-react';
 >
 > const ResetCacheButton = () => {
->   const graphql = React.useContext(GraphQLContext)
->   return <button onClick={graphql.reset}>Reset cache</button>
-> }
+>   const graphql = React.useContext(GraphQLContext);
+>   return <button onClick={graphql.reset}>Reset cache</button>;
+> };
 > ```
 
 ---
@@ -559,10 +559,10 @@ Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate t
 _Setting [GraphQL `fetch` options](#type-graphqlfetchoptions) for an imaginary API._
 
 > ```js
-> ;(options) => {
->   options.url = 'https://api.example.com/graphql'
->   options.credentials = 'include'
-> }
+> (options) => {
+>   options.url = 'https://api.example.com/graphql';
+>   options.credentials = 'include';
+> };
 > ```
 
 ---
@@ -692,7 +692,7 @@ const QUERY = /* GraphQL */ `
       id
     }
   }
-`
+`;
 ```
 
 The optional `/* GraphQL */` comment signals the syntax for highlighters and linters.
@@ -702,7 +702,7 @@ The optional `/* GraphQL */` comment signals the syntax for highlighters and lin
 Uses template strings tagged with `gql` from [`graphql-tag`](https://npm.im/graphql-tag):
 
 ```js
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 const QUERY = gql`
   {
@@ -710,7 +710,7 @@ const QUERY = gql`
       id
     }
   }
-`
+`;
 ```
 
 ### Cache strategy

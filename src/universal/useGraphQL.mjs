@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { FirstRenderDateContext } from './FirstRenderDateContext.mjs'
-import { GraphQL } from './GraphQL.mjs'
-import { GraphQLContext } from './GraphQLContext.mjs'
-import { graphqlFetchOptions } from './graphqlFetchOptions.mjs'
-import { hashObject } from './hashObject.mjs'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FirstRenderDateContext } from './FirstRenderDateContext.mjs';
+import { GraphQL } from './GraphQL.mjs';
+import { GraphQLContext } from './GraphQLContext.mjs';
+import { graphqlFetchOptions } from './graphqlFetchOptions.mjs';
+import { hashObject } from './hashObject.mjs';
 
 /**
  * A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL
@@ -69,31 +69,31 @@ export const useGraphQL = ({
   if (reloadOnLoad && resetOnLoad)
     throw new Error(
       'useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
-    )
+    );
 
-  const graphql = React.useContext(GraphQLContext)
+  const graphql = React.useContext(GraphQLContext);
 
   if (typeof graphql === 'undefined')
-    throw new Error('GraphQL context missing.')
+    throw new Error('GraphQL context missing.');
 
   if (!(graphql instanceof GraphQL))
-    throw new Error('GraphQL context must be a GraphQL instance.')
+    throw new Error('GraphQL context must be a GraphQL instance.');
 
-  const fetchOptions = graphqlFetchOptions(operation)
-  if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions)
+  const fetchOptions = graphqlFetchOptions(operation);
+  if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
 
-  const fetchOptionsHash = hashObject(fetchOptions)
+  const fetchOptionsHash = hashObject(fetchOptions);
 
-  let [cacheKey, setCacheKey] = React.useState(fetchOptionsHash)
-  let [cacheValue, setCacheValue] = React.useState(graphql.cache[cacheKey])
-  let [loading, setLoading] = React.useState(cacheKey in graphql.operations)
+  let [cacheKey, setCacheKey] = React.useState(fetchOptionsHash);
+  let [cacheValue, setCacheValue] = React.useState(graphql.cache[cacheKey]);
+  let [loading, setLoading] = React.useState(cacheKey in graphql.operations);
 
   // If the GraphQL operation or its fetch options change after the initial
   // render the state has to be re-initialized.
   if (cacheKey !== fetchOptionsHash) {
-    setCacheKey((cacheKey = fetchOptionsHash))
-    setCacheValue((cacheValue = graphql.cache[cacheKey]))
-    setLoading((loading = cacheKey in graphql.operations))
+    setCacheKey((cacheKey = fetchOptionsHash));
+    setCacheValue((cacheValue = graphql.cache[cacheKey]));
+    setLoading((loading = cacheKey in graphql.operations));
   }
 
   /**
@@ -107,19 +107,19 @@ export const useGraphQL = ({
       fetchOptionsOverride,
       reloadOnLoad,
       resetOnLoad,
-    })
+    });
 
-    setLoading(true)
-    setCacheKey(cacheKey)
-    setCacheValue(cacheValue)
+    setLoading(true);
+    setCacheKey(cacheKey);
+    setCacheValue(cacheValue);
 
-    return cacheValuePromise
-  }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad])
+    return cacheValuePromise;
+  }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad]);
 
-  const isMountedRef = React.useRef(false)
+  const isMountedRef = React.useRef(false);
 
   React.useEffect(() => {
-    isMountedRef.current = true
+    isMountedRef.current = true;
 
     /**
      * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
@@ -128,7 +128,7 @@ export const useGraphQL = ({
      */
     function onFetch({ cacheKey: fetchingCacheKey }) {
       if (cacheKey === fetchingCacheKey && isMountedRef.current)
-        setLoading(true)
+        setLoading(true);
     }
 
     /**
@@ -139,9 +139,9 @@ export const useGraphQL = ({
     function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
       if (cacheKey === cachedCacheKey && isMountedRef.current)
         ReactDOM.unstable_batchedUpdates(() => {
-          setLoading(false)
-          setCacheValue(cacheValue)
-        })
+          setLoading(false);
+          setCacheValue(cacheValue);
+        });
     }
 
     /**
@@ -156,7 +156,7 @@ export const useGraphQL = ({
         cacheValue &&
         isMountedRef.current
       )
-        load()
+        load();
     }
 
     /**
@@ -166,29 +166,29 @@ export const useGraphQL = ({
      */
     function onReset({ exceptCacheKey }) {
       if (cacheKey !== exceptCacheKey && isMountedRef.current)
-        if (loadOnReset) load()
-        else setCacheValue(graphql.cache[cacheKey])
+        if (loadOnReset) load();
+        else setCacheValue(graphql.cache[cacheKey]);
     }
 
-    graphql.on('fetch', onFetch)
-    graphql.on('cache', onCache)
-    graphql.on('reload', onReload)
-    graphql.on('reset', onReset)
+    graphql.on('fetch', onFetch);
+    graphql.on('cache', onCache);
+    graphql.on('reload', onReload);
+    graphql.on('reset', onReset);
 
     return () => {
-      isMountedRef.current = false
+      isMountedRef.current = false;
 
-      graphql.off('fetch', onFetch)
-      graphql.off('cache', onCache)
-      graphql.off('reload', onReload)
-      graphql.off('reset', onReset)
-    }
-  }, [cacheKey, cacheValue, graphql, load, loadOnReload, loadOnReset])
+      graphql.off('fetch', onFetch);
+      graphql.off('cache', onCache);
+      graphql.off('reload', onReload);
+      graphql.off('reset', onReset);
+    };
+  }, [cacheKey, cacheValue, graphql, load, loadOnReload, loadOnReset]);
 
-  const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState()
+  const [loadedOnMountCacheKey, setLoadedOnMountCacheKey] = React.useState();
 
   // Note: Allowed to be undefined for apps that don’t provide this context.
-  const firstRenderDate = React.useContext(FirstRenderDateContext)
+  const firstRenderDate = React.useContext(FirstRenderDateContext);
 
   React.useEffect(() => {
     if (
@@ -202,8 +202,8 @@ export const useGraphQL = ({
         new Date() - firstRenderDate < 1000
       )
     ) {
-      setLoadedOnMountCacheKey(cacheKey)
-      load()
+      setLoadedOnMountCacheKey(cacheKey);
+      load();
     }
   }, [
     cacheKey,
@@ -212,7 +212,7 @@ export const useGraphQL = ({
     load,
     loadOnMount,
     loadedOnMountCacheKey,
-  ])
+  ]);
 
   if (graphql.ssr && loadOnMount && !cacheValue)
     graphql.operate({
@@ -220,7 +220,7 @@ export const useGraphQL = ({
       fetchOptionsOverride,
       reloadOnLoad,
       resetOnLoad,
-    })
+    });
 
-  return { load, loading, cacheKey, cacheValue }
-}
+  return { load, loading, cacheKey, cacheValue };
+};
