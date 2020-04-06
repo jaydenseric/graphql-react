@@ -1,17 +1,13 @@
 'use strict';
 
-const plugins = [
-  ['@babel/proposal-class-properties', { loose: true }],
-  '@babel/transform-runtime',
-  'transform-require-extensions',
-];
-
-if (process.env.BABEL_ESM)
-  plugins.push(require('../../babelPluginAddBabelRuntimeFileExtensions.js'));
-
 module.exports = {
   comments: false,
-  plugins,
+  plugins: [
+    ['@babel/proposal-class-properties', { loose: true }],
+    '@babel/transform-runtime',
+    'transform-runtime-file-extensions',
+    'transform-require-extensions',
+  ],
   presets: [
     [
       '@babel/env',

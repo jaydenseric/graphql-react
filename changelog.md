@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Added a new [`babel-plugin-transform-runtime-file-extensions`](https://npm.im/babel-plugin-transform-runtime-file-extensions) dev dependency to simplify Babel config.
 - Improved the package `prepare:prettier` and `test:prettier` scripts.
 - Reordered the package `test:eslint` script args for consistency with `test:prettier`.
 - Configured Prettier option `semi` to the default, `true`.
