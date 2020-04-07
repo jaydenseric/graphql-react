@@ -1,14 +1,24 @@
 [
   {
-    "name": "Universal",
+    "name": "Universal ESM",
     "path": "universal/index.mjs",
     "limit": "2.5 KB",
     "ignore": ["prop-types"]
   },
   {
-    "name": "Server",
-    "path": "server/index.mjs",
-    "limit": "2.5 KB",
+    "name": "Universal CJS",
+    "path": "universal/index.js",
+    "limit": "3 KB",
     "ignore": ["prop-types"]
+  },
+  {
+    "name": "Server ESM",
+    "path": "server/index.mjs",
+    "limit": "2 KB"
+  },
+  {
+    "name": "Server CJS",
+    "path": "server/index.js",
+    "limit": "2 KB"
   }
 ]

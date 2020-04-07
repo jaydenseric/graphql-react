@@ -9,8 +9,9 @@
 - Reordered the package `test:eslint` script args for consistency with `test:prettier`.
 - Configured Prettier option `semi` to the default, `true`.
 - Reconfigured [`size-limit`](https://npm.im/size-limit):
-  - Set the limit back down to the 2.5 KB size advertized in the readme.
-  - Measure the universal and server only exports separately, without using unpublished size limit entry files that bloat the measured sizes.
+  - Separately test the universal and server only exports, without using unpublished size limit entry files that bloat the measured sizes.
+  - Separately test the ESM and CJS exports.
+  - Separately limit tests, with the universal ESM set to the 2.5 KB maximum size advertized in the readme.
 
 ## 10.0.0
 
