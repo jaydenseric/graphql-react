@@ -19,6 +19,7 @@
   - Separately test the universal and server only exports, without using unpublished size limit entry files that bloat the measured sizes.
   - Separately test the ESM and CJS exports.
   - Separately limit tests, with the universal ESM and CJS set to a 3 KB maximum size.
+- Removed redundant ESLint disable comments.
 
 ## 10.0.0
 

@@ -14,7 +14,6 @@ import listen from '../listen.js';
 import promisifyEvent from '../promisifyEvent.js';
 import sleep from '../sleep.js';
 
-// eslint-disable-next-line react/prop-types
 const RenderUseGraphQL = (operationOptions) =>
   JSON.stringify(useGraphQL(operationOptions));
 

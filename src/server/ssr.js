@@ -56,7 +56,7 @@ const GraphQL = require('../universal/GraphQL.js');
  * }
  * ```
  */
-module.exports = async function ssr( // eslint-disable-line require-await
+module.exports = async function ssr(
   graphql,
   node,
   render = ReactDOMServer.renderToStaticMarkup
