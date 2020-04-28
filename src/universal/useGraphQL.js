@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { FirstRenderDateContext } from './FirstRenderDateContext.mjs';
-import { GraphQL } from './GraphQL.mjs';
-import { GraphQLContext } from './GraphQLContext.mjs';
-import { graphqlFetchOptions } from './graphqlFetchOptions.mjs';
-import { hashObject } from './hashObject.mjs';
+'use strict';
+
+const React = require('react');
+const ReactDOM = require('react-dom');
+const GraphQL = require('./GraphQL.js');
+const GraphQLContext = require('./GraphQLContext.js');
+const FirstRenderDateContext = require('./private/FirstRenderDateContext.js');
+const graphqlFetchOptions = require('./private/graphqlFetchOptions.js');
+const hashObject = require('./private/hashObject.js');
 
 /**
  * A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL
@@ -57,7 +59,7 @@ import { hashObject } from './hashObject.mjs';
  * | Change name mutation |  |  |  | ✔️ |  |
  * | Like a post mutation |  |  |  | ✔️ |  |
  */
-export const useGraphQL = ({
+module.exports = function useGraphQL({
   fetchOptionsOverride,
   loadOnMount,
   loadOnReload,
@@ -65,7 +67,7 @@ export const useGraphQL = ({
   reloadOnLoad,
   resetOnLoad,
   operation,
-}) => {
+}) {
   if (reloadOnLoad && resetOnLoad)
     throw new Error(
       'useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'

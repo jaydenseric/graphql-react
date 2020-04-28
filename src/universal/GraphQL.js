@@ -1,6 +1,13 @@
-import mitt from 'mitt';
-import { graphqlFetchOptions } from './graphqlFetchOptions.mjs';
-import { hashObject } from './hashObject.mjs';
+'use strict';
+
+// The full path is required because mitt has a package.json `module` field.
+// When graphql-react is used in a webpack project (e.g. via Next.js), webpack
+// swaps out the mitt `main` CJS file for the `module` ESM file, represented as
+// an object with a `default` key because the ESM only has a default export.
+// This would result in `mitt` being undefined instead of a function.
+const mitt = require('mitt/dist/mitt.js');
+const graphqlFetchOptions = require('./private/graphqlFetchOptions.js');
+const hashObject = require('./private/hashObject.js');
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.
@@ -16,7 +23,7 @@ import { hashObject } from './hashObject.mjs';
  * const graphql = new GraphQL()
  * ```
  */
-export class GraphQL {
+module.exports = class GraphQL {
   constructor({ cache = {} } = {}) {
     const { on, off, emit } = mitt();
 
@@ -242,4 +249,4 @@ export class GraphQL {
       cacheValuePromise,
     };
   };
-}
+};

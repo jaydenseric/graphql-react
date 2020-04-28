@@ -1,12 +1,10 @@
 import 'cross-fetch/dist/node-polyfill.js';
 import { rejects, strictEqual } from 'assert';
 import React from 'react';
-import { ssr } from '../../server/ssr.mjs';
-import { GraphQL } from '../../universal/GraphQL.mjs';
-import { GraphQLContext } from '../../universal/GraphQLContext.mjs';
-import { useGraphQL } from '../../universal/useGraphQL.mjs';
-import { createGraphQLKoaApp } from '../createGraphQLKoaApp.mjs';
-import { listen } from '../listen.mjs';
+import { ssr } from '../../server/index.mjs';
+import { GraphQL, GraphQLContext, useGraphQL } from '../../universal/index.mjs';
+import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
+import listen from '../listen.js';
 
 export default (tests) => {
   tests.add('`ssr` argument 1 validation', async () => {

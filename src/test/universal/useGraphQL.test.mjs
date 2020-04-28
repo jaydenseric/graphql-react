@@ -3,14 +3,16 @@ import { deepStrictEqual, strictEqual, throws } from 'assert';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server.node.js';
 import ReactTestRenderer from 'react-test-renderer';
-import { GraphQL } from '../../universal/GraphQL.mjs';
-import { GraphQLContext } from '../../universal/GraphQLContext.mjs';
-import { GraphQLProvider } from '../../universal/GraphQLProvider.mjs';
-import { useGraphQL } from '../../universal/useGraphQL.mjs';
-import { createGraphQLKoaApp } from '../createGraphQLKoaApp.mjs';
-import { listen } from '../listen.mjs';
-import { promisifyEvent } from '../promisifyEvent.mjs';
-import { sleep } from '../sleep.mjs';
+import {
+  GraphQL,
+  GraphQLContext,
+  GraphQLProvider,
+  useGraphQL,
+} from '../../universal/index.mjs';
+import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
+import listen from '../listen.js';
+import promisifyEvent from '../promisifyEvent.js';
+import sleep from '../sleep.js';
 
 // eslint-disable-next-line react/prop-types
 const RenderUseGraphQL = (operationOptions) =>

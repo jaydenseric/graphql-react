@@ -1,4 +1,6 @@
-import { extractFiles } from 'extract-files';
+'use strict';
+
+const { extractFiles } = require('extract-files');
 
 /**
  * Gets default [`fetch` options]{@link GraphQLFetchOptions} for a
@@ -7,7 +9,7 @@ import { extractFiles } from 'extract-files';
  * @returns {GraphQLFetchOptions} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
  * @ignore
  */
-export function graphqlFetchOptions(operation) {
+module.exports = function graphqlFetchOptions(operation) {
   const fetchOptions = {
     url: '/graphql',
     method: 'POST',
@@ -44,4 +46,4 @@ export function graphqlFetchOptions(operation) {
   }
 
   return fetchOptions;
-}
+};

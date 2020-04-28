@@ -1,6 +1,6 @@
 import { notEqual, strictEqual } from 'assert';
 import FormData from 'formdata-node';
-import { hashObject } from '../../universal/hashObject.mjs';
+import hashObject from '../../universal/private/hashObject.js';
 
 // Global polyfill.
 global.FormData = FormData;

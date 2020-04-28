@@ -1,8 +1,10 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { FirstRenderDateContext } from './FirstRenderDateContext.mjs';
-import { GraphQL } from './GraphQL.mjs';
-import { GraphQLContext } from './GraphQLContext.mjs';
+'use strict';
+
+const PropTypes = require('prop-types');
+const React = require('react');
+const GraphQL = require('./GraphQL.js');
+const GraphQLContext = require('./GraphQLContext.js');
+const FirstRenderDateContext = require('./private/FirstRenderDateContext.js');
 
 /**
  * A React component that provides a [`GraphQL`]{@link GraphQL} instance for an
@@ -26,7 +28,7 @@ import { GraphQLContext } from './GraphQLContext.mjs';
  * )
  * ```
  */
-export const GraphQLProvider = ({ graphql, children }) => {
+function GraphQLProvider({ graphql, children }) {
   const firstRenderDateRef = React.useRef(new Date());
 
   return (
@@ -36,9 +38,11 @@ export const GraphQLProvider = ({ graphql, children }) => {
       </GraphQLContext.Provider>
     </FirstRenderDateContext.Provider>
   );
-};
+}
 
 GraphQLProvider.propTypes = {
   graphql: PropTypes.instanceOf(GraphQL).isRequired,
   children: PropTypes.node,
 };
+
+module.exports = GraphQLProvider;

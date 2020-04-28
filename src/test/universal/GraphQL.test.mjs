@@ -1,12 +1,12 @@
 import 'cross-fetch/dist/node-polyfill.js';
 import { deepStrictEqual, strictEqual, throws } from 'assert';
 import Koa from 'koa';
-import { GraphQL } from '../../universal/GraphQL.mjs';
-import { createGraphQLKoaApp } from '../createGraphQLKoaApp.mjs';
+import { GraphQL } from '../../universal/index.mjs';
+import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
 import graphql from '../graphql.js';
-import { listen } from '../listen.mjs';
-import { promisifyEvent } from '../promisifyEvent.mjs';
-import { testGraphQLOperation } from '../testGraphQLOperation.mjs';
+import listen from '../listen.js';
+import promisifyEvent from '../promisifyEvent.js';
+import testGraphQLOperation from '../testGraphQLOperation.mjs';
 
 const { GraphQLInt } = graphql;
 

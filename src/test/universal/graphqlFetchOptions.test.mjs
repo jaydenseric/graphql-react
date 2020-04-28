@@ -1,7 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'assert';
 import Blob from 'fetch-blob';
 import FormData from 'formdata-node';
-import { graphqlFetchOptions } from '../../universal/graphqlFetchOptions.mjs';
+import graphqlFetchOptions from '../../universal/private/graphqlFetchOptions.js';
 
 // Global polyfills.
 global.Blob = Blob;

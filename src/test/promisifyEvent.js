@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Promisifies an event.
  * @param {object} emitter An event emitter with `on` and `off` methods.
@@ -7,8 +9,8 @@
  * @see [Stack Overflow answer](https://stackoverflow.com/a/40353376/1596978).
  * @ignore
  */
-export const promisifyEvent = (emitter, event, timeout = 1000) =>
-  new Promise((resolve, reject) => {
+module.exports = function promisifyEvent(emitter, event, timeout = 1000) {
+  return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       emitter.off(event, listener);
       reject(new Error(`Event “${event}” wait timeout.`));
@@ -27,3 +29,4 @@ export const promisifyEvent = (emitter, event, timeout = 1000) =>
 
     emitter.on(event, listener);
   });
+};

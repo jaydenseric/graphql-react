@@ -2,7 +2,7 @@
   {
     "name": "Universal ESM",
     "path": "universal/index.mjs",
-    "limit": "2.5 KB",
+    "limit": "3 KB",
     "ignore": ["prop-types"]
   },
   {

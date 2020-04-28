@@ -1,14 +1,14 @@
-import graphqlApiKoa from 'graphql-api-koa';
-import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
-import graphql from './graphql.js';
+'use strict';
 
+const { errorHandler, execute } = require('graphql-api-koa');
+const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
 const {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-} = graphql;
+} = require('./graphql.js');
 
 /**
  * Creates a GraphQL Koa app.
@@ -16,10 +16,10 @@ const {
  * @returns {object} Koa instance.
  * @ignore
  */
-export const createGraphQLKoaApp = (
+module.exports = function createGraphQLKoaApp(
   fields = {
     echo: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLNonNull(GraphQLString),
       args: {
         phrase: {
           type: GraphQLString,
@@ -29,12 +29,12 @@ export const createGraphQLKoaApp = (
       resolve: (root, { phrase }) => phrase,
     },
   }
-) =>
-  new Koa()
-    .use(graphqlApiKoa.errorHandler())
+) {
+  return new Koa()
+    .use(errorHandler())
     .use(bodyParser())
     .use(
-      graphqlApiKoa.execute({
+      execute({
         schema: new GraphQLSchema({
           query: new GraphQLObjectType({
             name: 'Query',
@@ -43,3 +43,4 @@ export const createGraphQLKoaApp = (
         }),
       })
     );
+};

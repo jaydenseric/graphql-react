@@ -1,5 +1,7 @@
-import ReactDOMServer from 'react-dom/server.node.js';
-import { GraphQL } from '../universal/GraphQL.mjs';
+'use strict';
+
+const ReactDOMServer = require('react-dom/server.node.js');
+const GraphQL = require('../universal/GraphQL.js');
 
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},
@@ -54,7 +56,7 @@ import { GraphQL } from '../universal/GraphQL.mjs';
  * }
  * ```
  */
-export async function ssr( // eslint-disable-line require-await
+module.exports = async function ssr( // eslint-disable-line require-await
   graphql,
   node,
   render = ReactDOMServer.renderToStaticMarkup
@@ -92,4 +94,4 @@ export async function ssr( // eslint-disable-line require-await
   }
 
   return recurse();
-}
+};

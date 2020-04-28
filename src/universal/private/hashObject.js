@@ -1,4 +1,6 @@
-import fnv1a from 'fnv1a';
+'use strict';
+
+const fnv1a = require('fnv1a');
 
 /**
  * `JSON.stringify()` replacer that converts
@@ -55,5 +57,6 @@ function hashObjectReplacer(key, value) {
  * @returns {string} A hash.
  * @ignore
  */
-export const hashObject = (object) =>
-  fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36);
+module.exports = function hashObject(object) {
+  return fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36);
+};

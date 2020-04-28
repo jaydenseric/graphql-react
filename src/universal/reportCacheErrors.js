@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A [`GraphQL`]{@link GraphQL} `cache` event handler that reports
  * [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse
@@ -16,7 +18,7 @@
  * graphql.on('cache', reportCacheErrors)
  * ```
  */
-export function reportCacheErrors({
+module.exports = function reportCacheErrors({
   cacheKey,
   cacheValue: { fetchError, httpError, parseError, graphQLErrors },
 }) {
@@ -66,4 +68,4 @@ export function reportCacheErrors({
 
     console.groupEnd();
   }
-}
+};

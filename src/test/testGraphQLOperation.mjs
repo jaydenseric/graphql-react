@@ -1,6 +1,6 @@
 import { deepStrictEqual, strictEqual } from 'assert';
-import { GraphQL } from '../universal/GraphQL.mjs';
-import { promisifyEvent } from './promisifyEvent.mjs';
+import { GraphQL } from '../universal/index.mjs';
+import promisifyEvent from './promisifyEvent.js';
 
 /**
  * Tests [`GraphQL.operate()`]{@link GraphQL#operate} under certain conditions.
@@ -16,7 +16,7 @@ import { promisifyEvent } from './promisifyEvent.mjs';
  * @returns {Promise} Resolves once the test is complete.
  * @ignore
  */
-export async function testGraphQLOperation({
+export default async function testGraphQLOperation({
   port,
   operation = { query: '{ echo }' },
   resetOnLoad,

@@ -2,6 +2,12 @@
 
 ## Next
 
+### Major
+
+- Added a [package `exports` field](https://nodejs.org/api/esm.html#esm_package_exports) to support native ESM in Node.js.
+- Some source and published files are now `.js` (CJS) instead of `.mjs` (ESM), so undocumented deep imports may no longer work. [This approach avoids the dual package hazard](https://nodejs.org/api/esm.html#esm_approach_1_use_an_es_module_wrapper).
+- Updated Node.js support from v10+ to `10 - 12 || >= 13.7` to reflect the package `exports` related breaking changes.
+
 ### Patch
 
 - Updated dependencies.
@@ -12,7 +18,7 @@
 - Reconfigured [`size-limit`](https://npm.im/size-limit):
   - Separately test the universal and server only exports, without using unpublished size limit entry files that bloat the measured sizes.
   - Separately test the ESM and CJS exports.
-  - Separately limit tests, with the universal ESM set to the 2.5 KB maximum size advertized in the readme.
+  - Separately limit tests, with the universal ESM and CJS set to a 3 KB maximum size.
 
 ## 10.0.0
 

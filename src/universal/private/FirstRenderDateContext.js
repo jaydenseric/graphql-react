@@ -1,4 +1,6 @@
-import React from 'react';
+'use strict';
+
+const React = require('react');
 
 /**
  * [React context object](https://reactjs.org/docs/context#api) for a `Date`
@@ -9,6 +11,8 @@ import React from 'react';
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context#contextconsumer).
  * @ignore
  */
-export const FirstRenderDateContext = React.createContext();
+const FirstRenderDateContext = React.createContext();
 
 FirstRenderDateContext.displayName = 'FirstRenderDateContext';
+
+module.exports = FirstRenderDateContext;

@@ -12,7 +12,7 @@ module.exports = {
       '@babel/env',
       {
         targets: { node: true },
-        modules: process.env.BABEL_ESM ? false : 'cjs',
+        modules: process.env.PREPARE_MODULE_TYPE === 'esm' ? false : 'cjs',
         shippedProposals: true,
         loose: true,
       },
