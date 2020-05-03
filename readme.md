@@ -653,7 +653,7 @@ A &lt; 3 KB bundle impact is guaranteed by [Size Limit](https://github.com/ai/si
 | --- | --- | --- |
 | [`graphql-react`](https://npm.im/graphql-react) | [![graphql-react install size](https://badgen.net/packagephobia/install/graphql-react)](https://packagephobia.now.sh/result?p=graphql-react) | [![graphql-react minzipped size](https://badgen.net/bundlephobia/minzip/graphql-react)](https://bundlephobia.com/result?p=graphql-react) |
 
-[Tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers will eliminate unused exports (perhaps [`reportCacheErrors`](#function-reportcacheerrors)).
+The bundle impact may be smaller, depending on how much of the API you use.
 
 #### Apollo
 
@@ -669,15 +669,15 @@ Several dependencies must be installed for a minimal Apollo project.
 
 In addition, [fragment matcher](https://www.apollographql.com/docs/react/advanced/fragments#fragment-matcher) config impacts bundle size relative to the number and complexity of schema unions and interfaces; see [**_Cache strategy_**](#cache-strategy).
 
-### Native ESM
+### ESM
 
 #### graphql-react
 
-Supports native ESM via `.mjs` files for Node.js in [`--experimental-modules`](https://nodejs.org/api/esm.html#esm_enabling) mode and [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org). For legacy environments CJS is provided via `.js` files.
+Supports [ESM in Node.js](https://nodejs.org/api/esm.html) whilst avoiding the [dual package hazard](https://nodejs.org/api/esm.html#esm_dual_package_hazard) via [ESM wrappers around CJS](https://nodejs.org/api/esm.html#esm_approach_1_use_an_es_module_wrapper) and [`package.json` `exports` field conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports).
 
 #### Apollo
 
-No support for native ESM, although they do provide faux ESM via package `module` fields for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org).
+Faux ESM that can’t be used by Node.js is provided via package `module` fields for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org).
 
 ### Writing queries
 
