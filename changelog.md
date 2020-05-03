@@ -21,7 +21,7 @@
   - Separately limit tests, with the universal ESM and CJS set to a 3 KB maximum size.
 - Removed redundant ESLint disable comments.
 - Also run GitHub Actions with Node.js v14.
-- Updated readme details about ESM.
+- Updated readme content.
 - Updated JSDoc code examples:
   - Prettier formatting.
   - Import React in examples containing JSX.

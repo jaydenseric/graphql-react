@@ -756,7 +756,7 @@ GraphQL mutations only update the cache with the contents of their payload. The 
 
 #### graphql-react
 
-Supports file uploads out of the box, compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is supported by popular GraphQL servers including [Apollo Server](https://apollographql.com/docs/apollo-server). File input values can be used as query or mutation arguments.
+Supports file uploads out of the box, compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is [supported by popular GraphQL servers](https://github.com/jaydenseric/graphql-multipart-request-spec#implementations) including [Apollo Server](https://apollographql.com/docs/apollo-server). File input values can be used as query or mutation arguments.
 
 #### Apollo
 
@@ -786,7 +786,7 @@ Written in TypeScript; types are exported.
 
 #### graphql-react
 
-Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which provides easy to install custom [`App`](https://nextjs.org/docs/#custom-app) and [config](https://nextjs.org/docs/#custom-configuration) decorators to enable server side rendered GraphQL queries.
+Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which is an easily installed integration to enable server side rendered GraphQL queries.
 
 Also has [more detailed examples](https://github.com/jaydenseric/graphql-react-examples), deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
