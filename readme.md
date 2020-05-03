@@ -44,6 +44,7 @@ Here is a basic example that displays a Pokemon image, with tips commented:
 
 ```jsx
 import { GraphQL, GraphQLProvider, useGraphQL } from 'graphql-react';
+import React from 'react';
 
 // Zero config GraphQL client that manages the cache.
 const graphql = new GraphQL();
@@ -292,6 +293,7 @@ _Provide a [`GraphQL`](#class-graphql) instance for an app._
 
 > ```jsx
 > import { GraphQL, GraphQLProvider } from 'graphql-react';
+> import React from 'react';
 >
 > const graphql = new GraphQL();
 >
@@ -351,8 +353,9 @@ _SSR function that resolves a HTML string and cache JSON for client hydration._
 > ```jsx
 > import { GraphQL, GraphQLProvider } from 'graphql-react';
 > import { ssr } from 'graphql-react/server';
+> import React from 'react';
 > import ReactDOMServer from 'react-dom/server';
-> import { App } from './components';
+> import { App } from './components/App.mjs';
 >
 > async function render() {
 >   const graphql = new GraphQL();
@@ -372,7 +375,8 @@ _SSR function that resolves a HTML string suitable for a static page._
 > ```jsx
 > import { GraphQL, GraphQLProvider } from 'graphql-react';
 > import { ssr } from 'graphql-react/server';
-> import { App } from './components';
+> import React from 'react';
+> import { App } from './components/App.mjs';
 >
 > function render() {
 >   const graphql = new GraphQL();
@@ -414,6 +418,7 @@ _A component that displays a Pokémon image._
 
 > ```jsx
 > import { useGraphQL } from 'graphql-react';
+> import React from 'react';
 >
 > const PokemonImage = ({ name }) => {
 >   const { loading, cacheValue = {} } = useGraphQL({
@@ -472,8 +477,8 @@ _Options guide for common situations._
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
 
 > ```jsx
-> import React from 'react';
 > import { GraphQLContext } from 'graphql-react';
+> import React from 'react';
 >
 > const ResetCacheButton = () => {
 >   const graphql = React.useContext(GraphQLContext);

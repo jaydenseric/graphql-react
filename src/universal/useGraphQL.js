@@ -25,29 +25,30 @@ const hashObject = require('./private/hashObject.js');
  * @see [`GraphQLContext`]{@link GraphQLContext} is required for this hook to work.
  * @example <caption>A component that displays a Pokémon image.</caption>
  * ```jsx
- * import { useGraphQL } from 'graphql-react'
+ * import { useGraphQL } from 'graphql-react';
+ * import React from 'react';
  *
  * const PokemonImage = ({ name }) => {
- *  const { loading, cacheValue = {} } = useGraphQL({
- *    fetchOptionsOverride(options) {
- *      options.url = 'https://graphql-pokemon.now.sh'
- *    },
- *    operation: {
- *      query: `{ pokemon(name: "${name}") { image } }`
- *    },
- *    loadOnMount: true,
- *    loadOnReload: true,
- *    loadOnReset: true
- *  })
+ *   const { loading, cacheValue = {} } = useGraphQL({
+ *     fetchOptionsOverride(options) {
+ *       options.url = 'https://graphql-pokemon.now.sh';
+ *     },
+ *     operation: {
+ *       query: `{ pokemon(name: "${name}") { image } }`,
+ *     },
+ *     loadOnMount: true,
+ *     loadOnReload: true,
+ *     loadOnReset: true,
+ *   });
  *
- *  return cacheValue.data ? (
- *    <img src={cacheValue.data.pokemon.image} alt={name} />
- *  ) : loading ? (
- *    'Loading…'
- *  ) : (
- *    'Error!'
- *  )
- *}
+ *   return cacheValue.data ? (
+ *     <img src={cacheValue.data.pokemon.image} alt={name} />
+ *   ) : loading ? (
+ *     'Loading…'
+ *   ) : (
+ *     'Error!'
+ *   );
+ * };
  * ```
  * @example <caption>Options guide for common situations.</caption>
  * | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |

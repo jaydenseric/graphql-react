@@ -22,6 +22,10 @@
 - Removed redundant ESLint disable comments.
 - Also run GitHub Actions with Node.js v14.
 - Updated readme details about ESM.
+- Updated JSDoc code examples:
+  - Prettier formatting.
+  - Import React in examples containing JSX.
+  - Use Node.js ESM compatible import specifiers.
 
 ## 10.0.0
 

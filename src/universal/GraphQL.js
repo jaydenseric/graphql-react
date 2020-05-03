@@ -18,9 +18,9 @@ const hashObject = require('./private/hashObject.js');
  * @see [`reportCacheErrors`]{@link reportCacheErrors} to setup error reporting.
  * @example <caption>Construct a GraphQL client.</caption>
  * ```js
- * import { GraphQL } from 'graphql-react'
+ * import { GraphQL } from 'graphql-react';
  *
- * const graphql = new GraphQL()
+ * const graphql = new GraphQL();
  * ```
  */
 module.exports = class GraphQL {
@@ -62,17 +62,17 @@ module.exports = class GraphQL {
      * @type {GraphQLCache}
      * @example <caption>Export cache as JSON.</caption>
      * ```js
-     * const exportedCache = JSON.stringify(graphql.cache)
+     * const exportedCache = JSON.stringify(graphql.cache);
      * ```
      * @example <caption>Example cache JSON.</caption>
      * ```json
      * {
      *   "a1bCd2": {
-     *      "data": {
-     *        "viewer": {
-     *          "name": "Jayden Seric"
-     *        }
-     *      }
+     *     "data": {
+     *       "viewer": {
+     *         "name": "Jayden Seric"
+     *       }
+     *     }
      *   }
      * }
      * ```
@@ -98,7 +98,7 @@ module.exports = class GraphQL {
    * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from reloading.
    * @example <caption>Reloading the [GraphQL cache]{@link GraphQL#cache}.</caption>
    * ```js
-   * graphql.reload()
+   * graphql.reload();
    * ```
    */
   reload = (exceptCacheKey) => {
@@ -113,7 +113,7 @@ module.exports = class GraphQL {
    * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
    * @example <caption>Resetting the [GraphQL cache]{@link GraphQL#cache}.</caption>
    * ```js
-   * graphql.reset()
+   * graphql.reset();
    * ```
    */
   reset = (exceptCacheKey) => {

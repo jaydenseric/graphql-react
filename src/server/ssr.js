@@ -22,37 +22,39 @@ const GraphQL = require('../universal/GraphQL.js');
  * @see [`next-graphql-react`](https://npm.im/next-graphql-react) to use this API in a [Next.js](https://nextjs.org) project.
  * @example <caption>SSR function that resolves a HTML string and cache JSON for client hydration.</caption>
  * ```jsx
- * import { GraphQL, GraphQLProvider } from 'graphql-react'
- * import { ssr } from 'graphql-react/server'
- * import ReactDOMServer from 'react-dom/server'
- * import { App } from './components'
+ * import { GraphQL, GraphQLProvider } from 'graphql-react';
+ * import { ssr } from 'graphql-react/server';
+ * import React from 'react';
+ * import ReactDOMServer from 'react-dom/server';
+ * import { App } from './components/App.mjs';
  *
  * async function render() {
- *   const graphql = new GraphQL()
+ *   const graphql = new GraphQL();
  *   const page = (
  *     <GraphQLProvider graphql={graphql}>
  *       <App />
  *     </GraphQLProvider>
- *   )
- *   const html = await ssr(graphql, page, ReactDOMServer.renderToString)
- *   const cache = JSON.stringify(graphql.cache)
- *   return { html, cache }
+ *   );
+ *   const html = await ssr(graphql, page, ReactDOMServer.renderToString);
+ *   const cache = JSON.stringify(graphql.cache);
+ *   return { html, cache };
  * }
  * ```
  * @example <caption>SSR function that resolves a HTML string suitable for a static page.</caption>
  * ```jsx
- * import { GraphQL, GraphQLProvider } from 'graphql-react'
- * import { ssr } from 'graphql-react/server'
- * import { App } from './components'
+ * import { GraphQL, GraphQLProvider } from 'graphql-react';
+ * import { ssr } from 'graphql-react/server';
+ * import React from 'react';
+ * import { App } from './components/App.mjs';
  *
  * function render() {
- *   const graphql = new GraphQL()
+ *   const graphql = new GraphQL();
  *   const page = (
  *     <GraphQLProvider graphql={graphql}>
  *       <App />
  *     </GraphQLProvider>
- *   )
- *   return ssr(graphql, page)
+ *   );
+ *   return ssr(graphql, page);
  * }
  * ```
  */

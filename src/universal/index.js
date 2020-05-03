@@ -62,10 +62,10 @@ exports.useGraphQL = require('./useGraphQL.js');
  * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.fetchOptionsOverride`.
  * @example <caption>Setting [GraphQL `fetch` options]{@link GraphQLFetchOptions} for an imaginary API.</caption>
  * ```js
- * options => {
- *   options.url = 'https://api.example.com/graphql'
- *   options.credentials = 'include'
- * }
+ * (options) => {
+ *   options.url = 'https://api.example.com/graphql';
+ *   options.credentials = 'include';
+ * };
  * ```
  */
 

@@ -14,13 +14,13 @@ const React = require('react');
  * @see [`useGraphQL`]{@link useGraphQL} React hook requires an ancestor [`GraphQLContext`]{@link GraphQLContext} `Provider` to work.
  * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
  * ```jsx
- * import React from 'react'
- * import { GraphQLContext } from 'graphql-react'
+ * import { GraphQLContext } from 'graphql-react';
+ * import React from 'react';
  *
  * const ResetCacheButton = () => {
- *   const graphql = React.useContext(GraphQLContext)
- *   return <button onClick={graphql.reset}>Reset cache</button>
- * }
+ *   const graphql = React.useContext(GraphQLContext);
+ *   return <button onClick={graphql.reset}>Reset cache</button>;
+ * };
  * ```
  */
 const GraphQLContext = React.createContext();

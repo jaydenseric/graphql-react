@@ -19,13 +19,14 @@ const FirstRenderDateContext = require('./private/FirstRenderDateContext.js');
  * @see [`useGraphQL`]{@link useGraphQL} React hook requires this component to be an ancestor to work.
  * @example <caption>Provide a [`GraphQL`]{@link GraphQL} instance for an app.</caption>
  * ```jsx
- * import { GraphQL, GraphQLProvider } from 'graphql-react'
+ * import { GraphQL, GraphQLProvider } from 'graphql-react';
+ * import React from 'react';
  *
- * const graphql = new GraphQL()
+ * const graphql = new GraphQL();
  *
  * const App = ({ children }) => (
  *   <GraphQLProvider graphql={graphql}>{children}</GraphQLProvider>
- * )
+ * );
  * ```
  */
 function GraphQLProvider({ graphql, children }) {
