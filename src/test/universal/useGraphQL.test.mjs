@@ -304,7 +304,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation1Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation1Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -321,7 +321,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation2Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation2Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -388,7 +388,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation1Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation1Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -405,7 +405,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation2Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation2Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -469,7 +469,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation1Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation1Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -486,7 +486,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operation2Options} loadOnMount={true} />
+              <RenderUseGraphQL {...operation2Options} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -547,7 +547,7 @@ export default (tests) => {
         ReactTestRenderer.act(() => {
           testRenderer.update(
             <GraphQLProvider graphql={graphql}>
-              <RenderUseGraphQL {...operationOptions} loadOnMount={true} />
+              <RenderUseGraphQL {...operationOptions} loadOnMount />
             </GraphQLProvider>
           );
         });
@@ -581,8 +581,8 @@ export default (tests) => {
               fetchOptionsOverride={(options) => {
                 options.url = `http://localhost:${port}`;
               }}
-              loadOnMount={true}
-              reloadOnLoad={true}
+              loadOnMount
+              reloadOnLoad
             />
           </GraphQLProvider>
         );
@@ -613,8 +613,8 @@ export default (tests) => {
               fetchOptionsOverride={(options) => {
                 options.url = `http://localhost:${port}`;
               }}
-              loadOnMount={true}
-              resetOnLoad={true}
+              loadOnMount
+              resetOnLoad
             />
           </GraphQLProvider>
         );
@@ -637,8 +637,8 @@ export default (tests) => {
           <GraphQLProvider graphql={new GraphQL()}>
             <RenderUseGraphQL
               operation={{ query: '' }}
-              reloadOnLoad={true}
-              resetOnLoad={true}
+              reloadOnLoad
+              resetOnLoad
             />
           </GraphQLProvider>
         );
@@ -677,7 +677,7 @@ export default (tests) => {
       ReactTestRenderer.act(() => {
         testRenderer.update(
           <GraphQLContext.Provider value={graphql}>
-            <RenderUseGraphQL {...operationOptions} loadOnMount={true} />
+            <RenderUseGraphQL {...operationOptions} loadOnMount />
           </GraphQLContext.Provider>
         );
       });

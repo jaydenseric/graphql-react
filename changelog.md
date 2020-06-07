@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Simplified JSX boolean props in tests.
+
 ## 11.0.0
 
 ### Major
