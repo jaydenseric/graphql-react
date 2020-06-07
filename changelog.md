@@ -5,6 +5,7 @@
 ### Patch
 
 - Simplified JSX boolean props in tests.
+- Fixed an incorrect `reportCacheErrors` JSDoc parameter type.
 
 ## 11.0.0
 

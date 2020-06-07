@@ -312,7 +312,7 @@ A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https
 | :-- | :-- | :-- |
 | `data` | object | [`GraphQL`](#class-graphql) `cache` event data. |
 | `data.cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
-| `data.cacheValue` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue). |
+| `data.cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue). |
 
 #### Examples
 

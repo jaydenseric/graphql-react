@@ -9,7 +9,7 @@
  * @name reportCacheErrors
  * @param {object} data [`GraphQL`]{@link GraphQL} `cache` event data.
  * @param {GraphQLCacheKey} data.cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
- * @param {GraphQLCacheKey} data.cacheValue [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
+ * @param {GraphQLCacheValue} data.cacheValue [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
  * @example <caption>[`GraphQL`]{@link GraphQL} initialized to report cache errors.</caption>
  * ```js
  * import { GraphQL, reportCacheErrors } from 'graphql-react';
