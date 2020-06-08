@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated Node.js support to `^10.17.0 || ^12.0.0 || >= 13.7.0`. This is only a correction; the dependency updates with breaking changes happened in previous versions.
 - Updated dependencies.
 - Simplified JSX boolean props in tests.
 - Improved event documentation.
