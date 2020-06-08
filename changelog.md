@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated dependencies.
 - Simplified JSX boolean props in tests.
 - Fixed an incorrect `reportCacheErrors` JSDoc parameter type.
 - Updated EditorConfig.
