@@ -125,8 +125,8 @@ module.exports = function useGraphQL({
     isMountedRef.current = true;
 
     /**
-     * Handles a [`GraphQL`]{@link GraphQL} `fetch` event.
-     * @param {object} event Event data.
+     * Handles the [`GraphQL` event `fetch`]{@link GraphQL#event:fetch}.
+     * @param {GraphQL#event:fetch} event Event data.
      * @ignore
      */
     function onFetch({ cacheKey: fetchingCacheKey }) {
@@ -135,8 +135,8 @@ module.exports = function useGraphQL({
     }
 
     /**
-     * Handles a [`GraphQL`]{@link GraphQL} `cache` event.
-     * @param {object} event Event data.
+     * Handles the [`GraphQL` event `cache`]{@link GraphQL#event:cache}.
+     * @param {GraphQL#event:cache} event Event data.
      * @ignore
      */
     function onCache({ cacheKey: cachedCacheKey, cacheValue }) {
@@ -148,8 +148,8 @@ module.exports = function useGraphQL({
     }
 
     /**
-     * Handles a [`GraphQL`]{@link GraphQL} `reload` event.
-     * @param {object} event Event data.
+     * Handles the [`GraphQL` event `reload`]{@link GraphQL#event:reload}.
+     * @param {GraphQL#event:reload} event Event data.
      * @ignore
      */
     function onReload({ exceptCacheKey }) {
@@ -163,8 +163,8 @@ module.exports = function useGraphQL({
     }
 
     /**
-     * Handles a [`GraphQL`]{@link GraphQL} `reset` event.
-     * @param {object} event Event data.
+     * Handles the [`GraphQL` event `reset`]{@link GraphQL#event:reset}.
+     * @param {GraphQL#event:reset} event Event data.
      * @ignore
      */
     function onReset({ exceptCacheKey }) {

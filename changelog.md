@@ -6,6 +6,7 @@
 
 - Updated dependencies.
 - Simplified JSX boolean props in tests.
+- Improved event documentation.
 - Fixed an incorrect `reportCacheErrors` JSDoc parameter type.
 - Updated EditorConfig.
 

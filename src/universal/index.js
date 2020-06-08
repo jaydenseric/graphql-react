@@ -37,6 +37,43 @@ exports.useGraphQL = require('./useGraphQL.js');
  */
 
 /**
+ * Signals that [GraphQL cache]{@link GraphQL#cache} subscribers such as the
+ * [`useGraphQL`]{@link useGraphQL} React hook should reload their GraphQL
+ * operation.
+ * @kind event
+ * @name GraphQL#event:reload
+ * @type {object}
+ * @prop {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from reloading.
+ */
+
+/**
+ * Signals that the [GraphQL cache]{@link GraphQL#cache} has been reset.
+ * @kind event
+ * @name GraphQL#event:reset
+ * @type {object}
+ * @prop {GraphQLCacheKey} [exceptCacheKey] The [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache that was exempted from deletion.
+ */
+
+/**
+ * Signals that a GraphQL operation is being fetched.
+ * @kind event
+ * @name GraphQL#event:fetch
+ * @type {object}
+ * @prop {GraphQLCacheKey} cacheKey The [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for the operation being fetched.
+ * @prop {Promise<GraphQLCacheValue>} cacheValuePromise Resolves the loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
+ */
+
+/**
+ * Signals that a GraphQL operation was fetched and cached.
+ * @kind event
+ * @name GraphQL#event:cache
+ * @type {object}
+ * @prop {GraphQLCacheKey} cacheKey The [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for the operation that was cached.
+ * @prop {GraphQLCacheValue} cacheValue The loaded [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
+ * @prop {Response} [response] The [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) instance; may be undefined if there was a fetch error.
+ */
+
+/**
  * GraphQL API URL and
  * [polyfillable `fetch` options](https://github.github.io/fetch/#options). The
  * `url` property gets extracted and the rest are used as

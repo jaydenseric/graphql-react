@@ -92,10 +92,11 @@ module.exports = class GraphQL {
   /**
    * Signals that [GraphQL cache]{@link GraphQL#cache} subscribers such as the
    * [`useGraphQL`]{@link useGraphQL} React hook should reload their GraphQL
-   * operation. Emits a [`GraphQL`]{@link GraphQL} instance `reload` event.
+   * operation.
    * @kind function
    * @name GraphQL#reload
    * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from reloading.
+   * @fires GraphQL#event:reload
    * @example <caption>Reloading the [GraphQL cache]{@link GraphQL#cache}.</caption>
    * ```js
    * graphql.reload();
@@ -107,10 +108,11 @@ module.exports = class GraphQL {
 
   /**
    * Resets the [GraphQL cache]{@link GraphQL#cache}, useful when a user logs
-   * out. Emits a [`GraphQL`]{@link GraphQL} instance `reset` event.
+   * out.
    * @kind function
    * @name GraphQL#reset
    * @param {GraphQLCacheKey} [exceptCacheKey] A [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache.
+   * @fires GraphQL#event:reset
    * @example <caption>Resetting the [GraphQL cache]{@link GraphQL#cache}.</caption>
    * ```js
    * graphql.reset();
@@ -134,6 +136,8 @@ module.exports = class GraphQL {
    * @param {GraphQLFetchOptions} fetchOptions URL and options for [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API).
    * @param {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
    * @returns {Promise<GraphQLCacheValue>} A promise that resolves the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
+   * @fires GraphQL#event:fetch
+   * @fires GraphQL#event:cache
    * @ignore
    */
   fetch = ({ url, ...options }, cacheKey) => {
@@ -215,6 +219,8 @@ module.exports = class GraphQL {
    * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
    * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
+   * @fires GraphQL#event:fetch
+   * @fires GraphQL#event:cache
    */
   operate = ({
     operation,

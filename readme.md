@@ -127,6 +127,10 @@ Consider polyfilling:
   - [GraphQL instance method reset](#graphql-instance-method-reset)
   - [GraphQL instance property cache](#graphql-instance-property-cache)
   - [GraphQL instance property operations](#graphql-instance-property-operations)
+  - [GraphQL event cache](#graphql-event-cache)
+  - [GraphQL event fetch](#graphql-event-fetch)
+  - [GraphQL event reload](#graphql-event-reload)
+  - [GraphQL event reset](#graphql-event-reset)
 - [function GraphQLProvider](#function-graphqlprovider)
 - [function reportCacheErrors](#function-reportcacheerrors)
 - [function ssr](#function-ssr)
@@ -202,13 +206,22 @@ Loads or reuses an already loading GraphQL operation in [GraphQL operations](#gr
 
 **Returns:** [GraphQLOperationLoading](#type-graphqloperationloading) — Loading GraphQL operation details.
 
+##### Fires
+
+- [GraphQL event fetch](#graphql-event-fetch)
+- [GraphQL event cache](#graphql-event-cache)
+
 #### GraphQL instance method reload
 
-Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation. Emits a [`GraphQL`](#class-graphql) instance `reload` event.
+Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from reloading. |
+
+##### Fires
+
+- [GraphQL event reload](#graphql-event-reload)
 
 ##### Examples
 
@@ -220,11 +233,15 @@ _Reloading the [GraphQL cache](#graphql-instance-property-cache)._
 
 #### GraphQL instance method reset
 
-Resets the [GraphQL cache](#graphql-instance-property-cache), useful when a user logs out. Emits a [`GraphQL`](#class-graphql) instance `reset` event.
+Resets the [GraphQL cache](#graphql-instance-property-cache), useful when a user logs out.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
+
+##### Fires
+
+- [GraphQL event reset](#graphql-event-reset)
 
 ##### Examples
 
@@ -268,6 +285,49 @@ A map of loading GraphQL operations. You probably don’t need to interact with 
 
 **Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>
 
+#### GraphQL event cache
+
+Signals that a GraphQL operation was fetched and cached.
+
+**Type:** object
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the operation that was cached. |
+| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | The loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+| `response` | Response? | The [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) instance; may be undefined if there was a fetch error. |
+
+#### GraphQL event fetch
+
+Signals that a GraphQL operation is being fetched.
+
+**Type:** object
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the operation being fetched. |
+| `cacheValuePromise` | Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+
+#### GraphQL event reload
+
+Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation.
+
+**Type:** object
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from reloading. |
+
+#### GraphQL event reset
+
+Signals that the [GraphQL cache](#graphql-instance-property-cache) has been reset.
+
+**Type:** object
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache that was exempted from deletion. |
+
 ---
 
 ### function GraphQLProvider
@@ -306,13 +366,11 @@ _Provide a [`GraphQL`](#class-graphql) instance for an app._
 
 ### function reportCacheErrors
 
-A [`GraphQL`](#class-graphql) `cache` event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
+A [`GraphQL` event `cache`](#graphql-event-cache) handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `data` | object | [`GraphQL`](#class-graphql) `cache` event data. |
-| `data.cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
-| `data.cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue). |
+| `data` | [GraphQL#event:cache](#graphql-event-cache) | [`GraphQL`](#class-graphql) `cache` event data. |
 
 #### Examples
 
