@@ -729,17 +729,30 @@ Several dependencies must be installed for a minimal Apollo project.
 
 [Tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers will eliminate unused [`graphql`](https://npm.im/graphql) exports.
 
+Consuming the API multiple ways in a project or it’s dependencies causes _massive_ duplication in a bundle (doubling or tripling the bundle impact); see [**_ESM_**](#esm).
+
 In addition, [`possibleTypes`](https://www.apollographql.com/docs/react/data/fragments/#defining-possibletypes-manually) config impacts bundle size relative to the number and complexity of schema unions and interfaces; see [**_Cache strategy_**](#cache-strategy).
 
 ### ESM
 
 #### graphql-react
 
-Supports [ESM in Node.js](https://nodejs.org/api/esm.html) whilst avoiding the [dual package hazard](https://nodejs.org/api/esm.html#esm_dual_package_hazard) via [ESM wrappers around CJS](https://nodejs.org/api/esm.html#esm_approach_1_use_an_es_module_wrapper) and [`package.json` `exports` field conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports).
+Supports both CJS and [ESM in Node.js](https://nodejs.org/api/esm.html) whilst avoiding the [dual package hazard](https://nodejs.org/api/esm.html#esm_dual_package_hazard) and ensuring private internal code can’t be accessed from outside the package, via [`package.json` `exports` field conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports).
+
+Individual parts of the public API exist in separate CJS `.js` files that can be accessed via:
+
+- **Deep default imports** (recommended). Only what’s needed gets bundled, without relying on [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking).
+- **Main index named imports**. [Webpack](https://webpack.js.org) v5+ can tree shake imports from the bare `graphql-react` specifier, while earlier versions and [Rollup](https://rollupjs.org) can only [tree shake](https://developer.mozilla.org/docs/Glossary/Tree_shaking) imports from `graphql-react/universal/index.mjs`.
+
+Consuming the API multiple ways in a project or it’s dependencies doesn’t cause duplication in a bundle.
 
 #### Apollo
 
-Faux ESM that can’t be used by Node.js is provided via package `module` fields for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org).
+Faux ESM that can’t be used by Node.js (files don't have the `.mjs` extension and import specifiers don't contain file extensions) is provided via a package `module` field for [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers like [webpack](https://webpack.js.org) and [Rollup](https://rollupjs.org).
+
+Arbitrary CJS bundles are available at the main index and specific deep paths.
+
+Consuming the API multiple ways in a project or it’s dependencies causes _massive_ duplication in a bundle. This can easily double or triple the bundle impact.
 
 ### Writing queries
 
@@ -774,6 +787,8 @@ const QUERY = gql`
   }
 `;
 ```
+
+This complexity impacts bundle size and runtime performance. [`babel-plugin-graphql-tag`](https://npm.im/babel-plugin-graphql-tag) can be used to process the queries at build time, but this replaces the original strings with larger objects.
 
 ### Cache strategy
 
@@ -813,7 +828,7 @@ GraphQL mutations only update the cache with the contents of their payload. The 
 
 #### graphql-react
 
-Supports file uploads out of the box, compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is [supported by popular GraphQL servers](https://github.com/jaydenseric/graphql-multipart-request-spec#implementations) including [Apollo Server](https://apollographql.com/docs/apollo-server). File input values can be used as query or mutation arguments.
+Supports file uploads out of the box, compliant with the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec) (authored by [@jaydenseric](https://github.com/jaydenseric)) which is [supported by popular GraphQL servers](https://github.com/jaydenseric/graphql-multipart-request-spec#implementations) including [Apollo Server](https://apollographql.com/docs/apollo-server). [File input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file) values and more can be used as query or mutation arguments.
 
 #### Apollo
 
