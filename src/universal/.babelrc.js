@@ -19,6 +19,12 @@ const config = {
     ],
     '@babel/react',
   ],
+  overrides: [
+    {
+      test: /\.js$/,
+      sourceType: 'script',
+    },
+  ],
 };
 
 if (process.env.PREPARE_MODULE_TYPE)

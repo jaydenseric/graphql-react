@@ -19,4 +19,10 @@ module.exports = {
     ],
     '@babel/react',
   ],
+  overrides: [
+    {
+      test: /\.js$/,
+      sourceType: 'script',
+    },
+  ],
 };
