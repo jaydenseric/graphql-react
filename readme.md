@@ -724,13 +724,12 @@ Several dependencies must be installed for a minimal Apollo project.
 
 | Dependency | Install size | Bundle size |
 | --- | --- | --- |
-| [`apollo-boost`](https://npm.im/apollo-boost) | [![apollo-boost install size](https://badgen.net/packagephobia/install/apollo-boost)](https://packagephobia.now.sh/result?p=apollo-boost) | [![apollo-boost minzipped size](https://badgen.net/bundlephobia/minzip/apollo-boost)](https://bundlephobia.com/result?p=apollo-boost) |
-| [`@apollo/react-hooks`](https://npm.im/@apollo/react-hooks) | [![@apollo/react-hooks install size](https://badgen.net/packagephobia/install/@apollo/react-hooks)](https://packagephobia.now.sh/result?p=@apollo/react-hooks) | [![@apollo/react-hooks minzipped size](https://badgen.net/bundlephobia/minzip/@apollo/react-hooks)](https://bundlephobia.com/result?p=@apollo/react-hooks) |
+| [`@apollo/client`](https://npm.im/@apollo/client) | [![@apollo/client install size](https://badgen.net/packagephobia/install/@apollo/client)](https://packagephobia.now.sh/result?p=@apollo/client) | [![@apollo/client minzipped size](https://badgen.net/bundlephobia/minzip/@apollo/client)](https://bundlephobia.com/result?p=@apollo/client) |
 | [`graphql`](https://npm.im/graphql) | [![graphql install size](https://badgen.net/packagephobia/install/graphql)](https://packagephobia.now.sh/result?p=graphql) | [![graphql minzipped size](https://badgen.net/bundlephobia/minzip/graphql)](https://bundlephobia.com/result?p=graphql) |
 
 [Tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking) bundlers will eliminate unused [`graphql`](https://npm.im/graphql) exports.
 
-In addition, [fragment matcher](https://www.apollographql.com/docs/react/advanced/fragments#fragment-matcher) config impacts bundle size relative to the number and complexity of schema unions and interfaces; see [**_Cache strategy_**](#cache-strategy).
+In addition, [`possibleTypes`](https://www.apollographql.com/docs/react/data/fragments/#defining-possibletypes-manually) config impacts bundle size relative to the number and complexity of schema unions and interfaces; see [**_Cache strategy_**](#cache-strategy).
 
 ### ESM
 
@@ -762,10 +761,10 @@ The optional `/* GraphQL */` comment signals the syntax for highlighters and lin
 
 #### Apollo
 
-Uses template strings tagged with `gql` from [`graphql-tag`](https://npm.im/graphql-tag):
+Uses template strings tagged with `gql`, re-exported from [`graphql-tag`](https://npm.im/graphql-tag):
 
 ```js
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const QUERY = gql`
   {
@@ -790,11 +789,11 @@ GraphQL operations are cached under hashes of their [`fetch`](https://developer.
 
 Apollo Client is configured for one GraphQL API per app.
 
-GraphQL operation data is deconstructed based upon `id` and `__typename` fields into a “[normalized](https://apollographql.com/docs/react/advanced/caching#normalization)” cache. These fields must be queried even if they aren’t used in components.
+GraphQL operation data is deconstructed based upon `id` and `__typename` fields into a “[normalized](https://apollographql.com/docs/react/caching/cache-configuration/#data-normalization)” cache. These fields must be queried even if they aren’t used in components.
 
 [Errors aren’t cached](https://github.com/apollographql/apollo-client/issues/3897#issuecomment-432982170), and therefore can’t be server side rendered and transported to the client for hydration and initial render.
 
-Apollo Client must be configured with schema knowledge extracted at build time for a “[fragment matcher](https://apollographql.com/docs/react/advanced/fragments#fragment-matcher)” to cache fragments on unions and interfaces properly. It’s challenging to reconfigure and redeploy clients whenever the GraphQL schema updates. Also, the config increases the client bundle size; see [**_Bundle impact_**](#bundle-impact).
+To cache fragments on unions and interfaces properly, Apollo Client must be configured with schema knowledge extracted at build time, via [`possibleTypes`](https://www.apollographql.com/docs/react/data/fragments/#defining-possibletypes-manually). It’s challenging to reconfigure and redeploy clients whenever the GraphQL schema updates. Also, the config increases the client bundle size; see [**_Bundle impact_**](#bundle-impact).
 
 ### Stale cache
 
@@ -818,13 +817,13 @@ Supports file uploads out of the box, compliant with the [GraphQL multipart requ
 
 #### Apollo
 
-Supports file uploads if you drop [`apollo-boost`](https://npm.im/apollo-boost) and manually setup Apollo Client with [`apollo-upload-client`](https://npm.im/apollo-upload-client) (also by [@jaydenseric](https://github.com/jaydenseric)).
+Supports file uploads if you manually setup Apollo Client with [`apollo-upload-client`](https://npm.im/apollo-upload-client) (also by [@jaydenseric](https://github.com/jaydenseric)).
 
 ### Subscriptions
 
 #### graphql-react
 
-Not supported yet.
+Not supported yet, see [#15](https://github.com/jaydenseric/graphql-react/issues/15).
 
 #### Apollo
 
@@ -834,7 +833,7 @@ Supported.
 
 #### graphql-react
 
-Written in ECMAScript; no types are exported.
+Written in ECMAScript; no types are exported. Type definitions are available via [`@types/graphql-react`](https://npm.im/@types/graphql-react).
 
 #### Apollo
 
@@ -850,4 +849,4 @@ Also has [more detailed examples](https://github.com/jaydenseric/graphql-react-e
 
 #### Apollo
 
-Has [an official example](https://github.com/vercel/next.js/tree/canary/examples/with-apollo), but it consists of over 100 lines of complicated copy-paste boilerplate code across multiple files.
+Has [an official example](https://github.com/vercel/next.js/tree/canary/examples/with-apollo) with boilerplate code to manually copy. It’s difficult to stay up to date with [the frequent changes](https://github.com/vercel/next.js/commits/canary/examples/with-apollo).

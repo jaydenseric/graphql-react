@@ -8,6 +8,7 @@
 - Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/install-test.html) command.
 - Use Babel config `overrides` to ensure `.js` files are parsed as scripts, eliminating Babel `interopRequireDefault` helpers from transpilation output.
 - Updated Zeit/Vercel related URLs in documentation.
+- Updated the readme “Apollo comparison” section.
 
 ## 11.0.1
 
