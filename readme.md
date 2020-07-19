@@ -37,7 +37,7 @@ Use the [`useGraphQL`](#function-usegraphql) React hook in your components to ma
 
 ## Examples
 
-- [The official Next.js example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react).
+- [The official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react).
 - [The Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
 Here is a basic example that displays a Pokemon image, with tips commented:
@@ -844,10 +844,10 @@ Written in TypeScript; types are exported.
 
 #### graphql-react
 
-Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which is an easily installed integration to enable server side rendered GraphQL queries.
+Has [an official example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react) using [`next-graphql-react`](https://npm.im/next-graphql-react), which is an easily installed integration to enable server side rendered GraphQL queries.
 
 Also has [more detailed examples](https://github.com/jaydenseric/graphql-react-examples), deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
 #### Apollo
 
-Has [an official example](https://github.com/zeit/next.js/tree/canary/examples/with-apollo), but it consists of over 100 lines of complicated copy-paste boilerplate code across multiple files.
+Has [an official example](https://github.com/vercel/next.js/tree/canary/examples/with-apollo), but it consists of over 100 lines of complicated copy-paste boilerplate code across multiple files.

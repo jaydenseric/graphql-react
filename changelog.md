@@ -7,6 +7,7 @@
 - Updated dependencies.
 - Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/install-test.html) command.
 - Use Babel config `overrides` to ensure `.js` files are parsed as scripts, eliminating Babel `interopRequireDefault` helpers from transpilation output.
+- Updated Zeit/Vercel related URLs in documentation.
 
 ## 11.0.1
 
@@ -256,7 +257,7 @@
 - Handle exceptions outside tests (see [tapjs/node-tap#463 (comment)](https://github.com/tapjs/node-tap/issues/463#issuecomment-456701261)).
 - Added a `ReactNode` JSDoc type, replacing `ReactElement` types.
 - Removed tests made redundant by the removal of the `preload` function.
-- Document [the official Next.js example](https://github.com/zeit/next.js/tree/canary/examples/with-graphql-react).
+- Document [the official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react).
 - Improved documentation.
 
 ## 6.0.1
