@@ -11,7 +11,8 @@ const config = {
     [
       '@babel/env',
       {
-        targets: 'Node 10 - 12, Node >= 13.7',
+        targets:
+          'Node 10.17 - 11 and Node < 11, Node 12 - 13 and Node < 13, Node >= 13.7',
         modules: process.env.PREPARE_MODULE_TYPE === 'esm' ? false : 'cjs',
         shippedProposals: true,
         loose: true,
