@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- No longer test Node.js v13 in GitHub Actions CI.
+
 ## 11.0.2
 
 ### Patch
