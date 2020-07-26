@@ -5,6 +5,7 @@
 ### Patch
 
 - No longer test Node.js v13 in GitHub Actions CI.
+- Removed a no longer necessary [`formdata-node`](https://npm.im/formdata-node) workaround in `graphqlFetchOptions` tests.
 
 ## 11.0.2
 
