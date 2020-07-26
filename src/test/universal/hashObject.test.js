@@ -2,7 +2,7 @@
 
 const { notEqual, strictEqual } = require('assert');
 const FormData = require('formdata-node');
-const hashObject = require('../../universal/private/hashObject.js');
+const hashObject = require('../../universal/private/hashObject');
 
 // Global polyfill.
 global.FormData = FormData;

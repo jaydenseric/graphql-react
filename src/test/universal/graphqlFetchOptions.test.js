@@ -3,7 +3,7 @@
 const { deepStrictEqual, strictEqual } = require('assert');
 const Blob = require('fetch-blob');
 const FormData = require('formdata-node');
-const graphqlFetchOptions = require('../../universal/private/graphqlFetchOptions.js');
+const graphqlFetchOptions = require('../../universal/private/graphqlFetchOptions');
 
 // Global polyfills.
 global.Blob = Blob;

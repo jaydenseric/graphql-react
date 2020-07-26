@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports.ssr = require('./ssr.js');
+module.exports.ssr = require('./ssr');

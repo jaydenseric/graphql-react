@@ -1,14 +1,14 @@
 'use strict';
 
-require('cross-fetch/dist/node-polyfill.js');
+require('cross-fetch/dist/node-polyfill');
 const { deepStrictEqual, strictEqual, throws } = require('assert');
 const { GraphQLInt } = require('graphql');
 const Koa = require('koa');
-const GraphQL = require('../../universal/GraphQL.js');
-const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
-const listen = require('../listen.js');
-const promisifyEvent = require('../promisifyEvent.js');
-const testGraphQLOperation = require('../testGraphQLOperation.js');
+const GraphQL = require('../../universal/GraphQL');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp');
+const listen = require('../listen');
+const promisifyEvent = require('../promisifyEvent');
+const testGraphQLOperation = require('../testGraphQLOperation');
 
 module.exports = (tests) => {
   tests.add('`GraphQL` option `cache`', () => {

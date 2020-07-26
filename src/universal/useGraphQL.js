@@ -2,11 +2,11 @@
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const GraphQL = require('./GraphQL.js');
-const GraphQLContext = require('./GraphQLContext.js');
-const FirstRenderDateContext = require('./private/FirstRenderDateContext.js');
-const graphqlFetchOptions = require('./private/graphqlFetchOptions.js');
-const hashObject = require('./private/hashObject.js');
+const GraphQL = require('./GraphQL');
+const GraphQLContext = require('./GraphQLContext');
+const FirstRenderDateContext = require('./private/FirstRenderDateContext');
+const graphqlFetchOptions = require('./private/graphqlFetchOptions');
+const hashObject = require('./private/hashObject');
 
 /**
  * A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL

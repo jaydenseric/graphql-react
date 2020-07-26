@@ -1,10 +1,10 @@
 'use strict';
 
-exports.GraphQL = require('./GraphQL.js');
-exports.GraphQLContext = require('./GraphQLContext.js');
-exports.GraphQLProvider = require('./GraphQLProvider.js');
-exports.reportCacheErrors = require('./reportCacheErrors.js');
-exports.useGraphQL = require('./useGraphQL.js');
+exports.GraphQL = require('./GraphQL');
+exports.GraphQLContext = require('./GraphQLContext');
+exports.GraphQLProvider = require('./GraphQLProvider');
+exports.reportCacheErrors = require('./reportCacheErrors');
+exports.useGraphQL = require('./useGraphQL');
 
 /**
  * A [GraphQL cache]{@link GraphQL#cache} map of GraphQL operation results.

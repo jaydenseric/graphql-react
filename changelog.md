@@ -8,6 +8,7 @@
 - Corrected the Browserslist query in the Babel config for the server API.
 - Write tests as CJS and no longer separately build and test ESM and CJS to simplify package scripts, Babel and ESLint config.
 - Removed the [`@babel/plugin-proposal-class-properties`](https://npm.im/@babel/plugin-proposal-class-properties) dev dependency and config, as [`@babel/preset-env`](https://npm.im/@babel/preset-env) has handed this via it’s `shippedProposals` options [since v7.10.0](https://babeljs.io/blog/2020/05/25/7.10.0#class-properties-and-private-methods-to-shippedproposals-option-of-babel-preset-env-11451-https-githubcom-babel-babel-pull-11451).
+- Removed unnecessary `.js` file extensions from `require` paths.
 - Removed a no longer necessary [`formdata-node`](https://npm.im/formdata-node) workaround in `graphqlFetchOptions` tests.
 
 ## 11.0.2

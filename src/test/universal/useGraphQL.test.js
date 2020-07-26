@@ -1,18 +1,18 @@
 'use strict';
 
-require('cross-fetch/dist/node-polyfill.js');
+require('cross-fetch/dist/node-polyfill');
 const { deepStrictEqual, strictEqual, throws } = require('assert');
 const React = require('react');
-const ReactDOMServer = require('react-dom/server.node.js');
+const ReactDOMServer = require('react-dom/server.node');
 const ReactTestRenderer = require('react-test-renderer');
-const GraphQL = require('../../universal/GraphQL.js');
-const GraphQLContext = require('../../universal/GraphQLContext.js');
-const GraphQLProvider = require('../../universal/GraphQLProvider.js');
-const useGraphQL = require('../../universal/useGraphQL.js');
-const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
-const listen = require('../listen.js');
-const promisifyEvent = require('../promisifyEvent.js');
-const sleep = require('../sleep.js');
+const GraphQL = require('../../universal/GraphQL');
+const GraphQLContext = require('../../universal/GraphQLContext');
+const GraphQLProvider = require('../../universal/GraphQLProvider');
+const useGraphQL = require('../../universal/useGraphQL');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp');
+const listen = require('../listen');
+const promisifyEvent = require('../promisifyEvent');
+const sleep = require('../sleep');
 
 const RenderUseGraphQL = (operationOptions) =>
   JSON.stringify(useGraphQL(operationOptions));

@@ -1,8 +1,8 @@
 'use strict';
 
 const { deepStrictEqual, strictEqual } = require('assert');
-const GraphQL = require('../universal/GraphQL.js');
-const promisifyEvent = require('./promisifyEvent.js');
+const GraphQL = require('../universal/GraphQL');
+const promisifyEvent = require('./promisifyEvent');
 
 /**
  * Tests [`GraphQL.operate()`]{@link GraphQL#operate} under certain conditions.

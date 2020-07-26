@@ -2,9 +2,9 @@
 
 const PropTypes = require('prop-types');
 const React = require('react');
-const GraphQL = require('./GraphQL.js');
-const GraphQLContext = require('./GraphQLContext.js');
-const FirstRenderDateContext = require('./private/FirstRenderDateContext.js');
+const GraphQL = require('./GraphQL');
+const GraphQLContext = require('./GraphQLContext');
+const FirstRenderDateContext = require('./private/FirstRenderDateContext');
 
 /**
  * A React component that provides a [`GraphQL`]{@link GraphQL} instance for an

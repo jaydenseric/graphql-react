@@ -1,7 +1,7 @@
 'use strict';
 
-const ReactDOMServer = require('react-dom/server.node.js');
-const GraphQL = require('../universal/GraphQL.js');
+const ReactDOMServer = require('react-dom/server.node');
+const GraphQL = require('../universal/GraphQL');
 
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},

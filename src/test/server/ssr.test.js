@@ -1,14 +1,14 @@
 'use strict';
 
-require('cross-fetch/dist/node-polyfill.js');
+require('cross-fetch/dist/node-polyfill');
 const { rejects, strictEqual } = require('assert');
 const React = require('react');
-const ssr = require('../../server/ssr.js');
-const GraphQL = require('../../universal/GraphQL.js');
-const GraphQLContext = require('../../universal/GraphQLContext.js');
-const useGraphQL = require('../../universal/useGraphQL.js');
-const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
-const listen = require('../listen.js');
+const ssr = require('../../server/ssr');
+const GraphQL = require('../../universal/GraphQL');
+const GraphQLContext = require('../../universal/GraphQLContext');
+const useGraphQL = require('../../universal/useGraphQL');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp');
+const listen = require('../listen');
 
 module.exports = (tests) => {
   tests.add('`ssr` argument 1 validation', async () => {

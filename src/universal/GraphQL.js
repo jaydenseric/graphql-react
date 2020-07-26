@@ -5,9 +5,9 @@
 // swaps out the mitt `main` CJS file for the `module` ESM file, represented as
 // an object with a `default` key because the ESM only has a default export.
 // This would result in `mitt` being undefined instead of a function.
-const mitt = require('mitt/dist/mitt.js');
-const graphqlFetchOptions = require('./private/graphqlFetchOptions.js');
-const hashObject = require('./private/hashObject.js');
+const mitt = require('mitt/dist/mitt');
+const graphqlFetchOptions = require('./private/graphqlFetchOptions');
+const hashObject = require('./private/hashObject');
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.
