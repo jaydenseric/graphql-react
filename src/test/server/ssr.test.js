@@ -1,12 +1,16 @@
-import 'cross-fetch/dist/node-polyfill.js';
-import { rejects, strictEqual } from 'assert';
-import React from 'react';
-import { ssr } from '../../server/index.mjs';
-import { GraphQL, GraphQLContext, useGraphQL } from '../../universal/index.mjs';
-import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
-import listen from '../listen.js';
+'use strict';
 
-export default (tests) => {
+require('cross-fetch/dist/node-polyfill.js');
+const { rejects, strictEqual } = require('assert');
+const React = require('react');
+const ssr = require('../../server/ssr.js');
+const GraphQL = require('../../universal/GraphQL.js');
+const GraphQLContext = require('../../universal/GraphQLContext.js');
+const useGraphQL = require('../../universal/useGraphQL.js');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
+const listen = require('../listen.js');
+
+module.exports = (tests) => {
   tests.add('`ssr` argument 1 validation', async () => {
     const error = new Error('ssr() argument 1 must be a GraphQL instance.');
 

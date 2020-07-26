@@ -1,14 +1,14 @@
 'use strict';
 
-const { errorHandler, execute } = require('graphql-api-koa');
-const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
 const {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-} = require('./graphql.js');
+} = require('graphql');
+const { errorHandler, execute } = require('graphql-api-koa');
+const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
 
 /**
  * Creates a GraphQL Koa app.

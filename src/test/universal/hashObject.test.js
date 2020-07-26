@@ -1,11 +1,13 @@
-import { notEqual, strictEqual } from 'assert';
-import FormData from 'formdata-node';
-import hashObject from '../../universal/private/hashObject.js';
+'use strict';
+
+const { notEqual, strictEqual } = require('assert');
+const FormData = require('formdata-node');
+const hashObject = require('../../universal/private/hashObject.js');
 
 // Global polyfill.
 global.FormData = FormData;
 
-export default (tests) => {
+module.exports = (tests) => {
   tests.add('`hashObject` with an object', () => {
     const object = { a: 1, b: 2 };
     const hash1 = hashObject(object);

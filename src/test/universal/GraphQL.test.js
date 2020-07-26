@@ -1,16 +1,16 @@
-import 'cross-fetch/dist/node-polyfill.js';
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import Koa from 'koa';
-import { GraphQL } from '../../universal/index.mjs';
-import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
-import graphql from '../graphql.js';
-import listen from '../listen.js';
-import promisifyEvent from '../promisifyEvent.js';
-import testGraphQLOperation from '../testGraphQLOperation.mjs';
+'use strict';
 
-const { GraphQLInt } = graphql;
+require('cross-fetch/dist/node-polyfill.js');
+const { deepStrictEqual, strictEqual, throws } = require('assert');
+const { GraphQLInt } = require('graphql');
+const Koa = require('koa');
+const GraphQL = require('../../universal/GraphQL.js');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
+const listen = require('../listen.js');
+const promisifyEvent = require('../promisifyEvent.js');
+const testGraphQLOperation = require('../testGraphQLOperation.js');
 
-export default (tests) => {
+module.exports = (tests) => {
   tests.add('`GraphQL` option `cache`', () => {
     const cache = {
       abcdefg: {

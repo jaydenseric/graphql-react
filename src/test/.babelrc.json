@@ -1,0 +1,22 @@
+{
+  "comments": false,
+  "plugins": ["@babel/transform-runtime"],
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "targets": { "node": true },
+        "modules": false,
+        "shippedProposals": true,
+        "loose": true
+      }
+    ],
+    "@babel/react"
+  ],
+  "overrides": [
+    {
+      "test": "**/*.js",
+      "sourceType": "script"
+    }
+  ]
+}

@@ -1,6 +1,8 @@
-import { deepStrictEqual, strictEqual } from 'assert';
-import { GraphQL } from '../universal/index.mjs';
-import promisifyEvent from './promisifyEvent.js';
+'use strict';
+
+const { deepStrictEqual, strictEqual } = require('assert');
+const GraphQL = require('../universal/GraphQL.js');
+const promisifyEvent = require('./promisifyEvent.js');
 
 /**
  * Tests [`GraphQL.operate()`]{@link GraphQL#operate} under certain conditions.
@@ -16,7 +18,7 @@ import promisifyEvent from './promisifyEvent.js';
  * @returns {Promise} Resolves once the test is complete.
  * @ignore
  */
-export default async function testGraphQLOperation({
+module.exports = async function testGraphQLOperation({
   port,
   operation = { query: '{ echo }' },
   resetOnLoad,
@@ -89,4 +91,4 @@ export default async function testGraphQLOperation({
   });
 
   if (callback) callback({ cacheKey });
-}
+};

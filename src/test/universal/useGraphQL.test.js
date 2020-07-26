@@ -1,23 +1,23 @@
-import 'cross-fetch/dist/node-polyfill.js';
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import React from 'react';
-import ReactDOMServer from 'react-dom/server.node.js';
-import ReactTestRenderer from 'react-test-renderer';
-import {
-  GraphQL,
-  GraphQLContext,
-  GraphQLProvider,
-  useGraphQL,
-} from '../../universal/index.mjs';
-import createGraphQLKoaApp from '../createGraphQLKoaApp.js';
-import listen from '../listen.js';
-import promisifyEvent from '../promisifyEvent.js';
-import sleep from '../sleep.js';
+'use strict';
+
+require('cross-fetch/dist/node-polyfill.js');
+const { deepStrictEqual, strictEqual, throws } = require('assert');
+const React = require('react');
+const ReactDOMServer = require('react-dom/server.node.js');
+const ReactTestRenderer = require('react-test-renderer');
+const GraphQL = require('../../universal/GraphQL.js');
+const GraphQLContext = require('../../universal/GraphQLContext.js');
+const GraphQLProvider = require('../../universal/GraphQLProvider.js');
+const useGraphQL = require('../../universal/useGraphQL.js');
+const createGraphQLKoaApp = require('../createGraphQLKoaApp.js');
+const listen = require('../listen.js');
+const promisifyEvent = require('../promisifyEvent.js');
+const sleep = require('../sleep.js');
 
 const RenderUseGraphQL = (operationOptions) =>
   JSON.stringify(useGraphQL(operationOptions));
 
-export default (tests) => {
+module.exports = (tests) => {
   tests.add(
     '`useGraphQL` option `loadOnMount` false (default) with no initial cache',
     async () => {

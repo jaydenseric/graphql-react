@@ -1,13 +1,15 @@
-import { deepStrictEqual, strictEqual } from 'assert';
-import Blob from 'fetch-blob';
-import FormData from 'formdata-node';
-import graphqlFetchOptions from '../../universal/private/graphqlFetchOptions.js';
+'use strict';
+
+const { deepStrictEqual, strictEqual } = require('assert');
+const Blob = require('fetch-blob');
+const FormData = require('formdata-node');
+const graphqlFetchOptions = require('../../universal/private/graphqlFetchOptions.js');
 
 // Global polyfills.
 global.Blob = Blob;
 global.FormData = FormData;
 
-export default (tests) => {
+module.exports = (tests) => {
   tests.add('`graphqlFetchOptions` without files', () => {
     deepStrictEqual(graphqlFetchOptions({ query: '' }), {
       url: '/graphql',
