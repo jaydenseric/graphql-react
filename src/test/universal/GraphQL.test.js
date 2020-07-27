@@ -1,9 +1,10 @@
 'use strict';
 
-require('cross-fetch/dist/node-polyfill');
 const { deepStrictEqual, strictEqual, throws } = require('assert');
 const { GraphQLInt } = require('graphql');
 const Koa = require('koa');
+const { default: fetch, Response } = require('node-fetch');
+const revertableGlobals = require('revertable-globals');
 const GraphQL = require('../../universal/GraphQL');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
@@ -28,32 +29,38 @@ module.exports = (tests) => {
   tests.add(
     '`GraphQL` method `operate` without and with initial cache',
     async () => {
-      const { port, close } = await listen(createGraphQLKoaApp());
+      const revertGlobals = revertableGlobals({ fetch, Response });
 
       try {
-        const expectedResolvedCacheValue = { data: { echo: 'hello' } };
+        const { port, close } = await listen(createGraphQLKoaApp());
 
-        let hash;
+        try {
+          const expectedResolvedCacheValue = { data: { echo: 'hello' } };
 
-        // Without initial cache.
-        await testGraphQLOperation({
-          port,
-          expectedResolvedCacheValue,
-          callback({ cacheKey }) {
-            hash = cacheKey;
-          },
-        });
+          let hash;
 
-        // With initial cache.
-        await testGraphQLOperation({
-          port,
-          initialGraphQLCache: {
-            [hash]: expectedResolvedCacheValue,
-          },
-          expectedResolvedCacheValue,
-        });
+          // Without initial cache.
+          await testGraphQLOperation({
+            port,
+            expectedResolvedCacheValue,
+            callback({ cacheKey }) {
+              hash = cacheKey;
+            },
+          });
+
+          // With initial cache.
+          await testGraphQLOperation({
+            port,
+            initialGraphQLCache: {
+              [hash]: expectedResolvedCacheValue,
+            },
+            expectedResolvedCacheValue,
+          });
+        } finally {
+          close();
+        }
       } finally {
-        close();
+        revertGlobals();
       }
     }
   );
@@ -64,12 +71,6 @@ module.exports = (tests) => {
       const { port, close } = await listen(createGraphQLKoaApp());
 
       try {
-        // Store the global fetch polyfill.
-        const { fetch } = global;
-
-        // Delete the global fetch polyfill.
-        delete global.fetch;
-
         await testGraphQLOperation({
           port,
           expectedResolvedCacheValue: {
@@ -77,9 +78,6 @@ module.exports = (tests) => {
           },
           responseExpected: false,
         });
-
-        // Restore the global fetch polyfill.
-        global.fetch = fetch;
       } finally {
         close();
       }
@@ -89,11 +87,47 @@ module.exports = (tests) => {
   tests.add(
     '`GraphQL` method `operate` with HTTP and parse errors',
     async () => {
+      const revertGlobals = revertableGlobals({ fetch, Response });
+
+      try {
+        const { port, close } = await listen(
+          new Koa().use(async (ctx, next) => {
+            ctx.response.status = 404;
+            ctx.response.type = 'text/plain';
+            ctx.response.body = 'Not found.';
+            await next();
+          })
+        );
+
+        try {
+          await testGraphQLOperation({
+            port,
+            expectedResolvedCacheValue: {
+              httpError: {
+                status: 404,
+                statusText: 'Not Found',
+              },
+              parseError: 'Unexpected token N in JSON at position 0',
+            },
+          });
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add('`GraphQL` method `operate` with parse error', async () => {
+    const revertGlobals = revertableGlobals({ fetch, Response });
+
+    try {
       const { port, close } = await listen(
         new Koa().use(async (ctx, next) => {
-          ctx.response.status = 404;
-          ctx.response.type = 'text/plain';
-          ctx.response.body = 'Not found.';
+          ctx.response.status = 200;
+          ctx.response.type = 'text';
+          ctx.response.body = 'Not JSON.';
           await next();
         })
       );
@@ -102,62 +136,44 @@ module.exports = (tests) => {
         await testGraphQLOperation({
           port,
           expectedResolvedCacheValue: {
-            httpError: {
-              status: 404,
-              statusText: 'Not Found',
-            },
-            parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
+            parseError: 'Unexpected token N in JSON at position 0',
           },
         });
       } finally {
         close();
       }
-    }
-  );
-
-  tests.add('`GraphQL` method `operate` with parse error', async () => {
-    const { port, close } = await listen(
-      new Koa().use(async (ctx, next) => {
-        ctx.response.status = 200;
-        ctx.response.type = 'text';
-        ctx.response.body = 'Not JSON.';
-        await next();
-      })
-    );
-
-    try {
-      await testGraphQLOperation({
-        port,
-        expectedResolvedCacheValue: {
-          parseError: `invalid json response body at http://localhost:${port}/ reason: Unexpected token N in JSON at position 0`,
-        },
-      });
     } finally {
-      close();
+      revertGlobals();
     }
   });
 
   tests.add(
     '`GraphQL` method `operate` with malformed response payload',
     async () => {
-      const { port, close } = await listen(
-        new Koa().use(async (ctx, next) => {
-          ctx.response.status = 200;
-          ctx.response.type = 'json';
-          ctx.response.body = '[{"bad": true}]';
-          await next();
-        })
-      );
+      const revertGlobals = revertableGlobals({ fetch, Response });
 
       try {
-        await testGraphQLOperation({
-          port,
-          expectedResolvedCacheValue: {
-            parseError: 'Malformed payload.',
-          },
-        });
+        const { port, close } = await listen(
+          new Koa().use(async (ctx, next) => {
+            ctx.response.status = 200;
+            ctx.response.type = 'json';
+            ctx.response.body = '[{"bad": true}]';
+            await next();
+          })
+        );
+
+        try {
+          await testGraphQLOperation({
+            port,
+            expectedResolvedCacheValue: {
+              parseError: 'Malformed payload.',
+            },
+          });
+        } finally {
+          close();
+        }
       } finally {
-        close();
+        revertGlobals();
       }
     }
   );
@@ -165,32 +181,38 @@ module.exports = (tests) => {
   tests.add(
     '`GraphQL` method `operate` with HTTP and GraphQL errors',
     async () => {
-      const { port, close } = await listen(createGraphQLKoaApp());
+      const revertGlobals = revertableGlobals({ fetch, Response });
 
       try {
-        await testGraphQLOperation({
-          port,
-          operation: { query: '{ b }' },
-          expectedResolvedCacheValue: {
-            httpError: {
-              status: 400,
-              statusText: 'Bad Request',
-            },
-            graphQLErrors: [
-              {
-                message: 'Cannot query field "b" on type "Query".',
-                locations: [
-                  {
-                    line: 1,
-                    column: 3,
-                  },
-                ],
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          await testGraphQLOperation({
+            port,
+            operation: { query: '{ b }' },
+            expectedResolvedCacheValue: {
+              httpError: {
+                status: 400,
+                statusText: 'Bad Request',
               },
-            ],
-          },
-        });
+              graphQLErrors: [
+                {
+                  message: 'Cannot query field "b" on type "Query".',
+                  locations: [
+                    {
+                      line: 1,
+                      column: 3,
+                    },
+                  ],
+                },
+              ],
+            },
+          });
+        } finally {
+          close();
+        }
       } finally {
-        close();
+        revertGlobals();
       }
     }
   );
@@ -198,37 +220,43 @@ module.exports = (tests) => {
   tests.add(
     '`GraphQL` method `operate` with `resetOnLoad` option',
     async () => {
-      const { port, close } = await listen(createGraphQLKoaApp());
+      const revertGlobals = revertableGlobals({ fetch, Response });
 
       try {
-        const initialGraphQLCache = {
-          abcdefg: {
-            data: {
-              b: true,
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const initialGraphQLCache = {
+            abcdefg: {
+              data: {
+                b: true,
+              },
             },
-          },
-        };
+          };
 
-        const expectedResolvedCacheValue = {
-          data: {
-            echo: 'hello',
-          },
-        };
+          const expectedResolvedCacheValue = {
+            data: {
+              echo: 'hello',
+            },
+          };
 
-        await testGraphQLOperation({
-          port,
-          initialGraphQLCache,
-          expectedResolvedCacheValue,
-        });
+          await testGraphQLOperation({
+            port,
+            initialGraphQLCache,
+            expectedResolvedCacheValue,
+          });
 
-        await testGraphQLOperation({
-          port,
-          resetOnLoad: true,
-          initialGraphQLCache,
-          expectedResolvedCacheValue,
-        });
+          await testGraphQLOperation({
+            port,
+            resetOnLoad: true,
+            initialGraphQLCache,
+            expectedResolvedCacheValue,
+          });
+        } finally {
+          close();
+        }
       } finally {
-        close();
+        revertGlobals();
       }
     }
   );

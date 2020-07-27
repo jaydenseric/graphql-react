@@ -2,10 +2,8 @@
 
 const { notEqual, strictEqual } = require('assert');
 const FormData = require('formdata-node');
+const revertableGlobals = require('revertable-globals');
 const hashObject = require('../../universal/private/hashObject');
-
-// Global polyfill.
-global.FormData = FormData;
 
 module.exports = (tests) => {
   tests.add('`hashObject` with an object', () => {
@@ -28,22 +26,28 @@ module.exports = (tests) => {
   });
 
   tests.add('`hashObject` with a `FormData` instance', () => {
-    const form1 = new FormData();
-    const form2 = new FormData();
+    const revertGlobals = revertableGlobals({ FormData });
 
-    form1.append('1', 'a');
-    form2.append('1', 'b');
+    try {
+      const form1 = new FormData();
+      const form2 = new FormData();
 
-    const hash1 = hashObject(form1);
-    const hash2 = hashObject(form1);
-    const hash3 = hashObject(form2);
+      form1.append('1', 'a');
+      form2.append('1', 'b');
 
-    strictEqual(typeof hash1, 'string');
+      const hash1 = hashObject(form1);
+      const hash2 = hashObject(form1);
+      const hash3 = hashObject(form2);
 
-    // Deterministic hash.
-    strictEqual(hash1, hash2);
+      strictEqual(typeof hash1, 'string');
 
-    // Fields determine hash.
-    notEqual(hash2, hash3);
+      // Deterministic hash.
+      strictEqual(hash1, hash2);
+
+      // Fields determine hash.
+      notEqual(hash2, hash3);
+    } finally {
+      revertGlobals();
+    }
   });
 };

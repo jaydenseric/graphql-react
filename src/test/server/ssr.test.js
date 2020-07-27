@@ -1,8 +1,9 @@
 'use strict';
 
-require('cross-fetch/dist/node-polyfill');
 const { rejects, strictEqual } = require('assert');
+const { default: fetch } = require('node-fetch');
 const React = require('react');
+const revertableGlobals = require('revertable-globals');
 const ssr = require('../../server/ssr');
 const GraphQL = require('../../universal/GraphQL');
 const GraphQLContext = require('../../universal/GraphQLContext');
@@ -42,52 +43,58 @@ module.exports = (tests) => {
   });
 
   tests.add('`ssr` with the `useGraphQL` hook', async () => {
-    const { port, close } = await listen(createGraphQLKoaApp());
+    const revertGlobals = revertableGlobals({ fetch });
 
     try {
-      // eslint-disable-next-line react/prop-types
-      const Phrase = ({ phrase, children }) => {
-        const { cacheValue } = useGraphQL({
-          fetchOptionsOverride(options) {
-            options.url = `http://localhost:${port}`;
-          },
-          operation: { query: `{ echo(phrase: "${phrase}") }` },
-          loadOnMount: true,
-        });
+      const { port, close } = await listen(createGraphQLKoaApp());
 
-        return cacheValue && cacheValue.data ? (
-          <>
-            <p>{cacheValue.data.echo}</p>
-            {children}
-          </>
-        ) : null;
-      };
+      try {
+        // eslint-disable-next-line react/prop-types
+        const Phrase = ({ phrase, children }) => {
+          const { cacheValue } = useGraphQL({
+            fetchOptionsOverride(options) {
+              options.url = `http://localhost:${port}`;
+            },
+            operation: { query: `{ echo(phrase: "${phrase}") }` },
+            loadOnMount: true,
+          });
 
-      const graphql = new GraphQL();
+          return cacheValue && cacheValue.data ? (
+            <>
+              <p>{cacheValue.data.echo}</p>
+              {children}
+            </>
+          ) : null;
+        };
 
-      strictEqual(
-        await ssr(
-          graphql,
-          <GraphQLContext.Provider value={graphql}>
-            <Phrase phrase="a" />
-          </GraphQLContext.Provider>
-        ),
-        '<p>a</p>'
-      );
+        const graphql = new GraphQL();
 
-      strictEqual(
-        await ssr(
-          graphql,
-          <GraphQLContext.Provider value={graphql}>
-            <Phrase phrase="b">
-              <Phrase phrase="c" />
-            </Phrase>
-          </GraphQLContext.Provider>
-        ),
-        '<p>b</p><p>c</p>'
-      );
+        strictEqual(
+          await ssr(
+            graphql,
+            <GraphQLContext.Provider value={graphql}>
+              <Phrase phrase="a" />
+            </GraphQLContext.Provider>
+          ),
+          '<p>a</p>'
+        );
+
+        strictEqual(
+          await ssr(
+            graphql,
+            <GraphQLContext.Provider value={graphql}>
+              <Phrase phrase="b">
+                <Phrase phrase="c" />
+              </Phrase>
+            </GraphQLContext.Provider>
+          ),
+          '<p>b</p><p>c</p>'
+        );
+      } finally {
+        close();
+      }
     } finally {
-      close();
+      revertGlobals();
     }
   });
 };
