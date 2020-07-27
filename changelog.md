@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated dev dependencies.
 - No longer test Node.js v13 in GitHub Actions CI.
 - Corrected the Browserslist query in the Babel config for the server API.
 - Write tests as CJS and no longer separately build and test ESM and CJS to simplify package scripts, Babel and ESLint config.
