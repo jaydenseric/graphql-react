@@ -1,6 +1,6 @@
 'use strict';
 
-const { extractFiles } = require('extract-files');
+const extractFiles = require('extract-files/public/extractFiles');
 
 /**
  * Gets default [`fetch` options]{@link GraphQLFetchOptions} for a

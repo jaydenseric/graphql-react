@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated the [`extract-files`](https://npm.im/extract-files) dependency to [v9.0.0](https://github.com/jaydenseric/extract-files/releases/tag/v9.0.0), and used its new deep `require` path.
 - Updated dev dependencies.
 - No longer test Node.js v13 in GitHub Actions CI.
 - Corrected the Browserslist query in the Babel config for the server API.

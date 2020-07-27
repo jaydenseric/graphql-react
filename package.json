@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.5",
-    "extract-files": "^8.1.0",
+    "extract-files": "^9.0.0",
     "fnv1a": "^1.0.1",
     "mitt": "^2.1.0",
     "prop-types": "^15.7.2"
