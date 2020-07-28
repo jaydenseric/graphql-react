@@ -16,6 +16,22 @@ const hashObject = require('./private/hashObject');
  * @param {object} [options={}] Options.
  * @param {GraphQLCache} [options.cache={}] Cache to import; usually from a server side render.
  * @see [`reportCacheErrors`]{@link reportCacheErrors} to setup error reporting.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { GraphQL } from 'graphql-react';
+ * ```
+ *
+ * ```js
+ * import GraphQL from 'graphql-react/universal/GraphQL.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { GraphQL } = require('graphql-react');
+ * ```
+ *
+ * ```js
+ * const GraphQL = require('graphql-react/universal/GraphQL');
+ * ```
  * @example <caption>Construct a GraphQL client.</caption>
  * ```js
  * import { GraphQL } from 'graphql-react';

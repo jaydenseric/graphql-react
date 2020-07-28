@@ -17,6 +17,22 @@ const FirstRenderDateContext = require('./private/FirstRenderDateContext');
  * @returns {ReactNode} React virtual DOM node.
  * @see [`GraphQLContext`]{@link GraphQLContext} is provided via this component.
  * @see [`useGraphQL`]{@link useGraphQL} React hook requires this component to be an ancestor to work.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { GraphQLProvider } from 'graphql-react';
+ * ```
+ *
+ * ```js
+ * import GraphQLProvider from 'graphql-react/universal/GraphQLProvider.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { GraphQLProvider } = require('graphql-react');
+ * ```
+ *
+ * ```js
+ * const GraphQLProvider = require('graphql-react/universal/GraphQLProvider');
+ * ```
  * @example <caption>Provide a [`GraphQL`]{@link GraphQL} instance for an app.</caption>
  * ```jsx
  * import { GraphQL, GraphQLProvider } from 'graphql-react';

@@ -162,6 +162,26 @@ A lightweight GraphQL client that caches queries and mutations.
 
 #### Examples
 
+_Ways to `import`._
+
+> ```js
+> import { GraphQL } from 'graphql-react';
+> ```
+>
+> ```js
+> import GraphQL from 'graphql-react/universal/GraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { GraphQL } = require('graphql-react');
+> ```
+>
+> ```js
+> const GraphQL = require('graphql-react/universal/GraphQL');
+> ```
+
 _Construct a GraphQL client._
 
 > ```js
@@ -349,6 +369,26 @@ A React component that provides a [`GraphQL`](#class-graphql) instance for an ap
 
 #### Examples
 
+_Ways to `import`._
+
+> ```js
+> import { GraphQLProvider } from 'graphql-react';
+> ```
+>
+> ```js
+> import GraphQLProvider from 'graphql-react/universal/GraphQLProvider.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { GraphQLProvider } = require('graphql-react');
+> ```
+>
+> ```js
+> const GraphQLProvider = require('graphql-react/universal/GraphQLProvider');
+> ```
+
 _Provide a [`GraphQL`](#class-graphql) instance for an app._
 
 > ```jsx
@@ -373,6 +413,26 @@ A [`GraphQL` event `cache`](#graphql-event-cache) handler that reports [`fetch`]
 | `data` | [GraphQL#event:cache](#graphql-event-cache) | [`GraphQL`](#class-graphql) `cache` event data. |
 
 #### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { reportCacheErrors } from 'graphql-react';
+> ```
+>
+> ```js
+> import reportCacheErrors from 'graphql-react/universal/reportCacheErrors.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { reportCacheErrors } = require('graphql-react');
+> ```
+>
+> ```js
+> const reportCacheErrors = require('graphql-react/universal/reportCacheErrors');
+> ```
 
 _[`GraphQL`](#class-graphql) initialized to report cache errors._
 
@@ -405,6 +465,26 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 - [`next-graphql-react`](https://npm.im/next-graphql-react) to use this API in a [Next.js](https://nextjs.org) project.
 
 #### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { ssr } from 'graphql-react/server';
+> ```
+>
+> ```js
+> import ssr from 'graphql-react/server/GraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { ssr } = require('graphql-react/server');
+> ```
+>
+> ```js
+> const ssr = require('graphql-react/server/ssr');
+> ```
 
 _SSR function that resolves a HTML string and cache JSON for client hydration._
 
@@ -472,6 +552,26 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 
 #### Examples
 
+_Ways to `import`._
+
+> ```js
+> import { useGraphQL } from 'graphql-react';
+> ```
+>
+> ```js
+> import useGraphQL from 'graphql-react/universal/useGraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useGraphQL } = require('graphql-react');
+> ```
+>
+> ```js
+> const useGraphQL = require('graphql-react/universal/useGraphQL');
+> ```
+
 _A component that displays a Pokémon image._
 
 > ```jsx
@@ -531,6 +631,26 @@ _Options guide for common situations._
 - [`useGraphQL`](#function-usegraphql) React hook requires an ancestor [`GraphQLContext`](#constant-graphqlcontext) `Provider` to work.
 
 #### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { GraphQLContext } from 'graphql-react';
+> ```
+>
+> ```js
+> import GraphQLContext from 'graphql-react/universal/GraphQLContext.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { GraphQLContext } = require('graphql-react');
+> ```
+>
+> ```js
+> const GraphQLContext = require('graphql-react/universal/GraphQLContext');
+> ```
 
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
 

@@ -8,6 +8,22 @@
  * @kind function
  * @name reportCacheErrors
  * @param {GraphQL#event:cache} data [`GraphQL`]{@link GraphQL} `cache` event data.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { reportCacheErrors } from 'graphql-react';
+ * ```
+ *
+ * ```js
+ * import reportCacheErrors from 'graphql-react/universal/reportCacheErrors.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { reportCacheErrors } = require('graphql-react');
+ * ```
+ *
+ * ```js
+ * const reportCacheErrors = require('graphql-react/universal/reportCacheErrors');
+ * ```
  * @example <caption>[`GraphQL`]{@link GraphQL} initialized to report cache errors.</caption>
  * ```js
  * import { GraphQL, reportCacheErrors } from 'graphql-react';

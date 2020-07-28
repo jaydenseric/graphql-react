@@ -20,6 +20,22 @@ const GraphQL = require('../universal/GraphQL');
  * @returns {Promise<string>} Promise resolving the rendered HTML string.
  * @see [`ReactDOMServer` docs](https://reactjs.org/docs/react-dom-server).
  * @see [`next-graphql-react`](https://npm.im/next-graphql-react) to use this API in a [Next.js](https://nextjs.org) project.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { ssr } from 'graphql-react/server';
+ * ```
+ *
+ * ```js
+ * import ssr from 'graphql-react/server/GraphQL.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { ssr } = require('graphql-react/server');
+ * ```
+ *
+ * ```js
+ * const ssr = require('graphql-react/server/ssr');
+ * ```
  * @example <caption>SSR function that resolves a HTML string and cache JSON for client hydration.</caption>
  * ```jsx
  * import { GraphQL, GraphQLProvider } from 'graphql-react';

@@ -23,6 +23,22 @@ const hashObject = require('./private/hashObject');
  * @param {GraphQLOperation} options.operation GraphQL operation.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
  * @see [`GraphQLContext`]{@link GraphQLContext} is required for this hook to work.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { useGraphQL } from 'graphql-react';
+ * ```
+ *
+ * ```js
+ * import useGraphQL from 'graphql-react/universal/useGraphQL.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { useGraphQL } = require('graphql-react');
+ * ```
+ *
+ * ```js
+ * const useGraphQL = require('graphql-react/universal/useGraphQL');
+ * ```
  * @example <caption>A component that displays a Pokémon image.</caption>
  * ```jsx
  * import { useGraphQL } from 'graphql-react';

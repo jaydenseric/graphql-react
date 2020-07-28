@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Clearly documented ways to `import` and `require` the package exports.
+
 ## 11.0.3
 
 ### Patch
