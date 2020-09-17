@@ -2,6 +2,10 @@
 
 ## Next
 
+### Minor
+
+- Allow React component `displayName` and `propTypes` to be removed in production builds, fixing [#51](https://github.com/jaydenseric/graphql-react/issues/51).
+
 ### Patch
 
 - Updated dependencies.

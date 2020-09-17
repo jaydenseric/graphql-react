@@ -57,9 +57,10 @@ function GraphQLProvider({ graphql, children }) {
   );
 }
 
-GraphQLProvider.propTypes = {
-  graphql: PropTypes.instanceOf(GraphQL).isRequired,
-  children: PropTypes.node,
-};
+if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
+  GraphQLProvider.propTypes = {
+    graphql: PropTypes.instanceOf(GraphQL).isRequired,
+    children: PropTypes.node,
+  };
 
 module.exports = GraphQLProvider;

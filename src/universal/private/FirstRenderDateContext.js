@@ -13,6 +13,7 @@ const React = require('react');
  */
 const FirstRenderDateContext = React.createContext();
 
-FirstRenderDateContext.displayName = 'FirstRenderDateContext';
+if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
+  FirstRenderDateContext.displayName = 'FirstRenderDateContext';
 
 module.exports = FirstRenderDateContext;
