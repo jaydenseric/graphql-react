@@ -241,5 +241,10 @@ module.exports = function useGraphQL({
       resetOnLoad,
     });
 
-  return { load, loading, cacheKey, cacheValue };
+  return React.useMemo(() => ({ load, loading, cacheKey, cacheValue }), [
+    cacheKey,
+    cacheValue,
+    load,
+    loading,
+  ]);
 };
