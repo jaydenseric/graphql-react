@@ -13,6 +13,7 @@
 - Updated dependencies.
 - Increased the universal API size-limit from 3 KB to 3.5 KB.
 - Updated the `useGraphQL` React hook examples to use the [GitHub GraphQL API](https://docs.github.com/en/graphql).
+- Improved documentation.
 
 ## 11.0.4
 

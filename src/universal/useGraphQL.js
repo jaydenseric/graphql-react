@@ -15,10 +15,10 @@ const hashObject = require('./private/hashObject');
  * @name useGraphQL
  * @param {object} options Options.
  * @param {GraphQLOperation} options.operation GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook.
- * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook.
+ * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default [`fetch` options]{@link GraphQLFetchOptions} for the [GraphQL operation]{@link GraphQLOperation}. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook.
  * @param {boolean} [options.loadOnMount=false] Should the operation load when the component mounts.
- * @param {boolean} [options.loadOnReload=false] Should the operation load when the [`GraphQL`]{@link GraphQL} `reload` event fires and there is a [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} to reload, but only if the operation was not the one that caused the reload.
- * @param {boolean} [options.loadOnReset=false] Should the operation load when the [`GraphQL`]{@link GraphQL} `reset` event fires and the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is deleted, but only if the operation was not the one that caused the reset.
+ * @param {boolean} [options.loadOnReload=false] Should the operation load when the [`GraphQL`]{@link GraphQL} [`reload`]{@link GraphQL#event:reload} event fires and there is a [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} to reload, but only if the operation was not the one that caused the reload.
+ * @param {boolean} [options.loadOnReset=false] Should the operation load when the [`GraphQL`]{@link GraphQL} [`reset`]{@link GraphQL#event:reset} event fires and the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue} is deleted, but only if the operation was not the one that caused the reset.
  * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
  * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
  * @returns {GraphQLOperationStatus} GraphQL operation status.
@@ -126,7 +126,8 @@ module.exports = function useGraphQL({
   }, []);
 
   /**
-   * Handles the [`GraphQL` event `fetch`]{@link GraphQL#event:fetch}.
+   * Handles the [`GraphQL`]{@link GraphQL} [`fetch`]{@link GraphQL#event:fetch}
+   * event.
    * @param {GraphQL#event:fetch} event Event data.
    * @ignore
    */
@@ -147,7 +148,8 @@ module.exports = function useGraphQL({
   }, [graphql, onFetch]);
 
   /**
-   * Handles the [`GraphQL` event `cache`]{@link GraphQL#event:cache}.
+   * Handles the [`GraphQL`]{@link GraphQL} [`cache`]{@link GraphQL#event:cache}
+   * event.
    * @param {GraphQL#event:cache} event Event data.
    * @ignore
    */
@@ -171,7 +173,8 @@ module.exports = function useGraphQL({
   }, [graphql, onCache]);
 
   /**
-   * Handles the [`GraphQL` event `reload`]{@link GraphQL#event:reload}.
+   * Handles the [`GraphQL`]{@link GraphQL} [`reload`]{@link GraphQL#event:reload}
+   * event.
    * @param {GraphQL#event:reload} event Event data.
    * @ignore
    */
@@ -197,7 +200,8 @@ module.exports = function useGraphQL({
   }, [graphql, onReload]);
 
   /**
-   * Handles the [`GraphQL` event `reset`]{@link GraphQL#event:reset}.
+   * Handles the [`GraphQL`]{@link GraphQL} [`reset`]{@link GraphQL#event:reset}
+   * event.
    * @param {GraphQL#event:reset} event Event data.
    * @ignore
    */

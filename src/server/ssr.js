@@ -6,10 +6,10 @@ const GraphQL = require('../universal/GraphQL');
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},
  * preloading all GraphQL queries set to `loadOnMount`. After resolving, cache
- * can be exported from the
- * [`GraphQL` instance property `cache`]{@link GraphQL#cache} for serialization
- * (usually to JSON) and transport to the client for hydration via the
- * [`GraphQL` constructor parameter `options.cache`]{@link GraphQL}.
+ * can be exported from the [`GraphQL`]{@link GraphQL} instance property
+ * [`cache`]{@link GraphQL#cache} for serialization (usually to JSON) and
+ * transport to the client for hydration via the [`GraphQL`]{@link GraphQL}
+ * constructor parameter `options.cache`.
  *
  * Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API).
  * @kind function

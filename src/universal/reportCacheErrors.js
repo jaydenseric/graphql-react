@@ -1,13 +1,13 @@
 'use strict';
 
 /**
- * A [`GraphQL` event `cache`]{@link GraphQL#event:cache} handler that reports
- * [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse
- * and GraphQL errors via `console.log()`. In a browser environment the grouped
- * error details are expandable.
+ * A [`GraphQL`]{@link GraphQL} [`cache`]{@link GraphQL#event:cache} event
+ * handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API),
+ * HTTP, parse and GraphQL errors via `console.log()`. In a browser environment
+ * the grouped error details are expandable.
  * @kind function
  * @name reportCacheErrors
- * @param {GraphQL#event:cache} data [`GraphQL`]{@link GraphQL} `cache` event data.
+ * @param {GraphQL#event:cache} data [`GraphQL`]{@link GraphQL} [`cache`]{@link GraphQL#event:cache} event data.
  * @example <caption>Ways to `import`.</caption>
  * ```js
  * import { reportCacheErrors } from 'graphql-react';
