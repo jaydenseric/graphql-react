@@ -5,11 +5,14 @@
 ### Minor
 
 - Allow React component `displayName` and `propTypes` to be removed in production builds, fixing [#51](https://github.com/jaydenseric/graphql-react/issues/51).
+- Refactored the `useGraphQL` React hook to do less work for following renders if the `operation` and `fetchOptionsOverride` options are defined outside the component or memoized using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook.
 - Memoize what the `useGraphQL` React hook returns for more efficient hook composition.
 
 ### Patch
 
 - Updated dependencies.
+- Increased the universal API size-limit from 3 KB to 3.5 KB.
+- Updated the `useGraphQL` React hook examples to use the [GitHub GraphQL API](https://docs.github.com/en/graphql).
 
 ## 11.0.4
 

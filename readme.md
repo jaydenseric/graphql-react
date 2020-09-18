@@ -4,7 +4,7 @@
 
 [![npm version](https://badgen.net/npm/v/graphql-react)](https://npm.im/graphql-react) [![CI status](https://github.com/jaydenseric/graphql-react/workflows/CI/badge.svg)](https://github.com/jaydenseric/graphql-react/actions)
 
-A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that is lightweight (&lt; 3 KB [size limited](https://github.com/ai/size-limit)) but powerful; the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) alternative with server side rendering.
+A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that is lightweight (&lt; 3.5 KB [size limited](https://github.com/ai/size-limit)) but powerful; the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) alternative with server side rendering.
 
 - [Setup](#setup)
 - [Usage](#usage)
@@ -40,35 +40,59 @@ Use the [`useGraphQL`](#function-usegraphql) React hook in your components to ma
 - [The official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react).
 - [The Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
-Here is a basic example that displays a Pokemon image, with tips commented:
+Here is a basic example using the [GitHub GraphQL API](https://docs.github.com/en/graphql), with tips commented:
 
 ```jsx
 import { GraphQL, GraphQLProvider, useGraphQL } from 'graphql-react';
 import React from 'react';
 
-// Zero config GraphQL client that manages the cache.
-const graphql = new GraphQL();
+// Any GraphQL API can be queried in components, where fetch options for the
+// URI, auth headers, etc. can be specified. The `useGraphQL` hook will do less
+// work for following renders if `fetchOptionsOverride` is defined outside the
+// component, or is memoized using the `React.useMemo` hook within the
+// component. Typically it’s exported in a config module for use throughout the
+// project. The default fetch options received by the override function are
+// tailored to the operation; usually the body is JSON but if there are files in
+// the variables it will be a `FormData` instance for a GraphQL multipart
+// request.
+function fetchOptionsOverride(options) {
+  options.url = 'https://api.github.com/graphql';
+  options.headers.Authorization = `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`;
+}
 
-const PokemonImage = ({ name }) => {
-  // The useGraphQL hook can be used just the same for queries or mutations.
-  const { loading, cacheValue = {} } = useGraphQL({
-    // Any GraphQL API can be queried in components, where fetch options for
-    // the URL, auth headers, etc. are specified. To avoid repetition it’s a
-    // good idea to import the fetch options override functions for the APIs
-    // your app uses from a central module. The default fetch options received
-    // by the override function are tailored to the operation; typically the
-    // body is JSON but if there are files in the variables it will be a
-    // FormData instance for a GraphQL multipart request.
-    fetchOptionsOverride(options) {
-      options.url = 'https://graphql-pokemon.now.sh';
-    },
+// The query is just a string; no need to use `gql` from `graphql-tag`. The
+// special comment before the string allows editor syntax highlighting, Prettier
+// formatting and linting. The cache system doesn’t require `__typename` or `id`
+// fields to be queried.
+const query = /* GraphQL */ `
+  query($repoId: ID!) {
+    repo: node(id: $repoId) {
+      ... on Repository {
+        stargazers {
+          totalCount
+        }
+      }
+    }
+  }
+`;
 
-    // The operation typically contains `query` and sometimes `variables`, but
-    // additional properties can be used; all are JSON encoded and sent to the
-    // GraphQL server in the fetch request body.
-    operation: {
-      query: `{ pokemon(name: "${name}") { image } }`,
-    },
+function RepoStarCount({ repoId }) {
+  // Memoization allows the `useGraphQL` hook to avoid work in following renders
+  // with the same GraphQL operation.
+  const operation = React.useMemo(
+    () => ({
+      query,
+      variables: {
+        repoId,
+      },
+    }),
+    [repoId]
+  );
+
+  // The `useGraphQL` hook can be used for both queries and mutations.
+  const { loading, cacheValue } = useGraphQL({
+    operation,
+    fetchOptionsOverride,
 
     // Load the query whenever the component mounts. This is desirable for
     // queries to display content, but not for on demand situations like
@@ -83,23 +107,24 @@ const PokemonImage = ({ name }) => {
     loadOnReset: true,
   });
 
-  return cacheValue.data ? (
-    <img src={cacheValue.data.pokemon.image} alt={name} />
-  ) : loading ? (
-    // Data is often reloaded, so don’t assume loading indicates no data.
-    'Loading…'
-  ) : (
-    // Detailed error info is available in the `cacheValue` properties
-    // `fetchError`, `httpError`, `parseError` and `graphQLErrors`. A combination
-    // of errors is possible, and an error doesn’t necessarily mean data is
-    // unavailable.
-    'Error!'
-  );
-};
+  return cacheValue?.data
+    ? cacheValue.data.repo.stargazers.totalCount
+    : loading
+    ? // Data is often reloaded, so don’t assume loading indicates no data.
+      'Loading…'
+    : // Detailed error info is available in the `cacheValue` properties
+      // `fetchError`, `httpError`, `parseError` and `graphQLErrors`. A
+      // combination of errors is possible, and an error doesn’t necessarily
+      // mean data is unavailable.
+      'Error!';
+}
+
+// Zero config GraphQL client that manages the cache.
+const graphql = new GraphQL();
 
 const App = () => (
   <GraphQLProvider graphql={graphql}>
-    <PokemonImage name="pikachu" />
+    <RepoStarCount repoId="MDEwOlJlcG9zaXRvcnkxMTk5Mzg5Mzk=" />
   </GraphQLProvider>
 );
 ```
@@ -536,13 +561,13 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | `options` | object | Options. |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation. |
+| `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
+| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
 | `options.loadOnMount` | boolean? = `false` | Should the operation load when the component mounts. |
 | `options.loadOnReload` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) `reload` event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
 | `options.loadOnReset` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) `reset` event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
 | `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
 | `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
-| `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
 
 **Returns:** [GraphQLOperationStatus](#type-graphqloperationstatus) — GraphQL operation status.
 
@@ -570,35 +595,6 @@ _Ways to `require`._
 >
 > ```js
 > const useGraphQL = require('graphql-react/universal/useGraphQL');
-> ```
-
-_A component that displays a Pokémon image._
-
-> ```jsx
-> import { useGraphQL } from 'graphql-react';
-> import React from 'react';
->
-> const PokemonImage = ({ name }) => {
->   const { loading, cacheValue = {} } = useGraphQL({
->     fetchOptionsOverride(options) {
->       options.url = 'https://graphql-pokemon.now.sh';
->     },
->     operation: {
->       query: `{ pokemon(name: "${name}") { image } }`,
->     },
->     loadOnMount: true,
->     loadOnReload: true,
->     loadOnReset: true,
->   });
->
->   return cacheValue.data ? (
->     <img src={cacheValue.data.pokemon.image} alt={name} />
->   ) : loading ? (
->     'Loading…'
->   ) : (
->     'Error!'
->   );
-> };
 > ```
 
 _Options guide for common situations._
@@ -830,7 +826,7 @@ A React virtual DOM node; anything that can be rendered.
 
 #### graphql-react
 
-A &lt; 3 KB bundle impact is guaranteed by [Size Limit](https://github.com/ai/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
+A &lt; 3.5 KB bundle impact is guaranteed by [Size Limit](https://github.com/ai/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
 
 | Dependency | Install size | Bundle size |
 | --- | --- | --- |

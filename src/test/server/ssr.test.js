@@ -52,10 +52,10 @@ module.exports = (tests) => {
         // eslint-disable-next-line react/prop-types
         const Phrase = ({ phrase, children }) => {
           const { cacheValue } = useGraphQL({
+            operation: { query: `{ echo(phrase: "${phrase}") }` },
             fetchOptionsOverride(options) {
               options.url = `http://localhost:${port}`;
             },
-            operation: { query: `{ echo(phrase: "${phrase}") }` },
             loadOnMount: true,
           });
 
