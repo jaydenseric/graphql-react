@@ -108,9 +108,11 @@ module.exports = function useGraphQL({
       resetOnLoad,
     });
 
-    setLoading(true);
-    setCacheKey(cacheKey);
-    setCacheValue(cacheValue);
+    ReactDOM.unstable_batchedUpdates(() => {
+      setLoading(true);
+      setCacheKey(cacheKey);
+      setCacheValue(cacheValue);
+    });
 
     return cacheValuePromise;
   }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad]);
