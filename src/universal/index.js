@@ -139,10 +139,11 @@ exports.useGraphQL = require('./useGraphQL');
  * @kind typedef
  * @name GraphQLOperationStatus
  * @type {object}
- * @prop {Function} load Loads the [GraphQL operation]{@link GraphQLOperation} on demand, updating the [GraphQL cache]{@link GraphQL#cache}.
- * @prop {boolean} loading Is the [GraphQL operation]{@link GraphQLOperation} loading.
- * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
- * @prop {GraphQLCacheValue} cacheValue [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue} matching the current [GraphQL operation]{@link GraphQLOperation}.
+ * @prop {Function} load Loads the current [GraphQL operation]{@link GraphQLOperation} on demand, updating the [GraphQL cache]{@link GraphQL#cache}.
+ * @prop {boolean} loading Is the current [GraphQL operation]{@link GraphQLOperation} loading.
+ * @prop {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} for the current [GraphQL operation]{@link GraphQLOperation} and [GraphQL `fetch` options]{@link GraphQLFetchOptions}.
+ * @prop {GraphQLCacheValue} cacheValue [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue} for the current [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
+ * @prop {GraphQLCacheValue} loadedCacheValue [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue} that was last loaded by this [`useGraphQL`]{@link useGraphQL} React hook; even if the [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} has since changed.
  * @see [`useGraphQL`]{@link useGraphQL} React hook returns this type.
  */
 

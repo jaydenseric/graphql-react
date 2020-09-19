@@ -86,6 +86,7 @@ module.exports = function useGraphQL({
   let [cacheValue, setCacheValue] = React.useState(
     graphql.cache[fetchOptionsHash]
   );
+  let [loadedCacheValue, setLoadedCacheValue] = React.useState(cacheValue);
 
   // If the GraphQL operation or its fetch options change after the initial
   // render the state has to be re-initialized.
@@ -93,6 +94,7 @@ module.exports = function useGraphQL({
     setLoading((loading = fetchOptionsHash in graphql.operations));
     setCacheKey((cacheKey = fetchOptionsHash));
     setCacheValue((cacheValue = graphql.cache[fetchOptionsHash]));
+    if (cacheValue) setLoadedCacheValue((loadedCacheValue = cacheValue));
   }
 
   /**
@@ -112,6 +114,7 @@ module.exports = function useGraphQL({
       setLoading(true);
       setCacheKey(cacheKey);
       setCacheValue(cacheValue);
+      if (cacheValue) setLoadedCacheValue(cacheValue);
     });
 
     return cacheValuePromise;
@@ -161,6 +164,7 @@ module.exports = function useGraphQL({
         ReactDOM.unstable_batchedUpdates(() => {
           setLoading(false);
           setCacheValue(cacheValue);
+          setLoadedCacheValue(cacheValue);
         });
     },
     [cacheKey]
@@ -211,7 +215,11 @@ module.exports = function useGraphQL({
     ({ exceptCacheKey }) => {
       if (cacheKey !== exceptCacheKey && isMountedRef.current)
         if (loadOnReset) load();
-        else setCacheValue(graphql.cache[cacheKey]);
+        else
+          ReactDOM.unstable_batchedUpdates(() => {
+            setCacheValue(graphql.cache[cacheKey]);
+            setLoadedCacheValue(graphql.cache[cacheKey]);
+          });
     },
     [cacheKey, graphql.cache, load, loadOnReset]
   );
@@ -261,10 +269,8 @@ module.exports = function useGraphQL({
       resetOnLoad,
     });
 
-  return React.useMemo(() => ({ load, loading, cacheKey, cacheValue }), [
-    cacheKey,
-    cacheValue,
-    load,
-    loading,
-  ]);
+  return React.useMemo(
+    () => ({ load, loading, cacheKey, cacheValue, loadedCacheValue }),
+    [cacheKey, cacheValue, loadedCacheValue, load, loading]
+  );
 };

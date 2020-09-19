@@ -7,6 +7,7 @@
 - Allow React component `displayName` and `propTypes` to be removed in production builds, fixing [#51](https://github.com/jaydenseric/graphql-react/issues/51).
 - Refactored the `useGraphQL` React hook to do less work for following renders if the `operation` and `fetchOptionsOverride` options are defined outside the component or memoized using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook.
 - Memoize what the `useGraphQL` React hook returns for more efficient hook composition.
+- Added a new `loadedCacheValue` property to the GraphQL operation status object returned by the `useGraphQL` React hook. This allows cache for an earlier operation to be rendered while loading changes to the query, variables, or `fetch` options.
 
 ### Patch
 

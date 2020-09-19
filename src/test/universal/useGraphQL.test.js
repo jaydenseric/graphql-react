@@ -77,6 +77,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, false);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
 
           // Second render with different props.
           ReactTestRenderer.act(() => {
@@ -94,6 +95,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, false);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
         } finally {
           close();
         }
@@ -167,6 +169,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, false);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Second render with different props, no cache.
           ReactTestRenderer.act(() => {
@@ -184,6 +187,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, false);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           deepStrictEqual(renderResult2.cacheValue, undefined);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
         } finally {
           close();
         }
@@ -257,6 +261,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, false);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Second render with different props.
           ReactTestRenderer.act(() => {
@@ -274,6 +279,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, false);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           deepStrictEqual(renderResult2.cacheValue, operation2CacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation2CacheValue);
         } finally {
           close();
         }
@@ -341,6 +347,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, true);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
 
           // Second render with different props.
           ReactTestRenderer.act(() => {
@@ -358,6 +365,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, true);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
         } finally {
           close();
         }
@@ -431,6 +439,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, false);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Second render with different props, no cache.
           ReactTestRenderer.act(() => {
@@ -448,6 +457,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, true);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           deepStrictEqual(renderResult2.cacheValue, undefined);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation1CacheValue);
         } finally {
           close();
         }
@@ -521,6 +531,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loading, false);
           strictEqual(renderResult1.cacheKey, operation1CacheKey);
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Second render with different props.
           ReactTestRenderer.act(() => {
@@ -538,6 +549,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loading, false);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
           deepStrictEqual(renderResult2.cacheValue, operation2CacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation2CacheValue);
         } finally {
           close();
         }
@@ -605,6 +617,7 @@ module.exports = (tests) => {
           strictEqual(renderResult.loading, true);
           strictEqual(renderResult.cacheKey, operationCacheKey);
           deepStrictEqual(renderResult.cacheValue, operationCacheValue);
+          deepStrictEqual(renderResult.loadedCacheValue, operationCacheValue);
         } finally {
           close();
         }

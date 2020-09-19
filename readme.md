@@ -790,10 +790,11 @@ The status of a [GraphQL operation](#type-graphqloperation) managed by the [`use
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `load` | Function | Loads the [GraphQL operation](#type-graphqloperation) on demand, updating the [GraphQL cache](#graphql-instance-property-cache). |
-| `loading` | boolean | Is the [GraphQL operation](#type-graphqloperation) loading. |
-| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
-| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) matching the current [GraphQL operation](#type-graphqloperation). |
+| `load` | Function | Loads the current [GraphQL operation](#type-graphqloperation) on demand, updating the [GraphQL cache](#graphql-instance-property-cache). |
+| `loading` | boolean | Is the current [GraphQL operation](#type-graphqloperation) loading. |
+| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the current [GraphQL operation](#type-graphqloperation) and [GraphQL `fetch` options](#type-graphqlfetchoptions). |
+| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) for the current [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
+| `loadedCacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) that was last loaded by this [`useGraphQL`](#function-usegraphql) React hook; even if the [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) has since changed. |
 
 #### See
 
