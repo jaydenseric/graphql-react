@@ -20,7 +20,7 @@ const RenderUseGraphQL = (operationOptions) =>
 
 module.exports = (tests) => {
   tests.add(
-    '`useGraphQL` option `loadOnMount` false (default) with no initial cache',
+    '`useGraphQL` option `loadOnMount` false (default) without initial cache',
     async () => {
       const revertGlobals = revertableGlobals({ fetch });
 
@@ -153,7 +153,7 @@ module.exports = (tests) => {
 
           const testRenderer = ReactTestRenderer.create(null);
 
-          // First render with cache.
+          // First render.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -171,7 +171,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
-          // Second render with different props, no cache.
+          // Second render with different props.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -290,7 +290,7 @@ module.exports = (tests) => {
   );
 
   tests.add(
-    '`useGraphQL` option `loadOnMount` true with no initial cache',
+    '`useGraphQL` option `loadOnMount` true without initial cache',
     async () => {
       const revertGlobals = revertableGlobals({ fetch });
 
@@ -423,7 +423,7 @@ module.exports = (tests) => {
 
           const testRenderer = ReactTestRenderer.create(null);
 
-          // First render with cache.
+          // First render.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -441,7 +441,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
-          // Second render with different props, no cache.
+          // Second render with different props.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
