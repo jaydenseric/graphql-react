@@ -103,19 +103,14 @@ module.exports = function useGraphQL({
    * @ignore
    */
   const load = React.useCallback(() => {
-    const { cacheKey, cacheValue, cacheValuePromise } = graphql.operate({
+    const { cacheValuePromise } = graphql.operate({
       operation,
       fetchOptionsOverride,
       reloadOnLoad,
       resetOnLoad,
     });
 
-    ReactDOM.unstable_batchedUpdates(() => {
-      setLoading(true);
-      setCacheKey(cacheKey);
-      setCacheValue(cacheValue);
-      if (cacheValue) setLoadedCacheValue(cacheValue);
-    });
+    setLoading(true);
 
     return cacheValuePromise;
   }, [fetchOptionsOverride, graphql, operation, reloadOnLoad, resetOnLoad]);
@@ -213,13 +208,14 @@ module.exports = function useGraphQL({
    */
   const onReset = React.useCallback(
     ({ exceptCacheKey }) => {
-      if (cacheKey !== exceptCacheKey && isMountedRef.current)
+      if (cacheKey !== exceptCacheKey && isMountedRef.current) {
+        ReactDOM.unstable_batchedUpdates(() => {
+          setCacheValue(graphql.cache[cacheKey]);
+          setLoadedCacheValue(graphql.cache[cacheKey]);
+        });
+
         if (loadOnReset) load();
-        else
-          ReactDOM.unstable_batchedUpdates(() => {
-            setCacheValue(graphql.cache[cacheKey]);
-            setLoadedCacheValue(graphql.cache[cacheKey]);
-          });
+      }
     },
     [cacheKey, graphql.cache, load, loadOnReset]
   );
