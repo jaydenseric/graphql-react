@@ -1634,4 +1634,410 @@ module.exports = (tests) => {
       );
     }, new Error('GraphQL context must be a GraphQL instance.'));
   });
+
+  tests.add(
+    '`useGraphQL` with `GraphQL` event `fetch` after unmount',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          const SiblingComponent = ({ setDisplay }) => {
+            const onCache = React.useCallback(() => {
+              setDisplay(false);
+            }, [setDisplay]);
+
+            React.useEffect(() => {
+              graphql.on('fetch', onCache);
+
+              return () => {
+                graphql.off('fetch', onCache);
+              };
+            }, [onCache]);
+
+            return null;
+          };
+
+          const ParentComponent = () => {
+            const [display, setDisplay] = React.useState(true);
+
+            return (
+              <GraphQLProvider graphql={graphql}>
+                <SiblingComponent setDisplay={setDisplay} />
+                {display && <RenderUseGraphQL {...operationOptions} />}
+              </GraphQLProvider>
+            );
+          };
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(<ParentComponent />);
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          const consoleErrors = [];
+          const revertGlobals = revertableGlobals({
+            console: {
+              ...console,
+              error(message) {
+                consoleErrors.push(message);
+              },
+            },
+          });
+
+          try {
+            // Trigger the GraphQL `fetch` event.
+            await graphql.operate(operationOptions).cacheValuePromise;
+
+            // Second render.
+            ReactTestRenderer.act(() => {
+              testRenderer.update(<ParentComponent />);
+            });
+          } finally {
+            revertGlobals();
+          }
+
+          strictEqual(JSON.parse(testRenderer.toJSON()), null);
+
+          // Assert there were no “Can't perform a React state update on an
+          // unmounted component” React render warnings.
+          deepStrictEqual(consoleErrors, []);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` with `GraphQL` event `cache` after unmount',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          const SiblingComponent = ({ setDisplay }) => {
+            const onCache = React.useCallback(() => {
+              setDisplay(false);
+            }, [setDisplay]);
+
+            React.useEffect(() => {
+              graphql.on('cache', onCache);
+
+              return () => {
+                graphql.off('cache', onCache);
+              };
+            }, [onCache]);
+
+            return null;
+          };
+
+          const ParentComponent = () => {
+            const [display, setDisplay] = React.useState(true);
+
+            return (
+              <GraphQLProvider graphql={graphql}>
+                <SiblingComponent setDisplay={setDisplay} />
+                {display && <RenderUseGraphQL {...operationOptions} />}
+              </GraphQLProvider>
+            );
+          };
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(<ParentComponent />);
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          const consoleErrors = [];
+          const revertGlobals = revertableGlobals({
+            console: {
+              ...console,
+              error(message) {
+                consoleErrors.push(message);
+              },
+            },
+          });
+
+          try {
+            // Trigger the GraphQL `cache` event.
+            await graphql.operate(operationOptions).cacheValuePromise;
+
+            // Second render.
+            ReactTestRenderer.act(() => {
+              testRenderer.update(<ParentComponent />);
+            });
+          } finally {
+            revertGlobals();
+          }
+
+          strictEqual(JSON.parse(testRenderer.toJSON()), null);
+
+          // Assert there were no “Can't perform a React state update on an
+          // unmounted component” React render warnings.
+          deepStrictEqual(consoleErrors, []);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` with `GraphQL` event `reload` after unmount',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          const SiblingComponent = ({ setDisplay }) => {
+            const onCache = React.useCallback(() => {
+              setDisplay(false);
+            }, [setDisplay]);
+
+            React.useEffect(() => {
+              graphql.on('reload', onCache);
+
+              return () => {
+                graphql.off('reload', onCache);
+              };
+            }, [onCache]);
+
+            return null;
+          };
+
+          const ParentComponent = () => {
+            const [display, setDisplay] = React.useState(true);
+
+            return (
+              <GraphQLProvider graphql={graphql}>
+                <SiblingComponent setDisplay={setDisplay} />
+                {display && (
+                  <RenderUseGraphQL {...operationOptions} loadOnReload />
+                )}
+              </GraphQLProvider>
+            );
+          };
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(<ParentComponent />);
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          const consoleErrors = [];
+          const revertGlobals = revertableGlobals({
+            console: {
+              ...console,
+              error(message) {
+                consoleErrors.push(message);
+              },
+            },
+          });
+
+          try {
+            // Trigger the GraphQL `reload` event.
+            graphql.reload();
+
+            await Promise.all(Object.values(graphql.operations));
+
+            // Second render.
+            ReactTestRenderer.act(() => {
+              testRenderer.update(<ParentComponent />);
+            });
+          } finally {
+            revertGlobals();
+          }
+
+          strictEqual(JSON.parse(testRenderer.toJSON()), null);
+
+          // Assert there were no “Can't perform a React state update on an
+          // unmounted component” React render warnings.
+          deepStrictEqual(consoleErrors, []);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` with `GraphQL` event `reset` after unmount',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          const SiblingComponent = ({ setDisplay }) => {
+            const onCache = React.useCallback(() => {
+              setDisplay(false);
+            }, [setDisplay]);
+
+            React.useEffect(() => {
+              graphql.on('reset', onCache);
+
+              return () => {
+                graphql.off('reset', onCache);
+              };
+            }, [onCache]);
+
+            return null;
+          };
+
+          const ParentComponent = () => {
+            const [display, setDisplay] = React.useState(true);
+
+            return (
+              <GraphQLProvider graphql={graphql}>
+                <SiblingComponent setDisplay={setDisplay} />
+                {display && <RenderUseGraphQL {...operationOptions} />}
+              </GraphQLProvider>
+            );
+          };
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(<ParentComponent />);
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          const consoleErrors = [];
+          const revertGlobals = revertableGlobals({
+            console: {
+              ...console,
+              error(message) {
+                consoleErrors.push(message);
+              },
+            },
+          });
+
+          try {
+            // Trigger the GraphQL `reset` event.
+            graphql.reset();
+
+            await Promise.all(Object.values(graphql.operations));
+
+            // Second render.
+            ReactTestRenderer.act(() => {
+              testRenderer.update(<ParentComponent />);
+            });
+          } finally {
+            revertGlobals();
+          }
+
+          strictEqual(JSON.parse(testRenderer.toJSON()), null);
+
+          // Assert there were no “Can't perform a React state update on an
+          // unmounted component” React render warnings.
+          deepStrictEqual(consoleErrors, []);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
 };
