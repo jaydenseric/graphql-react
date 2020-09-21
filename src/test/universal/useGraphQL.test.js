@@ -1,6 +1,7 @@
 'use strict';
 
 const { deepStrictEqual, strictEqual, throws } = require('assert');
+const { GraphQLInt } = require('graphql');
 const { default: fetch } = require('node-fetch');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server.node');
@@ -186,7 +187,7 @@ module.exports = (tests) => {
 
           strictEqual(renderResult2.loading, false);
           strictEqual(renderResult2.cacheKey, operation2CacheKey);
-          deepStrictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.cacheValue, undefined);
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
         } finally {
           close();
@@ -307,19 +308,27 @@ module.exports = (tests) => {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
           };
-          const { cacheKey: operation1CacheKey } = graphql.operate(
-            operation1Options
-          );
+          const {
+            cacheKey: operation1CacheKey,
+            cacheValuePromise: operation1CacheValuePromise,
+          } = graphql.operate(operation1Options);
 
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
           };
-          const { cacheKey: operation2CacheKey } = graphql.operate(
-            operation2Options
-          );
+          const {
+            cacheKey: operation2CacheKey,
+            cacheValuePromise: operation2CacheValuePromise,
+          } = graphql.operate(operation2Options);
 
-          await Promise.all(Object.values(graphql.operations));
+          const [
+            operation1CacheValue,
+            operation2CacheValue,
+          ] = await Promise.all([
+            operation1CacheValuePromise,
+            operation2CacheValuePromise,
+          ]);
 
           graphql.reset();
 
@@ -349,7 +358,26 @@ module.exports = (tests) => {
           strictEqual(renderResult1.cacheValue, undefined);
           strictEqual(renderResult1.loadedCacheValue, undefined);
 
-          // Second render with different props.
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Second render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation1Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, operation1CacheKey);
+          deepStrictEqual(renderResult2.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation1CacheValue);
+
+          // Third render with different props.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -360,12 +388,31 @@ module.exports = (tests) => {
 
           strictEqual(cacheKeyFetched, operation2CacheKey);
 
-          const renderResult2 = JSON.parse(testRenderer.toJSON());
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
 
-          strictEqual(renderResult2.loading, true);
-          strictEqual(renderResult2.cacheKey, operation2CacheKey);
-          strictEqual(renderResult2.cacheValue, undefined);
-          strictEqual(renderResult2.loadedCacheValue, undefined);
+          strictEqual(renderResult3.loading, true);
+          strictEqual(renderResult3.cacheKey, operation2CacheKey);
+          strictEqual(renderResult3.cacheValue, undefined);
+          deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Fourth render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation2Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult4 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult4.loading, false);
+          strictEqual(renderResult4.cacheKey, operation2CacheKey);
+          deepStrictEqual(renderResult4.cacheValue, operation2CacheValue);
+          deepStrictEqual(renderResult4.loadedCacheValue, operation2CacheValue);
         } finally {
           close();
         }
@@ -407,7 +454,10 @@ module.exports = (tests) => {
             cacheValuePromise: operation2CacheValuePromise,
           } = graphql.operate(operation2Options);
 
-          const [operation1CacheValue] = await Promise.all([
+          const [
+            operation1CacheValue,
+            operation2CacheValue,
+          ] = await Promise.all([
             operation1CacheValuePromise,
             operation2CacheValuePromise,
           ]);
@@ -415,10 +465,10 @@ module.exports = (tests) => {
           // Ensure only the first operation is cached.
           delete graphql.cache[operation2CacheKey];
 
-          let fetched = false;
+          let cacheKeyFetched;
 
-          graphql.on('fetch', () => {
-            fetched = true;
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
           });
 
           const testRenderer = ReactTestRenderer.create(null);
@@ -432,7 +482,7 @@ module.exports = (tests) => {
             );
           });
 
-          strictEqual(fetched, false);
+          strictEqual(cacheKeyFetched, undefined);
 
           const renderResult1 = JSON.parse(testRenderer.toJSON());
 
@@ -441,7 +491,26 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
-          // Second render with different props.
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Second render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation1Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, operation1CacheKey);
+          deepStrictEqual(renderResult2.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation1CacheValue);
+
+          // Third render with different props.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -450,14 +519,33 @@ module.exports = (tests) => {
             );
           });
 
-          strictEqual(fetched, true);
+          strictEqual(cacheKeyFetched, operation2CacheKey);
 
-          const renderResult2 = JSON.parse(testRenderer.toJSON());
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
 
-          strictEqual(renderResult2.loading, true);
-          strictEqual(renderResult2.cacheKey, operation2CacheKey);
-          deepStrictEqual(renderResult2.cacheValue, undefined);
-          deepStrictEqual(renderResult2.loadedCacheValue, operation1CacheValue);
+          strictEqual(renderResult3.loading, true);
+          strictEqual(renderResult3.cacheKey, operation2CacheKey);
+          strictEqual(renderResult3.cacheValue, undefined);
+          deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Fourth render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation2Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult4 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult4.loading, false);
+          strictEqual(renderResult4.cacheKey, operation2CacheKey);
+          deepStrictEqual(renderResult4.cacheValue, operation2CacheValue);
+          deepStrictEqual(renderResult4.loadedCacheValue, operation2CacheValue);
         } finally {
           close();
         }
@@ -574,15 +662,13 @@ module.exports = (tests) => {
           };
 
           const operationOptions = {
-            operation: { query: '{ a: echo }' },
+            operation: { query: '{ echo }' },
             fetchOptionsOverride,
           };
-          const {
-            cacheKey: operationCacheKey,
-            cacheValuePromise: operationCacheValuePromise,
-          } = graphql.operate(operationOptions);
-
-          const operationCacheValue = await operationCacheValuePromise;
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
 
           let cacheKeyFetched;
 
@@ -601,7 +687,7 @@ module.exports = (tests) => {
           // hydration period.
           await sleep(1100);
 
-          // Second render.
+          // Second render after the post SSR first render hydration period.
           ReactTestRenderer.act(() => {
             testRenderer.update(
               <GraphQLProvider graphql={graphql}>
@@ -610,14 +696,825 @@ module.exports = (tests) => {
             );
           });
 
-          strictEqual(cacheKeyFetched, operationCacheKey);
+          strictEqual(cacheKeyFetched, cacheKey);
 
-          const renderResult = JSON.parse(testRenderer.toJSON());
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
 
-          strictEqual(renderResult.loading, true);
-          strictEqual(renderResult.cacheKey, operationCacheKey);
-          deepStrictEqual(renderResult.cacheValue, operationCacheValue);
-          deepStrictEqual(renderResult.loadedCacheValue, operationCacheValue);
+          strictEqual(renderResult2.loading, true);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          deepStrictEqual(renderResult2.cacheValue, cacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, cacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Third render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult3.loading, false);
+          strictEqual(renderResult3.cacheKey, cacheKey);
+          deepStrictEqual(renderResult3.cacheValue, cacheValue);
+          deepStrictEqual(renderResult3.loadedCacheValue, cacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnMount` true with first render date context missing',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLContext.Provider value={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnMount />
+              </GraphQLContext.Provider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, cacheKey);
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, true);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Second render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLContext.Provider value={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnMount />
+              </GraphQLContext.Provider>
+            );
+          });
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          deepStrictEqual(renderResult2.cacheValue, cacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, cacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReload` false (default) without initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+
+          await cacheValuePromise;
+
+          graphql.reset();
+
+          let fetched = false;
+
+          graphql.on('fetch', () => {
+            fetched = true;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
+
+          // Signal reload.
+          graphql.reload();
+
+          // Second render after reload was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(fetched, false);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReload` false (default) with initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        let requestCount = 0;
+
+        const { port, close } = await listen(
+          createGraphQLKoaApp({
+            requestCount: {
+              type: GraphQLInt,
+              resolve: () => ++requestCount,
+            },
+          })
+        );
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ requestCount }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          let fetched = false;
+
+          graphql.on('fetch', () => {
+            fetched = true;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          // Signal reload.
+          graphql.reload();
+
+          // Second render after reload was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(fetched, false);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          deepStrictEqual(renderResult2.cacheValue, cacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, cacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReload` true without initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+
+          await cacheValuePromise;
+
+          graphql.reset();
+
+          let fetched = false;
+
+          graphql.on('fetch', () => {
+            fetched = true;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReload />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
+
+          // Signal reload.
+          graphql.reload();
+
+          // Second render after reload was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReload />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(fetched, false);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReload` true with initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        let requestCount = 0;
+
+        const { port, close } = await listen(
+          createGraphQLKoaApp({
+            requestCount: {
+              type: GraphQLInt,
+              resolve: () => ++requestCount,
+            },
+          })
+        );
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ requestCount }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue1 = await cacheValuePromise;
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReload />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue1);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue1);
+
+          // Signal reload.
+          graphql.reload();
+
+          // Second render after reload was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReload />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, cacheKey);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, true);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          deepStrictEqual(renderResult2.cacheValue, cacheValue1);
+          deepStrictEqual(renderResult2.loadedCacheValue, cacheValue1);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          const cacheValue2 = graphql.cache[cacheKey];
+
+          // Third render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReload />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult3.loading, false);
+          strictEqual(renderResult3.cacheKey, cacheKey);
+          deepStrictEqual(renderResult3.cacheValue, cacheValue2);
+          deepStrictEqual(renderResult3.loadedCacheValue, cacheValue2);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReset` false (default) without initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+
+          await cacheValuePromise;
+
+          graphql.reset();
+
+          let fetched = false;
+
+          graphql.on('fetch', () => {
+            fetched = true;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
+
+          // Signal reset.
+          graphql.reset();
+
+          // Second render after reset was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(fetched, false);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReset` false (default) with initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        let requestCount = 0;
+
+        const { port, close } = await listen(
+          createGraphQLKoaApp({
+            requestCount: {
+              type: GraphQLInt,
+              resolve: () => ++requestCount,
+            },
+          })
+        );
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ requestCount }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          let fetched = false;
+
+          graphql.on('fetch', () => {
+            fetched = true;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
+
+          // Signal reset.
+          graphql.reset();
+
+          // Second render after reset was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(fetched, false);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReset` true without initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ echo }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue = await cacheValuePromise;
+
+          graphql.reset();
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReset />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          strictEqual(renderResult1.cacheValue, undefined);
+          strictEqual(renderResult1.loadedCacheValue, undefined);
+
+          // Signal reset.
+          graphql.reset();
+
+          // Second render after reset was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReset />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, cacheKey);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, true);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Third render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult3.loading, false);
+          strictEqual(renderResult3.cacheKey, cacheKey);
+          deepStrictEqual(renderResult3.cacheValue, cacheValue);
+          deepStrictEqual(renderResult3.loadedCacheValue, cacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnReset` true with initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        let requestCount = 0;
+
+        const { port, close } = await listen(
+          createGraphQLKoaApp({
+            requestCount: {
+              type: GraphQLInt,
+              resolve: () => ++requestCount,
+            },
+          })
+        );
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operationOptions = {
+            operation: { query: '{ requestCount }' },
+            fetchOptionsOverride,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operationOptions
+          );
+          const cacheValue1 = await cacheValuePromise;
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReset />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, cacheKey);
+          deepStrictEqual(renderResult1.cacheValue, cacheValue1);
+          deepStrictEqual(renderResult1.loadedCacheValue, cacheValue1);
+
+          // Signal reset.
+          graphql.reset();
+
+          // Second render after reset was signaled.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} loadOnReset />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, cacheKey);
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, true);
+          strictEqual(renderResult2.cacheKey, cacheKey);
+          strictEqual(renderResult2.cacheValue, undefined);
+          strictEqual(renderResult2.loadedCacheValue, undefined);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          const cacheValue2 = graphql.cache[cacheKey];
+
+          // Third render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operationOptions} />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult3.loading, false);
+          strictEqual(renderResult3.cacheKey, cacheKey);
+          deepStrictEqual(renderResult3.cacheValue, cacheValue2);
+          deepStrictEqual(renderResult3.loadedCacheValue, cacheValue2);
         } finally {
           close();
         }
@@ -719,61 +1616,6 @@ module.exports = (tests) => {
       }, new Error('useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'));
     }
   );
-
-  tests.add('`useGraphQL` with first render date context missing', async () => {
-    const revertGlobals = revertableGlobals({ fetch });
-
-    try {
-      const { port, close } = await listen(createGraphQLKoaApp());
-
-      try {
-        const graphql = new GraphQL();
-        const fetchOptionsOverride = (options) => {
-          options.url = `http://localhost:${port}`;
-        };
-
-        const operationOptions = {
-          operation: { query: '{ a: echo }' },
-          fetchOptionsOverride,
-        };
-        const {
-          cacheKey: operationCacheKey,
-          cacheValuePromise: operationCacheValuePromise,
-        } = graphql.operate(operationOptions);
-
-        const operationCacheValue = await operationCacheValuePromise;
-
-        let cacheKeyFetched;
-
-        graphql.on('fetch', ({ cacheKey }) => {
-          cacheKeyFetched = cacheKey;
-        });
-
-        const testRenderer = ReactTestRenderer.create(null);
-
-        ReactTestRenderer.act(() => {
-          testRenderer.update(
-            <GraphQLContext.Provider value={graphql}>
-              <RenderUseGraphQL {...operationOptions} loadOnMount />
-            </GraphQLContext.Provider>
-          );
-        });
-
-        const { loading, cacheKey, cacheValue } = JSON.parse(
-          testRenderer.toJSON()
-        );
-
-        strictEqual(cacheKeyFetched, operationCacheKey);
-        strictEqual(loading, true);
-        strictEqual(cacheKey, operationCacheKey);
-        deepStrictEqual(cacheValue, operationCacheValue);
-      } finally {
-        close();
-      }
-    } finally {
-      revertGlobals();
-    }
-  });
 
   tests.add('`useGraphQL` with GraphQL context missing', () => {
     throws(() => {

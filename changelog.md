@@ -15,7 +15,7 @@
 - Increased the universal API size-limit from 3 KB to 3.5 KB.
 - Use `ReactDOM.unstable_batchedUpdates` in the `useGraphQL` React hook `load` function.
 - Updated the `useGraphQL` React hook examples to use the [GitHub GraphQL API](https://docs.github.com/en/graphql).
-- Minor test tweaks.
+- Improved the `useGraphQL` React hook tests.
 - Improved documentation.
 
 ## 11.0.4
