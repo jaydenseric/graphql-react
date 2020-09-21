@@ -12,6 +12,7 @@
 ### Patch
 
 - Updated dependencies.
+- Use [`coverage-node`](https://npm.im/coverage-node) to enforce 100% code coverage for tests.
 - Increased the universal API size-limit from 3 KB to 3.5 KB.
 - Updated the `useGraphQL` React hook examples to use the [GitHub GraphQL API](https://docs.github.com/en/graphql).
 - Improved the `useGraphQL` React hook tests.
