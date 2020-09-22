@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Replaced Node.js deprecated `notEqual` assertions with `notStrictEqual` in tests.
+
 ## 11.1.0
 
 ### Minor

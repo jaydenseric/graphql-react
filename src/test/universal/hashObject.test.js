@@ -1,6 +1,6 @@
 'use strict';
 
-const { notEqual, strictEqual } = require('assert');
+const { notStrictEqual, strictEqual } = require('assert');
 const FormData = require('formdata-node');
 const revertableGlobals = require('revertable-globals');
 const hashObject = require('../../universal/private/hashObject');
@@ -22,7 +22,7 @@ module.exports = (tests) => {
     const hash3 = hashObject(object);
 
     // Property values affect the hash.
-    notEqual(hash2, hash3);
+    notStrictEqual(hash2, hash3);
   });
 
   tests.add('`hashObject` with a `FormData` instance', () => {
@@ -45,7 +45,7 @@ module.exports = (tests) => {
       strictEqual(hash1, hash2);
 
       // Fields determine hash.
-      notEqual(hash2, hash3);
+      notStrictEqual(hash2, hash3);
     } finally {
       revertGlobals();
     }
