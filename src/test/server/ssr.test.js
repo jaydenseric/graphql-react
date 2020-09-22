@@ -13,7 +13,7 @@ const listen = require('../listen');
 
 module.exports = (tests) => {
   tests.add('`ssr` argument 1 validation', async () => {
-    const error = new Error('ssr() argument 1 must be a GraphQL instance.');
+    const error = new TypeError('ssr() argument 1 must be a GraphQL instance.');
 
     await rejects(ssr(), error);
     await rejects(ssr(true), error);
@@ -24,7 +24,7 @@ module.exports = (tests) => {
 
     await rejects(
       ssr(graphql),
-      new Error('ssr() argument 2 must be a React node.')
+      new TypeError('ssr() argument 2 must be a React node.')
     );
 
     strictEqual(await ssr(graphql, undefined), '');
@@ -38,7 +38,7 @@ module.exports = (tests) => {
 
     await rejects(
       ssr(graphql, node, false),
-      new Error('ssr() argument 3 must be a function.')
+      new TypeError('ssr() argument 3 must be a function.')
     );
   });
 

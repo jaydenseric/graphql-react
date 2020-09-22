@@ -80,15 +80,15 @@ module.exports = async function ssr(
   render = ReactDOMServer.renderToStaticMarkup
 ) {
   if (!(graphql instanceof GraphQL))
-    throw new Error('ssr() argument 1 must be a GraphQL instance.');
+    throw new TypeError('ssr() argument 1 must be a GraphQL instance.');
 
   // Check argument 2 exists, allowing an undefined value as that is a valid
   // React node.
   if (arguments.length < 2)
-    throw new Error('ssr() argument 2 must be a React node.');
+    throw new TypeError('ssr() argument 2 must be a React node.');
 
   if (typeof render !== 'function')
-    throw new Error('ssr() argument 3 must be a function.');
+    throw new TypeError('ssr() argument 3 must be a function.');
 
   // Signal that queries should load at render.
   graphql.ssr = true;

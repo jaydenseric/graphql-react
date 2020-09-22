@@ -164,7 +164,7 @@ module.exports = class GraphQL {
         ? fetch
         : () =>
             Promise.reject(
-              new Error('Global fetch API or polyfill unavailable.')
+              new TypeError('Global fetch API or polyfill unavailable.')
             );
     const cacheValue = {};
     const cacheValuePromise = fetcher(url, options)
@@ -245,7 +245,7 @@ module.exports = class GraphQL {
     resetOnLoad,
   }) => {
     if (reloadOnLoad && resetOnLoad)
-      throw new Error(
+      throw new TypeError(
         'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
       );
 

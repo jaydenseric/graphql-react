@@ -271,7 +271,7 @@ module.exports = (tests) => {
           reloadOnLoad: true,
           resetOnLoad: true,
         });
-      }, new Error('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'));
+      }, new TypeError('operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'));
     }
   );
 

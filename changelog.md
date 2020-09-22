@@ -5,6 +5,7 @@
 ### Patch
 
 - Replaced Node.js deprecated `notEqual` assertions with `notStrictEqual` in tests.
+- Use the `TypeError` class instead of `Error` for relevant errors.
 
 ## 11.1.0
 

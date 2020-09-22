@@ -1613,7 +1613,7 @@ module.exports = (tests) => {
             />
           </GraphQLProvider>
         );
-      }, new Error('useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'));
+      }, new TypeError('useGraphQL() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'));
     }
   );
 
@@ -1622,7 +1622,7 @@ module.exports = (tests) => {
       ReactDOMServer.renderToString(
         <RenderUseGraphQL operation={{ query: '' }} />
       );
-    }, new Error('GraphQL context missing.'));
+    }, new TypeError('GraphQL context missing.'));
   });
 
   tests.add('`useGraphQL` with GraphQL context not a GraphQL instance', () => {
@@ -1632,7 +1632,7 @@ module.exports = (tests) => {
           <RenderUseGraphQL operation={{ query: '' }} />
         </GraphQLContext.Provider>
       );
-    }, new Error('GraphQL context must be a GraphQL instance.'));
+    }, new TypeError('GraphQL context must be a GraphQL instance.'));
   });
 
   tests.add(
