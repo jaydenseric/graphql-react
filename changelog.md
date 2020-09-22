@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 11.1.0
 
 ### Minor
 
