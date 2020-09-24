@@ -66,6 +66,50 @@ module.exports = (tests) => {
   );
 
   tests.add(
+    '`GraphQL` method `operate` with option `cacheKeyCreator`, without and with initial cache',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch, Response });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const cacheKey = 'a';
+          const expectedResolvedCacheValue = { data: { echo: 'hello' } };
+
+          let hash;
+
+          // Without initial cache.
+          await testGraphQLOperation({
+            port,
+            cacheKeyCreator: () => cacheKey,
+            expectedResolvedCacheValue,
+            callback({ cacheKey }) {
+              hash = cacheKey;
+            },
+          });
+
+          strictEqual(hash, cacheKey);
+
+          // With initial cache.
+          await testGraphQLOperation({
+            port,
+            cacheKeyCreator: () => 'a',
+            initialGraphQLCache: {
+              [hash]: expectedResolvedCacheValue,
+            },
+            expectedResolvedCacheValue,
+          });
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
     '`GraphQL` method `operate` with global `fetch` unavailable',
     async () => {
       const { port, close } = await listen(createGraphQLKoaApp());
@@ -258,6 +302,19 @@ module.exports = (tests) => {
       } finally {
         revertGlobals();
       }
+    }
+  );
+
+  tests.add(
+    '`GraphQL` method `operate` with option `cacheKeyCreator` not a function',
+    () => {
+      const graphql = new GraphQL();
+      throws(() => {
+        graphql.operate({
+          operation: { query: '' },
+          cacheKeyCreator: true,
+        });
+      }, new TypeError('operate() option “cacheKeyCreator” must be a function.'));
     }
   );
 

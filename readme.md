@@ -157,12 +157,14 @@ Consider polyfilling:
   - [GraphQL event reload](#graphql-event-reload)
   - [GraphQL event reset](#graphql-event-reset)
 - [function GraphQLProvider](#function-graphqlprovider)
+- [function hashObject](#function-hashobject)
 - [function reportCacheErrors](#function-reportcacheerrors)
 - [function ssr](#function-ssr)
 - [function useGraphQL](#function-usegraphql)
 - [constant GraphQLContext](#constant-graphqlcontext)
 - [type GraphQLCache](#type-graphqlcache)
 - [type GraphQLCacheKey](#type-graphqlcachekey)
+- [type GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)
 - [type GraphQLCacheValue](#type-graphqlcachevalue)
 - [type GraphQLFetchOptions](#type-graphqlfetchoptions)
 - [type GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)
@@ -246,6 +248,7 @@ Loads or reuses an already loading GraphQL operation in [GraphQL operations](#gr
 | `options` | object | Options. |
 | `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default GraphQL operation [`fetch` options](#type-graphqlfetchoptions). |
+| `options.cacheKeyCreator` | [GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)? = [hashObject](#function-hashobject) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for the operation. |
 | `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
 | `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
 
@@ -429,6 +432,46 @@ _Provide a [`GraphQL`](#class-graphql) instance for an app._
 
 ---
 
+### function hashObject
+
+Hashes an object.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `object` | object | A JSON serializable object that may contain [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instances. |
+
+**Returns:** string — A hash.
+
+#### See
+
+- [`GraphQLCacheKeyCreator` functions](#type-graphqlcachekeycreator) may use this to derive a [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey).
+- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) uses this as a default value for `options.cacheKeyCreator`.
+- [`useGraphQL`](#function-usegraphql) React hook this uses this as a default value for `options.cacheKeyCreator`.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { hashObject } from 'graphql-react';
+> ```
+>
+> ```js
+> import hashObject from 'graphql-react/universal/hashObject.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { hashObject } = require('graphql-react');
+> ```
+>
+> ```js
+> const hashObject = require('graphql-react/universal/hashObject');
+> ```
+
+---
+
 ### function reportCacheErrors
 
 A [`GraphQL`](#class-graphql) [`cache`](#graphql-event-cache) event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
@@ -563,6 +606,7 @@ A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operati
 | `options` | object | Options. |
 | `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
 | `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the [GraphQL operation](#type-graphqloperation). To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
+| `options.cacheKeyCreator` | [GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)? = [hashObject](#function-hashobject) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for the operation. |
 | `options.loadOnMount` | boolean? = `false` | Should the operation load when the component mounts. |
 | `options.loadOnReload` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) [`reload`](#graphql-event-reload) event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
 | `options.loadOnReset` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) [`reset`](#graphql-event-reset) event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
@@ -670,7 +714,7 @@ A [GraphQL cache](#graphql-instance-property-cache) map of [GraphQL operation](#
 
 #### See
 
-- [`GraphQL`](#class-graphql) constructor accepts this type in `options.cache`.
+- [`GraphQL`](#class-graphql) constructor accepts this type for `options.cache`.
 - [`GraphQL`](#class-graphql) instance property [`cache`](#graphql-instance-property-cache) is this type.
 
 ---
@@ -680,6 +724,23 @@ A [GraphQL cache](#graphql-instance-property-cache) map of [GraphQL operation](#
 A [GraphQL cache](#type-graphqlcache) key, derived from a hash of the [`fetch` options](#type-graphqlfetchoptions) of the [GraphQL operation](#type-graphqloperation) that populated the [value](#type-graphqlcachevalue).
 
 **Type:** string
+
+---
+
+### type GraphQLCacheKeyCreator
+
+[GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for a [GraphQL operation](#type-graphqloperation). It can either use the provided [`fetch` options](#type-graphqlfetchoptions) (e.g. derive a hash), or simply return a hardcoded string.
+
+**Type:** Function
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `options` | [GraphQLFetchOptions](#type-graphqlfetchoptions) | [GraphQL `fetch` options](#type-graphqlfetchoptions) tailored to the [GraphQL operation](#type-graphqloperation), e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec). |
+
+#### See
+
+- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.cacheKeyCreator`.
+- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.cacheKeyCreator`.
 
 ---
 
@@ -730,8 +791,8 @@ Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate t
 
 #### See
 
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type in `options.fetchOptionsOverride`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type in `options.fetchOptionsOverride`.
+- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.fetchOptionsOverride`.
+- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.fetchOptionsOverride`.
 
 #### Examples
 
@@ -759,8 +820,8 @@ A GraphQL operation. Additional properties may be used; all are sent to the Grap
 
 #### See
 
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type in `options.operation`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type in `options.operation`.
+- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.operation`.
+- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.operation`.
 
 ---
 

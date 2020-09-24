@@ -10,6 +10,7 @@ const promisifyEvent = require('./promisifyEvent');
  * @param {number} options.port GraphQL server port.
  * @param {GraphQLOperation} [options.operation] [GraphQL operation]{@link GraphQLOperation}.
  * @param {boolean} [options.resetOnLoad] Should the [GraphQL cache]{@link GraphQL#cache} reset once the query loads.
+ * @param {GraphQLCacheKeyCreator} [options.cacheKeyCreator] [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} creator for the operation.
  * @param {GraphQLCache} [options.initialGraphQLCache] Initial [GraphQL cache]{@link GraphQL#cache}.
  * @param {GraphQL} [options.graphql] [`GraphQL`]{@link GraphQL} instance.
  * @param {GraphQLCacheValue} options.expectedResolvedCacheValue Expected [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
@@ -22,6 +23,7 @@ module.exports = async function testGraphQLOperation({
   port,
   operation = { query: '{ echo }' },
   resetOnLoad,
+  cacheKeyCreator,
   initialGraphQLCache,
   graphql = new GraphQL({
     cache: {
@@ -42,6 +44,7 @@ module.exports = async function testGraphQLOperation({
     fetchOptionsOverride(options) {
       options.url = `http://localhost:${port}`;
     },
+    cacheKeyCreator,
     resetOnLoad,
     operation,
   });

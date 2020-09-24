@@ -2,6 +2,11 @@
 
 ## Next
 
+### Minor
+
+- Added a new `cacheKeyCreator` option to the `GraphQL` instance method `operate` and the `useGraphQL` React hook.
+- The previously private `hashObject` function is now publicly exported.
+
 ### Patch
 
 - Replaced Node.js deprecated `notEqual` assertions with `notStrictEqual` in tests.

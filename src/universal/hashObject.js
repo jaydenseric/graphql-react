@@ -53,9 +53,29 @@ function hashObjectReplacer(key, value) {
 
 /**
  * Hashes an object.
+ * @kind function
+ * @name hashObject
  * @param {object} object A JSON serializable object that may contain [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instances.
  * @returns {string} A hash.
- * @ignore
+ * @see [`GraphQLCacheKeyCreator` functions]{@link GraphQLCacheKeyCreator} may use this to derive a [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
+ * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} uses this as a default value for `options.cacheKeyCreator`.
+ * @see [`useGraphQL`]{@link useGraphQL} React hook this uses this as a default value for `options.cacheKeyCreator`.
+ * @example <caption>Ways to `import`.</caption>
+ * ```js
+ * import { hashObject } from 'graphql-react';
+ * ```
+ *
+ * ```js
+ * import hashObject from 'graphql-react/universal/hashObject.js';
+ * ```
+ * @example <caption>Ways to `require`.</caption>
+ * ```js
+ * const { hashObject } = require('graphql-react');
+ * ```
+ *
+ * ```js
+ * const hashObject = require('graphql-react/universal/hashObject');
+ * ```
  */
 module.exports = function hashObject(object) {
   return fnv1a(JSON.stringify(object, hashObjectReplacer)).toString(36);

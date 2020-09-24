@@ -3,6 +3,7 @@
 exports.GraphQL = require('./GraphQL');
 exports.GraphQLContext = require('./GraphQLContext');
 exports.GraphQLProvider = require('./GraphQLProvider');
+exports.hashObject = require('./hashObject');
 exports.reportCacheErrors = require('./reportCacheErrors');
 exports.useGraphQL = require('./useGraphQL');
 
@@ -12,7 +13,7 @@ exports.useGraphQL = require('./useGraphQL');
  * @kind typedef
  * @name GraphQLCache
  * @type {object.<GraphQLCacheKey, GraphQLCacheValue>}
- * @see [`GraphQL`]{@link GraphQL} constructor accepts this type in `options.cache`.
+ * @see [`GraphQL`]{@link GraphQL} constructor accepts this type for `options.cache`.
  * @see [`GraphQL`]{@link GraphQL} instance property [`cache`]{@link GraphQL#cache} is this type.
  */
 
@@ -24,6 +25,19 @@ exports.useGraphQL = require('./useGraphQL');
  * @kind typedef
  * @name GraphQLCacheKey
  * @type {string}
+ */
+
+/**
+ * [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} creator for
+ * a [GraphQL operation]{@link GraphQLOperation}. It can either use the provided
+ * [`fetch` options]{@link GraphQLFetchOptions} (e.g. derive a hash), or simply
+ * return a hardcoded string.
+ * @kind typedef
+ * @name GraphQLCacheKeyCreator
+ * @type {Function}
+ * @param {GraphQLFetchOptions} options [GraphQL `fetch` options]{@link GraphQLFetchOptions} tailored to the [GraphQL operation]{@link GraphQLOperation}, e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
+ * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} accepts this type for `options.cacheKeyCreator`.
+ * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type for `options.cacheKeyCreator`.
  */
 
 /**
@@ -99,8 +113,8 @@ exports.useGraphQL = require('./useGraphQL');
  * @name GraphQLFetchOptionsOverride
  * @type {Function}
  * @param {GraphQLFetchOptions} options [GraphQL `fetch` options]{@link GraphQLFetchOptions} tailored to the [GraphQL operation]{@link GraphQLOperation}, e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
- * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} accepts this type in `options.fetchOptionsOverride`.
- * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.fetchOptionsOverride`.
+ * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} accepts this type for `options.fetchOptionsOverride`.
+ * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type for `options.fetchOptionsOverride`.
  * @example <caption>Setting [GraphQL `fetch` options]{@link GraphQLFetchOptions} for an imaginary API.</caption>
  * ```js
  * (options) => {
@@ -118,8 +132,8 @@ exports.useGraphQL = require('./useGraphQL');
  * @type {object}
  * @prop {string} query GraphQL queries/mutations.
  * @prop {object} variables Variables used in the `query`.
- * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} accepts this type in `options.operation`.
- * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type in `options.operation`.
+ * @see [`GraphQL`]{@link GraphQL} instance method [`operate`]{@link GraphQL#operate} accepts this type for `options.operation`.
+ * @see [`useGraphQL`]{@link useGraphQL} React hook accepts this type for `options.operation`.
  */
 
 /**

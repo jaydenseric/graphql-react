@@ -6,8 +6,8 @@
 // an object with a `default` key because the ESM only has a default export.
 // This would result in `mitt` being undefined instead of a function.
 const mitt = require('mitt/dist/mitt');
+const hashObject = require('./hashObject');
 const graphqlFetchOptions = require('./private/graphqlFetchOptions');
-const hashObject = require('./private/hashObject');
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.
@@ -232,6 +232,7 @@ module.exports = class GraphQL {
    * @param {object} options Options.
    * @param {GraphQLOperation} options.operation GraphQL operation.
    * @param {GraphQLFetchOptionsOverride} [options.fetchOptionsOverride] Overrides default GraphQL operation [`fetch` options]{@link GraphQLFetchOptions}.
+   * @param {GraphQLCacheKeyCreator} [options.cacheKeyCreator=hashObject] [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} creator for the operation.
    * @param {boolean} [options.reloadOnLoad=false] Should a [GraphQL reload]{@link GraphQL#reload} happen after the operation loads, excluding the loaded operation cache.
    * @param {boolean} [options.resetOnLoad=false] Should a [GraphQL reset]{@link GraphQL#reset} happen after the operation loads, excluding the loaded operation cache.
    * @returns {GraphQLOperationLoading} Loading GraphQL operation details.
@@ -241,9 +242,15 @@ module.exports = class GraphQL {
   operate = ({
     operation,
     fetchOptionsOverride,
+    cacheKeyCreator = hashObject,
     reloadOnLoad,
     resetOnLoad,
   }) => {
+    if (typeof cacheKeyCreator !== 'function')
+      throw new TypeError(
+        'operate() option “cacheKeyCreator” must be a function.'
+      );
+
     if (reloadOnLoad && resetOnLoad)
       throw new TypeError(
         'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
@@ -251,7 +258,7 @@ module.exports = class GraphQL {
 
     const fetchOptions = graphqlFetchOptions(operation);
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
-    const cacheKey = hashObject(fetchOptions);
+    const cacheKey = cacheKeyCreator(fetchOptions);
     const cacheValuePromise =
       // Use an identical existing request or…
       this.operations[cacheKey] ||

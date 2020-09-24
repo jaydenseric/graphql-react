@@ -10,6 +10,7 @@ const revertableGlobals = require('revertable-globals');
 const GraphQL = require('../../universal/GraphQL');
 const GraphQLContext = require('../../universal/GraphQLContext');
 const GraphQLProvider = require('../../universal/GraphQLProvider');
+const hashObject = require('../../universal/hashObject');
 const useGraphQL = require('../../universal/useGraphQL');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
@@ -18,6 +19,8 @@ const sleep = require('../sleep');
 
 const RenderUseGraphQL = (operationOptions) =>
   JSON.stringify(useGraphQL(operationOptions));
+
+const cacheKeyCreator = (fetchOptions) => `prefix-${hashObject(fetchOptions)}`;
 
 module.exports = (tests) => {
   tests.add(
@@ -37,6 +40,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey: operation1CacheKey } = graphql.operate(
             operation1Options
@@ -45,6 +49,7 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey: operation2CacheKey } = graphql.operate(
             operation2Options
@@ -123,6 +128,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation1CacheKey,
@@ -132,6 +138,7 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation2CacheKey,
@@ -215,6 +222,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation1CacheKey,
@@ -224,6 +232,7 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation2CacheKey,
@@ -307,6 +316,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation1CacheKey,
@@ -316,6 +326,7 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation2CacheKey,
@@ -439,6 +450,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation1CacheKey,
@@ -448,11 +460,157 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation2CacheKey,
             cacheValuePromise: operation2CacheValuePromise,
           } = graphql.operate(operation2Options);
+
+          const [
+            operation1CacheValue,
+            operation2CacheValue,
+          ] = await Promise.all([
+            operation1CacheValuePromise,
+            operation2CacheValuePromise,
+          ]);
+
+          // Ensure only the first operation is cached.
+          delete graphql.cache[operation2CacheKey];
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const testRenderer = ReactTestRenderer.create(null);
+
+          // First render.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation1Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, undefined);
+
+          const renderResult1 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult1.loading, false);
+          strictEqual(renderResult1.cacheKey, operation1CacheKey);
+          deepStrictEqual(renderResult1.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Second render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation1Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult2 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult2.loading, false);
+          strictEqual(renderResult2.cacheKey, operation1CacheKey);
+          deepStrictEqual(renderResult2.cacheValue, operation1CacheValue);
+          deepStrictEqual(renderResult2.loadedCacheValue, operation1CacheValue);
+
+          // Third render with different props.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation2Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          strictEqual(cacheKeyFetched, operation2CacheKey);
+
+          const renderResult3 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult3.loading, true);
+          strictEqual(renderResult3.cacheKey, operation2CacheKey);
+          strictEqual(renderResult3.cacheValue, undefined);
+          deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
+
+          // Wait for loading to finish.
+          await Promise.all(Object.values(graphql.operations));
+
+          // Fourth render after loading finished.
+          ReactTestRenderer.act(() => {
+            testRenderer.update(
+              <GraphQLProvider graphql={graphql}>
+                <RenderUseGraphQL {...operation2Options} loadOnMount />
+              </GraphQLProvider>
+            );
+          });
+
+          const renderResult4 = JSON.parse(testRenderer.toJSON());
+
+          strictEqual(renderResult4.loading, false);
+          strictEqual(renderResult4.cacheKey, operation2CacheKey);
+          deepStrictEqual(renderResult4.cacheValue, operation2CacheValue);
+          deepStrictEqual(renderResult4.loadedCacheValue, operation2CacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnMount` true with initial cache for first operation, option `cacheKeyCreator` default',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operation1Options = {
+            operation: { query: '{ a: echo }' },
+            fetchOptionsOverride,
+          };
+          const {
+            cacheKey: operation1CacheKey,
+            cacheValuePromise: operation1CacheValuePromise,
+          } = graphql.operate({
+            ...operation1Options,
+
+            // Match what the default should be, so that the `cacheKey` derived
+            // by `useGraphQL` can be asserted to match.
+            cacheKeyCreator: hashObject,
+          });
+
+          const operation2Options = {
+            operation: { query: '{ b: echo }' },
+            fetchOptionsOverride,
+          };
+          const {
+            cacheKey: operation2CacheKey,
+            cacheValuePromise: operation2CacheValuePromise,
+          } = graphql.operate({
+            ...operation2Options,
+
+            // Match what the default should be, so that the `cacheKey` derived
+            // by `useGraphQL` can be asserted to match.
+            cacheKeyCreator: hashObject,
+          });
 
           const [
             operation1CacheValue,
@@ -572,6 +730,7 @@ module.exports = (tests) => {
           const operation1Options = {
             operation: { query: '{ a: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation1CacheKey,
@@ -581,6 +740,7 @@ module.exports = (tests) => {
           const operation2Options = {
             operation: { query: '{ b: echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const {
             cacheKey: operation2CacheKey,
@@ -664,6 +824,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -749,6 +910,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -825,6 +987,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -913,6 +1076,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ requestCount }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -989,6 +1153,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1077,6 +1242,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ requestCount }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1174,6 +1340,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1262,6 +1429,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ requestCount }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1338,6 +1506,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1444,6 +1613,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ requestCount }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1600,6 +1770,16 @@ module.exports = (tests) => {
     }
   });
 
+  tests.add('`useGraphQL` option `cacheKeyCreator` not a function', () => {
+    throws(() => {
+      ReactDOMServer.renderToString(
+        <GraphQLProvider graphql={new GraphQL()}>
+          <RenderUseGraphQL operation={{ query: '' }} cacheKeyCreator />
+        </GraphQLProvider>
+      );
+    }, new TypeError('useGraphQL() option “cacheKeyCreator” must be a function.'));
+  });
+
   tests.add(
     '`useGraphQL` options `reloadOnLoad` and `resetOnLoad` true',
     () => {
@@ -1652,6 +1832,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1752,6 +1933,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1852,6 +2034,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
@@ -1956,6 +2139,7 @@ module.exports = (tests) => {
           const operationOptions = {
             operation: { query: '{ echo }' },
             fetchOptionsOverride,
+            cacheKeyCreator,
           };
           const { cacheKey, cacheValuePromise } = graphql.operate(
             operationOptions
