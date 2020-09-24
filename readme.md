@@ -721,7 +721,7 @@ A [GraphQL cache](#graphql-instance-property-cache) map of [GraphQL operation](#
 
 ### type GraphQLCacheKey
 
-A [GraphQL cache](#type-graphqlcache) key, derived from a hash of the [`fetch` options](#type-graphqlfetchoptions) of the [GraphQL operation](#type-graphqloperation) that populated the [value](#type-graphqlcachevalue).
+A [GraphQL cache](#type-graphqlcache) key to identify a [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). Typically created by a [GraphQL cache](#type-graphqlcache) key [creator](#type-graphqlcachekeycreator) that hashes the [`fetch` options](#type-graphqlfetchoptions) of the associated [GraphQL operation](#type-graphqloperation) using [`hashObject`](#function-hashobject).
 
 **Type:** string
 

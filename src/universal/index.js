@@ -18,10 +18,13 @@ exports.useGraphQL = require('./useGraphQL');
  */
 
 /**
- * A [GraphQL cache]{@link GraphQLCache} key, derived from a hash of the
- * [`fetch` options]{@link GraphQLFetchOptions} of the
- * [GraphQL operation]{@link GraphQLOperation} that populated the
- * [value]{@link GraphQLCacheValue}.
+ * A [GraphQL cache]{@link GraphQLCache} key to identify a
+ * [GraphQL cache]{@link GraphQLCache} [value]{@link GraphQLCacheValue}.
+ * Typically created by a [GraphQL cache]{@link GraphQLCache} key
+ * [creator]{@link GraphQLCacheKeyCreator} that hashes the
+ * [`fetch` options]{@link GraphQLFetchOptions} of the associated
+ * [GraphQL operation]{@link GraphQLOperation} using
+ * [`hashObject`]{@link hashObject}.
  * @kind typedef
  * @name GraphQLCacheKey
  * @type {string}
