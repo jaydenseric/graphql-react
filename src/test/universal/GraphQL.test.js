@@ -369,7 +369,7 @@ module.exports = (tests) => {
   );
 
   tests.add(
-    '`GraphQL` with concurrent identical operations, first responds first',
+    '`GraphQL` method `operate` with concurrent identical operations, first responds first',
     async () => {
       const revertGlobals = revertableGlobals({ fetch, Response });
 
@@ -496,7 +496,7 @@ module.exports = (tests) => {
   );
 
   tests.add(
-    '`GraphQL` with concurrent identical operations, second responds first',
+    '`GraphQL` method `operate` with concurrent identical operations, second responds first',
     async () => {
       let fetchCount = 0;
       let resolveFirstOperationDelay;
