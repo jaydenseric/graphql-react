@@ -64,15 +64,14 @@ module.exports = async function testGraphQLOperation({
 
   const fetchEventData = await fetchEvent;
 
-  strictEqual(typeof fetchEventData, 'object');
-  strictEqual(fetchEventData.cacheKey, cacheKey);
-  strictEqual(fetchEventData.cacheValuePromise, cacheValuePromise);
+  deepStrictEqual(fetchEventData, { cacheKey, cacheValuePromise });
 
   const cacheEventData = await cacheEvent;
 
   strictEqual(typeof cacheEventData, 'object');
   strictEqual(cacheEventData.cacheKey, cacheKey);
-  deepStrictEqual(cacheEventData.cacheValue, expectedResolvedCacheValue);
+  deepStrictEqual(cacheEventData.cacheValue, graphql.cache[cacheKey]);
+  deepStrictEqual(graphql.cache[cacheKey], expectedResolvedCacheValue);
 
   const cacheValueResolved = await cacheValuePromise;
 
