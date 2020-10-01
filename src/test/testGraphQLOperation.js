@@ -56,17 +56,11 @@ module.exports = async function testGraphQLOperation({
   strictEqual(typeof cacheKey, 'string');
   deepStrictEqual(
     cacheValue,
-    initialGraphQLCache ? initialGraphQLCache[cacheKey] : undefined,
-    'Initial cache value'
+    initialGraphQLCache ? initialGraphQLCache[cacheKey] : undefined
   );
-  strictEqual(cacheKey in graphql.operations, true);
   strictEqual(cacheValuePromise instanceof Promise, true);
-  strictEqual(cacheValuePromise, graphql.operations[cacheKey]);
-
-  const cacheValueResolved = await graphql.operations[cacheKey];
-
-  strictEqual(cacheKey in graphql.operations, false);
-  deepStrictEqual(cacheValueResolved, expectedResolvedCacheValue);
+  strictEqual(cacheKey in graphql.operations, true);
+  strictEqual(graphql.operations[cacheKey], cacheValuePromise);
 
   const fetchEventData = await fetchEvent;
 
@@ -79,6 +73,11 @@ module.exports = async function testGraphQLOperation({
   strictEqual(typeof cacheEventData, 'object');
   strictEqual(cacheEventData.cacheKey, cacheKey);
   deepStrictEqual(cacheEventData.cacheValue, expectedResolvedCacheValue);
+
+  const cacheValueResolved = await cacheValuePromise;
+
+  strictEqual(cacheKey in graphql.operations, false);
+  deepStrictEqual(cacheValueResolved, expectedResolvedCacheValue);
 
   responseExpected
     ? strictEqual(cacheEventData.response instanceof Response, true)
