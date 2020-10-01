@@ -100,7 +100,7 @@ module.exports = async function ssr(
    */
   async function recurse() {
     const string = render(node);
-    const operations = Object.values(graphql.operations);
+    const operations = Object.values(graphql.operations).flat();
 
     if (operations.length) {
       await Promise.all(operations);

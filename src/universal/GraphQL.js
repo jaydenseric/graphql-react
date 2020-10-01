@@ -96,11 +96,18 @@ module.exports = class GraphQL {
     this.cache = cache;
 
     /**
-     * A map of loading GraphQL operations. You probably don’t need to interact
-     * with this unless you’re implementing a server side rendering framework.
+     * A map of loading [GraphQL operations]{@link GraphQLOperation}. The
+     * operations are listed under their [GraphQL cache]{@link GraphQL#cache}
+     * [key]{@link GraphQLCacheKey} in the order they were initiated. You
+     * probably don’t need to interact with this unless you’re implementing a
+     * server side rendering framework.
      * @kind member
      * @name GraphQL#operations
-     * @type {object.<GraphQLCacheKey, Promise<GraphQLCacheValue>>}
+     * @type {object.<GraphQLCacheKey, Array<Promise<GraphQLCacheValue>>>}
+     * @example <caption>How to await all loading [GraphQL operations]{@link GraphQL#operations} .</caption>
+     * ```js
+     * await Promise.all(Object.values(graphql.operations).flat());
+     * ```
      */
     this.operations = {};
   }
@@ -197,12 +204,46 @@ module.exports = class GraphQL {
         }
       )
       .then(() => {
-        // Cache the operation.
+        // If there’s earlier GraphQL operation(s) loading for the same cache
+        // key, wait for them to complete so the cache is updated and the
+        // `cache` events are emitted in the order the operations were
+        // initiated. This prevents a slow earlier operation from overwriting
+        // the cache from a faster later operation.
+        if (this.operations[cacheKey].length > 1) {
+          const operationIndex = this.operations[cacheKey].indexOf(
+            cacheValuePromise
+          );
+
+          if (operationIndex)
+            // There are earlier GraphQL operations.
+            return Promise.all(
+              // The earlier GraphQL operations.
+              this.operations[cacheKey].slice(0, operationIndex)
+            );
+        }
+      })
+      .then(() => {
+        // The cache value promise should resolve after the cache has been
+        // updated, it’s cleared from the map of loading GraphQL operations,
+        // and the `cache` event has been emitted (in that order).
+
+        // Update the cache.
         this.cache[cacheKey] = cacheValue;
 
-        // Clear the loaded operation.
-        delete this.operations[cacheKey];
+        // Clear this operation from the map of loading GraphQL operations.
+        this.operations[cacheKey].splice(
+          // The `>>> 0` is a clever way to defend against `indexOf` returning
+          // `-1` if the cache value promise is not in the array for some
+          // unexpected reason. It leaves non-negative integers alone, but
+          // converts `-1` into the largest possible unsigned 32-bit integer,
+          // which happens to be the ECMAScript spec max length of an array;
+          // resulting in a harmless splice.
+          this.operations[cacheKey].indexOf(cacheValuePromise) >>> 0,
+          1
+        );
+        if (!this.operations[cacheKey].length) delete this.operations[cacheKey];
 
+        // Emit the `cache` event.
         this.emit('cache', {
           cacheKey,
           cacheValue,
@@ -214,15 +255,18 @@ module.exports = class GraphQL {
         return cacheValue;
       });
 
-    this.operations[cacheKey] = cacheValuePromise;
+    if (!this.operations[cacheKey]) this.operations[cacheKey] = [];
+    this.operations[cacheKey].push(cacheValuePromise);
 
+    // Emit the `fetch` event after the cache value promise has been added to
+    // the map of loading GraphQL operations.
     this.emit('fetch', { cacheKey, cacheValuePromise });
 
     return cacheValuePromise;
   };
 
   /**
-   * Loads or reuses an already loading GraphQL operation in
+   * Loads a GraphQL operation, visible in
    * [GraphQL operations]{@link GraphQL#operations}. Emits a
    * [`GraphQL`]{@link GraphQL} instance `fetch` event if an already loading
    * operation isn’t reused, and a `cache` event once it’s loaded into the
@@ -259,13 +303,9 @@ module.exports = class GraphQL {
     const fetchOptions = graphqlFetchOptions(operation);
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
     const cacheKey = cacheKeyCreator(fetchOptions);
-    const cacheValuePromise =
-      // Use an identical existing request or…
-      this.operations[cacheKey] ||
-      // …make a fresh request.
-      this.fetch(fetchOptions, cacheKey);
+    const cacheValuePromise = this.fetch(fetchOptions, cacheKey);
 
-    // Potential edge-case issue: Multiple identical queries with resetOnLoad
+    // Potential edge-case issue: Multiple identical queries with `resetOnLoad`
     // enabled will cause excessive resets.
     cacheValuePromise.then(() => {
       if (reloadOnLoad) this.reload(cacheKey);

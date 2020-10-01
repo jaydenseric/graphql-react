@@ -241,7 +241,7 @@ Adds an event listener.
 
 #### GraphQL instance method operate
 
-Loads or reuses an already loading GraphQL operation in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) instance `fetch` event if an already loading operation isn’t reused, and a `cache` event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
+Loads a GraphQL operation, visible in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) instance `fetch` event if an already loading operation isn’t reused, and a `cache` event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
@@ -329,9 +329,17 @@ _Example cache JSON._
 
 #### GraphQL instance property operations
 
-A map of loading GraphQL operations. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
+A map of loading [GraphQL operations](#type-graphqloperation). The operations are listed under their [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) in the order they were initiated. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
 
-**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>
+**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Array&lt;Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>>
+
+##### Examples
+
+_How to await all loading [GraphQL operations](#graphql-instance-property-operations) ._
+
+> ```js
+> await Promise.all(Object.values(graphql.operations).flat());
+> ```
 
 #### GraphQL event cache
 
@@ -974,7 +982,7 @@ This complexity impacts bundle size and runtime performance. [`babel-plugin-grap
 
 The [`GraphQL`](#class-graphql) client has no GraphQL API specific config; [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options are determined on demand at the component level. Multiple GraphQL APIs can be queried!
 
-GraphQL operations are cached under hashes of their [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options. Multiple operations with the same hash share the same loading status and cache value.
+GraphQL operations are cached under hashes of their [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
 
 [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors can be cached, and therefore server side rendered and transported to the client for hydration and initial render.
 

@@ -2,12 +2,23 @@
 
 ## Next
 
+### Major
+
+- Concurrent GraphQL operations with the same cache key no longer share the first request.
+- The `GraphQL` instance property `operations` type has changed:
+
+  ```diff
+  - object<GraphQLCacheKey, Promise<GraphQLCacheValue>>
+  + object<GraphQLCacheKey, Array<Promise<GraphQLCacheValue>>>
+  ```
+
 ### Patch
 
 - Updated dev dependencies.
 - Improved the timeout error stack trace of the test utility `promisifyEvent` function.
 - Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
 - Test better the order of `GraphQL.operate()` triggered events.
+- Added a code example for how to await all loading GraphQL operations.
 
 ## 11.2.0
 

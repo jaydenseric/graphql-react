@@ -55,7 +55,7 @@ module.exports = (tests) => {
             operation2Options
           );
 
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           graphql.reset();
 
@@ -370,7 +370,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -407,7 +407,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -505,7 +505,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -542,7 +542,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -650,7 +650,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -687,7 +687,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -867,7 +867,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult2.loadedCacheValue, cacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Third render after loading finished.
           ReactTestRenderer.act(() => {
@@ -944,7 +944,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -1295,7 +1295,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult2.loadedCacheValue, cacheValue1);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           const cacheValue2 = graphql.cache[cacheKey];
 
@@ -1561,7 +1561,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           // Third render after loading finished.
           ReactTestRenderer.act(() => {
@@ -1666,7 +1666,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(Object.values(graphql.operations));
+          await Promise.all(Object.values(graphql.operations).flat());
 
           const cacheValue2 = graphql.cache[cacheKey];
 
@@ -2098,7 +2098,7 @@ module.exports = (tests) => {
             // Trigger the GraphQL `reload` event.
             graphql.reload();
 
-            await Promise.all(Object.values(graphql.operations));
+            await Promise.all(Object.values(graphql.operations).flat());
 
             // Second render.
             ReactTestRenderer.act(() => {
@@ -2201,7 +2201,7 @@ module.exports = (tests) => {
             // Trigger the GraphQL `reset` event.
             graphql.reset();
 
-            await Promise.all(Object.values(graphql.operations));
+            await Promise.all(Object.values(graphql.operations).flat());
 
             // Second render.
             ReactTestRenderer.act(() => {
