@@ -306,6 +306,33 @@ module.exports = (tests) => {
   );
 
   tests.add(
+    '`GraphQL` method `operate` with `reloadOnLoad` option',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch, Response });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          await testGraphQLOperation({
+            port,
+            reloadOnLoad: true,
+            expectedResolvedCacheValue: {
+              data: {
+                echo: 'hello',
+              },
+            },
+          });
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
     '`GraphQL` method `operate` with option `cacheKeyCreator` not a function',
     () => {
       const graphql = new GraphQL();

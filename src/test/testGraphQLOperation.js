@@ -10,6 +10,7 @@ const promisifyEvent = require('./promisifyEvent');
  * @param {number} options.port GraphQL server port.
  * @param {GraphQLOperation} [options.operation] [GraphQL operation]{@link GraphQLOperation}.
  * @param {boolean} [options.resetOnLoad] Should the [GraphQL cache]{@link GraphQL#cache} reset once the query loads.
+ * @param {boolean} [options.reloadOnLoad] Should the [GraphQL cache]{@link GraphQL#cache} reload once the query loads.
  * @param {GraphQLCacheKeyCreator} [options.cacheKeyCreator] [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey} creator for the operation.
  * @param {GraphQLCache} [options.initialGraphQLCache] Initial [GraphQL cache]{@link GraphQL#cache}.
  * @param {GraphQL} [options.graphql] [`GraphQL`]{@link GraphQL} instance.
@@ -23,6 +24,7 @@ module.exports = async function testGraphQLOperation({
   port,
   operation = { query: '{ echo }' },
   resetOnLoad,
+  reloadOnLoad,
   cacheKeyCreator,
   initialGraphQLCache,
   graphql = new GraphQL({
@@ -39,6 +41,7 @@ module.exports = async function testGraphQLOperation({
   const cacheEvent = promisifyEvent(graphql, 'cache');
 
   if (resetOnLoad) var resetEvent = promisifyEvent(graphql, 'reset');
+  if (reloadOnLoad) var reloadEvent = promisifyEvent(graphql, 'reload');
 
   const { cacheKey, cacheValue, cacheValuePromise } = graphql.operate({
     fetchOptionsOverride(options) {
@@ -46,6 +49,7 @@ module.exports = async function testGraphQLOperation({
     },
     cacheKeyCreator,
     resetOnLoad,
+    reloadOnLoad,
     operation,
   });
 
@@ -83,6 +87,11 @@ module.exports = async function testGraphQLOperation({
   if (resetEvent) {
     const resetEventData = await resetEvent;
     strictEqual(resetEventData.exceptCacheKey, cacheKey);
+  }
+
+  if (reloadEvent) {
+    const reloadEventData = await reloadEvent;
+    strictEqual(reloadEventData.exceptCacheKey, cacheKey);
   }
 
   deepStrictEqual(graphql.cache, {

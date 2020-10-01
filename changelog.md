@@ -6,6 +6,7 @@
 
 - Updated dev dependencies.
 - Improved the timeout error stack trace of the test utility `promisifyEvent` function.
+- Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
 
 ## 11.2.0
 
