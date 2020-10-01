@@ -2,6 +2,7 @@
 
 const ReactDOMServer = require('react-dom/server.node');
 const GraphQL = require('../universal/GraphQL');
+const arrayFlat = require('../universal/private/arrayFlat');
 
 /**
  * Asynchronously server side renders a [React node]{@link ReactNode},
@@ -100,10 +101,10 @@ module.exports = async function ssr(
    */
   async function recurse() {
     const string = render(node);
-    const operations = Object.values(graphql.operations).flat();
+    const cacheValuePromises = arrayFlat(Object.values(graphql.operations));
 
-    if (operations.length) {
-      await Promise.all(operations);
+    if (cacheValuePromises.length) {
+      await Promise.all(cacheValuePromises);
       return recurse();
     } else {
       delete graphql.ssr;
