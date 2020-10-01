@@ -17,7 +17,7 @@ const promisifyEvent = require('./promisifyEvent');
  * @param {GraphQLCacheValue} options.expectedResolvedCacheValue Expected [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
  * @param {boolean} [options.responseExpected=true] Is a response expected from the fetch.
  * @param {Function} [options.callback] Callback that accepts result metadata.
- * @returns {Promise} Resolves once the test is complete.
+ * @returns {Promise<void>} Resolves once the test is complete.
  * @ignore
  */
 module.exports = async function testGraphQLOperation({

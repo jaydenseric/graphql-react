@@ -19,6 +19,7 @@
 - Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
 - Test better the order of `GraphQL.operate()` triggered events.
 - Added a code example for how to await all loading GraphQL operations.
+- Used consistent JSDoc types for promises that resolve `void`.
 
 ## 11.2.0
 
