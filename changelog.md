@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Improved the timeout error stack trace of the test utility `promisifyEvent` function.
 
 ## 11.2.0
 
