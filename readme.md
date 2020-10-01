@@ -329,7 +329,7 @@ _Example cache JSON._
 
 #### GraphQL instance property operations
 
-A map of loading [GraphQL operations](#type-graphqloperation). The operations are listed under their [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) in the order they were initiated. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
+A map of loading [GraphQL operations](#type-graphqloperation), listed under their [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) in the order they were initiated. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
 
 **Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Array&lt;Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>>
 

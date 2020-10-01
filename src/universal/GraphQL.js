@@ -96,8 +96,8 @@ module.exports = class GraphQL {
     this.cache = cache;
 
     /**
-     * A map of loading [GraphQL operations]{@link GraphQLOperation}. The
-     * operations are listed under their [GraphQL cache]{@link GraphQL#cache}
+     * A map of loading [GraphQL operations]{@link GraphQLOperation}, listed
+     * under their [GraphQL cache]{@link GraphQL#cache}
      * [key]{@link GraphQLCacheKey} in the order they were initiated. You
      * probably don’t need to interact with this unless you’re implementing a
      * server side rendering framework.
