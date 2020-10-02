@@ -15,6 +15,7 @@ const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
 const promisifyEvent = require('../promisifyEvent');
 const testGraphQLOperation = require('../testGraphQLOperation');
+const timeLimitPromise = require('../timeLimitPromise');
 
 module.exports = (tests) => {
   tests.add('`GraphQL` option `cache`', () => {
@@ -371,148 +372,22 @@ module.exports = (tests) => {
   tests.add(
     '`GraphQL` method `operate` with concurrent identical operations, first responds first',
     async () => {
-      const revertGlobals = revertableGlobals({ fetch, Response });
-
-      try {
-        let requestCount = 0;
-
-        const { port, close } = await listen(
-          createGraphQLKoaApp({
-            requestCount: {
-              type: GraphQLInt,
-              resolve: () => ++requestCount,
-            },
-          })
-        );
-
-        try {
-          const graphql = new GraphQL();
-          const queryOptions = {
-            fetchOptionsOverride(options) {
-              options.url = `http://localhost:${port}`;
-            },
-            operation: {
-              query: '{ requestCount }',
-            },
-          };
-
-          const expectedResolvedCacheValue1 = {
-            data: {
-              requestCount: 1,
-            },
-          };
-          const expectedResolvedCacheValue2 = {
-            data: {
-              requestCount: 2,
-            },
-          };
-
-          const fetchEvent1 = promisifyEvent(graphql, 'fetch');
-          const cacheEvent1 = promisifyEvent(graphql, 'cache');
-
-          const {
-            cacheKey: cacheKey1,
-            cacheValue: cacheValue1,
-            cacheValuePromise: cacheValuePromise1,
-          } = graphql.operate(queryOptions);
-
-          strictEqual(cacheValue1, undefined);
-          strictEqual(cacheValuePromise1 instanceof Promise, true);
-          strictEqual(cacheKey1 in graphql.operations, true);
-          deepStrictEqual(graphql.operations[cacheKey1], [cacheValuePromise1]);
-
-          const fetchEvent1Data = await fetchEvent1;
-          const fetchEvent2 = promisifyEvent(graphql, 'fetch');
-
-          deepStrictEqual(fetchEvent1Data, {
-            cacheKey: cacheKey1,
-            cacheValuePromise: cacheValuePromise1,
-          });
-
-          const {
-            cacheKey: cacheKey2,
-            cacheValue: cacheValue2,
-            cacheValuePromise: cacheValuePromise2,
-          } = graphql.operate(queryOptions);
-
-          strictEqual(cacheKey2, cacheKey1);
-          strictEqual(cacheValue2, undefined);
-          strictEqual(cacheValuePromise2 instanceof Promise, true);
-          notStrictEqual(cacheValuePromise2, cacheValuePromise1);
-          strictEqual(cacheKey2 in graphql.operations, true);
-          deepStrictEqual(graphql.operations[cacheKey2], [
-            cacheValuePromise1,
-            cacheValuePromise2,
-          ]);
-
-          const fetchEvent2Data = await fetchEvent2;
-
-          deepStrictEqual(fetchEvent2Data, {
-            cacheKey: cacheKey2,
-            cacheValuePromise: cacheValuePromise2,
-          });
-
-          const cacheEvent1Data = await cacheEvent1;
-          const cacheEvent2 = promisifyEvent(graphql, 'cache');
-
-          strictEqual(typeof cacheEvent1Data, 'object');
-          strictEqual(cacheEvent1Data.cacheKey, cacheKey1);
-          deepStrictEqual(cacheEvent1Data.cacheValue, graphql.cache[cacheKey1]);
-          deepStrictEqual(
-            graphql.cache[cacheKey1],
-            expectedResolvedCacheValue1
-          );
-          strictEqual(cacheEvent1Data.response instanceof Response, true);
-
-          const cacheValueResolved1 = await cacheValuePromise1;
-
-          deepStrictEqual(graphql.operations, {
-            [cacheKey2]: [cacheValuePromise2],
-          });
-          deepStrictEqual(cacheValueResolved1, expectedResolvedCacheValue1);
-
-          const cacheEvent2Data = await cacheEvent2;
-
-          strictEqual(typeof cacheEvent2Data, 'object');
-          strictEqual(cacheEvent2Data.cacheKey, cacheKey2);
-          deepStrictEqual(cacheEvent2Data.cacheValue, graphql.cache[cacheKey2]);
-          deepStrictEqual(
-            graphql.cache[cacheKey2],
-            expectedResolvedCacheValue2
-          );
-          strictEqual(cacheEvent2Data.response instanceof Response, true);
-
-          const cacheValueResolved2 = await cacheValuePromise2;
-
-          deepStrictEqual(graphql.operations, {});
-          deepStrictEqual(cacheValueResolved2, expectedResolvedCacheValue2);
-        } finally {
-          close();
-        }
-      } finally {
-        revertGlobals();
-      }
-    }
-  );
-
-  tests.add(
-    '`GraphQL` method `operate` with concurrent identical operations, second responds first',
-    async () => {
       let fetchCount = 0;
-      let resolveFirstOperationDelay;
+      let firstOperationRespondedPromiseResolve;
 
-      // Ideally this promise would have a timeout.
-      const firstOperationDelay = new Promise((resolve) => {
-        resolveFirstOperationDelay = resolve;
-      });
+      const firstOperationRespondedPromise = timeLimitPromise(
+        new Promise((resolve) => {
+          firstOperationRespondedPromiseResolve = resolve;
+        })
+      );
 
       const revertGlobals = revertableGlobals({
         fetch(...args) {
           const result = fetch(...args);
 
-          if (++fetchCount === 2)
+          if (++fetchCount === 1)
             result.finally(() => {
-              resolveFirstOperationDelay();
+              firstOperationRespondedPromiseResolve();
             });
 
           return result;
@@ -530,7 +405,8 @@ module.exports = (tests) => {
               async resolve() {
                 const thisRequestCount = ++requestCount;
 
-                if (thisRequestCount === 1) await firstOperationDelay;
+                if (thisRequestCount === 2)
+                  await firstOperationRespondedPromise;
 
                 return thisRequestCount;
               },
@@ -539,15 +415,21 @@ module.exports = (tests) => {
         );
 
         try {
-          const graphql = new GraphQL();
-          const queryOptions = {
-            fetchOptionsOverride(options) {
-              options.url = `http://localhost:${port}`;
-            },
-            operation: {
-              query: '{ requestCount }',
-            },
-          };
+          let cacheKey;
+          let cacheValuePromise1;
+          let cacheValuePromise2;
+
+          let fetchEventCount = 0;
+          let fetchEvent1PromiseResolve;
+          let fetchEvent1PromiseReject;
+          let fetchEvent2PromiseResolve;
+          let fetchEvent2PromiseReject;
+
+          let cacheEventCount = 0;
+          let cacheEvent1PromiseResolve;
+          let cacheEvent1PromiseReject;
+          let cacheEvent2PromiseResolve;
+          let cacheEvent2PromiseReject;
 
           const expectedResolvedCacheValue1 = {
             data: {
@@ -560,85 +442,452 @@ module.exports = (tests) => {
             },
           };
 
-          const fetchEvent1 = promisifyEvent(graphql, 'fetch');
-          const cacheEvent1 = promisifyEvent(graphql, 'cache');
+          const graphql = new GraphQL();
+          const queryOptions = {
+            fetchOptionsOverride(options) {
+              options.url = `http://localhost:${port}`;
+            },
+            operation: {
+              query: '{ requestCount }',
+            },
+          };
 
-          const {
-            cacheKey: cacheKey1,
-            cacheValue: cacheValue1,
-            cacheValuePromise: cacheValuePromise1,
-          } = graphql.operate(queryOptions);
+          const fetchEvent1Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              fetchEvent1PromiseResolve = resolve;
+              fetchEvent1PromiseReject = reject;
+            })
+          );
 
-          strictEqual(cacheValue1, undefined);
-          strictEqual(cacheValuePromise1 instanceof Promise, true);
-          strictEqual(cacheKey1 in graphql.operations, true);
-          deepStrictEqual(graphql.operations[cacheKey1], [cacheValuePromise1]);
+          const fetchEvent2Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              fetchEvent2PromiseResolve = resolve;
+              fetchEvent2PromiseReject = reject;
+            })
+          );
 
-          const fetchEvent1Data = await fetchEvent1;
-          const fetchEvent2 = promisifyEvent(graphql, 'fetch');
+          graphql.on('fetch', (eventData) => {
+            switch (++fetchEventCount) {
+              case 1:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  deepStrictEqual(Object.keys(eventData), [
+                    'cacheKey',
+                    'cacheValuePromise',
+                  ]);
+                  strictEqual(typeof eventData.cacheKey, 'string');
+                  strictEqual(
+                    eventData.cacheValuePromise instanceof Promise,
+                    true
+                  );
 
-          deepStrictEqual(fetchEvent1Data, {
-            cacheKey: cacheKey1,
-            cacheValuePromise: cacheValuePromise1,
+                  ({ cacheKey } = eventData);
+                  cacheValuePromise1 = eventData.cacheValuePromise;
+
+                  fetchEvent1PromiseResolve();
+                } catch (error) {
+                  fetchEvent1PromiseReject(error);
+                }
+
+                break;
+              case 2:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  deepStrictEqual(Object.keys(eventData), [
+                    'cacheKey',
+                    'cacheValuePromise',
+                  ]);
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValuePromise instanceof Promise,
+                    true
+                  );
+
+                  cacheValuePromise2 = eventData.cacheValuePromise;
+
+                  fetchEvent2PromiseResolve();
+                } catch (error) {
+                  fetchEvent2PromiseReject(error);
+                }
+            }
           });
 
-          const {
-            cacheKey: cacheKey2,
-            cacheValue: cacheValue2,
-            cacheValuePromise: cacheValuePromise2,
-          } = graphql.operate(queryOptions);
+          const cacheEvent1Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              cacheEvent1PromiseResolve = resolve;
+              cacheEvent1PromiseReject = reject;
+            })
+          );
 
-          strictEqual(cacheKey2, cacheKey1);
-          strictEqual(cacheValue2, undefined);
-          strictEqual(cacheValuePromise2 instanceof Promise, true);
+          const cacheEvent2Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              cacheEvent2PromiseResolve = resolve;
+              cacheEvent2PromiseReject = reject;
+            })
+          );
+
+          graphql.on('cache', (eventData) => {
+            switch (++cacheEventCount) {
+              case 1:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValue === graphql.cache[cacheKey],
+                    true
+                  );
+                  deepStrictEqual(
+                    eventData.cacheValue,
+                    expectedResolvedCacheValue1
+                  );
+                  deepStrictEqual(
+                    graphql.cache[cacheKey],
+                    expectedResolvedCacheValue1
+                  );
+                  strictEqual(eventData.response instanceof Response, true);
+                  deepStrictEqual(graphql.operations, {
+                    [cacheKey]: [cacheValuePromise2],
+                  });
+
+                  cacheEvent1PromiseResolve();
+                } catch (error) {
+                  cacheEvent1PromiseReject(error);
+                }
+                break;
+              case 2:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValue === graphql.cache[cacheKey],
+                    true
+                  );
+                  deepStrictEqual(
+                    eventData.cacheValue,
+                    expectedResolvedCacheValue2
+                  );
+                  deepStrictEqual(
+                    graphql.cache[cacheKey],
+                    expectedResolvedCacheValue2
+                  );
+                  strictEqual(eventData.response instanceof Response, true);
+                  deepStrictEqual(graphql.operations, {});
+
+                  cacheEvent2PromiseResolve();
+                } catch (error) {
+                  cacheEvent2PromiseReject(error);
+                }
+            }
+          });
+
+          const operateReturn1 = graphql.operate(queryOptions);
+
+          strictEqual(typeof operateReturn1.cacheKey, 'string');
+          strictEqual(operateReturn1.cacheKey, cacheKey);
+          strictEqual(operateReturn1.cacheValue, undefined);
+          strictEqual(
+            operateReturn1.cacheValuePromise instanceof Promise,
+            true
+          );
+          strictEqual(operateReturn1.cacheValuePromise, cacheValuePromise1);
+          deepStrictEqual(graphql.operations[cacheKey], [cacheValuePromise1]);
+
+          await fetchEvent1Promise;
+
+          const operateReturn2 = graphql.operate(queryOptions);
+
+          strictEqual(typeof operateReturn2.cacheKey, 'string');
+          strictEqual(operateReturn2.cacheKey, cacheKey);
+          strictEqual(operateReturn2.cacheValue, undefined);
+          strictEqual(
+            operateReturn2.cacheValuePromise instanceof Promise,
+            true
+          );
+          strictEqual(operateReturn2.cacheValuePromise, cacheValuePromise2);
           notStrictEqual(cacheValuePromise2, cacheValuePromise1);
-          strictEqual(cacheKey2 in graphql.operations, true);
-          deepStrictEqual(graphql.operations[cacheKey2], [
+          deepStrictEqual(graphql.operations[cacheKey], [
             cacheValuePromise1,
             cacheValuePromise2,
           ]);
 
-          const fetchEvent2Data = await fetchEvent2;
+          await fetchEvent2Promise;
+          await cacheEvent1Promise;
 
-          deepStrictEqual(fetchEvent2Data, {
-            cacheKey: cacheKey2,
-            cacheValuePromise: cacheValuePromise2,
-          });
-
-          const cacheEvent1Data = await cacheEvent1;
-          const cacheEvent2 = promisifyEvent(graphql, 'cache');
-
-          strictEqual(typeof cacheEvent1Data, 'object');
-          strictEqual(cacheEvent1Data.cacheKey, cacheKey1);
-          deepStrictEqual(cacheEvent1Data.cacheValue, graphql.cache[cacheKey1]);
           deepStrictEqual(
-            graphql.cache[cacheKey1],
+            await cacheValuePromise1,
             expectedResolvedCacheValue1
           );
-          strictEqual(cacheEvent1Data.response instanceof Response, true);
 
-          const cacheValueResolved1 = await cacheValuePromise1;
+          await cacheEvent2Promise;
 
-          deepStrictEqual(graphql.operations, {
-            [cacheKey2]: [cacheValuePromise2],
-          });
-          deepStrictEqual(cacheValueResolved1, expectedResolvedCacheValue1);
-
-          const cacheEvent2Data = await cacheEvent2;
-
-          strictEqual(typeof cacheEvent2Data, 'object');
-          strictEqual(cacheEvent2Data.cacheKey, cacheKey2);
-          deepStrictEqual(cacheEvent2Data.cacheValue, graphql.cache[cacheKey2]);
           deepStrictEqual(
-            graphql.cache[cacheKey2],
+            await cacheValuePromise2,
             expectedResolvedCacheValue2
           );
-          strictEqual(cacheEvent2Data.response instanceof Response, true);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
 
-          const cacheValueResolved2 = await cacheValuePromise2;
+  tests.add(
+    '`GraphQL` method `operate` with concurrent identical operations, second responds first',
+    async () => {
+      let fetchCount = 0;
+      let secondOperationRespondedPromiseResolve;
 
-          deepStrictEqual(graphql.operations, {});
-          deepStrictEqual(cacheValueResolved2, expectedResolvedCacheValue2);
+      const secondOperationRespondedPromise = timeLimitPromise(
+        new Promise((resolve) => {
+          secondOperationRespondedPromiseResolve = resolve;
+        })
+      );
+
+      const revertGlobals = revertableGlobals({
+        fetch(...args) {
+          const result = fetch(...args);
+
+          if (++fetchCount === 2)
+            result.finally(() => {
+              secondOperationRespondedPromiseResolve();
+            });
+
+          return result;
+        },
+        Response,
+      });
+
+      try {
+        let requestCount = 0;
+
+        const { port, close } = await listen(
+          createGraphQLKoaApp({
+            requestCount: {
+              type: GraphQLInt,
+              async resolve() {
+                const thisRequestCount = ++requestCount;
+
+                if (thisRequestCount === 1)
+                  await secondOperationRespondedPromise;
+
+                return thisRequestCount;
+              },
+            },
+          })
+        );
+
+        try {
+          let cacheKey;
+          let cacheValuePromise1;
+          let cacheValuePromise2;
+
+          let fetchEventCount = 0;
+          let fetchEvent1PromiseResolve;
+          let fetchEvent1PromiseReject;
+          let fetchEvent2PromiseResolve;
+          let fetchEvent2PromiseReject;
+
+          let cacheEventCount = 0;
+          let cacheEvent1PromiseResolve;
+          let cacheEvent1PromiseReject;
+          let cacheEvent2PromiseResolve;
+          let cacheEvent2PromiseReject;
+
+          const expectedResolvedCacheValue1 = {
+            data: {
+              requestCount: 1,
+            },
+          };
+          const expectedResolvedCacheValue2 = {
+            data: {
+              requestCount: 2,
+            },
+          };
+
+          const graphql = new GraphQL();
+          const queryOptions = {
+            fetchOptionsOverride(options) {
+              options.url = `http://localhost:${port}`;
+            },
+            operation: {
+              query: '{ requestCount }',
+            },
+          };
+
+          const fetchEvent1Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              fetchEvent1PromiseResolve = resolve;
+              fetchEvent1PromiseReject = reject;
+            })
+          );
+
+          const fetchEvent2Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              fetchEvent2PromiseResolve = resolve;
+              fetchEvent2PromiseReject = reject;
+            })
+          );
+
+          graphql.on('fetch', (eventData) => {
+            switch (++fetchEventCount) {
+              case 1:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  deepStrictEqual(Object.keys(eventData), [
+                    'cacheKey',
+                    'cacheValuePromise',
+                  ]);
+                  strictEqual(typeof eventData.cacheKey, 'string');
+                  strictEqual(
+                    eventData.cacheValuePromise instanceof Promise,
+                    true
+                  );
+
+                  ({ cacheKey } = eventData);
+                  cacheValuePromise1 = eventData.cacheValuePromise;
+
+                  fetchEvent1PromiseResolve();
+                } catch (error) {
+                  fetchEvent1PromiseReject(error);
+                }
+
+                break;
+              case 2:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  deepStrictEqual(Object.keys(eventData), [
+                    'cacheKey',
+                    'cacheValuePromise',
+                  ]);
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValuePromise instanceof Promise,
+                    true
+                  );
+
+                  cacheValuePromise2 = eventData.cacheValuePromise;
+
+                  fetchEvent2PromiseResolve();
+                } catch (error) {
+                  fetchEvent2PromiseReject(error);
+                }
+            }
+          });
+
+          const cacheEvent1Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              cacheEvent1PromiseResolve = resolve;
+              cacheEvent1PromiseReject = reject;
+            })
+          );
+
+          const cacheEvent2Promise = timeLimitPromise(
+            new Promise((resolve, reject) => {
+              cacheEvent2PromiseResolve = resolve;
+              cacheEvent2PromiseReject = reject;
+            })
+          );
+
+          graphql.on('cache', (eventData) => {
+            switch (++cacheEventCount) {
+              case 1:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValue === graphql.cache[cacheKey],
+                    true
+                  );
+                  deepStrictEqual(
+                    eventData.cacheValue,
+                    expectedResolvedCacheValue1
+                  );
+                  deepStrictEqual(
+                    graphql.cache[cacheKey],
+                    expectedResolvedCacheValue1
+                  );
+                  strictEqual(eventData.response instanceof Response, true);
+                  deepStrictEqual(graphql.operations, {
+                    [cacheKey]: [cacheValuePromise2],
+                  });
+
+                  cacheEvent1PromiseResolve();
+                } catch (error) {
+                  cacheEvent1PromiseReject(error);
+                }
+                break;
+              case 2:
+                try {
+                  strictEqual(typeof eventData, 'object');
+                  strictEqual(eventData.cacheKey, cacheKey);
+                  strictEqual(
+                    eventData.cacheValue === graphql.cache[cacheKey],
+                    true
+                  );
+                  deepStrictEqual(
+                    eventData.cacheValue,
+                    expectedResolvedCacheValue2
+                  );
+                  deepStrictEqual(
+                    graphql.cache[cacheKey],
+                    expectedResolvedCacheValue2
+                  );
+                  strictEqual(eventData.response instanceof Response, true);
+                  deepStrictEqual(graphql.operations, {});
+
+                  cacheEvent2PromiseResolve();
+                } catch (error) {
+                  cacheEvent2PromiseReject(error);
+                }
+            }
+          });
+
+          const operateReturn1 = graphql.operate(queryOptions);
+
+          strictEqual(typeof operateReturn1.cacheKey, 'string');
+          strictEqual(operateReturn1.cacheKey, cacheKey);
+          strictEqual(operateReturn1.cacheValue, undefined);
+          strictEqual(
+            operateReturn1.cacheValuePromise instanceof Promise,
+            true
+          );
+          strictEqual(operateReturn1.cacheValuePromise, cacheValuePromise1);
+          deepStrictEqual(graphql.operations[cacheKey], [cacheValuePromise1]);
+
+          await fetchEvent1Promise;
+
+          const operateReturn2 = graphql.operate(queryOptions);
+
+          strictEqual(typeof operateReturn2.cacheKey, 'string');
+          strictEqual(operateReturn2.cacheKey, cacheKey);
+          strictEqual(operateReturn2.cacheValue, undefined);
+          strictEqual(
+            operateReturn2.cacheValuePromise instanceof Promise,
+            true
+          );
+          strictEqual(operateReturn2.cacheValuePromise, cacheValuePromise2);
+          notStrictEqual(cacheValuePromise2, cacheValuePromise1);
+          deepStrictEqual(graphql.operations[cacheKey], [
+            cacheValuePromise1,
+            cacheValuePromise2,
+          ]);
+
+          await fetchEvent2Promise;
+          await cacheEvent1Promise;
+
+          deepStrictEqual(
+            await cacheValuePromise1,
+            expectedResolvedCacheValue1
+          );
+
+          await cacheEvent2Promise;
+
+          deepStrictEqual(
+            await cacheValuePromise2,
+            expectedResolvedCacheValue2
+          );
         } finally {
           close();
         }
