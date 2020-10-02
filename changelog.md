@@ -15,7 +15,7 @@
 ### Patch
 
 - Updated dev dependencies.
-- Improved the timeout error stack trace of the test utility `promisifyEvent` function.
+- Improved the test utility `promisifyEvent` function.
 - Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
 - Test better the order of `GraphQL.operate()` triggered events.
 - Added a code example for how to await all loading GraphQL operations.
