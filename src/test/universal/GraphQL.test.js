@@ -14,6 +14,7 @@ const GraphQL = require('../../universal/GraphQL');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
 const promisifyEvent = require('../promisifyEvent');
+const sleep = require('../sleep');
 const testGraphQLOperation = require('../testGraphQLOperation');
 const timeLimitPromise = require('../timeLimitPromise');
 
@@ -405,8 +406,13 @@ module.exports = (tests) => {
               async resolve() {
                 const thisRequestCount = ++requestCount;
 
-                if (thisRequestCount === 2)
+                if (thisRequestCount === 2) {
+                  // Wait for the first operation response to be received.
                   await firstOperationRespondedPromise;
+
+                  // Wait enough time for the response to have been processed.
+                  await sleep(50);
+                }
 
                 return thisRequestCount;
               },
@@ -669,8 +675,13 @@ module.exports = (tests) => {
               async resolve() {
                 const thisRequestCount = ++requestCount;
 
-                if (thisRequestCount === 1)
+                if (thisRequestCount === 1) {
+                  // Wait for the second operation response to be received.
                   await secondOperationRespondedPromise;
+
+                  // Wait enough time for the response to have been processed.
+                  await sleep(50);
+                }
 
                 return thisRequestCount;
               },
