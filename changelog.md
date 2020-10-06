@@ -18,6 +18,7 @@
 - Improved the test utility `promisifyEvent` function.
 - Test the the `GraphQL` instance method `operate` option `reloadOnLoad` in isolation.
 - Test better the order of the `GraphQL` instance method `operate` triggered events.
+- Refactored the `GraphQL` instance method `operate` to eliminate the `GraphQL` private instance method `fetch` and reduce the chance of race conditions in consumer code.
 - Reduced the number of promises created by the `GraphQL` instance method `operate` when the `reloadOnLoad` and `reloadOnLoad` options are `false`.
 - Added a code example for how to await all loading GraphQL operations.
 - Used consistent JSDoc types for promises that resolve `void`.

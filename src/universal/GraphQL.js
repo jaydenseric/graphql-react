@@ -155,117 +155,6 @@ module.exports = class GraphQL {
   };
 
   /**
-   * Fetches a GraphQL operation.
-   * @param {GraphQLFetchOptions} fetchOptions URL and options for [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API).
-   * @param {GraphQLCacheKey} cacheKey [GraphQL cache]{@link GraphQL#cache} [key]{@link GraphQLCacheKey}.
-   * @returns {Promise<GraphQLCacheValue>} A promise that resolves the [GraphQL cache]{@link GraphQL#cache} [value]{@link GraphQLCacheValue}.
-   * @fires GraphQL#event:fetch
-   * @fires GraphQL#event:cache
-   * @ignore
-   */
-  fetch = ({ url, ...options }, cacheKey) => {
-    let fetchResponse;
-
-    const fetcher =
-      typeof fetch === 'function'
-        ? fetch
-        : () =>
-            Promise.reject(
-              new TypeError('Global fetch API or polyfill unavailable.')
-            );
-    const cacheValue = {};
-    const cacheValuePromise = fetcher(url, options)
-      .then(
-        (response) => {
-          fetchResponse = response;
-
-          if (!response.ok)
-            cacheValue.httpError = {
-              status: response.status,
-              statusText: response.statusText,
-            };
-
-          return response.json().then(
-            ({ errors, data }) => {
-              // JSON parse ok.
-              if (!errors && !data)
-                cacheValue.parseError = 'Malformed payload.';
-              if (errors) cacheValue.graphQLErrors = errors;
-              if (data) cacheValue.data = data;
-            },
-            ({ message }) => {
-              // JSON parse error.
-              cacheValue.parseError = message;
-            }
-          );
-        },
-        ({ message }) => {
-          cacheValue.fetchError = message;
-        }
-      )
-      .then(() => {
-        // If there’s earlier GraphQL operation(s) loading for the same cache
-        // key, wait for them to complete so the cache is updated and the
-        // `cache` events are emitted in the order the operations were
-        // initiated. This prevents a slow earlier operation from overwriting
-        // the cache from a faster later operation.
-        if (this.operations[cacheKey].length > 1) {
-          const operationIndex = this.operations[cacheKey].indexOf(
-            cacheValuePromise
-          );
-
-          if (operationIndex)
-            // There are earlier GraphQL operations.
-            return Promise.all(
-              // The earlier GraphQL operations.
-              this.operations[cacheKey].slice(0, operationIndex)
-            );
-        }
-      })
-      .then(() => {
-        // The cache value promise should resolve after the cache has been
-        // updated, it’s cleared from the map of loading GraphQL operations,
-        // and the `cache` event has been emitted (in that order).
-
-        // Update the cache.
-        this.cache[cacheKey] = cacheValue;
-
-        // Clear this operation from the map of loading GraphQL operations.
-        this.operations[cacheKey].splice(
-          // The `>>> 0` is a clever way to defend against `indexOf` returning
-          // `-1` if the cache value promise is not in the array for some
-          // unexpected reason. It leaves non-negative integers alone, but
-          // converts `-1` into the largest possible unsigned 32-bit integer,
-          // which happens to be the ECMAScript spec max length of an array;
-          // resulting in a harmless splice.
-          this.operations[cacheKey].indexOf(cacheValuePromise) >>> 0,
-          1
-        );
-        if (!this.operations[cacheKey].length) delete this.operations[cacheKey];
-
-        // Emit the `cache` event.
-        this.emit('cache', {
-          cacheKey,
-          cacheValue,
-
-          // May be undefined if there was a fetch error.
-          response: fetchResponse,
-        });
-
-        return cacheValue;
-      });
-
-    if (!this.operations[cacheKey]) this.operations[cacheKey] = [];
-    this.operations[cacheKey].push(cacheValuePromise);
-
-    // Emit the `fetch` event after the cache value promise has been added to
-    // the map of loading GraphQL operations.
-    this.emit('fetch', { cacheKey, cacheValuePromise });
-
-    return cacheValuePromise;
-  };
-
-  /**
    * Loads a GraphQL operation, visible in
    * [GraphQL operations]{@link GraphQL#operations}. Emits a
    * [`GraphQL`]{@link GraphQL} instance `fetch` event if an already loading
@@ -300,10 +189,133 @@ module.exports = class GraphQL {
         'operate() options “reloadOnLoad” and “resetOnLoad” can’t both be true.'
       );
 
+    // The `fetch` global not being defined correctly results in a `fetchError`
+    // within the cache value; not the `operate` method throwing an error.
+    const fetcher =
+      typeof fetch === 'function'
+        ? fetch
+        : () =>
+            Promise.reject(
+              new TypeError('Global fetch API or polyfill unavailable.')
+            );
+
+    // Create the fetch options.
     const fetchOptions = graphqlFetchOptions(operation);
     if (fetchOptionsOverride) fetchOptionsOverride(fetchOptions);
+    const { url, ...options } = fetchOptions;
+
+    // Create the cache key.
     const cacheKey = cacheKeyCreator(fetchOptions);
-    const cacheValuePromise = this.fetch(fetchOptions, cacheKey);
+
+    // The `operations` property must be updated for sync code following this
+    // `operate` method call, as well as async code using `cacheValuePromise`.
+    let resolveOperationsUpdated;
+    const operationsUpdatedPromise = new Promise((resolve) => {
+      resolveOperationsUpdated = resolve;
+    });
+
+    // Start the fetch sync within the `operate` method rather than within the
+    // `cacheValuePromise` chain to ensure fetches are sent in the order of
+    // multiple `operate` method calls within sync code.
+    const responsePromise = fetcher(url, options);
+
+    let fetchResponse;
+
+    const cacheValue = {};
+    const cacheValuePromise = operationsUpdatedPromise.then(() =>
+      responsePromise
+        .then(
+          (response) => {
+            fetchResponse = response;
+
+            if (!response.ok)
+              cacheValue.httpError = {
+                status: response.status,
+                statusText: response.statusText,
+              };
+
+            return response.json().then(
+              ({ errors, data }) => {
+                // JSON parse ok.
+                if (!errors && !data)
+                  cacheValue.parseError = 'Malformed payload.';
+                if (errors) cacheValue.graphQLErrors = errors;
+                if (data) cacheValue.data = data;
+              },
+              ({ message }) => {
+                // JSON parse error.
+                cacheValue.parseError = message;
+              }
+            );
+          },
+          ({ message }) => {
+            cacheValue.fetchError = message;
+          }
+        )
+        .then(() => {
+          // If there’s earlier GraphQL operation(s) loading for the same cache
+          // key, wait for them to complete so the cache is updated and the
+          // `cache` events are emitted in the order the operations were
+          // initiated. This prevents a slow earlier operation from overwriting
+          // the cache from a faster later operation.
+          if (this.operations[cacheKey].length > 1) {
+            const operationIndex = this.operations[cacheKey].indexOf(
+              cacheValuePromise
+            );
+
+            if (operationIndex)
+              // There are earlier GraphQL operations.
+              return Promise.all(
+                // The earlier GraphQL operations.
+                this.operations[cacheKey].slice(0, operationIndex)
+              );
+          }
+        })
+        .then(() => {
+          // The cache value promise should resolve after the cache has been
+          // updated, it’s cleared from the map of loading GraphQL operations,
+          // and the `cache` event has been emitted (in that order).
+
+          // Update the cache.
+          this.cache[cacheKey] = cacheValue;
+
+          // Clear this operation from the map of loading GraphQL operations.
+          this.operations[cacheKey].splice(
+            // The `>>> 0` is a clever way to defend against `indexOf` returning
+            // `-1` if the cache value promise is not in the array for some
+            // unexpected reason. It leaves non-negative integers alone, but
+            // converts `-1` into the largest possible unsigned 32-bit integer,
+            // which happens to be the ECMAScript spec max length of an array;
+            // resulting in a harmless splice.
+            this.operations[cacheKey].indexOf(cacheValuePromise) >>> 0,
+            1
+          );
+
+          // If there are no more operations loading for this cache key, delete
+          // the empty array from the `operations` property.
+          if (!this.operations[cacheKey].length)
+            delete this.operations[cacheKey];
+
+          // Emit the `cache` event.
+          this.emit('cache', {
+            cacheKey,
+            cacheValue,
+
+            // May be undefined if there was a fetch error.
+            response: fetchResponse,
+          });
+
+          return cacheValue;
+        })
+    );
+
+    // Add this operation to the map of loading GraphQL operations.
+    if (!this.operations[cacheKey]) this.operations[cacheKey] = [];
+    this.operations[cacheKey].push(cacheValuePromise);
+    resolveOperationsUpdated();
+
+    // Emit the `fetch` event after the `operations` property has been updated.
+    this.emit('fetch', { cacheKey, cacheValuePromise });
 
     // A reload or reset happens after the cache is updated as a side effect.
     if (reloadOnLoad)
