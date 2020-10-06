@@ -13,6 +13,7 @@ const bodyParser = require('koa-bodyparser');
 /**
  * Creates a GraphQL Koa app.
  * @param {object} fields GraphQL `query` fields.
+ * @param {Function} [executeOptionsOverride] Overrides `execute` Koa middlware options per request.
  * @returns {object} Koa instance.
  * @ignore
  */
@@ -28,7 +29,8 @@ module.exports = function createGraphQLKoaApp(
       },
       resolve: (root, { phrase }) => phrase,
     },
-  }
+  },
+  executeOptionsOverride
 ) {
   return new Koa()
     .use(errorHandler())
@@ -41,6 +43,7 @@ module.exports = function createGraphQLKoaApp(
             fields,
           }),
         }),
+        override: executeOptionsOverride,
       })
     );
 };

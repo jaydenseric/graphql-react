@@ -14,7 +14,6 @@ const GraphQL = require('../../universal/GraphQL');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
 const promisifyEvent = require('../promisifyEvent');
-const sleep = require('../sleep');
 const testGraphQLOperation = require('../testGraphQLOperation');
 const timeLimitPromise = require('../timeLimitPromise');
 
@@ -374,50 +373,65 @@ module.exports = (tests) => {
     '`GraphQL` method `operate` with concurrent identical operations, first responds first',
     async () => {
       let fetchCount = 0;
-      let firstOperationRespondedPromiseResolve;
+      let fetch1ResponseReceivedPromiseResolve;
 
-      const firstOperationRespondedPromise = timeLimitPromise(
+      const fetch1ResponseReceivedPromise = timeLimitPromise(
         new Promise((resolve) => {
-          firstOperationRespondedPromiseResolve = resolve;
+          fetch1ResponseReceivedPromiseResolve = resolve;
         })
       );
 
       const revertGlobals = revertableGlobals({
-        fetch(...args) {
-          const result = fetch(...args);
+        async fetch(uri, options) {
+          const thisFetchCount = ++fetchCount;
+          const response = await fetch(uri, {
+            ...options,
+            headers: {
+              ...options.headers,
+              'x-fetch-count': thisFetchCount,
+            },
+          });
 
-          if (++fetchCount === 1)
-            result.finally(() => {
-              firstOperationRespondedPromiseResolve();
-            });
+          if (thisFetchCount === 1) {
+            const responseJson = response.json.bind(response);
 
-          return result;
+            response.json = async () => {
+              try {
+                var json = await responseJson();
+              } finally {
+                fetch1ResponseReceivedPromiseResolve();
+              }
+
+              return json;
+            };
+          }
+
+          return response;
         },
         Response,
       });
 
       try {
-        let requestCount = 0;
-
         const { port, close } = await listen(
-          createGraphQLKoaApp({
-            requestCount: {
-              type: GraphQLInt,
-              async resolve() {
-                const thisRequestCount = ++requestCount;
+          createGraphQLKoaApp(
+            {
+              fetchCount: {
+                type: GraphQLInt,
+                async resolve(root, args, { fetchCount }) {
+                  if (fetchCount === 2)
+                    // Wait for the first fetch response to be received.
+                    await fetch1ResponseReceivedPromise;
 
-                if (thisRequestCount === 2) {
-                  // Wait for the first operation response to be received.
-                  await firstOperationRespondedPromise;
-
-                  // Wait enough time for the response to have been processed.
-                  await sleep(50);
-                }
-
-                return thisRequestCount;
+                  return fetchCount;
+                },
               },
             },
-          })
+            (ctx) => ({
+              contextValue: {
+                fetchCount: Number(ctx.request.header['x-fetch-count']),
+              },
+            })
+          )
         );
 
         try {
@@ -439,12 +453,12 @@ module.exports = (tests) => {
 
           const expectedResolvedCacheValue1 = {
             data: {
-              requestCount: 1,
+              fetchCount: 1,
             },
           };
           const expectedResolvedCacheValue2 = {
             data: {
-              requestCount: 2,
+              fetchCount: 2,
             },
           };
 
@@ -454,7 +468,7 @@ module.exports = (tests) => {
               options.url = `http://localhost:${port}`;
             },
             operation: {
-              query: '{ requestCount }',
+              query: '{ fetchCount }',
             },
           };
 
@@ -643,50 +657,66 @@ module.exports = (tests) => {
     '`GraphQL` method `operate` with concurrent identical operations, second responds first',
     async () => {
       let fetchCount = 0;
-      let secondOperationRespondedPromiseResolve;
+      let fetch2ResponseReceivedPromiseResolve;
 
-      const secondOperationRespondedPromise = timeLimitPromise(
+      const fetch2ResponseReceivedPromise = timeLimitPromise(
         new Promise((resolve) => {
-          secondOperationRespondedPromiseResolve = resolve;
+          fetch2ResponseReceivedPromiseResolve = resolve;
         })
       );
 
       const revertGlobals = revertableGlobals({
-        fetch(...args) {
-          const result = fetch(...args);
+        async fetch(uri, options) {
+          const thisFetchCount = ++fetchCount;
+          const response = await fetch(uri, {
+            ...options,
+            headers: {
+              ...options.headers,
+              'x-fetch-count': thisFetchCount,
+            },
+          });
 
-          if (++fetchCount === 2)
-            result.finally(() => {
-              secondOperationRespondedPromiseResolve();
-            });
+          if (thisFetchCount === 2) {
+            const responseJson = response.json.bind(response);
 
-          return result;
+            response.json = async () => {
+              try {
+                var json = await responseJson();
+              } finally {
+                fetch2ResponseReceivedPromiseResolve();
+              }
+
+              return json;
+            };
+          }
+
+          return response;
         },
         Response,
       });
 
       try {
-        let requestCount = 0;
-
         const { port, close } = await listen(
-          createGraphQLKoaApp({
-            requestCount: {
-              type: GraphQLInt,
-              async resolve() {
-                const thisRequestCount = ++requestCount;
+          createGraphQLKoaApp(
+            {
+              fetchCount: {
+                type: GraphQLInt,
+                async resolve(root, args, { fetchCount }) {
+                  if (fetchCount === 1)
+                    // Wait for the second fetch response to be
+                    // received.
+                    await fetch2ResponseReceivedPromise;
 
-                if (thisRequestCount === 1) {
-                  // Wait for the second operation response to be received.
-                  await secondOperationRespondedPromise;
-
-                  // Wait enough time for the response to have been processed.
-                  await sleep(50);
-                }
-
-                return thisRequestCount;
+                  return fetchCount;
+                },
               },
             },
-          })
+            (ctx) => ({
+              contextValue: {
+                fetchCount: Number(ctx.request.header['x-fetch-count']),
+              },
+            })
+          )
         );
 
         try {
@@ -708,12 +738,12 @@ module.exports = (tests) => {
 
           const expectedResolvedCacheValue1 = {
             data: {
-              requestCount: 1,
+              fetchCount: 1,
             },
           };
           const expectedResolvedCacheValue2 = {
             data: {
-              requestCount: 2,
+              fetchCount: 2,
             },
           };
 
@@ -723,7 +753,7 @@ module.exports = (tests) => {
               options.url = `http://localhost:${port}`;
             },
             operation: {
-              query: '{ requestCount }',
+              query: '{ fetchCount }',
             },
           };
 
