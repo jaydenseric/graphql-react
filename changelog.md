@@ -22,6 +22,7 @@
 - Reduced the number of promises created by the `GraphQL` instance method `operate` when the `reloadOnLoad` and `reloadOnLoad` options are `false`.
 - Added a code example for how to await all loading GraphQL operations.
 - Used consistent JSDoc types for promises that resolve `void`.
+- Tweaked JSDoc.
 - Tweaked changelog entries.
 
 ## 11.2.0

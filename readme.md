@@ -241,7 +241,7 @@ Adds an event listener.
 
 #### GraphQL instance method operate
 
-Loads a GraphQL operation, visible in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) instance `fetch` event if an already loading operation isn’t reused, and a `cache` event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
+Loads a GraphQL operation, visible in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) [`fetch`](#graphql-event-fetch) event once the [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) request has been initiated and the map of loading [GraphQL operations](#graphql-instance-property-operations) has been updated, and a [`GraphQL`](#class-graphql) [`cache`](#graphql-event-cache) event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
@@ -335,7 +335,7 @@ A map of loading [GraphQL operations](#type-graphqloperation), listed under thei
 
 ##### Examples
 
-_How to await all loading [GraphQL operations](#graphql-instance-property-operations) ._
+_How to await all loading [GraphQL operations](#graphql-instance-property-operations)._
 
 > ```js
 > await Promise.all(Object.values(graphql.operations).flat());

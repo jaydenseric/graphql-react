@@ -104,7 +104,7 @@ module.exports = class GraphQL {
      * @kind member
      * @name GraphQL#operations
      * @type {object.<GraphQLCacheKey, Array<Promise<GraphQLCacheValue>>>}
-     * @example <caption>How to await all loading [GraphQL operations]{@link GraphQL#operations} .</caption>
+     * @example <caption>How to await all loading [GraphQL operations]{@link GraphQL#operations}.</caption>
      * ```js
      * await Promise.all(Object.values(graphql.operations).flat());
      * ```
@@ -157,9 +157,12 @@ module.exports = class GraphQL {
   /**
    * Loads a GraphQL operation, visible in
    * [GraphQL operations]{@link GraphQL#operations}. Emits a
-   * [`GraphQL`]{@link GraphQL} instance `fetch` event if an already loading
-   * operation isn’t reused, and a `cache` event once it’s loaded into the
-   * [GraphQL cache]{@link GraphQL#cache}.
+   * [`GraphQL`]{@link GraphQL} [`fetch`]{@link GraphQL#event:fetch} event once
+   * the [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) request
+   * has been initiated and the map of loading
+   * [GraphQL operations]{@link GraphQL#operations} has been updated, and a
+   * [`GraphQL`]{@link GraphQL} [`cache`]{@link GraphQL#event:cache} event once
+   * it’s loaded into the [GraphQL cache]{@link GraphQL#cache}.
    * @kind function
    * @name GraphQL#operate
    * @param {object} options Options.
