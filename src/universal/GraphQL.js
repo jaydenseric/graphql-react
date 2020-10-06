@@ -305,12 +305,15 @@ module.exports = class GraphQL {
     const cacheKey = cacheKeyCreator(fetchOptions);
     const cacheValuePromise = this.fetch(fetchOptions, cacheKey);
 
-    // Potential edge-case issue: Multiple identical queries with `resetOnLoad`
-    // enabled will cause excessive resets.
-    cacheValuePromise.then(() => {
-      if (reloadOnLoad) this.reload(cacheKey);
-      else if (resetOnLoad) this.reset(cacheKey);
-    });
+    // A reload or reset happens after the cache is updated as a side effect.
+    if (reloadOnLoad)
+      cacheValuePromise.then(() => {
+        this.reload(cacheKey);
+      });
+    else if (resetOnLoad)
+      cacheValuePromise.then(() => {
+        this.reset(cacheKey);
+      });
 
     return {
       cacheKey,

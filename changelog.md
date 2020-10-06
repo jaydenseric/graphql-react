@@ -18,6 +18,7 @@
 - Improved the test utility `promisifyEvent` function.
 - Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
 - Test better the order of `GraphQL.operate()` triggered events.
+- Reduced the number of promises created by `GraphQL.operate()` when the `reloadOnLoad` and `reloadOnLoad` options are `false`.
 - Added a code example for how to await all loading GraphQL operations.
 - Used consistent JSDoc types for promises that resolve `void`.
 
