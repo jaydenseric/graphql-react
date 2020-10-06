@@ -16,11 +16,12 @@
 
 - Updated dev dependencies.
 - Improved the test utility `promisifyEvent` function.
-- Test the `GraphQL.operate()` option `reloadOnLoad` in isolation.
-- Test better the order of `GraphQL.operate()` triggered events.
-- Reduced the number of promises created by `GraphQL.operate()` when the `reloadOnLoad` and `reloadOnLoad` options are `false`.
+- Test the the `GraphQL` instance method `operate` option `reloadOnLoad` in isolation.
+- Test better the order of the `GraphQL` instance method `operate` triggered events.
+- Reduced the number of promises created by the `GraphQL` instance method `operate` when the `reloadOnLoad` and `reloadOnLoad` options are `false`.
 - Added a code example for how to await all loading GraphQL operations.
 - Used consistent JSDoc types for promises that resolve `void`.
+- Tweaked changelog entries.
 
 ## 11.2.0
 
@@ -191,7 +192,7 @@
 - Updated dependencies.
 - Increased the post SSR hydration time from 500 to 1000 milliseconds, closing [#37](https://github.com/jaydenseric/graphql-react/issues/37).
 - Added a `useGraphQL` options guide for common situations.
-- Test `GraphQL.operate()` with both `reloadOnLoad` and `resetOnLoad` options true.
+- Test the `GraphQL` instance method `operate` with both `reloadOnLoad` and `resetOnLoad` options `true`.
 - Use string `FormData` field names, as some `FormData` polyfills don't coerce numbers like native implementations do.
 - Test files in variables result in appropriate fetch options for a valid [GraphQL multipart request](https://github.com/jaydenseric/graphql-multipart-request-spec).
 - Tidied test names.
