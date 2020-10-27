@@ -6,6 +6,7 @@
 
 - Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.8 - 17`.
 - Updated dependencies.
+- Also run GitHub Actions with Node.js v15.
 
 ## 12.0.0
 
