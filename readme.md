@@ -4,7 +4,7 @@
 
 [![npm version](https://badgen.net/npm/v/graphql-react)](https://npm.im/graphql-react) [![CI status](https://github.com/jaydenseric/graphql-react/workflows/CI/badge.svg)](https://github.com/jaydenseric/graphql-react/actions)
 
-A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that is lightweight (&lt; 3.5 KB [size limited](https://github.com/ai/size-limit)) but powerful; the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) alternative with server side rendering.
+A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that is lightweight (< 3.5 KB [size limited](https://github.com/ai/size-limit)) but powerful; the first [Relay](https://facebook.github.io/relay) and [Apollo](https://apollographql.com/docs/react) alternative with server side rendering.
 
 - [Setup](#setup)
 - [Usage](#usage)
@@ -331,7 +331,7 @@ _Example cache JSON._
 
 A map of loading [GraphQL operations](#type-graphqloperation), listed under their [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) in the order they were initiated. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
 
-**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), Array&lt;Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)>>>
+**Type:** object<[GraphQLCacheKey](#type-graphqlcachekey), Array\<Promise<[GraphQLCacheValue](#type-graphqlcachevalue)>>>
 
 ##### Examples
 
@@ -362,7 +362,7 @@ Signals that a [GraphQL operation](#type-graphqloperation) is being fetched.
 | Property | Type | Description |
 | :-- | :-- | :-- |
 | `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the operation being fetched. |
-| `cacheValuePromise` | Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+| `cacheValuePromise` | Promise<[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
 
 #### GraphQL event reload
 
@@ -533,7 +533,7 @@ Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/AP
 | `node` | [ReactNode](#type-reactnode) | React virtual DOM node. |
 | `render` | Function? = ReactDOMServer.renderToStaticMarkup | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
 
-**Returns:** Promise&lt;string> — Promise resolving the rendered HTML string.
+**Returns:** Promise\<string> — Promise resolving the rendered HTML string.
 
 #### See
 
@@ -718,7 +718,7 @@ _A button component that resets the [GraphQL cache](#graphql-instance-property-c
 
 A [GraphQL cache](#graphql-instance-property-cache) map of [GraphQL operation](#type-graphqloperation) results.
 
-**Type:** object&lt;[GraphQLCacheKey](#type-graphqlcachekey), [GraphQLCacheValue](#type-graphqlcachevalue)>
+**Type:** object<[GraphQLCacheKey](#type-graphqlcachekey), [GraphQLCacheValue](#type-graphqlcachevalue)>
 
 #### See
 
@@ -763,7 +763,7 @@ JSON serializable [GraphQL operation](#type-graphqloperation) result that includ
 | `fetchError` | string? | [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) error message. |
 | `httpError` | [HttpError](#type-httperror)? | [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) HTTP error. |
 | `parseError` | string? | Parse error message. |
-| `graphQLErrors` | Array&lt;object>? | GraphQL response errors. |
+| `graphQLErrors` | Array<object>? | GraphQL response errors. |
 | `data` | object? | GraphQL response data. |
 
 ---
@@ -843,7 +843,7 @@ A loading [GraphQL operation](#type-graphqloperation).
 | :-- | :-- | :-- |
 | `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
 | `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue)? | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) from the last identical query. |
-| `cacheValuePromise` | Promise&lt;[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+| `cacheValuePromise` | Promise<[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
 
 #### See
 
@@ -888,7 +888,7 @@ The status of a [GraphQL operation](#type-graphqloperation) managed by the [`use
 
 A React virtual DOM node; anything that can be rendered.
 
-**Type:** `undefined` | `null` | boolean | number | string | React.Element | Array&lt;[ReactNode](#type-reactnode)>
+**Type:** `undefined` | `null` | boolean | number | string | React.Element | Array<[ReactNode](#type-reactnode)>
 
 ## Apollo comparison
 
@@ -896,7 +896,7 @@ A React virtual DOM node; anything that can be rendered.
 
 #### graphql-react
 
-A &lt; 3.5 KB bundle impact is guaranteed by [Size Limit](https://github.com/ai/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
+A < 3.5 KB bundle impact is guaranteed by [Size Limit](https://github.com/ai/size-limit) tests. The impact is smaller than the bundle size badge suggests as the internal [`object-assign`](https://npm.im/object-assign) dependency is shared with [`react`](https://npm.im/react).
 
 | Dependency | Install size | Bundle size |
 | --- | --- | --- |
