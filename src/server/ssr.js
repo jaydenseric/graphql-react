@@ -27,7 +27,7 @@ const arrayFlat = require('../universal/private/arrayFlat');
  * ```
  *
  * ```js
- * import ssr from 'graphql-react/server/GraphQL.js';
+ * import ssr from 'graphql-react/server/ssr.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js

@@ -549,7 +549,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import ssr from 'graphql-react/server/GraphQL.js';
+> import ssr from 'graphql-react/server/ssr.js';
 > ```
 
 _Ways to `require`._

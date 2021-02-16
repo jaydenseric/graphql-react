@@ -10,6 +10,7 @@
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
+- Fixed the documented deep `import` path for the function `ssr`.
 
 ## 12.0.1
 
