@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Replaced [`babel-eslint`](https://npm.im/babel-eslint) dev dependency with [`@babel/eslint-parser`](https://npm.im/@babel/eslint-parser).
 - Updated GitHub Actions CI config:
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
