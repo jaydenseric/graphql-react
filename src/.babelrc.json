@@ -10,7 +10,12 @@
         "loose": true
       }
     ],
-    "@babel/react"
+    [
+      "@babel/react",
+      {
+        "runtime": "automatic"
+      }
+    ]
   ],
   "overrides": [
     {

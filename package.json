@@ -46,8 +46,8 @@
   },
   "browserslist": "Node 10.17 - 11 and Node < 11, Node 12 - 13 and Node < 13, Node >= 13.7, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
-    "react": "16.8 - 17",
-    "react-dom": "16.8 - 17"
+    "react": "16.14 - 17",
+    "react-dom": "16.14 - 17"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.13",
