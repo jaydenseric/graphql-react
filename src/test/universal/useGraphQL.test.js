@@ -1,6 +1,7 @@
 'use strict';
 
 const { deepStrictEqual, strictEqual, throws } = require('assert');
+const flatten = require('@arr/flatten');
 const { GraphQLInt } = require('graphql');
 const { default: fetch } = require('node-fetch');
 const React = require('react');
@@ -13,7 +14,6 @@ const GraphQLContext = require('../../universal/GraphQLContext');
 const GraphQLProvider = require('../../universal/GraphQLProvider');
 const hashObject = require('../../universal/hashObject');
 const useGraphQL = require('../../universal/useGraphQL');
-const arrayFlat = require('../arrayFlat');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
 const promisifyEvent = require('../promisifyEvent');
@@ -57,7 +57,7 @@ module.exports = (tests) => {
             operation2Options
           );
 
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           graphql.reset();
 
@@ -372,7 +372,7 @@ module.exports = (tests) => {
           strictEqual(renderResult1.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -409,7 +409,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -563,7 +563,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -600,7 +600,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -708,7 +708,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -745,7 +745,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult3.loadedCacheValue, operation1CacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Fourth render after loading finished.
           ReactTestRenderer.act(() => {
@@ -925,7 +925,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult2.loadedCacheValue, cacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Third render after loading finished.
           ReactTestRenderer.act(() => {
@@ -1002,7 +1002,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult1.loadedCacheValue, cacheValue);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Second render after loading finished.
           ReactTestRenderer.act(() => {
@@ -1353,7 +1353,7 @@ module.exports = (tests) => {
           deepStrictEqual(renderResult2.loadedCacheValue, cacheValue1);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           const cacheValue2 = graphql.cache[cacheKey];
 
@@ -1619,7 +1619,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           // Third render after loading finished.
           ReactTestRenderer.act(() => {
@@ -1724,7 +1724,7 @@ module.exports = (tests) => {
           strictEqual(renderResult2.loadedCacheValue, undefined);
 
           // Wait for loading to finish.
-          await Promise.all(arrayFlat(Object.values(graphql.operations)));
+          await Promise.all(flatten(Object.values(graphql.operations)));
 
           const cacheValue2 = graphql.cache[cacheKey];
 
@@ -2156,7 +2156,7 @@ module.exports = (tests) => {
             // Trigger the GraphQL `reload` event.
             graphql.reload();
 
-            await Promise.all(arrayFlat(Object.values(graphql.operations)));
+            await Promise.all(flatten(Object.values(graphql.operations)));
 
             // Second render.
             ReactTestRenderer.act(() => {
@@ -2259,7 +2259,7 @@ module.exports = (tests) => {
             // Trigger the GraphQL `reset` event.
             graphql.reset();
 
-            await Promise.all(arrayFlat(Object.values(graphql.operations)));
+            await Promise.all(flatten(Object.values(graphql.operations)));
 
             // Second render.
             ReactTestRenderer.act(() => {

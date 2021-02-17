@@ -4,7 +4,6 @@ const { TestDirector } = require('test-director');
 
 const tests = new TestDirector();
 
-require('./arrayFlat.test')(tests);
 require('./universal/GraphQL.test')(tests);
 require('./universal/graphqlFetchOptions.test')(tests);
 require('./universal/hashObject.test')(tests);

@@ -14,6 +14,7 @@
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
+- Use a new [`@arr/flatten`](https://npm.im/@arr/flatten) dev dependency to flatten arrays in tests.
 
 ## 12.0.1
 
