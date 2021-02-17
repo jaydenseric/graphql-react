@@ -27,21 +27,17 @@
     "mjs"
   ],
   "files": [
-    "universal"
+    "private",
+    "public"
   ],
   "sideEffects": false,
-  "main": "universal",
+  "main": "public",
   "exports": {
     ".": {
-      "import": "./universal/index.mjs",
-      "require": "./universal/index.js"
+      "import": "./public/index.mjs",
+      "require": "./public/index.js"
     },
-    "./universal": {
-      "import": "./universal/index.mjs",
-      "require": "./universal/index.js"
-    },
-    "./universal/": "./universal/",
-    "./universal/private/": {},
+    "./public/": "./public/",
     "./package": "./package.json",
     "./package.json": "./package.json"
   },
@@ -99,10 +95,10 @@
   },
   "scripts": {
     "prepare": "npm run prepare:clean && npm run prepare:babel && npm run prepare:jsdoc && npm run prepare:prettier",
-    "prepare:clean": "rm -rf universal test",
+    "prepare:clean": "rm -rf private public test",
     "prepare:babel": "babel src -d . --keep-file-extension",
     "prepare:jsdoc": "jsdoc-md",
-    "prepare:prettier": "prettier --write universal test readme.md",
+    "prepare:prettier": "prettier --write private public test readme.md",
     "test": "npm run test:eslint && npm run test:prettier && npm run test:api && npm run test:size",
     "test:eslint": "eslint --ext mjs,js .",
     "test:prettier": "prettier -c .",

@@ -3,7 +3,7 @@
 const { notStrictEqual, strictEqual } = require('assert');
 const FormData = require('formdata-node');
 const revertableGlobals = require('revertable-globals');
-const hashObject = require('../../universal/hashObject');
+const hashObject = require('../../public/hashObject');
 
 module.exports = (tests) => {
   tests.add('`hashObject` with an object', () => {

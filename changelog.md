@@ -5,6 +5,7 @@
 ### Major
 
 - Removed the function `ssr` in favor of the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render), fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
+- Reorganized file structure. Deep import paths beginning with `graphql-react/universal` must be updated to `graphql-react/public`.
 
 ### Patch
 

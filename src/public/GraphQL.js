@@ -6,8 +6,8 @@
 // an object with a `default` key because the ESM only has a default export.
 // This would result in `mitt` being undefined instead of a function.
 const mitt = require('mitt/dist/mitt');
+const graphqlFetchOptions = require('../private/graphqlFetchOptions');
 const hashObject = require('./hashObject');
-const graphqlFetchOptions = require('./private/graphqlFetchOptions');
 
 /**
  * A lightweight GraphQL client that caches queries and mutations.
@@ -22,7 +22,7 @@ const graphqlFetchOptions = require('./private/graphqlFetchOptions');
  * ```
  *
  * ```js
- * import GraphQL from 'graphql-react/universal/GraphQL.js';
+ * import GraphQL from 'graphql-react/public/GraphQL.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -30,7 +30,7 @@ const graphqlFetchOptions = require('./private/graphqlFetchOptions');
  * ```
  *
  * ```js
- * const GraphQL = require('graphql-react/universal/GraphQL');
+ * const GraphQL = require('graphql-react/public/GraphQL');
  * ```
  * @example <caption>Construct a GraphQL client.</caption>
  * ```js

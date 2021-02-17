@@ -14,7 +14,7 @@
  * ```
  *
  * ```js
- * import reportCacheErrors from 'graphql-react/universal/reportCacheErrors.js';
+ * import reportCacheErrors from 'graphql-react/public/reportCacheErrors.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -22,7 +22,7 @@
  * ```
  *
  * ```js
- * const reportCacheErrors = require('graphql-react/universal/reportCacheErrors');
+ * const reportCacheErrors = require('graphql-react/public/reportCacheErrors');
  * ```
  * @example <caption>[`GraphQL`]{@link GraphQL} initialized to report cache errors.</caption>
  * ```js

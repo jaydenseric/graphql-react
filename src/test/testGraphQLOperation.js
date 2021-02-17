@@ -1,7 +1,7 @@
 'use strict';
 
 const { deepStrictEqual, strictEqual } = require('assert');
-const GraphQL = require('../universal/GraphQL');
+const GraphQL = require('../public/GraphQL');
 const promisifyEvent = require('./promisifyEvent');
 
 /**

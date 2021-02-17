@@ -2,9 +2,9 @@
 
 const PropTypes = require('prop-types');
 const React = require('react');
+const FirstRenderDateContext = require('../private/FirstRenderDateContext');
 const GraphQL = require('./GraphQL');
 const GraphQLContext = require('./GraphQLContext');
-const FirstRenderDateContext = require('./private/FirstRenderDateContext');
 
 /**
  * A React component that provides a [`GraphQL`]{@link GraphQL} instance for an
@@ -23,7 +23,7 @@ const FirstRenderDateContext = require('./private/FirstRenderDateContext');
  * ```
  *
  * ```js
- * import GraphQLProvider from 'graphql-react/universal/GraphQLProvider.js';
+ * import GraphQLProvider from 'graphql-react/public/GraphQLProvider.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -31,7 +31,7 @@ const FirstRenderDateContext = require('./private/FirstRenderDateContext');
  * ```
  *
  * ```js
- * const GraphQLProvider = require('graphql-react/universal/GraphQLProvider');
+ * const GraphQLProvider = require('graphql-react/public/GraphQLProvider');
  * ```
  * @example <caption>Provide a [`GraphQL`]{@link GraphQL} instance for an app.</caption>
  * ```jsx

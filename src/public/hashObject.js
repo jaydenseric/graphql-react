@@ -66,7 +66,7 @@ function hashObjectReplacer(key, value) {
  * ```
  *
  * ```js
- * import hashObject from 'graphql-react/universal/hashObject.js';
+ * import hashObject from 'graphql-react/public/hashObject.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -74,7 +74,7 @@ function hashObjectReplacer(key, value) {
  * ```
  *
  * ```js
- * const hashObject = require('graphql-react/universal/hashObject');
+ * const hashObject = require('graphql-react/public/hashObject');
  * ```
  */
 module.exports = function hashObject(object) {

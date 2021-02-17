@@ -4,7 +4,7 @@ const { deepStrictEqual, strictEqual } = require('assert');
 const Blob = require('fetch-blob');
 const FormData = require('formdata-node');
 const revertableGlobals = require('revertable-globals');
-const graphqlFetchOptions = require('../../universal/private/graphqlFetchOptions');
+const graphqlFetchOptions = require('../../private/graphqlFetchOptions');
 
 module.exports = (tests) => {
   tests.add('`graphqlFetchOptions` without files', () => {

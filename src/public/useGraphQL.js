@@ -3,11 +3,11 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext');
+const FirstRenderDateContext = require('../private/FirstRenderDateContext');
+const graphqlFetchOptions = require('../private/graphqlFetchOptions');
 const GraphQL = require('./GraphQL');
 const GraphQLContext = require('./GraphQLContext');
 const hashObject = require('./hashObject');
-const FirstRenderDateContext = require('./private/FirstRenderDateContext');
-const graphqlFetchOptions = require('./private/graphqlFetchOptions');
 
 /**
  * A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL
@@ -31,7 +31,7 @@ const graphqlFetchOptions = require('./private/graphqlFetchOptions');
  * ```
  *
  * ```js
- * import useGraphQL from 'graphql-react/universal/useGraphQL.js';
+ * import useGraphQL from 'graphql-react/public/useGraphQL.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -39,7 +39,7 @@ const graphqlFetchOptions = require('./private/graphqlFetchOptions');
  * ```
  *
  * ```js
- * const useGraphQL = require('graphql-react/universal/useGraphQL');
+ * const useGraphQL = require('graphql-react/public/useGraphQL');
  * ```
  * @example <caption>Options guide for common situations.</caption>
  * | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |

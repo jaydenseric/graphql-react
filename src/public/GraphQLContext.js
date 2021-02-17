@@ -18,7 +18,7 @@ const React = require('react');
  * ```
  *
  * ```js
- * import GraphQLContext from 'graphql-react/universal/GraphQLContext.js';
+ * import GraphQLContext from 'graphql-react/public/GraphQLContext.js';
  * ```
  * @example <caption>Ways to `require`.</caption>
  * ```js
@@ -26,7 +26,7 @@ const React = require('react');
  * ```
  *
  * ```js
- * const GraphQLContext = require('graphql-react/universal/GraphQLContext');
+ * const GraphQLContext = require('graphql-react/public/GraphQLContext');
  * ```
  * @example <caption>A button component that resets the [GraphQL cache]{@link GraphQL#cache}.</caption>
  * ```jsx

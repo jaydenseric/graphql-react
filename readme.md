@@ -195,7 +195,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import GraphQL from 'graphql-react/universal/GraphQL.js';
+> import GraphQL from 'graphql-react/public/GraphQL.js';
 > ```
 
 _Ways to `require`._
@@ -205,7 +205,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const GraphQL = require('graphql-react/universal/GraphQL');
+> const GraphQL = require('graphql-react/public/GraphQL');
 > ```
 
 _Construct a GraphQL client._
@@ -411,7 +411,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import GraphQLProvider from 'graphql-react/universal/GraphQLProvider.js';
+> import GraphQLProvider from 'graphql-react/public/GraphQLProvider.js';
 > ```
 
 _Ways to `require`._
@@ -421,7 +421,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const GraphQLProvider = require('graphql-react/universal/GraphQLProvider');
+> const GraphQLProvider = require('graphql-react/public/GraphQLProvider');
 > ```
 
 _Provide a [`GraphQL`](#class-graphql) instance for an app._
@@ -464,7 +464,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import hashObject from 'graphql-react/universal/hashObject.js';
+> import hashObject from 'graphql-react/public/hashObject.js';
 > ```
 
 _Ways to `require`._
@@ -474,7 +474,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const hashObject = require('graphql-react/universal/hashObject');
+> const hashObject = require('graphql-react/public/hashObject');
 > ```
 
 ---
@@ -496,7 +496,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import reportCacheErrors from 'graphql-react/universal/reportCacheErrors.js';
+> import reportCacheErrors from 'graphql-react/public/reportCacheErrors.js';
 > ```
 
 _Ways to `require`._
@@ -506,7 +506,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const reportCacheErrors = require('graphql-react/universal/reportCacheErrors');
+> const reportCacheErrors = require('graphql-react/public/reportCacheErrors');
 > ```
 
 _[`GraphQL`](#class-graphql) initialized to report cache errors._
@@ -551,7 +551,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import useGraphQL from 'graphql-react/universal/useGraphQL.js';
+> import useGraphQL from 'graphql-react/public/useGraphQL.js';
 > ```
 
 _Ways to `require`._
@@ -561,7 +561,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useGraphQL = require('graphql-react/universal/useGraphQL');
+> const useGraphQL = require('graphql-react/public/useGraphQL');
 > ```
 
 _Options guide for common situations._
@@ -602,7 +602,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import GraphQLContext from 'graphql-react/universal/GraphQLContext.js';
+> import GraphQLContext from 'graphql-react/public/GraphQLContext.js';
 > ```
 
 _Ways to `require`._
@@ -612,7 +612,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const GraphQLContext = require('graphql-react/universal/GraphQLContext');
+> const GraphQLContext = require('graphql-react/public/GraphQLContext');
 > ```
 
 _A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
@@ -843,7 +843,7 @@ Supports both CJS and [ESM in Node.js](https://nodejs.org/api/esm.html) whilst a
 Individual parts of the public API exist in separate CJS `.js` files that can be accessed via:
 
 - **Deep default imports** (recommended). Only what’s needed gets bundled, without relying on [tree shaking](https://developer.mozilla.org/docs/Glossary/Tree_shaking).
-- **Main index named imports**. [Webpack](https://webpack.js.org) v5+ can tree shake imports from the bare `graphql-react` specifier, while earlier versions and [Rollup](https://rollupjs.org) can only [tree shake](https://developer.mozilla.org/docs/Glossary/Tree_shaking) imports from `graphql-react/universal/index.mjs`.
+- **Main index named imports**. [Webpack](https://webpack.js.org) v5+ can tree shake imports from the bare `graphql-react` specifier, while earlier versions and [Rollup](https://rollupjs.org) can only [tree shake](https://developer.mozilla.org/docs/Glossary/Tree_shaking) imports from `graphql-react/public/index.mjs`.
 
 Consuming the API multiple ways in a project or it’s dependencies doesn’t cause duplication in a bundle.
 
