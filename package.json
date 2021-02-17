@@ -80,7 +80,6 @@
     "formdata-node": "^2.4.0",
     "graphql": "^15.5.0",
     "graphql-api-koa": "^6.0.0",
-    "hard-rejection": "^2.1.0",
     "jsdoc-md": "^9.1.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
@@ -102,7 +101,7 @@
     "test": "npm run test:eslint && npm run test:prettier && npm run test:api && npm run test:size",
     "test:eslint": "eslint --ext mjs,js .",
     "test:prettier": "prettier -c .",
-    "test:api": "coverage-node -r hard-rejection/register test",
+    "test:api": "coverage-node test",
     "test:size": "size-limit",
     "prepublishOnly": "npm test"
   }
