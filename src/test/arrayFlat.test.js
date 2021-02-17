@@ -1,11 +1,13 @@
 'use strict';
 
-const { deepStrictEqual, notStrictEqual } = require('assert');
-const arrayFlat = require('../../universal/private/arrayFlat');
+const { deepStrictEqual, notStrictEqual, throws } = require('assert');
+const arrayFlat = require('./arrayFlat');
 
 module.exports = (tests) => {
-  tests.add('`arrayFlat` with undefined', () => {
-    deepStrictEqual(arrayFlat(undefined), []);
+  tests.add('`arrayFlat` with argument 1 not an array', () => {
+    throws(() => {
+      arrayFlat(true);
+    }, new TypeError('Argument 1 must be an array.'));
   });
 
   tests.add('`arrayFlat` with an empty array', () => {

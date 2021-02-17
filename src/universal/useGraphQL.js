@@ -2,6 +2,7 @@
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext');
 const GraphQL = require('./GraphQL');
 const GraphQLContext = require('./GraphQLContext');
 const hashObject = require('./hashObject');
@@ -272,14 +273,19 @@ module.exports = function useGraphQL({
     loadedOnMountCacheKey,
   ]);
 
-  if (graphql.ssr && loadOnMount && !cacheValue)
-    graphql.operate({
+  const declareLoading = React.useContext(WaterfallRenderContext);
+
+  if (declareLoading && loadOnMount && !cacheValue) {
+    const { cacheValuePromise } = graphql.operate({
       operation,
       fetchOptionsOverride,
       cacheKeyCreator,
       reloadOnLoad,
       resetOnLoad,
     });
+
+    declareLoading(cacheValuePromise);
+  }
 
   return React.useMemo(
     () => ({ load, loading, cacheKey, cacheValue, loadedCacheValue }),

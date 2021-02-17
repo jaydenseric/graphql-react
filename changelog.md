@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Removed the function `ssr` in favor of the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render), fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
+
 ### Patch
 
 - Updated dependencies.
@@ -10,7 +14,6 @@
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
-- Fixed the documented deep `import` path for the function `ssr`.
 
 ## 12.0.1
 

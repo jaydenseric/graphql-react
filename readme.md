@@ -29,7 +29,7 @@ npm install graphql-react
 
 Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLProvider`](#function-graphqlprovider) to provide it for your app.
 
-For server side rendering see [`ssr()`](#function-ssr).
+To server side render your app, use the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
 
 ## Usage
 
@@ -159,7 +159,6 @@ Consider polyfilling:
 - [function GraphQLProvider](#function-graphqlprovider)
 - [function hashObject](#function-hashobject)
 - [function reportCacheErrors](#function-reportcacheerrors)
-- [function ssr](#function-ssr)
 - [function useGraphQL](#function-usegraphql)
 - [constant GraphQLContext](#constant-graphqlcontext)
 - [type GraphQLCache](#type-graphqlcache)
@@ -517,90 +516,6 @@ _[`GraphQL`](#class-graphql) initialized to report cache errors._
 >
 > const graphql = new GraphQL();
 > graphql.on('cache', reportCacheErrors);
-> ```
-
----
-
-### function ssr
-
-Asynchronously server side renders a [React node](#type-reactnode), preloading all GraphQL queries set to `loadOnMount`. After resolving, cache can be exported from the [`GraphQL`](#class-graphql) instance property [`cache`](#graphql-instance-property-cache) for serialization (usually to JSON) and transport to the client for hydration via the [`GraphQL`](#class-graphql) constructor parameter `options.cache`.
-
-Be sure to globally polyfill [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API).
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
-| `node` | [ReactNode](#type-reactnode) | React virtual DOM node. |
-| `render` | Function? = ReactDOMServer.renderToStaticMarkup | Synchronous React server side render function, defaulting to [`ReactDOMServer.renderToStaticMarkup`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) as it is more efficient than [`ReactDOMServer.renderToString`](https://reactjs.org/docs/react-dom-server.html#rendertostring). |
-
-**Returns:** Promise\<string> — Promise resolving the rendered HTML string.
-
-#### See
-
-- [`ReactDOMServer` docs](https://reactjs.org/docs/react-dom-server).
-- [`next-graphql-react`](https://npm.im/next-graphql-react) to use this API in a [Next.js](https://nextjs.org) project.
-
-#### Examples
-
-_Ways to `import`._
-
-> ```js
-> import { ssr } from 'graphql-react/server';
-> ```
->
-> ```js
-> import ssr from 'graphql-react/server/ssr.js';
-> ```
-
-_Ways to `require`._
-
-> ```js
-> const { ssr } = require('graphql-react/server');
-> ```
->
-> ```js
-> const ssr = require('graphql-react/server/ssr');
-> ```
-
-_SSR function that resolves a HTML string and cache JSON for client hydration._
-
-> ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react';
-> import { ssr } from 'graphql-react/server';
-> import React from 'react';
-> import ReactDOMServer from 'react-dom/server';
-> import { App } from './components/App.mjs';
->
-> async function render() {
->   const graphql = new GraphQL();
->   const page = (
->     <GraphQLProvider graphql={graphql}>
->       <App />
->     </GraphQLProvider>
->   );
->   const html = await ssr(graphql, page, ReactDOMServer.renderToString);
->   const cache = JSON.stringify(graphql.cache);
->   return { html, cache };
-> }
-> ```
-
-_SSR function that resolves a HTML string suitable for a static page._
-
-> ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react';
-> import { ssr } from 'graphql-react/server';
-> import React from 'react';
-> import { App } from './components/App.mjs';
->
-> function render() {
->   const graphql = new GraphQL();
->   const page = (
->     <GraphQLProvider graphql={graphql}>
->       <App />
->     </GraphQLProvider>
->   );
->   return ssr(graphql, page);
-> }
 > ```
 
 ---

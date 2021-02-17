@@ -6,13 +6,14 @@ const { default: fetch } = require('node-fetch');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server.node');
 const ReactTestRenderer = require('react-test-renderer');
+const { waterfallRender } = require('react-waterfall-render');
 const revertableGlobals = require('revertable-globals');
 const GraphQL = require('../../universal/GraphQL');
 const GraphQLContext = require('../../universal/GraphQLContext');
 const GraphQLProvider = require('../../universal/GraphQLProvider');
 const hashObject = require('../../universal/hashObject');
-const arrayFlat = require('../../universal/private/arrayFlat');
 const useGraphQL = require('../../universal/useGraphQL');
+const arrayFlat = require('../arrayFlat');
 const createGraphQLKoaApp = require('../createGraphQLKoaApp');
 const listen = require('../listen');
 const promisifyEvent = require('../promisifyEvent');
@@ -425,6 +426,62 @@ module.exports = (tests) => {
           strictEqual(renderResult4.cacheKey, operation2CacheKey);
           deepStrictEqual(renderResult4.cacheValue, operation2CacheValue);
           deepStrictEqual(renderResult4.loadedCacheValue, operation2CacheValue);
+        } finally {
+          close();
+        }
+      } finally {
+        revertGlobals();
+      }
+    }
+  );
+
+  tests.add(
+    '`useGraphQL` option `loadOnMount` true without initial cache, server side rendered',
+    async () => {
+      const revertGlobals = revertableGlobals({ fetch });
+
+      try {
+        const { port, close } = await listen(createGraphQLKoaApp());
+
+        try {
+          const graphql = new GraphQL();
+          const fetchOptionsOverride = (options) => {
+            options.url = `http://localhost:${port}`;
+          };
+
+          const operation1Options = {
+            operation: { query: '{ a: echo }' },
+            fetchOptionsOverride,
+            cacheKeyCreator,
+          };
+          const { cacheKey, cacheValuePromise } = graphql.operate(
+            operation1Options
+          );
+          const cacheValue = await cacheValuePromise;
+
+          graphql.reset();
+
+          let cacheKeyFetched;
+
+          graphql.on('fetch', ({ cacheKey }) => {
+            cacheKeyFetched = cacheKey;
+          });
+
+          const renderResultHtml = await waterfallRender(
+            <GraphQLProvider graphql={graphql}>
+              <RenderUseGraphQL {...operation1Options} loadOnMount />
+            </GraphQLProvider>,
+            ReactDOMServer.renderToStaticMarkup
+          );
+          const renderResult = JSON.parse(
+            renderResultHtml.replace(/&quot;/gu, '"')
+          );
+
+          strictEqual(cacheKeyFetched, cacheKey);
+          strictEqual(renderResult.loading, false);
+          strictEqual(renderResult.cacheKey, cacheKey);
+          deepStrictEqual(renderResult.cacheValue, cacheValue);
+          deepStrictEqual(renderResult.loadedCacheValue, cacheValue);
         } finally {
           close();
         }
