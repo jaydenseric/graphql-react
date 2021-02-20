@@ -50,7 +50,7 @@
     "react-dom": "16.14 - 17"
   },
   "dependencies": {
-    "@babel/runtime": "^7.12.13",
+    "@babel/runtime": "^7.13.9",
     "extract-files": "^9.0.0",
     "fnv1a": "^1.0.1",
     "mitt": "^2.1.0",
@@ -59,15 +59,15 @@
   },
   "devDependencies": {
     "@arr/flatten": "^1.0.1",
-    "@babel/cli": "^7.12.16",
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@babel/plugin-transform-runtime": "^7.12.15",
-    "@babel/preset-env": "^7.12.16",
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/eslint-parser": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
-    "@size-limit/preset-small-lib": "^4.9.2",
+    "@size-limit/preset-small-lib": "^4.10.1",
     "coverage-node": "^4.0.0",
-    "eslint": "^7.20.0",
+    "eslint": "^7.21.0",
     "eslint-config-env": "^18.0.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
@@ -89,7 +89,7 @@
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",
     "revertable-globals": "^1.1.0",
-    "size-limit": "^4.9.2",
+    "size-limit": "^4.10.1",
     "test-director": "^5.0.0"
   },
   "scripts": {
