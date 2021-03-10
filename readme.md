@@ -14,6 +14,8 @@ A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using m
 
 ## Setup
 
+First, polyfill any required globals (see [_**Support**_](#support)) that are missing in your client and server environments.
+
 ### Next.js setup
 
 See the [`next-graphql-react`](https://npm.im/next-graphql-react) setup instructions.

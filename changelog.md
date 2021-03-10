@@ -21,6 +21,7 @@
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
 - Added a test for `FirstRenderDateContext` used as a React context.
 - Updated the Relay and Apollo URLs in the readme.
+- Mention polyfilling any required globals in the readme section “Setup”.
 - Removed the readme section “Apollo comparison”.
 
 ## 12.0.1
