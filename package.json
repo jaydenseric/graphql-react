@@ -69,6 +69,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "event-target-shim": "^6.0.2",
     "fetch-blob": "^2.1.1",
     "filter-console": "^0.1.1",
     "formdata-node": "^2.5.0",
