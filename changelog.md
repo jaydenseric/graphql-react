@@ -6,22 +6,89 @@
 
 - Stopped supporting Internet Explorer.
 - Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.14 - 17`.
-- Updated the Babel config to use [the new JSX transform](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
-- Removed the function `ssr` in favor of the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render), fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
-- Reorganized file structure. Deep import paths beginning with `graphql-react/universal` must be updated to `graphql-react/public`.
+- Use [the new JSX runtime](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
+- Reorganized the file structure and replaced the entire API:
+
+  - Removed all of the previous public exports for the old API:
+    - `GraphQL`
+    - `GraphQLContext`
+    - `GraphQLProvider`
+    - `hashObject`
+    - `reportCacheErrors`
+    - `useGraphQL`
+    - `ssr`
+  - Added public exports for the new API, available as named imports from the index and as deep imports from `graphql-react/public/` `.js` CJS modules:
+    - `Cache`
+    - `CacheContext`
+    - `HYDRATION_TIME_MS`
+    - `HydrationTimeStampContext`
+    - `Loading`
+    - `LoadingCacheValue`
+    - `LoadingContext`
+    - `Provider`
+    - `cacheDelete`
+    - `cacheEntryDelete`
+    - `cacheEntryPrune`
+    - `cacheEntrySet`
+    - `cacheEntryStale`
+    - `cachePrune`
+    - `cacheStale`
+    - `fetchGraphQL`
+    - `fetchOptionsGraphQL`
+    - `useAutoAbortLoad`
+    - `useAutoLoad`
+    - `useCache`
+    - `useCacheEntry`
+    - `useCacheEntryPrunePrevention`
+    - `useLoadGraphQL`
+    - `useLoadOnDelete`
+    - `useLoadOnMount`
+    - `useLoadOnStale`
+    - `useLoading`
+    - `useLoadingEntry`
+    - `useWaterfallLoad`
+  - The [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) function from [`react-waterfall-render`](https://npm.im/react-waterfall-render) should now be used for server side rendering, fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
+  - In addition to the previously required globals, consider polyfilling:
+    - [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+    - [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+    - [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+    - [`EventTarget`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
+    - [`performance`](https://developer.mozilla.org/en-US/docs/Web/API/Window/performance)
+
+  The API for the cache (centered around a `Cache` instance provided in the `CacheContext` React context) is separated from the API for loading (centered around a `Loading` instance provided in the `LoadingContext` React context). Although the new loading system should work well for everyone, it could be totally avoided in an app that implements a custom alternative.
+
+  Instead of using the old [`mitt`](https://npm.im/mitt) dependency for events, the `Cache` and `Loading` classes extend the native [`EventTarget`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget) global available in modern browsers and Node.js; a powerful and familiar event system with zero bundle size cost.
+
+  The new API avoids class methods that add to bundle size regardless if they are used, in favor of focused functions that can be imported to process instances as arguments. For example, one route in your app may only render a cache entry, while another may have a form that makes the global cache stale. If the functionality to make the cache stale was a `Cache` instance method, it would increase the bundle size for the entire app, whereas a function imported in the second route will only grow the bundle size for that route. Features can be added to the API over time without growing everyone’s bundles.
+
+  There are now functions that can be imported to directly manipulate the cache. The functions `cacheEntrySet` and `cacheEntryDelete` update a particular entry, and `cacheDelete` deletes all cache.
+
+  There is a new approach for dealing with stale cache. The function `cacheEntryStale` signals a single entry is stale, and `cacheStale` does the same for all entries (useful after a mutation). These functions don’t actually update cache entries; they simply dispatch cache entry stale events and it’s up to components to listen for this event and reload the cache entry in response, typically via the `useLoadOnStale` React hook.
+
+  Cache entries that are not relevant to the current view can now be pruned on demand using the functions `cacheEntryPrune` for a single entry, or `cachePrune` for all entries, fixing [#55](https://github.com/jaydenseric/graphql-react/issues/55). These functions work by dispatching cache entry prune events on the `Cache` instance, and for each event not cancelled by a listener with `event.preventDefault()`, the cache entry is deleted. The `useCacheEntryPrunePrevention` React hook can be used to automatically cancel pruning of a cache entry used in a component.
+
+  Cache keys are now manually defined instead of automatically derived from `fetch` options hashes, fixing [#56](https://github.com/jaydenseric/graphql-react/issues/56). This is easier to understand, is faster to render, and results in a smaller bundle size without the old [`fnv1a`](https://npm.im/fnv1a) dependency for hashing.
+
+  Instead of one `useGraphQL` React hook with complex options that all add to a component’s bundle size regardless if they are used, there are now several more focused React hooks that can be composed to do exactly the work required, fixing [#53](https://github.com/jaydenseric/graphql-react/issues/53).
+
+  The React hooks can be composed with custom ones to load and cache any type of data, not just GraphQL, using any method, not just `fetch`.
+
+  The new loading system provides the ability to abort loading at any time, implemented using the native [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) global available in modern browsers and Node.js, fixing [#24](https://github.com/jaydenseric/graphql-react/issues/24). Many of the new React hooks leverage this for features such as automatically aborting loading a cache entry when the component loading it unmounts. The new API makes it trivially easy to build features as auto-suggest search inputs that abort the last loading on new input, or page queries that abort loading if the user abandons the route.
+
+  While the new API may seem to have an intimidating number of public exports, the average Next.js app that queries and renders data from a GraphQL API will only use a few. For inspiration, see the readme “Examples” section.
+
+- Published modules now contain JSDoc comments, which might affect TypeScript projects.
 
 ### Patch
 
 - Updated dependencies.
-- Replaced [`babel-eslint`](https://npm.im/babel-eslint) dev dependency with [`@babel/eslint-parser`](https://npm.im/@babel/eslint-parser).
+- Removed Babel and related dependencies and config.
 - Updated GitHub Actions CI config:
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
-- Use a new [`@arr/flatten`](https://npm.im/@arr/flatten) dev dependency to flatten arrays in tests.
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
 - Test the bundle size manually using [`webpack`](https://npm.im/webpack) v5, and remove [`size-limit`](https://npm.im/size-limit) related dev dependencies, config, and scripts.
-- Added a test for `FirstRenderDateContext` used as a React context.
 - Tweaked the package description.
 - Readme edits, including:
   - Updated the Relay and Apollo URLs.

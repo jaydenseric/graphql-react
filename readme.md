@@ -6,6 +6,8 @@
 
 A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that’s lightweight (< 3.5 KB) but powerful; the first [Relay](https://relay.dev) and [Apollo](https://apollographql.com/apollo-client) alternative with server side rendering.
 
+The [API](#api) can also be used to custom load, cache and server side render any data, even from non GraphQL sources.
+
 - [Setup](#setup)
 - [Examples](#examples)
 - [Support](#support)
@@ -27,7 +29,7 @@ To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://np
 npm install graphql-react
 ```
 
-Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLProvider`](#function-graphqlprovider) to provide it for your app.
+Create a single [`Cache`](#class-cache) instance and use the [`Provider`](#function-dataprovider) component to provide it for your app.
 
 To server side render your app, use the [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) function from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
 
@@ -39,22 +41,13 @@ To server side render your app, use the [`waterfallRender`](https://github.com/j
 Here is a basic example using the [GitHub GraphQL API](https://docs.github.com/en/graphql), with tips commented:
 
 ```jsx
-import { GraphQL, GraphQLProvider, useGraphQL } from 'graphql-react';
-import React from 'react';
-
-// Any GraphQL API can be queried in components, where fetch options for the
-// URI, auth headers, etc. can be specified. The `useGraphQL` hook will do less
-// work for following renders if `fetchOptionsOverride` is defined outside the
-// component, or is memoized using the `React.useMemo` hook within the
-// component. Typically it’s exported in a config module for use throughout the
-// project. The default fetch options received by the override function are
-// tailored to the operation; usually the body is JSON but if there are files in
-// the variables it will be a `FormData` instance for a GraphQL multipart
-// request.
-function fetchOptionsOverride(options) {
-  options.url = 'https://api.github.com/graphql';
-  options.headers.Authorization = `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`;
-}
+// While named imports are available, deep imports result in a small bundle size
+// regardless of the (often dubious) tree-shaking abilities of your bundler.
+import useAutoLoad from 'graphql-react/public/useAutoLoad.js';
+import useCacheEntry from 'graphql-react/public/useCacheEntry.js';
+import useLoadGraphQL from 'graphql-react/public/useLoadGraphQL.js';
+import useWaterfallLoad from 'graphql-react/public/useWaterfallLoad.js';
+import { useCallback } from 'react';
 
 // The query is just a string; no need to use `gql` from `graphql-tag`. The
 // special comment before the string allows editor syntax highlighting, Prettier
@@ -72,57 +65,71 @@ const query = /* GraphQL */ `
   }
 `;
 
-function RepoStarCount({ repoId }) {
-  // Memoization allows the `useGraphQL` hook to avoid work in following renders
-  // with the same GraphQL operation.
-  const operation = React.useMemo(
-    () => ({
-      query,
-      variables: {
-        repoId,
-      },
-    }),
-    [repoId]
+export default function GitHubRepoStars({ repoId }) {
+  const cacheKey = `GitHubRepoStars-${repoId}`;
+  const cacheValue = useCacheEntry(cacheKey);
+
+  // A hook for loading GraphQL is available, but custom hooks for loading non
+  // GraphQL (e.g. fetching from a REST API) can be made.
+  const loadGraphQL = useLoadGraphQL();
+
+  const load = useCallback(
+    () =>
+      // To be DRY, utilize a custom hook for each API your app loads from, e.g.
+      // `useLoadGraphQLGitHub`.
+      loadGraphQL(
+        cacheKey,
+        // Fetch URI.
+        'https://api.github.com/graphql',
+        // Fetch options.
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+          },
+          body: JSON.stringify({
+            query,
+            variables: {
+              repoId,
+            },
+          }),
+        }
+      ),
+    [cacheKey, loadGraphQL, repoId]
   );
 
-  // The `useGraphQL` hook can be used for both queries and mutations.
-  const { loading, cacheValue } = useGraphQL({
-    operation,
-    fetchOptionsOverride,
+  // This hook automatically keeps the cache entry loaded from when the
+  // component mounts, reloading it if it’s staled or deleted. It also aborts
+  // loading if the arguments change or the component unmounts; very handy for
+  // auto-suggest components!
+  useAutoLoad(cacheKey, load);
 
-    // Load the query whenever the component mounts. This is desirable for
-    // queries to display content, but not for on demand situations like
-    // pagination view more buttons or forms that submit mutations.
-    loadOnMount: true,
+  // Waterfall loading can be used to load data when server side rendering,
+  // enabled automagically by `next-graphql-react`. To learn how this works or
+  // to set it up for a non Next.js app, see:
+  // https://github.com/jaydenseric/react-waterfall-render
+  const isWaterfallLoading = useWaterfallLoad(cacheKey, load);
 
-    // Reload the query whenever a global cache reload is signaled.
-    loadOnReload: true,
-
-    // Reload the query whenever the global cache is reset. Resets immediately
-    // delete the cache and are mostly only used when logging out the user.
-    loadOnReset: true,
-  });
-
-  return cacheValue?.data
-    ? cacheValue.data.repo.stargazers.totalCount
-    : loading
-    ? // Data is often reloaded, so don’t assume loading indicates no data.
-      'Loading…'
-    : // Detailed error info is available in the `cacheValue` properties
-      // `fetchError`, `httpError`, `parseError` and `graphQLErrors`. A
-      // combination of errors is possible, and an error doesn’t necessarily
-      // mean data is unavailable.
-      'Error!';
+  // When waterfall loading it’s efficient to skip rendering, as the app will
+  // re-render once this step of the waterfall has loaded. If more waterfall
+  // loading happens in children, those steps of the waterfall are awaited and
+  // the app re-renders again, and so forth until there’s no more loading for
+  // the final server side render.
+  return isWaterfallLoading
+    ? null
+    : cacheValue
+    ? cacheValue.errors
+      ? // Unlike many other GraphQL libraries, detailed loading errors are
+        // cached and can be server side rendered without causing a
+        // server/client HTML mismatch error.
+        'Error!'
+      : cacheValue.data.repo.stargazers.totalCount
+    : // In this situation no cache value implies loading. Use the
+      // `useLoadingEntry` hook to manage loading in detail.
+      'Loading…';
 }
-
-// Zero config GraphQL client that manages the cache.
-const graphql = new GraphQL();
-
-const App = () => (
-  <GraphQLProvider graphql={graphql}>
-    <RepoStarCount repoId="MDEwOlJlcG9zaXRvcnkxMTk5Mzg5Mzk=" />
-  </GraphQLProvider>
-);
 ```
 
 ## Support
@@ -132,597 +139,1237 @@ const App = () => (
 
 Consider polyfilling:
 
-- [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-- [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API)
-- [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData)
+- [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+- [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+- [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+- [`EventTarget`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
+- [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
+- [`performance`](https://developer.mozilla.org/en-US/docs/Web/API/Window/performance)
 
 ## API
 
 ### Table of contents
 
-- [class GraphQL](#class-graphql)
-  - [GraphQL instance method off](#graphql-instance-method-off)
-  - [GraphQL instance method on](#graphql-instance-method-on)
-  - [GraphQL instance method operate](#graphql-instance-method-operate)
-  - [GraphQL instance method reload](#graphql-instance-method-reload)
-  - [GraphQL instance method reset](#graphql-instance-method-reset)
-  - [GraphQL instance property cache](#graphql-instance-property-cache)
-  - [GraphQL instance property operations](#graphql-instance-property-operations)
-  - [GraphQL event cache](#graphql-event-cache)
-  - [GraphQL event fetch](#graphql-event-fetch)
-  - [GraphQL event reload](#graphql-event-reload)
-  - [GraphQL event reset](#graphql-event-reset)
-- [function GraphQLProvider](#function-graphqlprovider)
-- [function hashObject](#function-hashobject)
-- [function reportCacheErrors](#function-reportcacheerrors)
-- [function useGraphQL](#function-usegraphql)
-- [constant GraphQLContext](#constant-graphqlcontext)
-- [type GraphQLCache](#type-graphqlcache)
-- [type GraphQLCacheKey](#type-graphqlcachekey)
-- [type GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)
-- [type GraphQLCacheValue](#type-graphqlcachevalue)
-- [type GraphQLFetchOptions](#type-graphqlfetchoptions)
-- [type GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)
+- [class Cache](#class-cache)
+  - [Cache instance property store](#cache-instance-property-store)
+  - [Cache event delete](#cache-event-delete)
+  - [Cache event prune](#cache-event-prune)
+  - [Cache event set](#cache-event-set)
+  - [Cache event stale](#cache-event-stale)
+- [class Loading](#class-loading)
+  - [Loading instance property store](#loading-instance-property-store)
+  - [Loading event end](#loading-event-end)
+  - [Loading event start](#loading-event-start)
+- [class LoadingCacheValue](#class-loadingcachevalue)
+  - [LoadingCacheValue instance property abortController](#loadingcachevalue-instance-property-abortcontroller)
+  - [LoadingCacheValue instance property promise](#loadingcachevalue-instance-property-promise)
+  - [LoadingCacheValue instance property timeStamp](#loadingcachevalue-instance-property-timestamp)
+- [function cacheDelete](#function-cachedelete)
+- [function cacheEntryDelete](#function-cacheentrydelete)
+- [function cacheEntryPrune](#function-cacheentryprune)
+- [function cacheEntrySet](#function-cacheentryset)
+- [function cacheEntryStale](#function-cacheentrystale)
+- [function cachePrune](#function-cacheprune)
+- [function cacheStale](#function-cachestale)
+- [function fetchGraphQL](#function-fetchgraphql)
+- [function fetchOptionsGraphQL](#function-fetchoptionsgraphql)
+- [function Provider](#function-provider)
+- [function useAutoAbortLoad](#function-useautoabortload)
+- [function useAutoLoad](#function-useautoload)
+- [function useCache](#function-usecache)
+- [function useCacheEntry](#function-usecacheentry)
+- [function useCacheEntryPrunePrevention](#function-usecacheentrypruneprevention)
+- [function useLoadGraphQL](#function-useloadgraphql)
+- [function useLoading](#function-useloading)
+- [function useLoadingEntry](#function-useloadingentry)
+- [function useLoadOnDelete](#function-useloadondelete)
+- [function useLoadOnMount](#function-useloadonmount)
+- [function useLoadOnStale](#function-useloadonstale)
+- [function useWaterfallLoad](#function-usewaterfallload)
+- [member CacheContext](#member-cachecontext)
+- [member HydrationTimeStampContext](#member-hydrationtimestampcontext)
+- [member LoadingContext](#member-loadingcontext)
+- [constant HYDRATION_TIME_MS](#constant-hydration_time_ms)
+- [type CacheKey](#type-cachekey)
+- [type CacheKeyMatcher](#type-cachekeymatcher)
+- [type CacheValue](#type-cachevalue)
+- [type FetchOptions](#type-fetchoptions)
 - [type GraphQLOperation](#type-graphqloperation)
-- [type GraphQLOperationLoading](#type-graphqloperationloading)
-- [type GraphQLOperationStatus](#type-graphqloperationstatus)
-- [type HttpError](#type-httperror)
+- [type GraphQLResult](#type-graphqlresult)
+- [type GraphQLResultError](#type-graphqlresulterror)
+- [type HighResTimeStamp](#type-highrestimestamp)
+- [type Loader](#type-loader)
+- [type LoadGraphQL](#type-loadgraphql)
 - [type ReactNode](#type-reactnode)
 
-### class GraphQL
+### class Cache
 
-A lightweight GraphQL client that caches queries and mutations.
+Cache store.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | object? = {} | Options. |
-| `options.cache` | [GraphQLCache](#type-graphqlcache)? = {} | Cache to import; usually from a server side render. |
-
-#### See
-
-- [`reportCacheErrors`](#function-reportcacheerrors) to setup error reporting.
+| `store` | object? = {} | Initial [cache store](#cache-instance-property-store). Useful for hydrating cache data from a server side render prior to the initial client side render. |
 
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { GraphQL } from 'graphql-react';
+> import { Cache } from 'graphql-react';
 > ```
 >
 > ```js
-> import GraphQL from 'graphql-react/public/GraphQL.js';
+> import Cache from 'graphql-react/public/Cache.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { GraphQL } = require('graphql-react');
+> const { Cache } = require('graphql-react');
 > ```
 >
 > ```js
-> const GraphQL = require('graphql-react/public/GraphQL');
+> const Cache = require('graphql-react/public/Cache');
 > ```
 
-_Construct a GraphQL client._
+_Construct a new instance._
 
 > ```js
-> import { GraphQL } from 'graphql-react';
->
-> const graphql = new GraphQL();
+> const cache = new Cache();
 > ```
 
-#### GraphQL instance method off
+#### Cache instance property store
 
-Removes an event listener.
-
-| Parameter | Type     | Description    |
-| :-------- | :------- | :------------- |
-| `type`    | string   | Event type.    |
-| `handler` | Function | Event handler. |
-
-#### GraphQL instance method on
-
-Adds an event listener.
-
-| Parameter | Type     | Description    |
-| :-------- | :------- | :------------- |
-| `type`    | string   | Event type.    |
-| `handler` | Function | Event handler. |
-
-##### See
-
-- [`reportCacheErrors`](#function-reportcacheerrors) can be used with this to setup error reporting.
-
-#### GraphQL instance method operate
-
-Loads a GraphQL operation, visible in [GraphQL operations](#graphql-instance-property-operations). Emits a [`GraphQL`](#class-graphql) [`fetch`](#graphql-event-fetch) event once the [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) request has been initiated and the map of loading [GraphQL operations](#graphql-instance-property-operations) has been updated, and a [`GraphQL`](#class-graphql) [`cache`](#graphql-event-cache) event once it’s loaded into the [GraphQL cache](#graphql-instance-property-cache).
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `options` | object | Options. |
-| `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default GraphQL operation [`fetch` options](#type-graphqlfetchoptions). |
-| `options.cacheKeyCreator` | [GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)? = [hashObject](#function-hashobject) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for the operation. |
-| `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
-| `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
-
-**Returns:** [GraphQLOperationLoading](#type-graphqloperationloading) — Loading GraphQL operation details.
-
-##### Fires
-
-- [GraphQL event fetch](#graphql-event-fetch)
-- [GraphQL event cache](#graphql-event-cache)
-
-#### GraphQL instance method reload
-
-Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation.
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from reloading. |
-
-##### Fires
-
-- [GraphQL event reload](#graphql-event-reload)
-
-##### Examples
-
-_Reloading the [GraphQL cache](#graphql-instance-property-cache)._
-
-> ```js
-> graphql.reload();
-> ```
-
-#### GraphQL instance method reset
-
-Resets the [GraphQL cache](#graphql-instance-property-cache), useful when a user logs out.
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from deletion. Useful for resetting cache after a mutation, preserving the mutation cache. |
-
-##### Fires
-
-- [GraphQL event reset](#graphql-event-reset)
-
-##### Examples
-
-_Resetting the [GraphQL cache](#graphql-instance-property-cache)._
-
-> ```js
-> graphql.reset();
-> ```
-
-#### GraphQL instance property cache
-
-Cache of loaded GraphQL operations. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
-
-**Type:** [GraphQLCache](#type-graphqlcache)
-
-##### Examples
-
-_Export cache as JSON._
-
-> ```js
-> const exportedCache = JSON.stringify(graphql.cache);
-> ```
-
-_Example cache JSON._
-
-> ```json
-> {
->   "a1bCd2": {
->     "data": {
->       "viewer": {
->         "name": "Jayden Seric"
->       }
->     }
->   }
-> }
-> ```
-
-#### GraphQL instance property operations
-
-A map of loading [GraphQL operations](#type-graphqloperation), listed under their [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) in the order they were initiated. You probably don’t need to interact with this unless you’re implementing a server side rendering framework.
-
-**Type:** object<[GraphQLCacheKey](#type-graphqlcachekey), Array\<Promise<[GraphQLCacheValue](#type-graphqlcachevalue)>>>
-
-##### Examples
-
-_How to await all loading [GraphQL operations](#graphql-instance-property-operations)._
-
-> ```js
-> Promise.all(Object.values(graphql.operations).flat());
-> ```
-
-#### GraphQL event cache
-
-Signals that a [GraphQL operation](#type-graphqloperation) was fetched and cached.
+Store of cache [keys](#type-cachekey) and [values](#type-cachevalue).
 
 **Type:** object
 
-| Property | Type | Description |
-| :-- | :-- | :-- |
-| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the operation that was cached. |
-| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | The loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
-| `response` | Response? | The [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) instance; may be undefined if there was a fetch error. |
+#### Cache event delete
 
-#### GraphQL event fetch
+Signals that a [cache store](#cache-instance-property-store) entry was deleted. The event name starts with the [cache key](#type-cachekey) of the deleted entry, followed by `/delete`.
 
-Signals that a [GraphQL operation](#type-graphqloperation) is being fetched.
+**Type:** CustomEvent
 
-**Type:** object
+#### Cache event prune
 
-| Property | Type | Description |
-| :-- | :-- | :-- |
-| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the operation being fetched. |
-| `cacheValuePromise` | Promise<[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+Signals that a [cache store](#cache-instance-property-store) entry will be deleted unless the event is canceled via `event.preventDefault()`. The event name starts with the [cache key](#type-cachekey) of the entry being pruned, followed by `/prune`.
 
-#### GraphQL event reload
+**Type:** CustomEvent
 
-Signals that [GraphQL cache](#graphql-instance-property-cache) subscribers such as the [`useGraphQL`](#function-usegraphql) React hook should reload their GraphQL operation.
+#### Cache event set
 
-**Type:** object
+Signals that a [cache store](#cache-instance-property-store) entry was set. The event name starts with the [cache key](#type-cachekey) of the set entry, followed by `/set`.
+
+**Type:** CustomEvent
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | A [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache to exempt from reloading. |
+| `detail` | object | Event detail. |
+| `detail.cacheValue` | [CacheValue](#type-cachevalue) | Cache value that was set. |
 
-#### GraphQL event reset
+#### Cache event stale
 
-Signals that the [GraphQL cache](#graphql-instance-property-cache) has been reset.
+Signals that a [cache store](#cache-instance-property-store) entry is now stale (often due to a mutation) and should probably be reloaded. The event name starts with the [cache key](#type-cachekey) of the stale entry, followed by `/stale`.
 
-**Type:** object
-
-| Property | Type | Description |
-| :-- | :-- | :-- |
-| `exceptCacheKey` | [GraphQLCacheKey](#type-graphqlcachekey)? | The [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for cache that was exempted from deletion. |
+**Type:** CustomEvent
 
 ---
 
-### function GraphQLProvider
+### class Loading
 
-A React component that provides a [`GraphQL`](#class-graphql) instance for an app.
+Loading store.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { Loading } from 'graphql-react';
+> ```
+>
+> ```js
+> import Loading from 'graphql-react/public/Loading.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { Loading } = require('graphql-react');
+> ```
+>
+> ```js
+> const Loading = require('graphql-react/public/Loading');
+> ```
+
+_Construct a new instance._
+
+> ```js
+> const loading = new Loading();
+> ```
+
+#### Loading instance property store
+
+Loading store, keyed by [cache key](#type-cachekey). Multiple [loading cache values](#class-loadingcachevalue) for the same key are set in the order they started.
+
+**Type:** object<[CacheKey](#type-cachekey), Set<[LoadingCacheValue](#class-loadingcachevalue)>>
+
+#### Loading event end
+
+Signals the end of [loading a cache value](#class-loadingcachevalue); either the loading finished and the [cache value](#type-cachevalue) was set, the loading was aborted, or there was an error. The event name starts with the [cache key](#type-cachekey), followed by `/end`.
+
+**Type:** CustomEvent
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `detail` | object | Event detail. |
+| `detail.loadingCacheValue` | [LoadingCacheValue](#class-loadingcachevalue) | Loading cache value that ended. |
+
+#### Loading event start
+
+Signals the start of [loading a cache value](#class-loadingcachevalue). The event name starts with the [cache key](#type-cachekey), followed by `/start`.
+
+**Type:** CustomEvent
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `detail` | object | Event detail. |
+| `detail.loadingCacheValue` | [LoadingCacheValue](#class-loadingcachevalue) | Loading cache value that started. |
+
+---
+
+### class LoadingCacheValue
+
+Controls a loading [cache value](#type-cachevalue).
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `loading` | [Loading](#class-loading) | Loading to update. |
+| `cache` | [Cache](#class-cache) | Cache to update. |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `loadingResult` | Promise<[CacheValue](#type-cachevalue)> | Resolves the loading result (including any loading errors) to be set as the [cache value](#type-cachevalue) if loading isn’t aborted. Shouldn’t reject. |
+| `abortController` | AbortController | Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no affect after loading ends. |
+
+#### Fires
+
+- [Loading event start](#loading-event-start)
+- [Cache event set](#cache-event-set)
+- [Loading event end](#loading-event-end)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { LoadingCacheValue } from 'graphql-react';
+> ```
+>
+> ```js
+> import LoadingCacheValue from 'graphql-react/public/LoadingCacheValue.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { LoadingCacheValue } = require('graphql-react');
+> ```
+>
+> ```js
+> const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue');
+> ```
+
+#### LoadingCacheValue instance property abortController
+
+Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no affect after loading ends.
+
+**Type:** AbortController
+
+#### LoadingCacheValue instance property promise
+
+Resolves the loading result, after the [cache value](#type-cachevalue) has been set if the loading wasn’t aborted. Shouldn’t reject.
+
+**Type:** Promise<\*>
+
+#### LoadingCacheValue instance property timeStamp
+
+When this loading started.
+
+**Type:** [HighResTimeStamp](#type-highrestimestamp)
+
+---
+
+### function cacheDelete
+
+Deletes [cache](#cache-instance-property-store) entries. Useful after a user logs out.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cache` | [Cache](#class-cache) | Cache to update. |
+| `cacheKeyMatcher` | [CacheKeyMatcher](#type-cachekeymatcher)? | Matches [cache keys](#type-cachekey) to delete. By default all are matched. |
+
+#### Fires
+
+- [Cache event delete](#cache-event-delete)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheDelete } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheDelete from 'graphql-react/public/cacheDelete.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheDelete } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheDelete = require('graphql-react/public/cacheDelete');
+> ```
+
+---
+
+### function cacheEntryDelete
+
+Deletes a [cache](#cache-instance-property-store) entry.
+
+| Parameter  | Type                       | Description      |
+| :--------- | :------------------------- | :--------------- |
+| `cache`    | [Cache](#class-cache)      | Cache to update. |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.       |
+
+#### Fires
+
+- [Cache event delete](#cache-event-delete)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheEntryDelete } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheEntryDelete from 'graphql-react/public/cacheEntryDelete.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheEntryDelete } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheEntryDelete = require('graphql-react/public/cacheEntryDelete');
+> ```
+
+---
+
+### function cacheEntryPrune
+
+Prunes a [cache](#cache-instance-property-store) entry, if no [prune event](#cache-event-prune) listener cancels the [cache](#cache-instance-property-store) entry deletion via `event.preventDefault()`.
+
+| Parameter  | Type                       | Description      |
+| :--------- | :------------------------- | :--------------- |
+| `cache`    | [Cache](#class-cache)      | Cache to update. |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.       |
+
+#### Fires
+
+- [Cache event prune](#cache-event-prune)
+- [Cache event delete](#cache-event-delete)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheEntryPrune } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheEntryPrune from 'graphql-react/public/cacheEntryPrune.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheEntryPrune } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheEntryPrune = require('graphql-react/public/cacheEntryPrune');
+> ```
+
+---
+
+### function cacheEntrySet
+
+Sets a [cache](#cache-instance-property-store) entry.
+
+| Parameter    | Type                           | Description      |
+| :----------- | :----------------------------- | :--------------- |
+| `cache`      | [Cache](#class-cache)          | Cache to update. |
+| `cacheKey`   | [CacheKey](#type-cachekey)     | Cache key.       |
+| `cacheValue` | [CacheValue](#type-cachevalue) | Cache value.     |
+
+#### Fires
+
+- [Cache event set](#cache-event-set)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheEntrySet } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheEntrySet from 'graphql-react/public/cacheEntrySet.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheEntrySet } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheEntrySet = require('graphql-react/public/cacheEntrySet');
+> ```
+
+---
+
+### function cacheEntryStale
+
+Stales a [cache](#cache-instance-property-store) entry, signalling it should probably be reloaded.
+
+| Parameter  | Type                       | Description      |
+| :--------- | :------------------------- | :--------------- |
+| `cache`    | [Cache](#class-cache)      | Cache to update. |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.       |
+
+#### Fires
+
+- [Cache event stale](#cache-event-stale)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheEntryStale } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheEntryStale from 'graphql-react/public/cacheEntryStale.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheEntryStale } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheEntryStale = require('graphql-react/public/cacheEntryStale');
+> ```
+
+---
+
+### function cachePrune
+
+Prunes [cache](#cache-instance-property-store) entries. Useful after a mutation.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cache` | [Cache](#class-cache) | Cache to update. |
+| `cacheKeyMatcher` | [CacheKeyMatcher](#type-cachekeymatcher)? | Matches [cache keys](#type-cachekey) to prune. By default all are matched. |
+
+#### Fires
+
+- [Cache event prune](#cache-event-prune)
+- [Cache event delete](#cache-event-delete)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cachePrune } from 'graphql-react';
+> ```
+>
+> ```js
+> import cachePrune from 'graphql-react/public/cachePrune.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cachePrune } = require('graphql-react');
+> ```
+>
+> ```js
+> const cachePrune = require('graphql-react/public/cachePrune');
+> ```
+
+---
+
+### function cacheStale
+
+Stales [cache](#cache-instance-property-store) entries. Useful after a mutation.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cache` | [Cache](#class-cache) | Cache to update. |
+| `cacheKeyMatcher` | [CacheKeyMatcher](#type-cachekeymatcher)? | Matches [cache keys](#type-cachekey) to stale. By default all are matched. |
+
+#### Fires
+
+- [Cache event stale](#cache-event-stale)
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { cacheStale } from 'graphql-react';
+> ```
+>
+> ```js
+> import cacheStale from 'graphql-react/public/cacheStale.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { cacheStale } = require('graphql-react');
+> ```
+>
+> ```js
+> const cacheStale = require('graphql-react/public/cacheStale');
+> ```
+
+---
+
+### function fetchGraphQL
+
+Fetches a GraphQL operation, always resolving a [GraphQL result](#type-graphqlresult) suitable for use as a [cache value](#type-cachevalue), even if there are errors. Loading errors are added to the [GraphQL result](#type-graphqlresult) `errors` property, and have an `extensions` property containing `client: true`, along with `code` and sometimes error-specific properties:
+
+| Error code | Reasons | Error specific properties |
+| :-- | :-- | :-- |
+| `FETCH_ERROR` | Fetch error, e.g. the `fetch` global isn’t defined, or the network is offline. | `fetchErrorMessage` (string). |
+| `RESPONSE_HTTP_STATUS` | Response HTTP status code is in the error range. | `statusCode` (number), `statusText` (string). |
+| `RESPONSE_JSON_PARSE_ERROR` | Response JSON parse error. | `jsonParseErrorMessage` (string). |
+| `RESPONSE_MALFORMED` | Response JSON isn’t an object, is missing an `errors` or `data` property, the `errors` property isn’t an array, or the `data` property isn’t an object or `null`. |  |
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `fetchUri` | string | Fetch URI for the GraphQL API. |
+| `fetchOptions` | [FetchOptions](#type-fetchoptions) | Fetch options. |
+
+**Returns:** Promise<[GraphQLResult](#type-graphqlresult)> — Resolves a result suitable for use as a [cache value](#type-cachevalue). Shouldn’t reject.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { fetchGraphQL } from 'graphql-react';
+> ```
+>
+> ```js
+> import fetchGraphQL from 'graphql-react/public/fetchGraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { fetchGraphQL } = require('graphql-react');
+> ```
+>
+> ```js
+> const fetchGraphQL = require('graphql-react/public/fetchGraphQL');
+> ```
+
+---
+
+### function fetchOptionsGraphQL
+
+Creates default [`fetch` options](#type-fetchoptions) for a [GraphQL operation](#type-graphqloperation). If the [GraphQL operation](#type-graphqloperation) contains files to upload, the options will be for a [GraphQL multipart request](https://github.com/jaydenseric/graphql-multipart-request-spec), otherwise they will be for a regular [GraphQL `POST` request](https://github.com/graphql/graphql-over-http/blob/main/spec/GraphQLOverHTTP.md#post).
+
+This utility exists for user convenience and isn’t used directly by the `graphql-react` API. If there is no chance the [GraphQL operation](#type-graphqloperation) contains files, avoid using this utility for a smaller bundle size.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. |
+
+**Returns:** [FetchOptions](#type-fetchoptions) — [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { fetchOptionsGraphQL } from 'graphql-react';
+> ```
+>
+> ```js
+> import fetchOptionsGraphQL from 'graphql-react/public/fetchOptionsGraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { fetchOptionsGraphQL } = require('graphql-react');
+> ```
+>
+> ```js
+> const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL');
+> ```
+
+---
+
+### function Provider
+
+A React component to provide all the React context required to enable the entire `graphql-react` API:
+
+- [Hydration time stamp context](#member-hydrationtimestampcontext)
+- [Cache context](#member-cachecontext)
+- [Loading context](#member-loadingcontext)
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | `props` | object | Component props. |
-| `props.graphql` | [GraphQL](#class-graphql) | [`GraphQL`](#class-graphql) instance. |
+| `props.cache` | [Cache](#class-cache) | [`Cache`](#class-cache) instance. |
 | `props.children` | [ReactNode](#type-reactnode)? | React children. |
 
 **Returns:** [ReactNode](#type-reactnode) — React virtual DOM node.
 
-#### See
-
-- [`GraphQLContext`](#constant-graphqlcontext) is provided via this component.
-- [`useGraphQL`](#function-usegraphql) React hook requires this component to be an ancestor to work.
-
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { GraphQLProvider } from 'graphql-react';
+> import { Provider } from 'graphql-react';
 > ```
 >
 > ```js
-> import GraphQLProvider from 'graphql-react/public/GraphQLProvider.js';
+> import Provider from 'graphql-react/public/Provider.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { GraphQLProvider } = require('graphql-react');
+> const { Provider } = require('graphql-react');
 > ```
 >
 > ```js
-> const GraphQLProvider = require('graphql-react/public/GraphQLProvider');
+> const Provider = require('graphql-react/public/Provider');
 > ```
 
-_Provide a [`GraphQL`](#class-graphql) instance for an app._
+_Provide a [`Cache`](#class-cache) instance for an app._
 
 > ```jsx
-> import { GraphQL, GraphQLProvider } from 'graphql-react';
+> import { Cache, Provider } from 'graphql-react';
 > import React from 'react';
 >
-> const graphql = new GraphQL();
+> const cache = new Cache();
 >
-> const App = ({ children }) => (
->   <GraphQLProvider graphql={graphql}>{children}</GraphQLProvider>
-> );
+> const App = ({ children }) => <Provider cache={cache}>{children}</Provider>;
 > ```
 
 ---
 
-### function hashObject
+### function useAutoAbortLoad
 
-Hashes an object.
+A React hook to create a memoized [loader](#type-loader) from another, that automatically aborts previous loading that started via this hook when new loading starts via this hook, the hook arguments change, or the component unmounts.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `object` | object | A JSON serializable object that may contain [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instances. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
 
-**Returns:** string — A hash.
+**Returns:** [Loader](#type-loader) — Memoized function that starts the loading.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useAutoAbortLoad } from 'graphql-react';
+> ```
+>
+> ```js
+> import useAutoAbortLoad from 'graphql-react/public/useAutoAbortLoad.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useAutoAbortLoad } = require('graphql-react');
+> ```
+>
+> ```js
+> const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad');
+> ```
+
+---
+
+### function useAutoLoad
+
+A React hook to prevent a [cache](#cache-instance-property-store) entry from being pruned while the component is mounted and automatically keep it loaded. Previous loading that started via this hook aborts when new loading starts via this hook, the hook arguments change, or the component unmounts.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
+
+**Returns:** [Loader](#type-loader) — Memoized [loader](#type-loader) created from the `load` argument, that automatically aborts the last loading when the memoized function changes or the component unmounts.
 
 #### See
 
-- [`GraphQLCacheKeyCreator` functions](#type-graphqlcachekeycreator) may use this to derive a [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey).
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) uses this as a default value for `options.cacheKeyCreator`.
-- [`useGraphQL`](#function-usegraphql) React hook this uses this as a default value for `options.cacheKeyCreator`.
+- [`useCacheEntryPrunePrevention`](#function-usecacheentrypruneprevention), used by this hook.
+- [`useAutoAbortLoad`](#function-useautoabortload), used by this hook.
+- [`useLoadOnMount`](#function-useloadonmount), used by this hook.
+- [`useLoadOnStale`](#function-useloadonstale), used by this hook.
+- [`useLoadOnDelete`](#function-useloadondelete), used by this hook.
+- [`useWaterfallLoad`](#function-usewaterfallload), often used alongside this hook for SSR loading.
 
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { hashObject } from 'graphql-react';
+> import { useAutoLoad } from 'graphql-react';
 > ```
 >
 > ```js
-> import hashObject from 'graphql-react/public/hashObject.js';
+> import useAutoLoad from 'graphql-react/public/useAutoLoad.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { hashObject } = require('graphql-react');
+> const { useAutoLoad } = require('graphql-react');
 > ```
 >
 > ```js
-> const hashObject = require('graphql-react/public/hashObject');
+> const useAutoLoad = require('graphql-react/public/useAutoLoad');
 > ```
 
 ---
 
-### function reportCacheErrors
+### function useCache
 
-A [`GraphQL`](#class-graphql) [`cache`](#graphql-event-cache) event handler that reports [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API), HTTP, parse and GraphQL errors via `console.log()`. In a browser environment the grouped error details are expandable.
+A React hook to get the [cache context](#member-cachecontext).
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `data` | [GraphQL#event:cache](#graphql-event-cache) | [`GraphQL`](#class-graphql) [`cache`](#graphql-event-cache) event data. |
+**Returns:** [Cache](#class-cache) — The cache.
 
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { reportCacheErrors } from 'graphql-react';
+> import { useCache } from 'graphql-react';
 > ```
 >
 > ```js
-> import reportCacheErrors from 'graphql-react/public/reportCacheErrors.js';
+> import useCache from 'graphql-react/public/useCache.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { reportCacheErrors } = require('graphql-react');
+> const { useCache } = require('graphql-react');
 > ```
 >
 > ```js
-> const reportCacheErrors = require('graphql-react/public/reportCacheErrors');
-> ```
-
-_[`GraphQL`](#class-graphql) initialized to report cache errors._
-
-> ```js
-> import { GraphQL, reportCacheErrors } from 'graphql-react';
->
-> const graphql = new GraphQL();
-> graphql.on('cache', reportCacheErrors);
+> const useCache = require('graphql-react/public/useCache');
 > ```
 
 ---
 
-### function useGraphQL
+### function useCacheEntry
 
-A [React hook](https://reactjs.org/docs/hooks-intro) to manage a GraphQL operation in a component.
+A React hook to get a [cache value](#type-cachevalue) using its [cache key](#type-cachekey).
+
+| Parameter  | Type                       | Description |
+| :--------- | :------------------------- | :---------- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.  |
+
+**Returns:** [CacheValue](#type-cachevalue) — Cache value, if present.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useCacheEntry } from 'graphql-react';
+> ```
+>
+> ```js
+> import useCacheEntry from 'graphql-react/public/useCacheEntry.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useCacheEntry } = require('graphql-react');
+> ```
+>
+> ```js
+> const useCacheEntry = require('graphql-react/public/useCacheEntry');
+> ```
+
+---
+
+### function useCacheEntryPrunePrevention
+
+A React hook to prevent a [cache](#cache-instance-property-store) entry from being pruned, by canceling the cache entry deletion for [prune events](#cache-event-prune) with `event.preventDefault()`.
+
+| Parameter  | Type                       | Description |
+| :--------- | :------------------------- | :---------- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.  |
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useCacheEntryPrunePrevention } from 'graphql-react';
+> ```
+>
+> ```js
+> import useCacheEntryPrunePrevention from 'graphql-react/public/useCacheEntryPrunePrevention.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useCacheEntryPrunePrevention } = require('graphql-react');
+> ```
+>
+> ```js
+> const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention');
+> ```
+
+---
+
+### function useLoadGraphQL
+
+A React hook to get a function for loading a GraphQL operation.
+
+**Returns:** [LoadGraphQL](#type-loadgraphql) — Loads a GraphQL operation.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoadGraphQL } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoadGraphQL from 'graphql-react/public/useLoadGraphQL.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoadGraphQL } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL');
+> ```
+
+---
+
+### function useLoading
+
+A React hook to get the [loading context](#member-loadingcontext).
+
+**Returns:** [Loading](#class-loading) — Loading.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoading } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoading from 'graphql-react/public/useLoading.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoading } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoading = require('graphql-react/public/useLoading');
+> ```
+
+---
+
+### function useLoadingEntry
+
+A React hook to get the [loading cache values](#class-loadingcachevalue) for a given [cache key](#type-cachekey).
+
+| Parameter  | Type                       | Description |
+| :--------- | :------------------------- | :---------- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.  |
+
+**Returns:** Set<[LoadingCacheValue](#class-loadingcachevalue)> | `undefined` — Loading cache values, if present.
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoadingEntry } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoadingEntry from 'graphql-react/public/useLoadingEntry.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoadingEntry } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoadingEntry = require('graphql-react/public/useLoadingEntry');
+> ```
+
+---
+
+### function useLoadOnDelete
+
+A React hook to load a [cache](#cache-instance-property-store) entry after it’s [deleted](#cache-event-delete), if there isn’t loading for the [cache key](#type-cachekey) that started after.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| `options` | object | Options. |
-| `options.operation` | [GraphQLOperation](#type-graphqloperation) | GraphQL operation. To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
-| `options.fetchOptionsOverride` | [GraphQLFetchOptionsOverride](#type-graphqlfetchoptionsoverride)? | Overrides default [`fetch` options](#type-graphqlfetchoptions) for the [GraphQL operation](#type-graphqloperation). To reduce work for following renders, define it outside the component or memoize it using the [`React.useMemo`](https://reactjs.org/docs/hooks-reference.html#usememo) hook. |
-| `options.cacheKeyCreator` | [GraphQLCacheKeyCreator](#type-graphqlcachekeycreator)? = [hashObject](#function-hashobject) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for the operation. |
-| `options.loadOnMount` | boolean? = `false` | Should the operation load when the component mounts. |
-| `options.loadOnReload` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) [`reload`](#graphql-event-reload) event fires and there is a [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) to reload, but only if the operation was not the one that caused the reload. |
-| `options.loadOnReset` | boolean? = `false` | Should the operation load when the [`GraphQL`](#class-graphql) [`reset`](#graphql-event-reset) event fires and the [GraphQL cache](#graphql-instance-property-cache) [value](#type-graphqlcachevalue) is deleted, but only if the operation was not the one that caused the reset. |
-| `options.reloadOnLoad` | boolean? = `false` | Should a [GraphQL reload](#graphql-instance-method-reload) happen after the operation loads, excluding the loaded operation cache. |
-| `options.resetOnLoad` | boolean? = `false` | Should a [GraphQL reset](#graphql-instance-method-reset) happen after the operation loads, excluding the loaded operation cache. |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
 
-**Returns:** [GraphQLOperationStatus](#type-graphqloperationstatus) — GraphQL operation status.
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoadOnDelete } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoadOnDelete from 'graphql-react/public/useLoadOnDelete.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoadOnDelete } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete');
+> ```
+
+---
+
+### function useLoadOnMount
+
+A React hook to automatically load a [cache](#cache-instance-property-store) entry after the component mounts or the [cache context](#member-cachecontext) or any of the arguments change, except during the [hydration time](#constant-hydration_time_ms) if the [hydration time stamp context](#member-hydrationtimestampcontext) is populated and the [cache](#cache-instance-property-store) entry is already populated.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoadOnMount } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoadOnMount from 'graphql-react/public/useLoadOnMount.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoadOnMount } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoadOnMount = require('graphql-react/public/useLoadOnMount');
+> ```
+
+---
+
+### function useLoadOnStale
+
+A React hook to load a [cache](#cache-instance-property-store) entry after becomes [stale](#cache-event-stale), if there isn’t loading for the [cache key](#type-cachekey) that started after.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { useLoadOnStale } from 'graphql-react';
+> ```
+>
+> ```js
+> import useLoadOnStale from 'graphql-react/public/useLoadOnStale.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { useLoadOnStale } = require('graphql-react');
+> ```
+>
+> ```js
+> const useLoadOnStale = require('graphql-react/public/useLoadOnStale');
+> ```
+
+---
+
+### function useWaterfallLoad
+
+A React hook to load a [cache](#cache-instance-property-store) entry if the [waterfall render context](https://github.com/jaydenseric/react-waterfall-render#member-waterfallrendercontext) is populated, i.e. when [waterfall rendering](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) for either a server side render or to preload components in a browser environment.
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
+| `load` | [Loader](#type-loader) | Memoized function that starts the loading. |
+
+**Returns:** boolean — Did loading start. If so, it’s efficient for the component to return `null` since this render will be discarded anyway for a re-render onces the loading ends.
 
 #### See
 
-- [`GraphQLContext`](#constant-graphqlcontext) is required for this hook to work.
+- [`useAutoLoad`](#function-useautoload), often used alongside this hook.
 
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { useGraphQL } from 'graphql-react';
+> import { useWaterfallLoad } from 'graphql-react';
 > ```
 >
 > ```js
-> import useGraphQL from 'graphql-react/public/useGraphQL.js';
+> import useWaterfallLoad from 'graphql-react/public/useWaterfallLoad.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { useGraphQL } = require('graphql-react');
+> const { useWaterfallLoad } = require('graphql-react');
 > ```
 >
 > ```js
-> const useGraphQL = require('graphql-react/public/useGraphQL');
+> const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad');
 > ```
-
-_Options guide for common situations._
-
-> | Situation | `loadOnMount` | `loadOnReload` | `loadOnReset` | `reloadOnLoad` | `resetOnLoad` |
-> | :-- | :-: | :-: | :-: | :-: | :-: |
-> | Profile query | ✔️ | ✔️ | ✔️ |  |  |
-> | Login mutation |  |  |  |  | ✔️ |
-> | Logout mutation |  |  |  |  | ✔️ |
-> | Change password mutation |  |  |  |  |  |
-> | Change name mutation |  |  |  | ✔️ |  |
-> | Like a post mutation |  |  |  | ✔️ |  |
 
 ---
 
-### constant GraphQLContext
+### member CacheContext
 
-[React context object](https://reactjs.org/docs/context#api) for a [`GraphQL`](#class-graphql) instance.
+React context for a [`Cache`](#class-cache) instance.
 
 **Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `Provider` | Function | [React context provider component](https://reactjs.org/docs/context#contextprovider). |
-| `Consumer` | Function | [React context consumer component](https://reactjs.org/docs/context#contextconsumer). |
-
-#### See
-
-- [`GraphQLProvider`](#function-graphqlprovider) is used to provide this context.
-- [`useGraphQL`](#function-usegraphql) React hook requires an ancestor [`GraphQLContext`](#constant-graphqlcontext) `Provider` to work.
+| `Provider` | Function | [React context provider component](https://reactjs.org/docs/context.html#contextprovider). |
+| `Consumer` | Function | [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer). |
 
 #### Examples
 
 _Ways to `import`._
 
 > ```js
-> import { GraphQLContext } from 'graphql-react';
+> import { CacheContext } from 'graphql-react';
 > ```
 >
 > ```js
-> import GraphQLContext from 'graphql-react/public/GraphQLContext.js';
+> import CacheContext from 'graphql-react/public/CacheContext.js';
 > ```
 
 _Ways to `require`._
 
 > ```js
-> const { GraphQLContext } = require('graphql-react');
+> const { CacheContext } = require('graphql-react');
 > ```
 >
 > ```js
-> const GraphQLContext = require('graphql-react/public/GraphQLContext');
+> const CacheContext = require('graphql-react/public/CacheContext');
 > ```
 
-_A button component that resets the [GraphQL cache](#graphql-instance-property-cache)._
+---
 
-> ```jsx
-> import { GraphQLContext } from 'graphql-react';
-> import React from 'react';
+### member HydrationTimeStampContext
+
+React context for the client side hydration [time stamp](#type-highrestimestamp).
+
+**Type:** object
+
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `Provider` | Function | [React context provider component](https://reactjs.org/docs/context.html#contextprovider). |
+| `Consumer` | Function | [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer). |
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { HydrationTimeStampContext } from 'graphql-react';
+> ```
 >
-> const ResetCacheButton = () => {
->   const graphql = React.useContext(GraphQLContext);
->   return <button onClick={graphql.reset}>Reset cache</button>;
-> };
+> ```js
+> import HydrationTimeStampContext from 'graphql-react/public/HydrationTimeStampContext.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { HydrationTimeStampContext } = require('graphql-react');
+> ```
+>
+> ```js
+> const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext');
 > ```
 
 ---
 
-### type GraphQLCache
+### member LoadingContext
 
-A [GraphQL cache](#graphql-instance-property-cache) map of [GraphQL operation](#type-graphqloperation) results.
+React context for a [`Loading`](#class-loading) instance.
 
-**Type:** object<[GraphQLCacheKey](#type-graphqlcachekey), [GraphQLCacheValue](#type-graphqlcachevalue)>
+**Type:** object
 
-#### See
+| Property | Type | Description |
+| :-- | :-- | :-- |
+| `Provider` | Function | [React context provider component](https://reactjs.org/docs/context.html#contextprovider). |
+| `Consumer` | Function | [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer). |
 
-- [`GraphQL`](#class-graphql) constructor accepts this type for `options.cache`.
-- [`GraphQL`](#class-graphql) instance property [`cache`](#graphql-instance-property-cache) is this type.
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { LoadingContext } from 'graphql-react';
+> ```
+>
+> ```js
+> import LoadingContext from 'graphql-react/public/LoadingContext.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { LoadingContext } = require('graphql-react');
+> ```
+>
+> ```js
+> const LoadingContext = require('graphql-react/public/LoadingContext');
+> ```
 
 ---
 
-### type GraphQLCacheKey
+### constant HYDRATION_TIME_MS
 
-A [GraphQL cache](#type-graphqlcache) key to identify a [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). Typically created by a [GraphQL cache](#type-graphqlcache) key [creator](#type-graphqlcachekeycreator) that hashes the [`fetch` options](#type-graphqlfetchoptions) of the associated [GraphQL operation](#type-graphqloperation) using [`hashObject`](#function-hashobject).
+Number of milliseconds after the first client render that’s considered the hydration time; during which the [`useAutoLoad`](#function-useautoload) React hook won’t load if the cache entry is already populated.
+
+**Type:** number
+
+#### Examples
+
+_Ways to `import`._
+
+> ```js
+> import { HYDRATION_TIME_MS } from 'graphql-react';
+> ```
+>
+> ```js
+> import HYDRATION_TIME_MS from 'graphql-react/public/HYDRATION_TIME_MS.js';
+> ```
+
+_Ways to `require`._
+
+> ```js
+> const { HYDRATION_TIME_MS } = require('graphql-react');
+> ```
+>
+> ```js
+> const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS');
+> ```
+
+---
+
+### type CacheKey
+
+A unique key to access a [cache value](#type-cachevalue).
 
 **Type:** string
 
 ---
 
-### type GraphQLCacheKeyCreator
+### type CacheKeyMatcher
 
-[GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) creator for a [GraphQL operation](#type-graphqloperation). It can either use the provided [`fetch` options](#type-graphqlfetchoptions) (e.g. derive a hash), or simply return a hardcoded string.
-
-**Type:** Function
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `options` | [GraphQLFetchOptions](#type-graphqlfetchoptions) | [GraphQL `fetch` options](#type-graphqlfetchoptions) tailored to the [GraphQL operation](#type-graphqloperation), e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec). |
-
-#### See
-
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.cacheKeyCreator`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.cacheKeyCreator`.
-
----
-
-### type GraphQLCacheValue
-
-JSON serializable [GraphQL operation](#type-graphqloperation) result that includes errors and data.
-
-**Type:** object
-
-| Property | Type | Description |
-| :-- | :-- | :-- |
-| `fetchError` | string? | [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) error message. |
-| `httpError` | [HttpError](#type-httperror)? | [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) HTTP error. |
-| `parseError` | string? | Parse error message. |
-| `graphQLErrors` | Array<object>? | GraphQL response errors. |
-| `data` | object? | GraphQL response data. |
-
----
-
-### type GraphQLFetchOptions
-
-GraphQL API URL and [polyfillable `fetch` options](https://github.github.io/fetch/#options). The `url` property gets extracted and the rest are used as [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
-
-**Type:** object
-
-| Property      | Type               | Description                      |
-| :------------ | :----------------- | :------------------------------- |
-| `url`         | string             | GraphQL API URL.                 |
-| `body`        | string \| FormData | HTTP request body.               |
-| `headers`     | object             | HTTP request headers.            |
-| `credentials` | string?            | Authentication credentials mode. |
-
-#### See
-
-- [`GraphQLFetchOptionsOverride` functions](#type-graphqlfetchoptionsoverride) accept this type.
-
----
-
-### type GraphQLFetchOptionsOverride
-
-Overrides default [GraphQL `fetch` options](#type-graphqlfetchoptions). Mutate the provided options object; there is no need to return it.
+Matches a [cache key](#type-cachekey) against a custom condition.
 
 **Type:** Function
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `options` | [GraphQLFetchOptions](#type-graphqlfetchoptions) | [GraphQL `fetch` options](#type-graphqlfetchoptions) tailored to the [GraphQL operation](#type-graphqloperation), e.g. if there are files to upload `options.body` will be a [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) instance conforming to the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec). |
+| Parameter  | Type                       | Description |
+| :--------- | :------------------------- | :---------- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key.  |
+
+**Returns:** boolean — Does the [cache key](#type-cachekey) match the custom condition.
+
+---
+
+### type CacheValue
+
+A [cache](#cache-instance-property-store) value. If server side rendering, it should be JSON serializable for client hydration. It should contain information about any errors that occurred during loading so they can be rendered, and if server side rendering, be hydrated on the client.
+
+**Type:** \*
+
+---
+
+### type FetchOptions
+
+[`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) options, called `init` in official specs.
+
+**Type:** object
 
 #### See
 
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.fetchOptionsOverride`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.fetchOptionsOverride`.
-
-#### Examples
-
-_Setting [GraphQL `fetch` options](#type-graphqlfetchoptions) for an imaginary API._
-
-> ```js
-> (options) => {
->   options.url = 'https://api.example.com/graphql';
->   options.credentials = 'include';
-> };
-> ```
+- [MDN `fetch` parameters docs](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#parameters).
+- [Polyfillable `fetch` options](https://github.github.io/fetch/#options). Don’t use other options if `fetch` is polyfilled for Node.js or legacy browsers.
 
 ---
 
@@ -732,66 +1379,84 @@ A GraphQL operation. Additional properties may be used; all are sent to the Grap
 
 **Type:** object
 
-| Property    | Type   | Description                    |
-| :---------- | :----- | :----------------------------- |
-| `query`     | string | GraphQL queries/mutations.     |
-| `variables` | object | Variables used in the `query`. |
-
-#### See
-
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) accepts this type for `options.operation`.
-- [`useGraphQL`](#function-usegraphql) React hook accepts this type for `options.operation`.
+| Property    | Type    | Description                    |
+| :---------- | :------ | :----------------------------- |
+| `query`     | string  | GraphQL queries or mutations.  |
+| `variables` | object? | Variables used in the `query`. |
 
 ---
 
-### type GraphQLOperationLoading
+### type GraphQLResult
 
-A loading [GraphQL operation](#type-graphqloperation).
+A GraphQL result.
 
 **Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
-| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue)? | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) from the last identical query. |
-| `cacheValuePromise` | Promise<[GraphQLCacheValue](#type-graphqlcachevalue)> | Resolves the loaded [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue). |
+| `data` | object? | GraphQL response data. |
+| `errors` | Array<[GraphQLResultError](#type-graphqlresulterror)>? | GraphQL response errors from the server, along with any loading errors added on the client. |
 
 #### See
 
-- [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) returns this type.
+- [GraphQL spec for a response](https://spec.graphql.org/June2018/#sec-Response).
 
 ---
 
-### type GraphQLOperationStatus
+### type GraphQLResultError
 
-The status of a [GraphQL operation](#type-graphqloperation) managed by the [`useGraphQL`](#function-usegraphql) React hook.
+A GraphQL result error; either created by the GraphQL server, or by whatever loaded the GraphQL on the client (e.g. [`fetchGraphQL`](#function-fetchgraphql)).
 
 **Type:** object
 
 | Property | Type | Description |
 | :-- | :-- | :-- |
-| `load` | Function | Loads the current [GraphQL operation](#type-graphqloperation) on demand, updating the [GraphQL cache](#graphql-instance-property-cache). |
-| `loading` | boolean | Is the current [GraphQL operation](#type-graphqloperation) loading. |
-| `cacheKey` | [GraphQLCacheKey](#type-graphqlcachekey) | [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) for the current [GraphQL operation](#type-graphqloperation) and [GraphQL `fetch` options](#type-graphqlfetchoptions). |
-| `cacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) for the current [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey). |
-| `loadedCacheValue` | [GraphQLCacheValue](#type-graphqlcachevalue) | [GraphQL cache](#type-graphqlcache) [value](#type-graphqlcachevalue) that was last loaded by this [`useGraphQL`](#function-usegraphql) React hook; even if the [GraphQL cache](#graphql-instance-property-cache) [key](#type-graphqlcachekey) has since changed. |
+| `message` | object | Error message. |
+| `locations` | Array<{line: number, column: number}>? | GraphQL query locations related to the error. |
+| `path` | Array<string>? | [GraphQL result](#type-graphqlresult) `data` field path related to the error. |
+| `extensions` | object? | Custom error data. If the error was created on the client and not the GraphQL server, this property should be present and contain at least `client: true`, although `code` and error specific properties may be present. |
 
 #### See
 
-- [`useGraphQL`](#function-usegraphql) React hook returns this type.
+- [GraphQL spec for response errors](https://spec.graphql.org/June2018/#sec-Errors).
 
 ---
 
-### type HttpError
+### type HighResTimeStamp
 
-[`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) HTTP error.
+Milliseconds since the [performance time origin](https://developer.mozilla.org/en-US/docs/Web/API/Performance/timeOrigin) (when the current JavaScript environment started running).
 
-**Type:** object
+**Type:** number
 
-| Property     | Type   | Description       |
-| :----------- | :----- | :---------------- |
-| `status`     | number | HTTP status code. |
-| `statusText` | string | HTTP status text. |
+#### See
+
+- [MDN `DOMHighResTimeStamp` docs](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp).
+
+---
+
+### type Loader
+
+Starts [loading a cache value](#class-loadingcachevalue).
+
+**Type:** Function
+
+**Returns:** [LoadingCacheValue](#class-loadingcachevalue) — The loading cache value.
+
+---
+
+### type LoadGraphQL
+
+Loads a GraphQL operation, using the [GraphQL fetcher](#function-fetchgraphql).
+
+**Type:** [Loader](#type-loader)
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `cacheKey` | [CacheKey](#type-cachekey) | Cache key to store the loading result under. |
+| `fetchUri` | string | [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) URI. |
+| `fetchOptions` | [FetchOptions](#type-fetchoptions) | [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) options. |
+
+**Returns:** [LoadingCacheValue](#class-loadingcachevalue) — The loading cache value.
 
 ---
 
