@@ -12,7 +12,7 @@ exports.useGraphQL = require('./useGraphQL');
  * [GraphQL operation]{@link GraphQLOperation} results.
  * @kind typedef
  * @name GraphQLCache
- * @type {object.<GraphQLCacheKey, GraphQLCacheValue>}
+ * @type {object<GraphQLCacheKey, GraphQLCacheValue>}
  * @see [`GraphQL`]{@link GraphQL} constructor accepts this type for `options.cache`.
  * @see [`GraphQL`]{@link GraphQL} instance property [`cache`]{@link GraphQL#cache} is this type.
  */

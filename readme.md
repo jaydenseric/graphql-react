@@ -338,7 +338,7 @@ A map of loading [GraphQL operations](#type-graphqloperation), listed under thei
 _How to await all loading [GraphQL operations](#graphql-instance-property-operations)._
 
 > ```js
-> await Promise.all(Object.values(graphql.operations).flat());
+> Promise.all(Object.values(graphql.operations).flat());
 > ```
 
 #### GraphQL event cache

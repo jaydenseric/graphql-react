@@ -103,10 +103,10 @@ module.exports = class GraphQL {
      * server side rendering framework.
      * @kind member
      * @name GraphQL#operations
-     * @type {object.<GraphQLCacheKey, Array<Promise<GraphQLCacheValue>>>}
+     * @type {object<GraphQLCacheKey, Array<Promise<GraphQLCacheValue>>>}
      * @example <caption>How to await all loading [GraphQL operations]{@link GraphQL#operations}.</caption>
      * ```js
-     * await Promise.all(Object.values(graphql.operations).flat());
+     * Promise.all(Object.values(graphql.operations).flat());
      * ```
      */
     this.operations = {};
