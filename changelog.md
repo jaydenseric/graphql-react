@@ -21,6 +21,7 @@
 - Use a new [`@arr/flatten`](https://npm.im/@arr/flatten) dev dependency to flatten arrays in tests.
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
 - Added a test for `FirstRenderDateContext` used as a React context.
+- Tweaked the package description.
 - Readme edits, including:
   - Updated the Relay and Apollo URLs.
   - Mention polyfilling any required globals in the “Setup” section.
