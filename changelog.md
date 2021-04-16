@@ -20,6 +20,7 @@
   - Don’t specify the `CI` environment variable as it’s set by default.
 - Use a new [`@arr/flatten`](https://npm.im/@arr/flatten) dev dependency to flatten arrays in tests.
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
+- Test the bundle size manually using [`webpack`](https://npm.im/webpack) v5, and remove [`size-limit`](https://npm.im/size-limit) related dev dependencies, config, and scripts.
 - Added a test for `FirstRenderDateContext` used as a React context.
 - Tweaked the package description.
 - Readme edits, including:
