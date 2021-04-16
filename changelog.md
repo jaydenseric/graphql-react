@@ -24,6 +24,7 @@
 - Readme edits, including:
   - Updated the Relay and Apollo URLs.
   - Mention polyfilling any required globals in the “Setup” section.
+  - Removed the “Usage” section.
   - Tweaked links in the “Support” section.
   - Removed the “Apollo comparison” section.
 

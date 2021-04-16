@@ -7,7 +7,6 @@
 A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that is lightweight (< 3.5 KB [size limited](https://github.com/ai/size-limit)) but powerful; the first [Relay](https://relay.dev) and [Apollo](https://apollographql.com/apollo-client) alternative with server side rendering.
 
 - [Setup](#setup)
-- [Usage](#usage)
 - [Examples](#examples)
 - [Support](#support)
 - [API](#api)
@@ -31,10 +30,6 @@ npm install graphql-react
 Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLProvider`](#function-graphqlprovider) to provide it for your app.
 
 To server side render your app, use the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
-
-## Usage
-
-Use the [`useGraphQL`](#function-usegraphql) React hook in your components to make queries and mutations, or use the [`GraphQL`](#class-graphql) instance method [`operate`](#graphql-instance-method-operate) directly.
 
 ## Examples
 
