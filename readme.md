@@ -132,8 +132,8 @@ const App = () => (
 
 ## Support
 
-- Node.js `^10.17.0 || ^12.0.0 || >= 13.7.0`
-- Browsers [`> 0.5%, not OperaMini all, not dead`](https://browserl.ist/?q=%3E+0.5%25%2C+not+OperaMini+all%2C+not+dead)
+- [Node.js](https://nodejs.org): `^10.17.0 || ^12.0.0 || >= 13.7.0`
+- [Browsers](https://npm.im/browserslist): `> 0.5%, not OperaMini all, not IE > 0, not dead`
 
 Consider polyfilling:
 

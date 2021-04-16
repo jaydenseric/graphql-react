@@ -4,6 +4,7 @@
 
 ### Major
 
+- Stopped supporting Internet Explorer.
 - Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.14 - 17`.
 - Updated the Babel config to use [the new JSX transform](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
 - Removed the function `ssr` in favor of the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render), fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
@@ -20,9 +21,11 @@
 - Use a new [`@arr/flatten`](https://npm.im/@arr/flatten) dev dependency to flatten arrays in tests.
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
 - Added a test for `FirstRenderDateContext` used as a React context.
-- Updated the Relay and Apollo URLs in the readme.
-- Mention polyfilling any required globals in the readme section “Setup”.
-- Removed the readme section “Apollo comparison”.
+- Readme edits, including:
+  - Updated the Relay and Apollo URLs.
+  - Mention polyfilling any required globals in the “Setup” section.
+  - Tweaked links in the “Support” section.
+  - Removed the “Apollo comparison” section.
 
 ## 12.0.1
 
