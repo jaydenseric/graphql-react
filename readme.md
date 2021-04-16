@@ -13,13 +13,13 @@ A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using m
 
 ## Setup
 
-First, polyfill any required globals (see [_**Support**_](#support)) that are missing in your client and server environments.
+First, polyfill any required globals (see [_**Support**_](#support)) that are missing in your server and client environments.
 
 ### Next.js setup
 
 See the [`next-graphql-react`](https://npm.im/next-graphql-react) setup instructions.
 
-### Vanilla React setup
+### Custom React setup
 
 To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://npmjs.com) run:
 
@@ -29,12 +29,12 @@ npm install graphql-react
 
 Create a single [`GraphQL`](#class-graphql) instance and use [`GraphQLProvider`](#function-graphqlprovider) to provide it for your app.
 
-To server side render your app, use the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
+To server side render your app, use the [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) function from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
 
 ## Examples
 
-- [The official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react).
-- [The Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
+- [Official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react).
+- [Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.now.sh](https://graphql-react.now.sh).
 
 Here is a basic example using the [GitHub GraphQL API](https://docs.github.com/en/graphql), with tips commented:
 
