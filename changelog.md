@@ -4,6 +4,7 @@
 
 ### Major
 
+- Updated Node.js version support to `^12.0.0 || >= 13.7.0`.
 - Stopped supporting Internet Explorer.
 - Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.14 - 17`.
 - Use [the new JSX runtime](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html).
