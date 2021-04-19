@@ -1,8 +1,7 @@
 'use strict';
 
 const { deepStrictEqual, strictEqual } = require('assert');
-const Blob = require('fetch-blob');
-const FormData = require('formdata-node');
+const { File, FormData } = require('formdata-node');
 const revertableGlobals = require('revertable-globals');
 const fetchOptionsGraphQL = require('../../public/fetchOptionsGraphQL');
 
@@ -19,13 +18,13 @@ module.exports = (tests) => {
   });
 
   tests.add('`fetchOptionsGraphQL` with files.', () => {
-    const revertGlobals = revertableGlobals({ Blob, FormData });
+    const revertGlobals = revertableGlobals({ File, FormData });
 
     try {
-      const filetype = 'text/plain';
+      const fileName = 'a.txt';
       const options = fetchOptionsGraphQL({
         query: '',
-        variables: { a: new Blob(['a'], { type: filetype }) },
+        variables: { a: new File(['a'], fileName) },
       });
 
       // See the GraphQL multipart request spec:
@@ -44,9 +43,8 @@ module.exports = (tests) => {
       ]);
       deepStrictEqual(formDataEntries[1], ['map', '{"1":["variables.a"]}']);
       strictEqual(formDataEntries[2][0], '1');
-      strictEqual(formDataEntries[2][1] instanceof Blob, true);
-      strictEqual(formDataEntries[2][1].name, 'blob');
-      strictEqual(formDataEntries[2][1].type, filetype);
+      strictEqual(formDataEntries[2][1] instanceof File, true);
+      strictEqual(formDataEntries[2][1].name, fileName);
     } finally {
       revertGlobals();
     }
