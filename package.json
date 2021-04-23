@@ -55,16 +55,16 @@
     "react-waterfall-render": "^1.0.0"
   },
   "devDependencies": {
-    "@testing-library/react-hooks": "^5.1.1",
+    "@testing-library/react-hooks": "^5.1.2",
     "abort-controller": "^3.0.0",
     "coverage-node": "^4.0.0",
     "disposable-directory": "^3.0.0",
     "eslint": "^7.24.0",
-    "eslint-config-env": "^19.0.0",
+    "eslint-config-env": "^19.0.1",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-compat": "^3.9.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^32.3.0",
+    "eslint-plugin-jsdoc": "^32.3.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
@@ -81,7 +81,7 @@
     "react-test-renderer": "^17.0.2",
     "revertable-globals": "^1.1.0",
     "test-director": "^5.0.0",
-    "webpack": "^5.33.2"
+    "webpack": "^5.35.0"
   },
   "scripts": {
     "prepare": "npm run prepare:jsdoc && npm run prepare:prettier",

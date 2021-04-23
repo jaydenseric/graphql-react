@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated dev dependencies.
 - Updated the [example Next.js app](https://graphql-react.vercel.app) URL in the readme.
 
 ## 13.0.0
