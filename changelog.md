@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Updated Node.js support to `^12.20 || >= 14.13`.
+
 ### Patch
 
 - Updated dev dependencies.
