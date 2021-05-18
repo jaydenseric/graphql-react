@@ -149,8 +149,6 @@ Consider polyfilling:
 
 ## API
 
-### Table of contents
-
 - [class Cache](#class-cache)
   - [Cache instance property store](#cache-instance-property-store)
   - [Cache event delete](#cache-event-delete)

@@ -5,12 +5,14 @@
 ### Major
 
 - Updated Node.js support to `^12.20 || >= 14.13`.
+- Updated dev dependencies, some of which require newer Node.js versions than were previously supported.
 - Replaced the the `package.json` `exports` field public [subpath folder mapping](https://nodejs.org/api/packages.html#packages_subpath_folder_mappings) (deprecated by Node.js) with a [subpath pattern](https://nodejs.org/api/packages.html#packages_subpath_patterns). Deep `require` paths within `graphql-react/public/` must now include the `.js` file extension.
 
 ### Patch
 
-- Updated dev dependencies.
 - Updated GitHub Actions CI config to run tests with Node.js v12, v14, v16.
+- Simplified JSDoc related package scripts now that [`jsdoc-md`](https://npm.im/jsdoc-md) v10+ automatically generates a Prettier formatted readme.
+- Added a package `test:jsdoc` script that checks the readme API docs are up to date with the source JSDoc.
 - Updated the [example Next.js app](https://graphql-react.vercel.app) URL in the readme.
 
 ## 13.0.0

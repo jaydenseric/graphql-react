@@ -73,7 +73,7 @@
     "filter-console": "^0.1.1",
     "formdata-node": "^3.1.1",
     "gzip-size": "^6.0.0",
-    "jsdoc-md": "^9.1.1",
+    "jsdoc-md": "^11.0.0",
     "node-fetch": "^3.0.0-beta.9",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
@@ -84,12 +84,11 @@
     "webpack": "^5.35.0"
   },
   "scripts": {
-    "prepare": "npm run prepare:jsdoc && npm run prepare:prettier",
-    "prepare:jsdoc": "jsdoc-md",
-    "prepare:prettier": "prettier --write readme.md",
-    "test": "npm run test:eslint && npm run test:prettier && npm run test:api",
+    "jsdoc": "jsdoc-md",
+    "test": "npm run test:eslint && npm run test:prettier && npm run test:jsdoc && npm run test:api",
     "test:eslint": "eslint --ext mjs,js .",
     "test:prettier": "prettier -c .",
+    "test:jsdoc": "jsdoc-md -c",
     "test:api": "coverage-node test",
     "prepublishOnly": "npm test"
   }
