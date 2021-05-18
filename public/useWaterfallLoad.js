@@ -1,7 +1,7 @@
 'use strict';
 
 const { useContext } = require('react');
-const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext');
+const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext.js');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const LoadingCacheValue = require('./LoadingCacheValue');
 const useCache = require('./useCache');

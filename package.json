@@ -52,7 +52,7 @@
   "dependencies": {
     "extract-files": "^10.0.0",
     "isobject": "^4.0.0",
-    "react-waterfall-render": "^1.0.0"
+    "react-waterfall-render": "^2.0.0"
   },
   "devDependencies": {
     "@testing-library/react-hooks": "^6.0.0",
