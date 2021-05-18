@@ -1,6 +1,6 @@
 'use strict';
 
-const extractFiles = require('extract-files/public/extractFiles');
+const extractFiles = require('extract-files/public/extractFiles.js');
 
 /**
  * Creates default [`fetch` options]{@link FetchOptions} for a
