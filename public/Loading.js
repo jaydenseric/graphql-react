@@ -18,7 +18,7 @@
  * ```
  *
  * ```js
- * const Loading = require('graphql-react/public/Loading');
+ * const Loading = require('graphql-react/public/Loading.js');
  * ```
  * @example <caption>Construct a new instance.</caption>
  * ```js

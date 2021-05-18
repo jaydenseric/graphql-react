@@ -26,7 +26,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete');
+ * const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete.js');
  * ```
  */
 module.exports = function useLoadOnDelete(cacheKey, load) {

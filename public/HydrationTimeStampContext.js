@@ -23,7 +23,7 @@ const { createContext } = require('react');
  * ```
  *
  * ```js
- * const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext');
+ * const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext.js');
  * ```
  */
 const HydrationTimeStampContext = createContext();

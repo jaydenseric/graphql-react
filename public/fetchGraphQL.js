@@ -40,7 +40,7 @@ const ERROR_CODE_RESPONSE_MALFORMED = 'RESPONSE_MALFORMED';
  * ```
  *
  * ```js
- * const fetchGraphQL = require('graphql-react/public/fetchGraphQL');
+ * const fetchGraphQL = require('graphql-react/public/fetchGraphQL.js');
  * ```
  */
 module.exports = function fetchGraphQL(fetchUri, fetchOptions) {

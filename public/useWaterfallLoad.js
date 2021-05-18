@@ -33,7 +33,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad');
+ * const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad.js');
  * ```
  */
 module.exports = function useWaterfallLoad(cacheKey, load) {

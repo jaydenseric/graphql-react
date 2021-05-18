@@ -26,7 +26,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useCacheEntry = require('graphql-react/public/useCacheEntry');
+ * const useCacheEntry = require('graphql-react/public/useCacheEntry.js');
  * ```
  */
 module.exports = function useCacheEntry(cacheKey) {

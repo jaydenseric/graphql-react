@@ -25,7 +25,7 @@ const cacheEntryDelete = require('./cacheEntryDelete');
  * ```
  *
  * ```js
- * const cacheDelete = require('graphql-react/public/cacheDelete');
+ * const cacheDelete = require('graphql-react/public/cacheDelete.js');
  * ```
  */
 module.exports = function cacheDelete(cache, cacheKeyMatcher) {

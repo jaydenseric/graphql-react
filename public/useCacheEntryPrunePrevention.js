@@ -25,7 +25,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention');
+ * const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention.js');
  * ```
  */
 module.exports = function useCacheEntryPrunePrevention(cacheKey) {

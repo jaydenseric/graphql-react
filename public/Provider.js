@@ -35,7 +35,7 @@ const LoadingContext = require('./LoadingContext');
  * ```
  *
  * ```js
- * const Provider = require('graphql-react/public/Provider');
+ * const Provider = require('graphql-react/public/Provider.js');
  * ```
  * @example <caption>Provide a [`Cache`]{@link Cache} instance for an app.</caption>
  * ```jsx

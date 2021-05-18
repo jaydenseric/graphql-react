@@ -22,7 +22,7 @@ const createArgErrorMessageProd = require('../private/createArgErrorMessageProd'
  * ```
  *
  * ```js
- * const Cache = require('graphql-react/public/Cache');
+ * const Cache = require('graphql-react/public/Cache.js');
  * ```
  * @example <caption>Construct a new instance.</caption>
  * ```js

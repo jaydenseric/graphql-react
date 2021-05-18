@@ -37,7 +37,7 @@ const useLoadOnStale = require('./useLoadOnStale');
  * ```
  *
  * ```js
- * const useAutoLoad = require('graphql-react/public/useAutoLoad');
+ * const useAutoLoad = require('graphql-react/public/useAutoLoad.js');
  * ```
  */
 module.exports = function useAutoLoad(cacheKey, load) {

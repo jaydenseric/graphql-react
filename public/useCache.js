@@ -23,7 +23,7 @@ const CacheContext = require('./CacheContext');
  * ```
  *
  * ```js
- * const useCache = require('graphql-react/public/useCache');
+ * const useCache = require('graphql-react/public/useCache.js');
  * ```
  */
 module.exports = function useCache() {

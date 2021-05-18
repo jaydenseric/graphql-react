@@ -31,7 +31,7 @@ const cacheEntrySet = require('./cacheEntrySet');
  * ```
  *
  * ```js
- * const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue');
+ * const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue.js');
  * ```
  */
 module.exports = class LoadingCacheValue {

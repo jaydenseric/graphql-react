@@ -23,7 +23,7 @@ const { createContext } = require('react');
  * ```
  *
  * ```js
- * const LoadingContext = require('graphql-react/public/LoadingContext');
+ * const LoadingContext = require('graphql-react/public/LoadingContext.js');
  * ```
  */
 const LoadingContext = createContext();

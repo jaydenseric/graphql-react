@@ -26,7 +26,7 @@ const useLoading = require('./useLoading');
  * ```
  *
  * ```js
- * const useLoadingEntry = require('graphql-react/public/useLoadingEntry');
+ * const useLoadingEntry = require('graphql-react/public/useLoadingEntry.js');
  * ```
  */
 module.exports = function useLoadingEntry(cacheKey) {

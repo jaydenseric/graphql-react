@@ -27,7 +27,7 @@ const useLoading = require('./useLoading');
  * ```
  *
  * ```js
- * const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL');
+ * const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL.js');
  * ```
  */
 module.exports = function useLoadGraphQL() {

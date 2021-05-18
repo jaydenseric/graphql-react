@@ -25,7 +25,7 @@ const Cache = require('./Cache');
  * ```
  *
  * ```js
- * const cacheEntryStale = require('graphql-react/public/cacheEntryStale');
+ * const cacheEntryStale = require('graphql-react/public/cacheEntryStale.js');
  * ```
  */
 module.exports = function cacheEntryStale(cache, cacheKey) {

@@ -230,7 +230,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const Cache = require('graphql-react/public/Cache');
+> const Cache = require('graphql-react/public/Cache.js');
 > ```
 
 _Construct a new instance._
@@ -299,7 +299,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const Loading = require('graphql-react/public/Loading');
+> const Loading = require('graphql-react/public/Loading.js');
 > ```
 
 _Construct a new instance._
@@ -375,7 +375,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue');
+> const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue.js');
 > ```
 
 #### LoadingCacheValue instance property abortController
@@ -430,7 +430,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheDelete = require('graphql-react/public/cacheDelete');
+> const cacheDelete = require('graphql-react/public/cacheDelete.js');
 > ```
 
 ---
@@ -467,7 +467,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheEntryDelete = require('graphql-react/public/cacheEntryDelete');
+> const cacheEntryDelete = require('graphql-react/public/cacheEntryDelete.js');
 > ```
 
 ---
@@ -505,7 +505,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheEntryPrune = require('graphql-react/public/cacheEntryPrune');
+> const cacheEntryPrune = require('graphql-react/public/cacheEntryPrune.js');
 > ```
 
 ---
@@ -543,7 +543,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheEntrySet = require('graphql-react/public/cacheEntrySet');
+> const cacheEntrySet = require('graphql-react/public/cacheEntrySet.js');
 > ```
 
 ---
@@ -580,7 +580,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheEntryStale = require('graphql-react/public/cacheEntryStale');
+> const cacheEntryStale = require('graphql-react/public/cacheEntryStale.js');
 > ```
 
 ---
@@ -618,7 +618,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cachePrune = require('graphql-react/public/cachePrune');
+> const cachePrune = require('graphql-react/public/cachePrune.js');
 > ```
 
 ---
@@ -655,7 +655,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const cacheStale = require('graphql-react/public/cacheStale');
+> const cacheStale = require('graphql-react/public/cacheStale.js');
 > ```
 
 ---
@@ -697,7 +697,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const fetchGraphQL = require('graphql-react/public/fetchGraphQL');
+> const fetchGraphQL = require('graphql-react/public/fetchGraphQL.js');
 > ```
 
 ---
@@ -733,7 +733,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL');
+> const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL.js');
 > ```
 
 ---
@@ -773,7 +773,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const Provider = require('graphql-react/public/Provider');
+> const Provider = require('graphql-react/public/Provider.js');
 > ```
 
 _Provide a [`Cache`](#class-cache) instance for an app._
@@ -818,7 +818,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad');
+> const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad.js');
 > ```
 
 ---
@@ -862,7 +862,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useAutoLoad = require('graphql-react/public/useAutoLoad');
+> const useAutoLoad = require('graphql-react/public/useAutoLoad.js');
 > ```
 
 ---
@@ -892,7 +892,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useCache = require('graphql-react/public/useCache');
+> const useCache = require('graphql-react/public/useCache.js');
 > ```
 
 ---
@@ -926,7 +926,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useCacheEntry = require('graphql-react/public/useCacheEntry');
+> const useCacheEntry = require('graphql-react/public/useCacheEntry.js');
 > ```
 
 ---
@@ -958,7 +958,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention');
+> const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention.js');
 > ```
 
 ---
@@ -988,7 +988,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL');
+> const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL.js');
 > ```
 
 ---
@@ -1018,7 +1018,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoading = require('graphql-react/public/useLoading');
+> const useLoading = require('graphql-react/public/useLoading.js');
 > ```
 
 ---
@@ -1052,7 +1052,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoadingEntry = require('graphql-react/public/useLoadingEntry');
+> const useLoadingEntry = require('graphql-react/public/useLoadingEntry.js');
 > ```
 
 ---
@@ -1085,7 +1085,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete');
+> const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete.js');
 > ```
 
 ---
@@ -1118,7 +1118,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoadOnMount = require('graphql-react/public/useLoadOnMount');
+> const useLoadOnMount = require('graphql-react/public/useLoadOnMount.js');
 > ```
 
 ---
@@ -1151,7 +1151,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useLoadOnStale = require('graphql-react/public/useLoadOnStale');
+> const useLoadOnStale = require('graphql-react/public/useLoadOnStale.js');
 > ```
 
 ---
@@ -1190,7 +1190,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad');
+> const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad.js');
 > ```
 
 ---
@@ -1225,7 +1225,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const CacheContext = require('graphql-react/public/CacheContext');
+> const CacheContext = require('graphql-react/public/CacheContext.js');
 > ```
 
 ---
@@ -1260,7 +1260,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext');
+> const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext.js');
 > ```
 
 ---
@@ -1295,7 +1295,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const LoadingContext = require('graphql-react/public/LoadingContext');
+> const LoadingContext = require('graphql-react/public/LoadingContext.js');
 > ```
 
 ---
@@ -1325,7 +1325,7 @@ _Ways to `require`._
 > ```
 >
 > ```js
-> const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS');
+> const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS.js');
 > ```
 
 ---

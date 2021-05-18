@@ -26,7 +26,7 @@ const createArgErrorMessageProd = require('../private/createArgErrorMessageProd'
  * ```
  *
  * ```js
- * const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad');
+ * const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad.js');
  * ```
  */
 module.exports = function useAutoAbortLoad(load) {

@@ -33,7 +33,7 @@ const extractFiles = require('extract-files/public/extractFiles');
  * ```
  *
  * ```js
- * const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL');
+ * const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL.js');
  * ```
  */
 module.exports = function fetchOptionsGraphQL(operation) {

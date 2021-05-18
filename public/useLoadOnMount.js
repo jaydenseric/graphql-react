@@ -31,7 +31,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useLoadOnMount = require('graphql-react/public/useLoadOnMount');
+ * const useLoadOnMount = require('graphql-react/public/useLoadOnMount.js');
  * ```
  */
 module.exports = function useLoadOnMount(cacheKey, load) {

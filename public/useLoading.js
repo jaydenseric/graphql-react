@@ -23,7 +23,7 @@ const LoadingContext = require('./LoadingContext');
  * ```
  *
  * ```js
- * const useLoading = require('graphql-react/public/useLoading');
+ * const useLoading = require('graphql-react/public/useLoading.js');
  * ```
  */
 module.exports = function useLoading() {

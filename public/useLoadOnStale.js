@@ -26,7 +26,7 @@ const useCache = require('./useCache');
  * ```
  *
  * ```js
- * const useLoadOnStale = require('graphql-react/public/useLoadOnStale');
+ * const useLoadOnStale = require('graphql-react/public/useLoadOnStale.js');
  * ```
  */
 module.exports = function useLoadOnStale(cacheKey, load) {

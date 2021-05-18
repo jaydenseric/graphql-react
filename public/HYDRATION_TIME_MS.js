@@ -22,7 +22,7 @@
  * ```
  *
  * ```js
- * const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS');
+ * const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS.js');
  * ```
  */
 module.exports = 1000;

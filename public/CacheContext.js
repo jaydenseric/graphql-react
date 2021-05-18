@@ -23,7 +23,7 @@ const { createContext } = require('react');
  * ```
  *
  * ```js
- * const CacheContext = require('graphql-react/public/CacheContext');
+ * const CacheContext = require('graphql-react/public/CacheContext.js');
  * ```
  */
 const CacheContext = createContext();
