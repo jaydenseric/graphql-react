@@ -1,7 +1,7 @@
 {
   "name": "graphql-react",
   "version": "13.0.0",
-  "description": "A GraphQL client for React using modern context and hooks APIs that’s lightweight (< 3.5 kB) but powerful; the first Relay and Apollo alternative with server side rendering.",
+  "description": "A GraphQL client for React using modern context and hooks APIs that’s lightweight (< 4 kB) but powerful; the first Relay and Apollo alternative with server side rendering.",
   "license": "MIT",
   "author": {
     "name": "Jayden Seric",
@@ -58,7 +58,7 @@
     "@testing-library/react-hooks": "^6.0.0",
     "abort-controller": "^3.0.0",
     "coverage-node": "^5.0.1",
-    "disposable-directory": "^4.0.0",
+    "esbuild": "^0.12.0",
     "eslint": "^7.26.0",
     "eslint-config-env": "^20.0.0",
     "eslint-config-prettier": "^8.3.0",
@@ -80,8 +80,7 @@
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
     "revertable-globals": "^2.0.0",
-    "test-director": "^6.0.0",
-    "webpack": "^5.37.0"
+    "test-director": "^6.0.0"
   },
   "scripts": {
     "jsdoc": "jsdoc-md",
