@@ -20,6 +20,7 @@
 - Don’t destructure `require` from [`react`](https://npm.im/react) to slightly improve the [`esbuild`](https://npm.im/esbuild) bundle size.
 - Use the `.js` file extension in internal `require` paths.
 - Updated the [example Next.js app](https://graphql-react.vercel.app) URL in the readme.
+- Readme tweaks.
 
 ## 13.0.0
 

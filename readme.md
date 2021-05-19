@@ -6,7 +6,7 @@
 
 A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using modern [context](https://reactjs.org/docs/context) and [hooks](https://reactjs.org/docs/hooks-intro) APIs that’s lightweight (< 4 kB) but powerful; the first [Relay](https://relay.dev) and [Apollo](https://apollographql.com/apollo-client) alternative with server side rendering.
 
-The [API](#api) can also be used to custom load, cache and server side render any data, even from non GraphQL sources.
+The [API](#api) can also be used to custom load, cache and server side render any data, even from non-[GraphQL](https://graphql.org) sources.
 
 - [Setup](#setup)
 - [Examples](#examples)
@@ -23,7 +23,7 @@ See the [`next-graphql-react`](https://npm.im/next-graphql-react) setup instruct
 
 ### Custom React setup
 
-To install [`graphql-react`](https://npm.im/graphql-react) from [npm](https://npmjs.com) run:
+To install with [npm](https://npmjs.com/get-npm), run:
 
 ```sh
 npm install graphql-react
@@ -108,7 +108,7 @@ export default function GitHubRepoStars({ repoId }) {
 
   // Waterfall loading can be used to load data when server side rendering,
   // enabled automagically by `next-graphql-react`. To learn how this works or
-  // to set it up for a non Next.js app, see:
+  // to set it up for a non-Next.js app, see:
   // https://github.com/jaydenseric/react-waterfall-render
   const isWaterfallLoading = useWaterfallLoad(cacheKey, load);
 
