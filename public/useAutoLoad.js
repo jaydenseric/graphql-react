@@ -1,11 +1,11 @@
 'use strict';
 
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const useAutoAbortLoad = require('./useAutoAbortLoad');
-const useCacheEntryPrunePrevention = require('./useCacheEntryPrunePrevention');
-const useLoadOnDelete = require('./useLoadOnDelete');
-const useLoadOnMount = require('./useLoadOnMount');
-const useLoadOnStale = require('./useLoadOnStale');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const useAutoAbortLoad = require('./useAutoAbortLoad.js');
+const useCacheEntryPrunePrevention = require('./useCacheEntryPrunePrevention.js');
+const useLoadOnDelete = require('./useLoadOnDelete.js');
+const useLoadOnMount = require('./useLoadOnMount.js');
+const useLoadOnStale = require('./useLoadOnStale.js');
 
 /**
  * A React hook to prevent a [cache]{@link Cache#store} entry from being pruned

@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const useCache = require('./useCache');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const useCache = require('./useCache.js');
 
 /**
  * A React hook to load a [cache]{@link Cache#store} entry after becomes

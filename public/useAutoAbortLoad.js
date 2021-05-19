@@ -1,7 +1,7 @@
 'use strict';
 
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
 
 /**
  * A React hook to create a memoized [loader]{@link Loader} from another, that

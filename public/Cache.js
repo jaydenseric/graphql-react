@@ -1,7 +1,7 @@
 'use strict';
 
 const isObject = require('isobject/index.cjs.js');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
 
 /**
  * Cache store.

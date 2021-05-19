@@ -2,11 +2,11 @@
 
 const isObject = require('isobject/index.cjs.js');
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const LoadingCacheValue = require('./LoadingCacheValue');
-const fetchGraphQL = require('./fetchGraphQL');
-const useCache = require('./useCache');
-const useLoading = require('./useLoading');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const LoadingCacheValue = require('./LoadingCacheValue.js');
+const fetchGraphQL = require('./fetchGraphQL.js');
+const useCache = require('./useCache.js');
+const useLoading = require('./useLoading.js');
 
 /**
  * A React hook to get a function for loading a GraphQL operation.

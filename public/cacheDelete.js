@@ -1,8 +1,8 @@
 'use strict';
 
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const Cache = require('./Cache');
-const cacheEntryDelete = require('./cacheEntryDelete');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const Cache = require('./Cache.js');
+const cacheEntryDelete = require('./cacheEntryDelete.js');
 
 /**
  * Deletes [cache]{@link Cache#store} entries. Useful after a user logs out.

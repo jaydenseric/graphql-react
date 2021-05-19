@@ -1,7 +1,7 @@
 'use strict';
 
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const Cache = require('./Cache');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const Cache = require('./Cache.js');
 
 /**
  * Sets a [cache]{@link Cache#store} entry.

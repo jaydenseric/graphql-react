@@ -2,9 +2,9 @@
 
 const React = require('react');
 const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext.js');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const LoadingCacheValue = require('./LoadingCacheValue');
-const useCache = require('./useCache');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const LoadingCacheValue = require('./LoadingCacheValue.js');
+const useCache = require('./useCache.js');
 
 /**
  * A React hook to load a [cache]{@link Cache#store} entry if the

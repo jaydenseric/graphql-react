@@ -18,6 +18,7 @@
 - Increased the documented bundle size to “< 4 kB” to match that of [`esbuild`](https://npm.im/esbuild) instead of [`webpack`](https://npm.im/webpack).
 - Use the correct `kB` symbol instead of `KB` wherever bundle size is mentioned in the package description and readme.
 - Don’t destructure `require` from [`react`](https://npm.im/react) to slightly improve the [`esbuild`](https://npm.im/esbuild) bundle size.
+- Use the `.js` file extension in internal `require` paths.
 - Updated the [example Next.js app](https://graphql-react.vercel.app) URL in the readme.
 
 ## 13.0.0

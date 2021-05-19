@@ -1,9 +1,9 @@
 'use strict';
 
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const useForceUpdate = require('../private/useForceUpdate');
-const useCache = require('./useCache');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const useForceUpdate = require('../private/useForceUpdate.js');
+const useCache = require('./useCache.js');
 
 /**
  * A React hook to get a [cache value]{@link CacheValue} using its

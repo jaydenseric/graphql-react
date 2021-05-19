@@ -1,9 +1,9 @@
 'use strict';
 
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const Cache = require('./Cache');
-const Loading = require('./Loading');
-const cacheEntrySet = require('./cacheEntrySet');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const Cache = require('./Cache.js');
+const Loading = require('./Loading.js');
+const cacheEntrySet = require('./cacheEntrySet.js');
 
 /**
  * Controls a loading [cache value]{@link CacheValue}.

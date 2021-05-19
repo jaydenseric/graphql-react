@@ -1,9 +1,9 @@
 'use strict';
 
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const useForceUpdate = require('../private/useForceUpdate');
-const useLoading = require('./useLoading');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const useForceUpdate = require('../private/useForceUpdate.js');
+const useLoading = require('./useLoading.js');
 
 /**
  * A React hook to get the [loading cache values]{@link LoadingCacheValue} for

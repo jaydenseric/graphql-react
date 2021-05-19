@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
-const Loading = require('./Loading');
-const LoadingContext = require('./LoadingContext');
+const Loading = require('./Loading.js');
+const LoadingContext = require('./LoadingContext.js');
 
 /**
  * A React hook to get the [loading context]{@link LoadingContext}.

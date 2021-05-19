@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
-const Cache = require('./Cache');
-const CacheContext = require('./CacheContext');
+const Cache = require('./Cache.js');
+const CacheContext = require('./CacheContext.js');
 
 /**
  * A React hook to get the [cache context]{@link CacheContext}.

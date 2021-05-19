@@ -1,8 +1,8 @@
 'use strict';
 
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const Cache = require('./Cache');
-const cacheEntryPrune = require('./cacheEntryPrune');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const Cache = require('./Cache.js');
+const cacheEntryPrune = require('./cacheEntryPrune.js');
 
 /**
  * Prunes [cache]{@link Cache#store} entries. Useful after a mutation.

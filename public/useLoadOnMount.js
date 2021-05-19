@@ -1,10 +1,10 @@
 'use strict';
 
 const React = require('react');
-const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
-const HYDRATION_TIME_MS = require('./HYDRATION_TIME_MS');
-const HydrationTimeStampContext = require('./HydrationTimeStampContext');
-const useCache = require('./useCache');
+const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.js');
+const HYDRATION_TIME_MS = require('./HYDRATION_TIME_MS.js');
+const HydrationTimeStampContext = require('./HydrationTimeStampContext.js');
+const useCache = require('./useCache.js');
 
 /**
  * A React hook to automatically load a [cache]{@link Cache#store} entry after

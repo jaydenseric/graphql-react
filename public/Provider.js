@@ -2,11 +2,11 @@
 
 const React = require('react');
 const { jsx } = require('react/jsx-runtime');
-const Cache = require('./Cache');
-const CacheContext = require('./CacheContext');
-const HydrationTimeStampContext = require('./HydrationTimeStampContext');
-const Loading = require('./Loading');
-const LoadingContext = require('./LoadingContext');
+const Cache = require('./Cache.js');
+const CacheContext = require('./CacheContext.js');
+const HydrationTimeStampContext = require('./HydrationTimeStampContext.js');
+const Loading = require('./Loading.js');
+const LoadingContext = require('./LoadingContext.js');
 
 /**
  * A React component to provide all the React context required to enable the
