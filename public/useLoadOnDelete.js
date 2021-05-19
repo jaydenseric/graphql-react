@@ -1,6 +1,6 @@
 'use strict';
 
-const { useCallback, useEffect } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const useCache = require('./useCache');
 
@@ -46,11 +46,11 @@ module.exports = function useLoadOnDelete(cacheKey, load) {
 
   const cache = useCache();
 
-  const onCacheEntryDelete = useCallback(() => {
+  const onCacheEntryDelete = React.useCallback(() => {
     load();
   }, [load]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const eventNameDelete = `${cacheKey}/delete`;
 
     cache.addEventListener(eventNameDelete, onCacheEntryDelete);

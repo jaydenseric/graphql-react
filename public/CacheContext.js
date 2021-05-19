@@ -1,6 +1,6 @@
 'use strict';
 
-const { createContext } = require('react');
+const React = require('react');
 
 /**
  * React context for a [`Cache`]{@link Cache} instance.
@@ -26,7 +26,7 @@ const { createContext } = require('react');
  * const CacheContext = require('graphql-react/public/CacheContext.js');
  * ```
  */
-const CacheContext = createContext();
+const CacheContext = React.createContext();
 
 if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
   CacheContext.displayName = 'CacheContext';

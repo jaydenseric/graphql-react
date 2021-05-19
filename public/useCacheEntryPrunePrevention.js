@@ -1,6 +1,6 @@
 'use strict';
 
-const { useCallback, useEffect } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const useCache = require('./useCache');
 
@@ -38,11 +38,11 @@ module.exports = function useCacheEntryPrunePrevention(cacheKey) {
 
   const cache = useCache();
 
-  const onCacheEntryPrune = useCallback((event) => {
+  const onCacheEntryPrune = React.useCallback((event) => {
     event.preventDefault();
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const eventNamePrune = `${cacheKey}/prune`;
 
     cache.addEventListener(eventNamePrune, onCacheEntryPrune);

@@ -1,6 +1,6 @@
 'use strict';
 
-const { useRef } = require('react');
+const React = require('react');
 const { jsx } = require('react/jsx-runtime');
 const Cache = require('./Cache');
 const CacheContext = require('./CacheContext');
@@ -48,11 +48,11 @@ const LoadingContext = require('./LoadingContext');
  * ```
  */
 module.exports = function Provider({ cache, children }) {
-  const hydrationTimeStampRef = useRef();
+  const hydrationTimeStampRef = React.useRef();
   if (!hydrationTimeStampRef.current)
     hydrationTimeStampRef.current = performance.now();
 
-  const loadingRef = useRef();
+  const loadingRef = React.useRef();
   if (!loadingRef.current) loadingRef.current = new Loading();
 
   if (!(cache instanceof Cache))

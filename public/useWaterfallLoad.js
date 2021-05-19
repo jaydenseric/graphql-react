@@ -1,6 +1,6 @@
 'use strict';
 
-const { useContext } = require('react');
+const React = require('react');
 const WaterfallRenderContext = require('react-waterfall-render/public/WaterfallRenderContext.js');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const LoadingCacheValue = require('./LoadingCacheValue');
@@ -52,7 +52,7 @@ module.exports = function useWaterfallLoad(cacheKey, load) {
     );
 
   const cache = useCache();
-  const declareLoading = useContext(WaterfallRenderContext);
+  const declareLoading = React.useContext(WaterfallRenderContext);
 
   if (declareLoading && !(cacheKey in cache.store)) {
     // Todo: First, check if already loading?

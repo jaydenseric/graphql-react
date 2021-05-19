@@ -1,6 +1,6 @@
 'use strict';
 
-const { useContext, useDebugValue } = require('react');
+const React = require('react');
 const Cache = require('./Cache');
 const CacheContext = require('./CacheContext');
 
@@ -27,11 +27,11 @@ const CacheContext = require('./CacheContext');
  * ```
  */
 module.exports = function useCache() {
-  const cache = useContext(CacheContext);
+  const cache = React.useContext(CacheContext);
 
   if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useDebugValue(cache);
+    React.useDebugValue(cache);
 
   if (cache === undefined) throw new TypeError('Cache context missing.');
 

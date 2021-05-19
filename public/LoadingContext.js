@@ -1,6 +1,6 @@
 'use strict';
 
-const { createContext } = require('react');
+const React = require('react');
 
 /**
  * React context for a [`Loading`]{@link Loading} instance.
@@ -26,7 +26,7 @@ const { createContext } = require('react');
  * const LoadingContext = require('graphql-react/public/LoadingContext.js');
  * ```
  */
-const LoadingContext = createContext();
+const LoadingContext = React.createContext();
 
 if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
   LoadingContext.displayName = 'LoadingContext';

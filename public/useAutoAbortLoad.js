@@ -1,6 +1,6 @@
 'use strict';
 
-const { useCallback, useEffect, useRef } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 
 /**
@@ -37,9 +37,9 @@ module.exports = function useAutoAbortLoad(load) {
         : createArgErrorMessageProd(1)
     );
 
-  const lastLoadingCacheValueRef = useRef();
+  const lastLoadingCacheValueRef = React.useRef();
 
-  useEffect(
+  React.useEffect(
     () => () => {
       if (lastLoadingCacheValueRef.current)
         // Abort the last loading as it’s now redundant due to the changed
@@ -50,7 +50,7 @@ module.exports = function useAutoAbortLoad(load) {
     [load]
   );
 
-  return useCallback(() => {
+  return React.useCallback(() => {
     if (lastLoadingCacheValueRef.current)
       // Ensure the last loading is aborted before starting new loading.
       // Checking if it’s already ended or aborted first is unnecessary.

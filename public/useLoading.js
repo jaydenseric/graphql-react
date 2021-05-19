@@ -1,6 +1,6 @@
 'use strict';
 
-const { useContext, useDebugValue } = require('react');
+const React = require('react');
 const Loading = require('./Loading');
 const LoadingContext = require('./LoadingContext');
 
@@ -27,11 +27,11 @@ const LoadingContext = require('./LoadingContext');
  * ```
  */
 module.exports = function useLoading() {
-  const loading = useContext(LoadingContext);
+  const loading = React.useContext(LoadingContext);
 
   if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useDebugValue(loading);
+    React.useDebugValue(loading);
 
   if (loading === undefined) throw new TypeError('Loading context missing.');
 

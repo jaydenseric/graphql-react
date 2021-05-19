@@ -1,6 +1,6 @@
 'use strict';
 
-const { useCallback, useEffect } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const useCache = require('./useCache');
 
@@ -46,11 +46,11 @@ module.exports = function useLoadOnStale(cacheKey, load) {
 
   const cache = useCache();
 
-  const onCacheEntryStale = useCallback(() => {
+  const onCacheEntryStale = React.useCallback(() => {
     load();
   }, [load]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const eventNameStale = `${cacheKey}/stale`;
 
     cache.addEventListener(eventNameStale, onCacheEntryStale);

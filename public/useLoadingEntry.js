@@ -1,6 +1,6 @@
 'use strict';
 
-const { useCallback, useDebugValue, useEffect } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const useForceUpdate = require('../private/useForceUpdate');
 const useLoading = require('./useLoading');
@@ -40,11 +40,11 @@ module.exports = function useLoadingEntry(cacheKey) {
   const loading = useLoading();
   const forceUpdate = useForceUpdate();
 
-  const onTriggerUpdate = useCallback(() => {
+  const onTriggerUpdate = React.useCallback(() => {
     forceUpdate();
   }, [forceUpdate]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const eventNameStart = `${cacheKey}/start`;
     const eventNameEnd = `${cacheKey}/end`;
 
@@ -61,7 +61,7 @@ module.exports = function useLoadingEntry(cacheKey) {
 
   if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useDebugValue(value);
+    React.useDebugValue(value);
 
   return value;
 };

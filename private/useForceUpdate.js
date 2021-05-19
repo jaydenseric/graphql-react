@@ -1,6 +1,6 @@
 'use strict';
 
-const { useReducer } = require('react');
+const React = require('react');
 
 /**
  * A React hook to force the component to update and re-render.
@@ -12,5 +12,5 @@ const { useReducer } = require('react');
  * @ignore
  */
 module.exports = function useForceUpdate() {
-  return useReducer(() => Symbol())[1];
+  return React.useReducer(() => Symbol())[1];
 };

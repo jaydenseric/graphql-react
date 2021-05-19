@@ -1,7 +1,7 @@
 'use strict';
 
 const isObject = require('isobject/index.cjs.js');
-const { useCallback } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const LoadingCacheValue = require('./LoadingCacheValue');
 const fetchGraphQL = require('./fetchGraphQL');
@@ -34,7 +34,7 @@ module.exports = function useLoadGraphQL() {
   const cache = useCache();
   const loading = useLoading();
 
-  return useCallback(
+  return React.useCallback(
     (cacheKey, fetchUri, fetchOptions) => {
       if (typeof cacheKey !== 'string')
         throw new TypeError(

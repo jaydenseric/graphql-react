@@ -1,6 +1,6 @@
 'use strict';
 
-const { createContext } = require('react');
+const React = require('react');
 
 /**
  * React context for the client side hydration [time stamp]{@link HighResTimeStamp}.
@@ -26,7 +26,7 @@ const { createContext } = require('react');
  * const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext.js');
  * ```
  */
-const HydrationTimeStampContext = createContext();
+const HydrationTimeStampContext = React.createContext();
 
 if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
   HydrationTimeStampContext.displayName = 'HydrationTimeStampContext';

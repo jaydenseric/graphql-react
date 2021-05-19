@@ -1,6 +1,6 @@
 'use strict';
 
-const { useContext, useEffect, useRef } = require('react');
+const React = require('react');
 const createArgErrorMessageProd = require('../private/createArgErrorMessageProd');
 const HYDRATION_TIME_MS = require('./HYDRATION_TIME_MS');
 const HydrationTimeStampContext = require('./HydrationTimeStampContext');
@@ -50,7 +50,7 @@ module.exports = function useLoadOnMount(cacheKey, load) {
     );
 
   const cache = useCache();
-  const hydrationTimeStamp = useContext(HydrationTimeStampContext);
+  const hydrationTimeStamp = React.useContext(HydrationTimeStampContext);
 
   if (
     // Allowed to be undefined for apps that don’t provide this context.
@@ -59,9 +59,9 @@ module.exports = function useLoadOnMount(cacheKey, load) {
   )
     throw new TypeError('Hydration time stamp context value must be a number.');
 
-  const startedRef = useRef();
+  const startedRef = React.useRef();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (
       // Loading the same as currently specified wasn’t already started.
       !(
