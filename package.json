@@ -1,7 +1,7 @@
 {
   "name": "graphql-react",
   "version": "13.0.0",
-  "description": "A GraphQL client for React using modern context and hooks APIs that’s lightweight (< 3.5 KB) but powerful; the first Relay and Apollo alternative with server side rendering.",
+  "description": "A GraphQL client for React using modern context and hooks APIs that’s lightweight (< 3.5 kB) but powerful; the first Relay and Apollo alternative with server side rendering.",
   "license": "MIT",
   "author": {
     "name": "Jayden Seric",
