@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Amended the changelog entries for v11.0.0, v11.0.2, and v14.0.0.
+
 ## 14.0.0
 
 ### Major
@@ -21,6 +27,7 @@
 - Use the `.js` file extension in internal `require` paths.
 - Updated the [example Next.js app](https://graphql-react.vercel.app) URL in the readme.
 - Readme tweaks.
+- The file `changelog.md` is no longer published.
 
 ## 13.0.0
 
@@ -211,7 +218,7 @@
 ### Patch
 
 - Updated dependencies.
-- Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/install-test.html) command.
+- Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/v7/commands/npm-install-test) command.
 - Use Babel config `overrides` to ensure `.js` files are parsed as scripts, eliminating Babel `interopRequireDefault` helpers from transpilation output.
 - Updated Zeit/Vercel related URLs in documentation.
 - Updated the readme “Apollo comparison” section.
@@ -231,8 +238,8 @@
 
 ### Major
 
-- Added a [package `exports` field](https://nodejs.org/api/esm.html#esm_package_exports) to support native ESM in Node.js.
-- Some source and published files are now `.js` (CJS) instead of `.mjs` (ESM), so undocumented deep imports may no longer work. [This approach avoids the dual package hazard](https://nodejs.org/api/esm.html#esm_approach_1_use_an_es_module_wrapper).
+- Added a package [`exports`](https://nodejs.org/api/packages.html#packages_exports) field to support native ESM in Node.js.
+- Some source and published files are now `.js` (CJS) instead of `.mjs` (ESM), so undocumented deep imports may no longer work. [This approach avoids the dual package hazard](https://nodejs.org/api/packages.html#packages_approach_1_use_an_es_module_wrapper).
 - Updated Node.js support from v10+ to `10 - 12 || >= 13.7` to reflect the package `exports` related breaking changes.
 
 ### Patch
