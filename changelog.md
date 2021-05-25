@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Renamed variables in the test index module.
 - Amended the changelog entries for v11.0.0, v11.0.2, and v14.0.0.
 
 ## 14.0.0
