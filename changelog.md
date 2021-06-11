@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Updated the [`extract-files`](https://npm.im/extract-files) dependency to [v11](https://github.com/jaydenseric/extract-files/releases/tag/v11.0.0). This dependency is used by the function `fetchOptionsGraphQL`.
+
 ### Patch
 
 - Updated dev dependencies.
