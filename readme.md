@@ -1411,7 +1411,7 @@ A GraphQL result error; either created by the GraphQL server, or by whatever loa
 | :-- | :-- | :-- |
 | `message` | object | Error message. |
 | `locations` | Array<{line: number, column: number}>? | GraphQL query locations related to the error. |
-| `path` | Array<string>? | [GraphQL result](#type-graphqlresult) `data` field path related to the error. |
+| `path` | Array\<string>? | [GraphQL result](#type-graphqlresult) `data` field path related to the error. |
 | `extensions` | object? | Custom error data. If the error was created on the client and not the GraphQL server, this property should be present and contain at least `client: true`, although `code` and error specific properties may be present. |
 
 #### See
