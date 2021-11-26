@@ -1,3 +1,14 @@
 {
-  "extends": ["env"]
+  "extends": ["env"],
+  "settings": {
+    "polyfills": [
+      "AbortController",
+      "CustomEvent",
+      "Event",
+      "EventTarget",
+      "fetch",
+      "FormData",
+      "performance"
+    ]
+  }
 }

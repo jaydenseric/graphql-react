@@ -10,6 +10,7 @@
 
 - Also run GitHub Actions CI with Node.js v17.
 - Refactored the `useCacheEntryPrunePrevention` React hook to avoid the `React.useCallback` React hook.
+- Configured polyfilled globals in ESLint config for [`eslint-plugin-compat`](https://npm.im/eslint-plugin-compat).
 - Fixed JSDoc grammar typos.
 - Corrected a test name.
 
