@@ -9,6 +9,7 @@
 ### Patch
 
 - Also run GitHub Actions CI with Node.js v17.
+- Refactored the `useCacheEntryPrunePrevention` React hook to avoid the `React.useCallback` React hook.
 - Fixed JSDoc grammar typos.
 - Corrected a test name.
 

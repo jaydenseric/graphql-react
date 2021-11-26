@@ -5,6 +5,17 @@ const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.
 const useCache = require('./useCache.js');
 
 /**
+ * Cancels an event.
+ * @kind function
+ * @name cancelEvent
+ * @param {Event} event Event.
+ * @ignore
+ */
+function cancelEvent(event) {
+  event.preventDefault();
+}
+
+/**
  * A React hook to prevent a [cache]{@link Cache#store} entry from being pruned,
  * by canceling the cache entry deletion for
  * [prune events]{@link Cache#event:prune} with `event.preventDefault()`.
@@ -38,17 +49,13 @@ module.exports = function useCacheEntryPrunePrevention(cacheKey) {
 
   const cache = useCache();
 
-  const onCacheEntryPrune = React.useCallback((event) => {
-    event.preventDefault();
-  }, []);
-
   React.useEffect(() => {
     const eventNamePrune = `${cacheKey}/prune`;
 
-    cache.addEventListener(eventNamePrune, onCacheEntryPrune);
+    cache.addEventListener(eventNamePrune, cancelEvent);
 
     return () => {
-      cache.removeEventListener(eventNamePrune, onCacheEntryPrune);
+      cache.removeEventListener(eventNamePrune, cancelEvent);
     };
-  }, [cache, cacheKey, onCacheEntryPrune]);
+  }, [cache, cacheKey]);
 };
