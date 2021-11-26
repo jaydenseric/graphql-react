@@ -346,7 +346,7 @@ Controls a loading [cache value](#type-cachevalue).
 | `cache` | [Cache](#class-cache) | Cache to update. |
 | `cacheKey` | [CacheKey](#type-cachekey) | Cache key. |
 | `loadingResult` | Promise<[CacheValue](#type-cachevalue)> | Resolves the loading result (including any loading errors) to be set as the [cache value](#type-cachevalue) if loading isn’t aborted. Shouldn’t reject. |
-| `abortController` | AbortController | Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no affect after loading ends. |
+| `abortController` | AbortController | Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no effect after loading ends. |
 
 #### Fires
 
@@ -378,7 +378,7 @@ _Ways to `require`._
 
 #### LoadingCacheValue instance property abortController
 
-Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no affect after loading ends.
+Aborts this loading and skips setting the loading result as the [cache value](#type-cachevalue). Has no effect after loading ends.
 
 **Type:** AbortController
 

@@ -13,7 +13,7 @@ const cacheEntrySet = require('./cacheEntrySet.js');
  * @param {Cache} cache Cache to update.
  * @param {CacheKey} cacheKey Cache key.
  * @param {Promise<CacheValue>} loadingResult Resolves the loading result (including any loading errors) to be set as the [cache value]{@link CacheValue} if loading isn’t aborted. Shouldn’t reject.
- * @param {AbortController} abortController Aborts this loading and skips setting the loading result as the [cache value]{@link CacheValue}. Has no affect after loading ends.
+ * @param {AbortController} abortController Aborts this loading and skips setting the loading result as the [cache value]{@link CacheValue}. Has no effect after loading ends.
  * @fires Loading#event:start
  * @fires Cache#event:set
  * @fires Loading#event:end
@@ -81,7 +81,7 @@ module.exports = class LoadingCacheValue {
 
     /**
      * Aborts this loading and skips setting the loading result as the
-     * [cache value]{@link CacheValue}. Has no affect after loading ends.
+     * [cache value]{@link CacheValue}. Has no effect after loading ends.
      * @kind member
      * @name LoadingCacheValue#abortController
      * @type {AbortController}

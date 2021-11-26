@@ -9,6 +9,7 @@
 ### Patch
 
 - Also run GitHub Actions CI with Node.js v17.
+- Fixed JSDoc grammar typos.
 
 ## 15.0.0
 
