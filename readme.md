@@ -134,7 +134,7 @@ export default function GitHubRepoStars({ repoId }) {
 
 ## Support
 
-- [Node.js](https://nodejs.org): `^12.20.0 || ^14.13.1 || >= 16.0.0`
+- [Node.js](https://nodejs.org): `^12.22.0 || ^14.17.0 || >= 16.0.0`
 - [Browsers](https://npm.im/browserslist): `> 0.5%, not OperaMini all, not IE > 0, not dead`
 
 Consider polyfilling:
