@@ -494,7 +494,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`fetchGraphQL` with response JSON `errors` property not an object or null, no `data` property, HTTP status ok.',
+    '`fetchGraphQL` with no response JSON `errors` property, `data` property not an object, HTTP status ok.',
     async () => {
       let fetchedUri;
       let fetchedOptions;
