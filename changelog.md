@@ -6,7 +6,9 @@
 
 - Updated Node.js support to `^12.22.0 || ^14.17.0 || >= 16.0.0`.
 - Updated dev dependencies, some of which require newer Node.js versions than previously supported.
+- Public modules are now individually listed in the package `files` and `exports` fields.
 - Removed the package main index module; deep imports must be used.
+- Shortened public module deep import paths, removing the `/public/`.
 
 ### Patch
 
@@ -14,6 +16,7 @@
 - Refactored the `useCacheEntryPrunePrevention` React hook to avoid the `React.useCallback` React hook.
 - Configured polyfilled globals in ESLint config for [`eslint-plugin-compat`](https://npm.im/eslint-plugin-compat).
 - Fixed JSDoc grammar typos.
+- Reorganized the test file structure.
 - Corrected a test name.
 - Test the bundle sizes for public modules individually.
 - Use a new `assertBundleSize` function to assert module bundle size in tests:
