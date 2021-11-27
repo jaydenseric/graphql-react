@@ -21,25 +21,18 @@ const LoadingContext = require('./LoadingContext.js');
  * @param {Cache} props.cache [`Cache`]{@link Cache} instance.
  * @param {ReactNode} [props.children] React children.
  * @returns {ReactNode} React virtual DOM node.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { Provider } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import Provider from 'graphql-react/public/Provider.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { Provider } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const Provider = require('graphql-react/public/Provider.js');
  * ```
  * @example <caption>Provide a [`Cache`]{@link Cache} instance for an app.</caption>
  * ```jsx
- * import { Cache, Provider } from 'graphql-react';
+ * import Cache from 'graphql-react/public/Cache.js';
+ * import Provider from 'graphql-react/public/Provider.js';
  * import React from 'react';
  *
  * const cache = new Cache();

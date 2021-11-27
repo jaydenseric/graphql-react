@@ -9,19 +9,11 @@ const CacheContext = require('./CacheContext.js');
  * @kind function
  * @name useCache
  * @returns {Cache} The cache.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useCache } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useCache from 'graphql-react/public/useCache.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useCache } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useCache = require('graphql-react/public/useCache.js');
  * ```

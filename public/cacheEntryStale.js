@@ -11,19 +11,11 @@ const Cache = require('./Cache.js');
  * @param {Cache} cache Cache to update.
  * @param {CacheKey} cacheKey Cache key.
  * @fires Cache#event:stale
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheEntryStale } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheEntryStale from 'graphql-react/public/cacheEntryStale.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheEntryStale } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheEntryStale = require('graphql-react/public/cacheEntryStale.js');
  * ```

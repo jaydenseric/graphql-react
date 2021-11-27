@@ -23,19 +23,11 @@ const useLoadOnStale = require('./useLoadOnStale.js');
  * @see [`useLoadOnStale`]{@link useLoadOnStale}, used by this hook.
  * @see [`useLoadOnDelete`]{@link useLoadOnDelete}, used by this hook.
  * @see [`useWaterfallLoad`]{@link useWaterfallLoad}, often used alongside this hook for SSR loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useAutoLoad } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useAutoLoad from 'graphql-react/public/useAutoLoad.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useAutoLoad } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useAutoLoad = require('graphql-react/public/useAutoLoad.js');
  * ```

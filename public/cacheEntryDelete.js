@@ -10,19 +10,11 @@ const Cache = require('./Cache.js');
  * @param {Cache} cache Cache to update.
  * @param {CacheKey} cacheKey Cache key.
  * @fires Cache#event:delete
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheEntryDelete } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheEntryDelete from 'graphql-react/public/cacheEntryDelete.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheEntryDelete } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheEntryDelete = require('graphql-react/public/cacheEntryDelete.js');
  * ```

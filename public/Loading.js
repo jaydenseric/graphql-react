@@ -4,19 +4,11 @@
  * Loading store.
  * @kind class
  * @name Loading
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { Loading } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import Loading from 'graphql-react/public/Loading.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { Loading } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const Loading = require('graphql-react/public/Loading.js');
  * ```

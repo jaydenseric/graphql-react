@@ -19,19 +19,11 @@ const useCache = require('./useCache.js');
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {boolean} Did loading start. If so, it’s efficient for the component to return `null` since this render will be discarded anyway for a re-render onces the loading ends.
  * @see [`useAutoLoad`]{@link useAutoLoad}, often used alongside this hook.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useWaterfallLoad } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useWaterfallLoad from 'graphql-react/public/useWaterfallLoad.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useWaterfallLoad } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad.js');
  * ```

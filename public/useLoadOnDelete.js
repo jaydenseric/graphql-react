@@ -12,19 +12,11 @@ const useCache = require('./useCache.js');
  * @name useLoadOnDelete
  * @param {CacheKey} cacheKey Cache key.
  * @param {Loader} load Memoized function that starts the loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoadOnDelete } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoadOnDelete from 'graphql-react/public/useLoadOnDelete.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoadOnDelete } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete.js');
  * ```

@@ -12,19 +12,11 @@ const useLoading = require('./useLoading.js');
  * @name useLoadingEntry
  * @param {CacheKey} cacheKey Cache key.
  * @returns {Set<LoadingCacheValue>|undefined} Loading cache values, if present.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoadingEntry } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoadingEntry from 'graphql-react/public/useLoadingEntry.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoadingEntry } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoadingEntry = require('graphql-react/public/useLoadingEntry.js');
  * ```

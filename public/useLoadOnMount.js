@@ -17,19 +17,11 @@ const useCache = require('./useCache.js');
  * @name useLoadOnMount
  * @param {CacheKey} cacheKey Cache key.
  * @param {Loader} load Memoized function that starts the loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoadOnMount } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoadOnMount from 'graphql-react/public/useLoadOnMount.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoadOnMount } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoadOnMount = require('graphql-react/public/useLoadOnMount.js');
  * ```

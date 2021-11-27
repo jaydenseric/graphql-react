@@ -31,12 +31,7 @@
     "public"
   ],
   "sideEffects": false,
-  "main": "public",
   "exports": {
-    ".": {
-      "import": "./public/index.mjs",
-      "require": "./public/index.js"
-    },
     "./public/*": "./public/*",
     "./package": "./package.json",
     "./package.json": "./package.json"

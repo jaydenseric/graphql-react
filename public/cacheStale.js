@@ -11,19 +11,11 @@ const cacheEntryStale = require('./cacheEntryStale.js');
  * @param {Cache} cache Cache to update.
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to stale. By default all are matched.
  * @fires Cache#event:stale
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheStale } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheStale from 'graphql-react/public/cacheStale.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheStale } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheStale = require('graphql-react/public/cacheStale.js');
  * ```

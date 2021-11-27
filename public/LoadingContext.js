@@ -9,19 +9,11 @@ const React = require('react');
  * @type {object}
  * @prop {Function} Provider [React context provider component](https://reactjs.org/docs/context.html#contextprovider).
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { LoadingContext } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import LoadingContext from 'graphql-react/public/LoadingContext.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { LoadingContext } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const LoadingContext = require('graphql-react/public/LoadingContext.js');
  * ```

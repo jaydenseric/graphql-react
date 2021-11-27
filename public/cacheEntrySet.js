@@ -11,19 +11,11 @@ const Cache = require('./Cache.js');
  * @param {CacheKey} cacheKey Cache key.
  * @param {CacheValue} cacheValue Cache value.
  * @fires Cache#event:set
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheEntrySet } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheEntrySet from 'graphql-react/public/cacheEntrySet.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheEntrySet } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheEntrySet = require('graphql-react/public/cacheEntrySet.js');
  * ```

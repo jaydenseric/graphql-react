@@ -8,19 +8,11 @@ const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.
  * @kind class
  * @name Cache
  * @param {object} [store={}] Initial [cache store]{@link Cache#store}. Useful for hydrating cache data from a server side render prior to the initial client side render.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { Cache } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import Cache from 'graphql-react/public/Cache.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { Cache } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const Cache = require('graphql-react/public/Cache.js');
  * ```

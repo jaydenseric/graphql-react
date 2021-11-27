@@ -12,19 +12,11 @@ const useCache = require('./useCache.js');
  * @name useCacheEntry
  * @param {CacheKey} cacheKey Cache key.
  * @returns {CacheValue} Cache value, if present.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useCacheEntry } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useCacheEntry from 'graphql-react/public/useCacheEntry.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useCacheEntry } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useCacheEntry = require('graphql-react/public/useCacheEntry.js');
  * ```

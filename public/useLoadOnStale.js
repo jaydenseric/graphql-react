@@ -12,19 +12,11 @@ const useCache = require('./useCache.js');
  * @name useLoadOnStale
  * @param {CacheKey} cacheKey Cache key.
  * @param {Loader} load Memoized function that starts the loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoadOnStale } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoadOnStale from 'graphql-react/public/useLoadOnStale.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoadOnStale } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoadOnStale = require('graphql-react/public/useLoadOnStale.js');
  * ```

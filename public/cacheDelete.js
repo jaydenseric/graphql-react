@@ -11,19 +11,11 @@ const cacheEntryDelete = require('./cacheEntryDelete.js');
  * @param {Cache} cache Cache to update.
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to delete. By default all are matched.
  * @fires Cache#event:delete
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheDelete } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheDelete from 'graphql-react/public/cacheDelete.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheDelete } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheDelete = require('graphql-react/public/cacheDelete.js');
  * ```

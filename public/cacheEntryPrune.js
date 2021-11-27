@@ -14,19 +14,11 @@ const cacheEntryDelete = require('./cacheEntryDelete.js');
  * @param {CacheKey} cacheKey Cache key.
  * @fires Cache#event:prune
  * @fires Cache#event:delete
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cacheEntryPrune } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cacheEntryPrune from 'graphql-react/public/cacheEntryPrune.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cacheEntryPrune } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cacheEntryPrune = require('graphql-react/public/cacheEntryPrune.js');
  * ```

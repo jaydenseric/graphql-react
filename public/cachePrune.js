@@ -12,19 +12,11 @@ const cacheEntryPrune = require('./cacheEntryPrune.js');
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to prune. By default all are matched.
  * @fires Cache#event:prune
  * @fires Cache#event:delete
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { cachePrune } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import cachePrune from 'graphql-react/public/cachePrune.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { cachePrune } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const cachePrune = require('graphql-react/public/cachePrune.js');
  * ```

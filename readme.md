@@ -211,22 +211,14 @@ Cache store.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { Cache } from 'graphql-react';
-> ```
->
 > ```js
 > import Cache from 'graphql-react/public/Cache.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { Cache } = require('graphql-react');
-> ```
->
 > ```js
 > const Cache = require('graphql-react/public/Cache.js');
 > ```
@@ -280,22 +272,14 @@ Loading store.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { Loading } from 'graphql-react';
-> ```
->
 > ```js
 > import Loading from 'graphql-react/public/Loading.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { Loading } = require('graphql-react');
-> ```
->
 > ```js
 > const Loading = require('graphql-react/public/Loading.js');
 > ```
@@ -356,22 +340,14 @@ Controls a loading [cache value](#type-cachevalue).
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { LoadingCacheValue } from 'graphql-react';
-> ```
->
 > ```js
 > import LoadingCacheValue from 'graphql-react/public/LoadingCacheValue.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { LoadingCacheValue } = require('graphql-react');
-> ```
->
 > ```js
 > const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue.js');
 > ```
@@ -411,22 +387,14 @@ Deletes [cache](#cache-instance-property-store) entries. Useful after a user log
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheDelete } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheDelete from 'graphql-react/public/cacheDelete.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheDelete } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheDelete = require('graphql-react/public/cacheDelete.js');
 > ```
@@ -448,22 +416,14 @@ Deletes a [cache](#cache-instance-property-store) entry.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheEntryDelete } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheEntryDelete from 'graphql-react/public/cacheEntryDelete.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheEntryDelete } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheEntryDelete = require('graphql-react/public/cacheEntryDelete.js');
 > ```
@@ -486,22 +446,14 @@ Prunes a [cache](#cache-instance-property-store) entry, if no [prune event](#cac
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheEntryPrune } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheEntryPrune from 'graphql-react/public/cacheEntryPrune.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheEntryPrune } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheEntryPrune = require('graphql-react/public/cacheEntryPrune.js');
 > ```
@@ -524,22 +476,14 @@ Sets a [cache](#cache-instance-property-store) entry.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheEntrySet } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheEntrySet from 'graphql-react/public/cacheEntrySet.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheEntrySet } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheEntrySet = require('graphql-react/public/cacheEntrySet.js');
 > ```
@@ -561,22 +505,14 @@ Stales a [cache](#cache-instance-property-store) entry, signalling it should pro
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheEntryStale } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheEntryStale from 'graphql-react/public/cacheEntryStale.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheEntryStale } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheEntryStale = require('graphql-react/public/cacheEntryStale.js');
 > ```
@@ -599,22 +535,14 @@ Prunes [cache](#cache-instance-property-store) entries. Useful after a mutation.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cachePrune } from 'graphql-react';
-> ```
->
 > ```js
 > import cachePrune from 'graphql-react/public/cachePrune.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cachePrune } = require('graphql-react');
-> ```
->
 > ```js
 > const cachePrune = require('graphql-react/public/cachePrune.js');
 > ```
@@ -636,22 +564,14 @@ Stales [cache](#cache-instance-property-store) entries. Useful after a mutation.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { cacheStale } from 'graphql-react';
-> ```
->
 > ```js
 > import cacheStale from 'graphql-react/public/cacheStale.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { cacheStale } = require('graphql-react');
-> ```
->
 > ```js
 > const cacheStale = require('graphql-react/public/cacheStale.js');
 > ```
@@ -678,22 +598,14 @@ Fetches a GraphQL operation, always resolving a [GraphQL result](#type-graphqlre
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { fetchGraphQL } from 'graphql-react';
-> ```
->
 > ```js
 > import fetchGraphQL from 'graphql-react/public/fetchGraphQL.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { fetchGraphQL } = require('graphql-react');
-> ```
->
 > ```js
 > const fetchGraphQL = require('graphql-react/public/fetchGraphQL.js');
 > ```
@@ -714,22 +626,14 @@ This utility exists for user convenience and isn’t used directly by the `graph
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { fetchOptionsGraphQL } from 'graphql-react';
-> ```
->
 > ```js
 > import fetchOptionsGraphQL from 'graphql-react/public/fetchOptionsGraphQL.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { fetchOptionsGraphQL } = require('graphql-react');
-> ```
->
 > ```js
 > const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL.js');
 > ```
@@ -754,22 +658,14 @@ A React component to provide all the React context required to enable the entire
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { Provider } from 'graphql-react';
-> ```
->
 > ```js
 > import Provider from 'graphql-react/public/Provider.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { Provider } = require('graphql-react');
-> ```
->
 > ```js
 > const Provider = require('graphql-react/public/Provider.js');
 > ```
@@ -777,7 +673,8 @@ _Ways to `require`._
 _Provide a [`Cache`](#class-cache) instance for an app._
 
 > ```jsx
-> import { Cache, Provider } from 'graphql-react';
+> import Cache from 'graphql-react/public/Cache.js';
+> import Provider from 'graphql-react/public/Provider.js';
 > import React from 'react';
 >
 > const cache = new Cache();
@@ -799,22 +696,14 @@ A React hook to create a memoized [loader](#type-loader) from another, that auto
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useAutoAbortLoad } from 'graphql-react';
-> ```
->
 > ```js
 > import useAutoAbortLoad from 'graphql-react/public/useAutoAbortLoad.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useAutoAbortLoad } = require('graphql-react');
-> ```
->
 > ```js
 > const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad.js');
 > ```
@@ -843,22 +732,14 @@ A React hook to prevent a [cache](#cache-instance-property-store) entry from bei
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useAutoLoad } from 'graphql-react';
-> ```
->
 > ```js
 > import useAutoLoad from 'graphql-react/public/useAutoLoad.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useAutoLoad } = require('graphql-react');
-> ```
->
 > ```js
 > const useAutoLoad = require('graphql-react/public/useAutoLoad.js');
 > ```
@@ -873,22 +754,14 @@ A React hook to get the [cache context](#member-cachecontext).
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useCache } from 'graphql-react';
-> ```
->
 > ```js
 > import useCache from 'graphql-react/public/useCache.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useCache } = require('graphql-react');
-> ```
->
 > ```js
 > const useCache = require('graphql-react/public/useCache.js');
 > ```
@@ -907,22 +780,14 @@ A React hook to get a [cache value](#type-cachevalue) using its [cache key](#typ
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useCacheEntry } from 'graphql-react';
-> ```
->
 > ```js
 > import useCacheEntry from 'graphql-react/public/useCacheEntry.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useCacheEntry } = require('graphql-react');
-> ```
->
 > ```js
 > const useCacheEntry = require('graphql-react/public/useCacheEntry.js');
 > ```
@@ -939,22 +804,14 @@ A React hook to prevent a [cache](#cache-instance-property-store) entry from bei
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useCacheEntryPrunePrevention } from 'graphql-react';
-> ```
->
 > ```js
 > import useCacheEntryPrunePrevention from 'graphql-react/public/useCacheEntryPrunePrevention.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useCacheEntryPrunePrevention } = require('graphql-react');
-> ```
->
 > ```js
 > const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention.js');
 > ```
@@ -969,22 +826,14 @@ A React hook to get a function for loading a GraphQL operation.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoadGraphQL } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoadGraphQL from 'graphql-react/public/useLoadGraphQL.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoadGraphQL } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL.js');
 > ```
@@ -999,22 +848,14 @@ A React hook to get the [loading context](#member-loadingcontext).
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoading } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoading from 'graphql-react/public/useLoading.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoading } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoading = require('graphql-react/public/useLoading.js');
 > ```
@@ -1033,22 +874,14 @@ A React hook to get the [loading cache values](#class-loadingcachevalue) for a g
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoadingEntry } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoadingEntry from 'graphql-react/public/useLoadingEntry.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoadingEntry } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoadingEntry = require('graphql-react/public/useLoadingEntry.js');
 > ```
@@ -1066,22 +899,14 @@ A React hook to load a [cache](#cache-instance-property-store) entry after it’
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoadOnDelete } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoadOnDelete from 'graphql-react/public/useLoadOnDelete.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoadOnDelete } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoadOnDelete = require('graphql-react/public/useLoadOnDelete.js');
 > ```
@@ -1099,22 +924,14 @@ A React hook to automatically load a [cache](#cache-instance-property-store) ent
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoadOnMount } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoadOnMount from 'graphql-react/public/useLoadOnMount.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoadOnMount } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoadOnMount = require('graphql-react/public/useLoadOnMount.js');
 > ```
@@ -1132,22 +949,14 @@ A React hook to load a [cache](#cache-instance-property-store) entry after becom
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useLoadOnStale } from 'graphql-react';
-> ```
->
 > ```js
 > import useLoadOnStale from 'graphql-react/public/useLoadOnStale.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useLoadOnStale } = require('graphql-react');
-> ```
->
 > ```js
 > const useLoadOnStale = require('graphql-react/public/useLoadOnStale.js');
 > ```
@@ -1171,22 +980,14 @@ A React hook to load a [cache](#cache-instance-property-store) entry if the [wat
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { useWaterfallLoad } from 'graphql-react';
-> ```
->
 > ```js
 > import useWaterfallLoad from 'graphql-react/public/useWaterfallLoad.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { useWaterfallLoad } = require('graphql-react');
-> ```
->
 > ```js
 > const useWaterfallLoad = require('graphql-react/public/useWaterfallLoad.js');
 > ```
@@ -1206,22 +1007,14 @@ React context for a [`Cache`](#class-cache) instance.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { CacheContext } from 'graphql-react';
-> ```
->
 > ```js
 > import CacheContext from 'graphql-react/public/CacheContext.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { CacheContext } = require('graphql-react');
-> ```
->
 > ```js
 > const CacheContext = require('graphql-react/public/CacheContext.js');
 > ```
@@ -1241,22 +1034,14 @@ React context for the client side hydration [time stamp](#type-highrestimestamp)
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { HydrationTimeStampContext } from 'graphql-react';
-> ```
->
 > ```js
 > import HydrationTimeStampContext from 'graphql-react/public/HydrationTimeStampContext.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { HydrationTimeStampContext } = require('graphql-react');
-> ```
->
 > ```js
 > const HydrationTimeStampContext = require('graphql-react/public/HydrationTimeStampContext.js');
 > ```
@@ -1276,22 +1061,14 @@ React context for a [`Loading`](#class-loading) instance.
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { LoadingContext } from 'graphql-react';
-> ```
->
 > ```js
 > import LoadingContext from 'graphql-react/public/LoadingContext.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { LoadingContext } = require('graphql-react');
-> ```
->
 > ```js
 > const LoadingContext = require('graphql-react/public/LoadingContext.js');
 > ```
@@ -1306,22 +1083,14 @@ Number of milliseconds after the first client render that’s considered the hyd
 
 #### Examples
 
-_Ways to `import`._
+_How to `import`._
 
-> ```js
-> import { HYDRATION_TIME_MS } from 'graphql-react';
-> ```
->
 > ```js
 > import HYDRATION_TIME_MS from 'graphql-react/public/HYDRATION_TIME_MS.js';
 > ```
 
-_Ways to `require`._
+_How to `require`._
 
-> ```js
-> const { HYDRATION_TIME_MS } = require('graphql-react');
-> ```
->
 > ```js
 > const HYDRATION_TIME_MS = require('graphql-react/public/HYDRATION_TIME_MS.js');
 > ```

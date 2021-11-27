@@ -9,19 +9,11 @@ const React = require('react');
  * @type {object}
  * @prop {Function} Provider [React context provider component](https://reactjs.org/docs/context.html#contextprovider).
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { CacheContext } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import CacheContext from 'graphql-react/public/CacheContext.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { CacheContext } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const CacheContext = require('graphql-react/public/CacheContext.js');
  * ```

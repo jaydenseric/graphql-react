@@ -19,19 +19,11 @@ const extractFiles = require('extract-files/public/extractFiles.js');
  * @name fetchOptionsGraphQL
  * @param {GraphQLOperation} operation GraphQL operation.
  * @returns {FetchOptions} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { fetchOptionsGraphQL } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import fetchOptionsGraphQL from 'graphql-react/public/fetchOptionsGraphQL.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { fetchOptionsGraphQL } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const fetchOptionsGraphQL = require('graphql-react/public/fetchOptionsGraphQL.js');
  * ```

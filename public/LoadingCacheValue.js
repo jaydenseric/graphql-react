@@ -17,19 +17,11 @@ const cacheEntrySet = require('./cacheEntrySet.js');
  * @fires Loading#event:start
  * @fires Cache#event:set
  * @fires Loading#event:end
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { LoadingCacheValue } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import LoadingCacheValue from 'graphql-react/public/LoadingCacheValue.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { LoadingCacheValue } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const LoadingCacheValue = require('graphql-react/public/LoadingCacheValue.js');
  * ```

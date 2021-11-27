@@ -9,19 +9,11 @@ const LoadingContext = require('./LoadingContext.js');
  * @kind function
  * @name useLoading
  * @returns {Loading} Loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoading } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoading from 'graphql-react/public/useLoading.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoading } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoading = require('graphql-react/public/useLoading.js');
  * ```

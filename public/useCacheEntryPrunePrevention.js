@@ -22,19 +22,11 @@ function cancelEvent(event) {
  * @kind function
  * @name useCacheEntryPrunePrevention
  * @param {CacheKey} cacheKey Cache key.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useCacheEntryPrunePrevention } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useCacheEntryPrunePrevention from 'graphql-react/public/useCacheEntryPrunePrevention.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useCacheEntryPrunePrevention } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useCacheEntryPrunePrevention = require('graphql-react/public/useCacheEntryPrunePrevention.js');
  * ```

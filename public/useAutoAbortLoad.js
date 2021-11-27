@@ -12,19 +12,11 @@ const createArgErrorMessageProd = require('../private/createArgErrorMessageProd.
  * @name useAutoAbortLoad
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {Loader} Memoized function that starts the loading.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useAutoAbortLoad } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useAutoAbortLoad from 'graphql-react/public/useAutoAbortLoad.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useAutoAbortLoad } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useAutoAbortLoad = require('graphql-react/public/useAutoAbortLoad.js');
  * ```

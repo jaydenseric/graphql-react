@@ -13,19 +13,11 @@ const useLoading = require('./useLoading.js');
  * @kind function
  * @name useLoadGraphQL
  * @returns {LoadGraphQL} Loads a GraphQL operation.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { useLoadGraphQL } from 'graphql-react';
- * ```
- *
+ * @example <caption>How to `import`.</caption>
  * ```js
  * import useLoadGraphQL from 'graphql-react/public/useLoadGraphQL.js';
  * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { useLoadGraphQL } = require('graphql-react');
- * ```
- *
+ * @example <caption>How to `require`.</caption>
  * ```js
  * const useLoadGraphQL = require('graphql-react/public/useLoadGraphQL.js');
  * ```
