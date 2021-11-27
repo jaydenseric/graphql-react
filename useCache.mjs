@@ -7,7 +7,7 @@ import CacheContext from "./CacheContext.mjs";
  * @kind function
  * @name useCache
  * @returns {Cache} The cache.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useCache from "graphql-react/useCache.mjs";
  * ```

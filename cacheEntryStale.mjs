@@ -8,7 +8,7 @@ import Cache from "./Cache.mjs";
  * @param {Cache} cache Cache to update.
  * @param {CacheKey} cacheKey Cache key.
  * @fires Cache#event:stale
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import cacheEntryStale from "graphql-react/cacheEntryStale.mjs";
  * ```

@@ -2,7 +2,7 @@
  * Loading store.
  * @kind class
  * @name Loading
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import Loading from "graphql-react/Loading.mjs";
  * ```

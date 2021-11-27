@@ -3,7 +3,7 @@
  * @kind class
  * @name Cache
  * @param {object} [store={}] Initial [cache store]{@link Cache#store}. Useful for hydrating cache data from a server side render prior to the initial client side render.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import Cache from "graphql-react/Cache.mjs";
  * ```

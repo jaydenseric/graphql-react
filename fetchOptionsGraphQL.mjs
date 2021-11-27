@@ -17,7 +17,7 @@ import extractFiles from "extract-files/public/extractFiles.js";
  * @name fetchOptionsGraphQL
  * @param {GraphQLOperation} operation GraphQL operation.
  * @returns {FetchOptions} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import fetchOptionsGraphQL from "graphql-react/fetchOptionsGraphQL.mjs";
  * ```

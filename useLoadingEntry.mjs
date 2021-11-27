@@ -9,7 +9,7 @@ import useLoading from "./useLoading.mjs";
  * @name useLoadingEntry
  * @param {CacheKey} cacheKey Cache key.
  * @returns {Set<LoadingCacheValue>|undefined} Loading cache values, if present.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useLoadingEntry from "graphql-react/useLoadingEntry.mjs";
  * ```

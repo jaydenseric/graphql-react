@@ -9,7 +9,7 @@ import useLoading from "./useLoading.mjs";
  * @kind function
  * @name useLoadGraphQL
  * @returns {LoadGraphQL} Loads a GraphQL operation.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
  * ```

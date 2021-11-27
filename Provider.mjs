@@ -18,7 +18,7 @@ import LoadingContext from "./LoadingContext.mjs";
  * @param {Cache} props.cache [`Cache`]{@link Cache} instance.
  * @param {ReactNode} [props.children] React children.
  * @returns {ReactNode} React virtual DOM node.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import Provider from "graphql-react/Provider.mjs";
  * ```

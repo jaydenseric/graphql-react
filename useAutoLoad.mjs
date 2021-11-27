@@ -20,7 +20,7 @@ import useLoadOnStale from "./useLoadOnStale.mjs";
  * @see [`useLoadOnStale`]{@link useLoadOnStale}, used by this hook.
  * @see [`useLoadOnDelete`]{@link useLoadOnDelete}, used by this hook.
  * @see [`useWaterfallLoad`]{@link useWaterfallLoad}, often used alongside this hook for SSR loading.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useAutoLoad from "graphql-react/useAutoLoad.mjs";
  * ```

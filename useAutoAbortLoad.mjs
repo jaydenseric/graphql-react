@@ -9,7 +9,7 @@ import React from "react";
  * @name useAutoAbortLoad
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {Loader} Memoized function that starts the loading.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useAutoAbortLoad from "graphql-react/useAutoAbortLoad.mjs";
  * ```

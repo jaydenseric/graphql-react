@@ -11,7 +11,7 @@ import cacheEntryDelete from "./cacheEntryDelete.mjs";
  * @param {CacheKey} cacheKey Cache key.
  * @fires Cache#event:prune
  * @fires Cache#event:delete
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import cacheEntryPrune from "graphql-react/cacheEntryPrune.mjs";
  * ```

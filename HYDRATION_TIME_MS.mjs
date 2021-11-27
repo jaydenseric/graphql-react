@@ -6,7 +6,7 @@
  * @kind constant
  * @name HYDRATION_TIME_MS
  * @type {number}
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import HYDRATION_TIME_MS from "graphql-react/HYDRATION_TIME_MS.mjs";
  * ```

@@ -14,7 +14,7 @@ import cacheEntrySet from "./cacheEntrySet.mjs";
  * @fires Loading#event:start
  * @fires Cache#event:set
  * @fires Loading#event:end
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import LoadingCacheValue from "graphql-react/LoadingCacheValue.mjs";
  * ```

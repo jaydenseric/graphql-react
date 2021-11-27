@@ -8,7 +8,7 @@ import cacheEntryDelete from "./cacheEntryDelete.mjs";
  * @param {Cache} cache Cache to update.
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to delete. By default all are matched.
  * @fires Cache#event:delete
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import cacheDelete from "graphql-react/cacheDelete.mjs";
  * ```

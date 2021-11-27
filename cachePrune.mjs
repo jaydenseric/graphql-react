@@ -9,7 +9,7 @@ import cacheEntryPrune from "./cacheEntryPrune.mjs";
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to prune. By default all are matched.
  * @fires Cache#event:prune
  * @fires Cache#event:delete
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import cachePrune from "graphql-react/cachePrune.mjs";
  * ```

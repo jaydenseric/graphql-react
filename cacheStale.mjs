@@ -8,7 +8,7 @@ import cacheEntryStale from "./cacheEntryStale.mjs";
  * @param {Cache} cache Cache to update.
  * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to stale. By default all are matched.
  * @fires Cache#event:stale
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import cacheStale from "graphql-react/cacheStale.mjs";
  * ```

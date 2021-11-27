@@ -9,7 +9,7 @@ import useCache from "./useCache.mjs";
  * @name useLoadOnStale
  * @param {CacheKey} cacheKey Cache key.
  * @param {Loader} load Memoized function that starts the loading.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useLoadOnStale from "graphql-react/useLoadOnStale.mjs";
  * ```

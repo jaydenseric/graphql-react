@@ -22,7 +22,7 @@ const ERROR_CODE_RESPONSE_MALFORMED = "RESPONSE_MALFORMED";
  * @param {string} fetchUri Fetch URI for the GraphQL API.
  * @param {FetchOptions} fetchOptions Fetch options.
  * @returns {Promise<GraphQLResult>} Resolves a result suitable for use as a [cache value]{@link CacheValue}. Shouldn’t reject.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import fetchGraphQL from "graphql-react/fetchGraphQL.mjs";
  * ```

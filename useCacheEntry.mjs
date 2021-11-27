@@ -9,7 +9,7 @@ import useForceUpdate from "./useForceUpdate.mjs";
  * @name useCacheEntry
  * @param {CacheKey} cacheKey Cache key.
  * @returns {CacheValue} Cache value, if present.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useCacheEntry from "graphql-react/useCacheEntry.mjs";
  * ```

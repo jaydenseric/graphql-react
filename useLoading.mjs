@@ -7,7 +7,7 @@ import LoadingContext from "./LoadingContext.mjs";
  * @kind function
  * @name useLoading
  * @returns {Loading} Loading.
- * @example <caption>How to `import`.</caption>
+ * @example <caption>How to import.</caption>
  * ```js
  * import useLoading from "graphql-react/useLoading.mjs";
  * ```
