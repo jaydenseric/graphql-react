@@ -3,8 +3,16 @@ import revertableGlobals from 'revertable-globals';
 import createArgErrorMessageProd from '../../private/createArgErrorMessageProd.js';
 import Cache from '../../public/Cache.js';
 import cachePrune from '../../public/cachePrune.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`cachePrune` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/cachePrune.js', import.meta.url),
+      600
+    );
+  });
+
   tests.add('`cachePrune` argument 1 `cache` not a `Cache` instance.', () => {
     const cache = true;
 

@@ -8,8 +8,16 @@ import { jsx } from 'react/jsx-runtime.js';
 import Loading from '../../public/Loading.js';
 import LoadingContext from '../../public/LoadingContext.js';
 import useLoading from '../../public/useLoading.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoading` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoading.js', import.meta.url),
+      500
+    );
+  });
+
   tests.add('`useLoading` with loading context missing.', () => {
     try {
       const revertConsole = suppressErrorOutput();

@@ -8,9 +8,17 @@ import HydrationTimeStampContext from '../../public/HydrationTimeStampContext.js
 import Loading from '../../public/Loading.js';
 import LoadingContext from '../../public/LoadingContext.js';
 import Provider from '../../public/Provider.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 import suppressReactRenderErrorConsoleOutput from '../suppressReactRenderErrorConsoleOutput.mjs';
 
 export default (tests) => {
+  tests.add('`Provider` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/Provider.js', import.meta.url),
+      900
+    );
+  });
+
   tests.add('`Provider` with prop `cache` missing.', () => {
     const revertConsole = suppressReactRenderErrorConsoleOutput();
 

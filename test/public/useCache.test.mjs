@@ -8,8 +8,16 @@ import { jsx } from 'react/jsx-runtime.js';
 import Cache from '../../public/Cache.js';
 import CacheContext from '../../public/CacheContext.js';
 import useCache from '../../public/useCache.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useCache` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useCache.js', import.meta.url),
+      600
+    );
+  });
+
   tests.add('`useCache` with cache context missing.', () => {
     try {
       const revertConsole = suppressErrorOutput();

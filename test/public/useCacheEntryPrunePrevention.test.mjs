@@ -12,8 +12,16 @@ import Cache from '../../public/Cache.js';
 import CacheContext from '../../public/CacheContext.js';
 import cacheEntryPrune from '../../public/cacheEntryPrune.js';
 import useCacheEntryPrunePrevention from '../../public/useCacheEntryPrunePrevention.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useCacheEntryPrunePrevention` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useCacheEntryPrunePrevention.js', import.meta.url),
+      700
+    );
+  });
+
   tests.add(
     '`useCacheEntryPrunePrevention` argument 1 `cacheKey` not a string.',
     () => {

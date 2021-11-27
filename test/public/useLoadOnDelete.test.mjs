@@ -12,8 +12,16 @@ import CacheContext from '../../public/CacheContext.js';
 import cacheEntryDelete from '../../public/cacheEntryDelete.js';
 import cacheEntrySet from '../../public/cacheEntrySet.js';
 import useLoadOnDelete from '../../public/useLoadOnDelete.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoadOnDelete` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoadOnDelete.js', import.meta.url),
+      800
+    );
+  });
+
   tests.add('`useLoadOnDelete` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

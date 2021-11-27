@@ -8,8 +8,16 @@ import CacheContext from '../../public/CacheContext.js';
 import Loading from '../../public/Loading.js';
 import LoadingCacheValue from '../../public/LoadingCacheValue.js';
 import useAutoAbortLoad from '../../public/useAutoAbortLoad.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useAutoAbortLoad` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useAutoAbortLoad.js', import.meta.url),
+      500
+    );
+  });
+
   tests.add('`useAutoAbortLoad` argument 1 `load` not a function.', () => {
     const load = true;
 

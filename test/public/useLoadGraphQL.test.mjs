@@ -17,8 +17,16 @@ import LoadingCacheValue from '../../public/LoadingCacheValue.js';
 import LoadingContext from '../../public/LoadingContext.js';
 import cacheDelete from '../../public/cacheDelete.js';
 import useLoadGraphQL from '../../public/useLoadGraphQL.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoadGraphQL` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoadGraphQL.js', import.meta.url),
+      1800
+    );
+  });
+
   tests.add('`useLoadGraphQL` with cache context missing.', () => {
     try {
       const revertConsole = suppressErrorOutput();

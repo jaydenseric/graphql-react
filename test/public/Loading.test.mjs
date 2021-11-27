@@ -1,7 +1,15 @@
 import { deepStrictEqual, strictEqual } from 'assert';
 import Loading from '../../public/Loading.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`Loading` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/Loading.js', import.meta.url),
+      200
+    );
+  });
+
   tests.add('`Loading` constructor.', () => {
     const loading = new Loading();
 

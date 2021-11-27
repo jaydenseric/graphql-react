@@ -13,8 +13,16 @@ import CacheContext from '../../public/CacheContext.js';
 import cacheEntryDelete from '../../public/cacheEntryDelete.js';
 import cacheEntrySet from '../../public/cacheEntrySet.js';
 import useCacheEntry from '../../public/useCacheEntry.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useCacheEntry` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useCacheEntry.js', import.meta.url),
+      800
+    );
+  });
+
   tests.add('`useCacheEntry` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

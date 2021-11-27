@@ -1,6 +1,5 @@
 import './polyfills.mjs';
 import TestDirector from 'test-director';
-import test_bundle from './bundle.test.mjs';
 import test_createArgErrorMessageProd from './private/createArgErrorMessageProd.test.mjs';
 import test_useForceUpdate from './private/useForceUpdate.test.mjs';
 import test_Cache from './public/Cache.test.mjs';
@@ -66,6 +65,5 @@ test_useLoadOnDelete(tests);
 test_useLoadOnMount(tests);
 test_useLoadOnStale(tests);
 test_useWaterfallLoad(tests);
-test_bundle(tests);
 
 tests.run();

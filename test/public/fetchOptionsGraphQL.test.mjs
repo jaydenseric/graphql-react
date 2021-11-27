@@ -2,8 +2,16 @@ import { deepStrictEqual, strictEqual } from 'assert';
 import { File, FormData } from 'formdata-node';
 import revertableGlobals from 'revertable-globals';
 import fetchOptionsGraphQL from '../../public/fetchOptionsGraphQL.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`fetchOptionsGraphQL` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/fetchOptionsGraphQL.js', import.meta.url),
+      800
+    );
+  });
+
   tests.add('`fetchOptionsGraphQL` without files.', () => {
     deepStrictEqual(fetchOptionsGraphQL({ query: '' }), {
       method: 'POST',

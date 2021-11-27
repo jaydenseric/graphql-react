@@ -13,8 +13,16 @@ import Loading from '../../public/Loading.js';
 import LoadingCacheValue from '../../public/LoadingCacheValue.js';
 import LoadingContext from '../../public/LoadingContext.js';
 import useLoadingEntry from '../../public/useLoadingEntry.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoadingEntry` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoadingEntry.js', import.meta.url),
+      800
+    );
+  });
+
   tests.add('`useLoadingEntry` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

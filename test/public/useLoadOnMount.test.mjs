@@ -12,8 +12,16 @@ import CacheContext from '../../public/CacheContext.js';
 import HYDRATION_TIME_MS from '../../public/HYDRATION_TIME_MS.js';
 import HydrationTimeStampContext from '../../public/HydrationTimeStampContext.js';
 import useLoadOnMount from '../../public/useLoadOnMount.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoadOnMount` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoadOnMount.js', import.meta.url),
+      900
+    );
+  });
+
   tests.add('`useLoadOnMount` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

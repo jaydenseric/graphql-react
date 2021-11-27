@@ -15,8 +15,16 @@ import Loading from '../../public/Loading.js';
 import LoadingCacheValue from '../../public/LoadingCacheValue.js';
 import useCacheEntry from '../../public/useCacheEntry.js';
 import useWaterfallLoad from '../../public/useWaterfallLoad.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useWaterfallLoad` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useWaterfallLoad.js', import.meta.url),
+      1300
+    );
+  });
+
   tests.add('`useWaterfallLoad` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

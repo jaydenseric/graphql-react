@@ -4,8 +4,16 @@ import createArgErrorMessageProd from '../../private/createArgErrorMessageProd.j
 import Cache from '../../public/Cache.js';
 import Loading from '../../public/Loading.js';
 import LoadingCacheValue from '../../public/LoadingCacheValue.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`LoadingCacheValue` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/LoadingCacheValue.js', import.meta.url),
+      850
+    );
+  });
+
   tests.add(
     '`LoadingCacheValue` constructor argument 1 `loading` not a `Loading` instance.',
     () => {

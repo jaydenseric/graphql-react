@@ -11,8 +11,16 @@ import Cache from '../../public/Cache.js';
 import CacheContext from '../../public/CacheContext.js';
 import cacheEntryStale from '../../public/cacheEntryStale.js';
 import useLoadOnStale from '../../public/useLoadOnStale.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useLoadOnStale` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useLoadOnStale.js', import.meta.url),
+      800
+    );
+  });
+
   tests.add('`useLoadOnStale` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 

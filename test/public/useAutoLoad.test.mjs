@@ -11,8 +11,16 @@ import cacheEntryDelete from '../../public/cacheEntryDelete.js';
 import cacheEntryPrune from '../../public/cacheEntryPrune.js';
 import cacheEntryStale from '../../public/cacheEntryStale.js';
 import useAutoLoad from '../../public/useAutoLoad.js';
+import assertBundleSize from '../assertBundleSize.mjs';
 
 export default (tests) => {
+  tests.add('`useAutoLoad` bundle size.', async () => {
+    await assertBundleSize(
+      new URL('../../public/useAutoLoad.js', import.meta.url),
+      1400
+    );
+  });
+
   tests.add('`useAutoLoad` argument 1 `cacheKey` not a string.', () => {
     const cacheKey = true;
 
