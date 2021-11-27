@@ -6,17 +6,17 @@ import {
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import cacheEntryStale from './cacheEntryStale.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import cacheEntryStale from './cacheEntryStale.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnStale from './useLoadOnStale.js';
+import useLoadOnStale from './useLoadOnStale.mjs';
 
 export default (tests) => {
   tests.add('`useLoadOnStale` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useLoadOnStale.js', import.meta.url),
+      new URL('./useLoadOnStale.mjs', import.meta.url),
       800
     );
   });

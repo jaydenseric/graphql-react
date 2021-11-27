@@ -6,18 +6,18 @@ import {
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import cacheEntryDelete from './cacheEntryDelete.js';
-import cacheEntrySet from './cacheEntrySet.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import cacheEntryDelete from './cacheEntryDelete.mjs';
+import cacheEntrySet from './cacheEntrySet.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnDelete from './useLoadOnDelete.js';
+import useLoadOnDelete from './useLoadOnDelete.mjs';
 
 export default (tests) => {
   tests.add('`useLoadOnDelete` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useLoadOnDelete.js', import.meta.url),
+      new URL('./useLoadOnDelete.mjs', import.meta.url),
       800
     );
   });

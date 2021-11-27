@@ -2,20 +2,20 @@ import { strictEqual, throws } from 'assert';
 import { cleanup, renderHook } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import Loading from './Loading.js';
-import LoadingCacheValue from './LoadingCacheValue.js';
-import cacheEntryDelete from './cacheEntryDelete.js';
-import cacheEntryPrune from './cacheEntryPrune.js';
-import cacheEntryStale from './cacheEntryStale.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import Loading from './Loading.mjs';
+import LoadingCacheValue from './LoadingCacheValue.mjs';
+import cacheEntryDelete from './cacheEntryDelete.mjs';
+import cacheEntryPrune from './cacheEntryPrune.mjs';
+import cacheEntryStale from './cacheEntryStale.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useAutoLoad from './useAutoLoad.js';
+import useAutoLoad from './useAutoLoad.mjs';
 
 export default (tests) => {
   tests.add('`useAutoLoad` bundle size.', async () => {
-    await assertBundleSize(new URL('./useAutoLoad.js', import.meta.url), 1400);
+    await assertBundleSize(new URL('./useAutoLoad.mjs', import.meta.url), 1400);
   });
 
   tests.add('`useAutoLoad` argument 1 `cacheKey` not a string.', () => {

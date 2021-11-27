@@ -1,14 +1,14 @@
 import { deepStrictEqual, strictEqual, throws } from 'assert';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import cacheEntryPrune from './cacheEntryPrune.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import cacheEntryPrune from './cacheEntryPrune.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`cacheEntryPrune` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./cacheEntryPrune.js', import.meta.url),
+      new URL('./cacheEntryPrune.mjs', import.meta.url),
       500
     );
   });

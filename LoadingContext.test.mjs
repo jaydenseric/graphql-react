@@ -2,13 +2,13 @@ import { strictEqual } from 'assert';
 import { useContext } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { jsx } from 'react/jsx-runtime.js';
-import LoadingContext from './LoadingContext.js';
+import LoadingContext from './LoadingContext.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`LoadingContext` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./LoadingContext.js', import.meta.url),
+      new URL('./LoadingContext.mjs', import.meta.url),
       350
     );
   });

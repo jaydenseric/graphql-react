@@ -2,13 +2,13 @@ import { strictEqual } from 'assert';
 import { useContext } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { jsx } from 'react/jsx-runtime.js';
-import HydrationTimeStampContext from './HydrationTimeStampContext.js';
+import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`HydrationTimeStampContext` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./HydrationTimeStampContext.js', import.meta.url),
+      new URL('./HydrationTimeStampContext.mjs', import.meta.url),
       350
     );
   });

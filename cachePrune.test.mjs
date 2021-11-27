@@ -1,13 +1,13 @@
 import { deepStrictEqual, strictEqual, throws } from 'assert';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import cachePrune from './cachePrune.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import cachePrune from './cachePrune.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`cachePrune` bundle size.', async () => {
-    await assertBundleSize(new URL('./cachePrune.js', import.meta.url), 600);
+    await assertBundleSize(new URL('./cachePrune.mjs', import.meta.url), 600);
   });
 
   tests.add('`cachePrune` argument 1 `cache` not a `Cache` instance.', () => {

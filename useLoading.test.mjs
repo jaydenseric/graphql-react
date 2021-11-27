@@ -5,14 +5,14 @@ import {
   suppressErrorOutput,
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
-import Loading from './Loading.js';
-import LoadingContext from './LoadingContext.js';
+import Loading from './Loading.mjs';
+import LoadingContext from './LoadingContext.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoading from './useLoading.js';
+import useLoading from './useLoading.mjs';
 
 export default (tests) => {
   tests.add('`useLoading` bundle size.', async () => {
-    await assertBundleSize(new URL('./useLoading.js', import.meta.url), 500);
+    await assertBundleSize(new URL('./useLoading.mjs', import.meta.url), 500);
   });
 
   tests.add('`useLoading` with loading context missing.', () => {

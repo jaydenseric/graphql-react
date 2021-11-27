@@ -6,18 +6,18 @@ import {
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import HYDRATION_TIME_MS from './HYDRATION_TIME_MS.js';
-import HydrationTimeStampContext from './HydrationTimeStampContext.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import HYDRATION_TIME_MS from './HYDRATION_TIME_MS.mjs';
+import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnMount from './useLoadOnMount.js';
+import useLoadOnMount from './useLoadOnMount.mjs';
 
 export default (tests) => {
   tests.add('`useLoadOnMount` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useLoadOnMount.js', import.meta.url),
+      new URL('./useLoadOnMount.mjs', import.meta.url),
       900
     );
   });

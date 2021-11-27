@@ -2,12 +2,12 @@ import { strictEqual } from 'assert';
 import { useContext } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { jsx } from 'react/jsx-runtime.js';
-import CacheContext from './CacheContext.js';
+import CacheContext from './CacheContext.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`CacheContext` bundle size.', async () => {
-    await assertBundleSize(new URL('./CacheContext.js', import.meta.url), 350);
+    await assertBundleSize(new URL('./CacheContext.mjs', import.meta.url), 350);
   });
 
   tests.add('`CacheContext` used as a React context.', () => {

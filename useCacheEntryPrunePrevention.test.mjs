@@ -7,17 +7,17 @@ import {
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import cacheEntryPrune from './cacheEntryPrune.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import cacheEntryPrune from './cacheEntryPrune.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useCacheEntryPrunePrevention from './useCacheEntryPrunePrevention.js';
+import useCacheEntryPrunePrevention from './useCacheEntryPrunePrevention.mjs';
 
 export default (tests) => {
   tests.add('`useCacheEntryPrunePrevention` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useCacheEntryPrunePrevention.js', import.meta.url),
+      new URL('./useCacheEntryPrunePrevention.mjs', import.meta.url),
       700
     );
   });

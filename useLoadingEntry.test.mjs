@@ -7,18 +7,18 @@ import {
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import Loading from './Loading.js';
-import LoadingCacheValue from './LoadingCacheValue.js';
-import LoadingContext from './LoadingContext.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import Loading from './Loading.mjs';
+import LoadingCacheValue from './LoadingCacheValue.mjs';
+import LoadingContext from './LoadingContext.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadingEntry from './useLoadingEntry.js';
+import useLoadingEntry from './useLoadingEntry.mjs';
 
 export default (tests) => {
   tests.add('`useLoadingEntry` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useLoadingEntry.js', import.meta.url),
+      new URL('./useLoadingEntry.mjs', import.meta.url),
       800
     );
   });

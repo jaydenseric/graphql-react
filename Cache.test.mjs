@@ -1,12 +1,12 @@
 import { deepStrictEqual, strictEqual, throws } from 'assert';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`Cache` bundle size.', async () => {
-    await assertBundleSize(new URL('./Cache.js', import.meta.url), 300);
+    await assertBundleSize(new URL('./Cache.mjs', import.meta.url), 300);
   });
 
   tests.add('`Cache` constructor argument 1 `store`, not an object.', () => {

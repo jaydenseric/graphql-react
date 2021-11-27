@@ -1,7 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'assert';
 import { Response } from 'node-fetch';
 import revertableGlobals from 'revertable-globals';
-import fetchGraphQL from './fetchGraphQL.js';
+import fetchGraphQL from './fetchGraphQL.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 
 const graphqlResponseOptions = {
@@ -13,7 +13,7 @@ const graphqlResponseOptions = {
 
 export default (tests) => {
   tests.add('`fetchGraphQL` bundle size.', async () => {
-    await assertBundleSize(new URL('./fetchGraphQL.js', import.meta.url), 800);
+    await assertBundleSize(new URL('./fetchGraphQL.mjs', import.meta.url), 800);
   });
 
   tests.add('`fetchGraphQL` with global `fetch` API unavailable.', async () => {

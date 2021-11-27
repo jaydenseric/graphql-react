@@ -8,19 +8,19 @@ import { renderToStaticMarkup } from 'react-dom/server.js';
 import waterfallRender from 'react-waterfall-render/public/waterfallRender.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import Loading from './Loading.js';
-import LoadingCacheValue from './LoadingCacheValue.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import Loading from './Loading.mjs';
+import LoadingCacheValue from './LoadingCacheValue.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useCacheEntry from './useCacheEntry.js';
-import useWaterfallLoad from './useWaterfallLoad.js';
+import useCacheEntry from './useCacheEntry.mjs';
+import useWaterfallLoad from './useWaterfallLoad.mjs';
 
 export default (tests) => {
   tests.add('`useWaterfallLoad` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useWaterfallLoad.js', import.meta.url),
+      new URL('./useWaterfallLoad.mjs', import.meta.url),
       1300
     );
   });

@@ -2,18 +2,18 @@ import { strictEqual, throws } from 'assert';
 import { useContext } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { jsx } from 'react/jsx-runtime.js';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import HydrationTimeStampContext from './HydrationTimeStampContext.js';
-import Loading from './Loading.js';
-import LoadingContext from './LoadingContext.js';
-import Provider from './Provider.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
+import Loading from './Loading.mjs';
+import LoadingContext from './LoadingContext.mjs';
+import Provider from './Provider.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
 import suppressReactRenderErrorConsoleOutput from './test/suppressReactRenderErrorConsoleOutput.mjs';
 
 export default (tests) => {
   tests.add('`Provider` bundle size.', async () => {
-    await assertBundleSize(new URL('./Provider.js', import.meta.url), 900);
+    await assertBundleSize(new URL('./Provider.mjs', import.meta.url), 900);
   });
 
   tests.add('`Provider` with prop `cache` missing.', () => {

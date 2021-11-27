@@ -2,18 +2,18 @@ import { notStrictEqual, strictEqual, throws } from 'assert';
 import { cleanup, renderHook } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import Loading from './Loading.js';
-import LoadingCacheValue from './LoadingCacheValue.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import Loading from './Loading.mjs';
+import LoadingCacheValue from './LoadingCacheValue.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useAutoAbortLoad from './useAutoAbortLoad.js';
+import useAutoAbortLoad from './useAutoAbortLoad.mjs';
 
 export default (tests) => {
   tests.add('`useAutoAbortLoad` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useAutoAbortLoad.js', import.meta.url),
+      new URL('./useAutoAbortLoad.mjs', import.meta.url),
       500
     );
   });

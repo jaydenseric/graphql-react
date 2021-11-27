@@ -4,7 +4,7 @@ import {
   cleanup,
   renderHook,
 } from '@testing-library/react-hooks/lib/pure.js';
-import useForceUpdate from './useForceUpdate.js';
+import useForceUpdate from './useForceUpdate.mjs';
 
 export default (tests) => {
   tests.add('`useForceUpdate` forcing an update.', async () => {

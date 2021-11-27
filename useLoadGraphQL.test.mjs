@@ -9,20 +9,20 @@ import { AbortError, Response } from 'node-fetch';
 import { jsx } from 'react/jsx-runtime.js';
 import revertableGlobals from 'revertable-globals';
 import TestDirector from 'test-director';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
-import Loading from './Loading.js';
-import LoadingCacheValue from './LoadingCacheValue.js';
-import LoadingContext from './LoadingContext.js';
-import cacheDelete from './cacheDelete.js';
-import createArgErrorMessageProd from './createArgErrorMessageProd.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
+import Loading from './Loading.mjs';
+import LoadingCacheValue from './LoadingCacheValue.mjs';
+import LoadingContext from './LoadingContext.mjs';
+import cacheDelete from './cacheDelete.mjs';
+import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadGraphQL from './useLoadGraphQL.js';
+import useLoadGraphQL from './useLoadGraphQL.mjs';
 
 export default (tests) => {
   tests.add('`useLoadGraphQL` bundle size.', async () => {
     await assertBundleSize(
-      new URL('./useLoadGraphQL.js', import.meta.url),
+      new URL('./useLoadGraphQL.mjs', import.meta.url),
       1800
     );
   });

@@ -10,6 +10,7 @@
 - Removed `./package` from the package `exports` field; the full `package.json` filename must be used in a `require` path.
 - Removed the package main index module; deep imports must be used.
 - Shortened public module deep import paths, removing the `/public/`.
+- The API is now ESM in `.mjs` files instead of CJS in `.js` files, [accessible via `import` but not `require`](https://nodejs.org/dist/latest/docs/api/esm.html#require).
 
 ### Patch
 

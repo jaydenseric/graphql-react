@@ -5,14 +5,14 @@ import {
   suppressErrorOutput,
 } from '@testing-library/react-hooks/lib/pure.js';
 import { jsx } from 'react/jsx-runtime.js';
-import Cache from './Cache.js';
-import CacheContext from './CacheContext.js';
+import Cache from './Cache.mjs';
+import CacheContext from './CacheContext.mjs';
 import assertBundleSize from './test/assertBundleSize.mjs';
-import useCache from './useCache.js';
+import useCache from './useCache.mjs';
 
 export default (tests) => {
   tests.add('`useCache` bundle size.', async () => {
-    await assertBundleSize(new URL('./useCache.js', import.meta.url), 600);
+    await assertBundleSize(new URL('./useCache.mjs', import.meta.url), 600);
   });
 
   tests.add('`useCache` with cache context missing.', () => {
