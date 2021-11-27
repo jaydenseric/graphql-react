@@ -8,14 +8,14 @@ A [GraphQL](https://graphql.org) client for [React](https://reactjs.org) using m
 
 The [API](#api) can also be used to custom load, cache and server side render any data, even from non-[GraphQL](https://graphql.org) sources.
 
-- [Setup](#setup)
+- [Installation](#installation)
 - [Examples](#examples)
-- [Support](#support)
+- [Requirements](#requirements)
 - [API](#api)
 
-## Setup
+## Installation
 
-First, polyfill any required globals (see [_**Support**_](#support)) that are missing in your server and client environments.
+First, polyfill any required globals (see [_**Requirements**_](#requirements)) that are missing in your server and client environments.
 
 ### Next.js setup
 
@@ -130,7 +130,7 @@ export default function GitHubRepoStars({ repoId }) {
 }
 ```
 
-## Support
+## Requirements
 
 - [Node.js](https://nodejs.org): `^12.22.0 || ^14.17.0 || >= 16.0.0`
 - [Browsers](https://npm.im/browserslist): `> 0.5%, not OperaMini all, not IE > 0, not dead`
