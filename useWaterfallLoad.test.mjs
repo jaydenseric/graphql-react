@@ -6,7 +6,7 @@ import {
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
 import ReactDOMServer from "react-dom/server.js";
-import waterfallRender from "react-waterfall-render/public/waterfallRender.js";
+import waterfallRender from "react-waterfall-render/waterfallRender.mjs";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
@@ -19,7 +19,7 @@ export default (tests) => {
   tests.add("`useWaterfallLoad` bundle size.", async () => {
     await assertBundleSize(
       new URL("./useWaterfallLoad.mjs", import.meta.url),
-      1300
+      1000
     );
   });
 

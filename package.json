@@ -101,7 +101,7 @@
   },
   "dependencies": {
     "extract-files": "^11.0.0",
-    "react-waterfall-render": "^2.0.0"
+    "react-waterfall-render": "^3.0.0"
   },
   "devDependencies": {
     "@testing-library/react-hooks": "^7.0.2",

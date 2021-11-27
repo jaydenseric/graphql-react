@@ -1,5 +1,5 @@
 import React from "react";
-import WaterfallRenderContext from "react-waterfall-render/public/WaterfallRenderContext.js";
+import WaterfallRenderContext from "react-waterfall-render/WaterfallRenderContext.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import useCache from "./useCache.mjs";
 
