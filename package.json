@@ -61,7 +61,6 @@
   ],
   "sideEffects": false,
   "exports": {
-    "./package": "./package.json",
     "./package.json": "./package.json",
     "./Cache.js": "./Cache.js",
     "./CacheContext.js": "./CacheContext.js",
