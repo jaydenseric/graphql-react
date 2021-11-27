@@ -1,4 +1,4 @@
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * Cache store.
@@ -7,7 +7,7 @@ import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
  * @param {object} [store={}] Initial [cache store]{@link Cache#store}. Useful for hydrating cache data from a server side render prior to the initial client side render.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import Cache from 'graphql-react/Cache.mjs';
+ * import Cache from "graphql-react/Cache.mjs";
  * ```
  * @example <caption>Construct a new instance.</caption>
  * ```js
@@ -18,10 +18,10 @@ export default class Cache extends EventTarget {
   constructor(store = {}) {
     super();
 
-    if (typeof store !== 'object' || !store || Array.isArray(store))
+    if (typeof store !== "object" || !store || Array.isArray(store))
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Constructor argument 1 `store` must be an object.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Constructor argument 1 `store` must be an object."
           : createArgErrorMessageProd(1)
       );
 

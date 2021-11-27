@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * React context for a [`Loading`]{@link Loading} instance.
@@ -9,12 +9,12 @@ import React from 'react';
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
  * @example <caption>How to `import`.</caption>
  * ```js
- * import LoadingContext from 'graphql-react/LoadingContext.mjs';
+ * import LoadingContext from "graphql-react/LoadingContext.mjs";
  * ```
  */
 const LoadingContext = React.createContext();
 
-if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
-  LoadingContext.displayName = 'LoadingContext';
+if (typeof process === "object" && process.env.NODE_ENV !== "production")
+  LoadingContext.displayName = "LoadingContext";
 
 export default LoadingContext;

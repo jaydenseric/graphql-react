@@ -1,29 +1,29 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import cacheEntrySet from './cacheEntrySet.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { deepStrictEqual, strictEqual, throws } from "assert";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import cacheEntrySet from "./cacheEntrySet.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`cacheEntrySet` bundle size.', async () => {
+  tests.add("`cacheEntrySet` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./cacheEntrySet.mjs', import.meta.url),
+      new URL("./cacheEntrySet.mjs", import.meta.url),
       350
     );
   });
 
   tests.add(
-    '`cacheEntrySet` argument 1 `cache` not a `Cache` instance.',
+    "`cacheEntrySet` argument 1 `cache` not a `Cache` instance.",
     () => {
       const cache = true;
 
       throws(() => {
         cacheEntrySet(cache);
-      }, new TypeError('Argument 1 `cache` must be a `Cache` instance.'));
+      }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -37,16 +37,16 @@ export default (tests) => {
     }
   );
 
-  tests.add('`cacheEntrySet` argument 2 `cacheKey` not a string.', () => {
+  tests.add("`cacheEntrySet` argument 2 `cacheKey` not a string.", () => {
     const cache = new Cache();
     const cacheKey = true;
 
     throws(() => {
       cacheEntrySet(cache, cacheKey);
-    }, new TypeError('Argument 2 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 2 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -59,14 +59,14 @@ export default (tests) => {
     }
   });
 
-  tests.add('`cacheEntrySet` sets a cache entry.', () => {
+  tests.add("`cacheEntrySet` sets a cache entry.", () => {
     const initialCacheStore = { a: 1 };
     const cache = new Cache({ ...initialCacheStore });
     const events = [];
     const listener = (event) => {
       events.push(event);
     };
-    const setCacheKey = 'b';
+    const setCacheKey = "b";
     const setCacheValue = 2;
     const setEventName = `${setCacheKey}/set`;
 

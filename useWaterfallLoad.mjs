@@ -1,8 +1,8 @@
-import React from 'react';
-import WaterfallRenderContext from 'react-waterfall-render/public/WaterfallRenderContext.js';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import useCache from './useCache.mjs';
+import React from "react";
+import WaterfallRenderContext from "react-waterfall-render/public/WaterfallRenderContext.js";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import useCache from "./useCache.mjs";
 
 /**
  * A React hook to load a [cache]{@link Cache#store} entry if the
@@ -19,21 +19,21 @@ import useCache from './useCache.mjs';
  * @see [`useAutoLoad`]{@link useAutoLoad}, often used alongside this hook.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useWaterfallLoad from 'graphql-react/useWaterfallLoad.mjs';
+ * import useWaterfallLoad from "graphql-react/useWaterfallLoad.mjs";
  * ```
  */
 export default function useWaterfallLoad(cacheKey, load) {
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cacheKey` must be a string."
         : createArgErrorMessageProd(1)
     );
 
-  if (typeof load !== 'function')
+  if (typeof load !== "function")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 2 `load` must be a function.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 2 `load` must be a function."
         : createArgErrorMessageProd(2)
     );
 
@@ -46,7 +46,7 @@ export default function useWaterfallLoad(cacheKey, load) {
 
     if (!(loadingCacheValue instanceof LoadingCacheValue))
       throw new TypeError(
-        'Argument 2 `load` must return a `LoadingCacheValue` instance.'
+        "Argument 2 `load` must return a `LoadingCacheValue` instance."
       );
 
     declareLoading(loadingCacheValue.promise);

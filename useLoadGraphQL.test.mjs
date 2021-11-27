@@ -1,33 +1,33 @@
-import { deepStrictEqual, fail, strictEqual, throws } from 'assert';
+import { deepStrictEqual, fail, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { AbortError, Response } from 'node-fetch';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import TestDirector from 'test-director';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import LoadingContext from './LoadingContext.mjs';
-import cacheDelete from './cacheDelete.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadGraphQL from './useLoadGraphQL.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { AbortError, Response } from "node-fetch";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import TestDirector from "test-director";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import LoadingContext from "./LoadingContext.mjs";
+import cacheDelete from "./cacheDelete.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoadGraphQL from "./useLoadGraphQL.mjs";
 
 export default (tests) => {
-  tests.add('`useLoadGraphQL` bundle size.', async () => {
+  tests.add("`useLoadGraphQL` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useLoadGraphQL.mjs', import.meta.url),
+      new URL("./useLoadGraphQL.mjs", import.meta.url),
       1800
     );
   });
 
-  tests.add('`useLoadGraphQL` with cache context missing.', () => {
+  tests.add("`useLoadGraphQL` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
@@ -37,14 +37,14 @@ export default (tests) => {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadGraphQL` with cache context value not a `Cache` instance.',
+    "`useLoadGraphQL` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -65,7 +65,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -73,7 +73,7 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useLoadGraphQL` with loading context missing.', () => {
+  tests.add("`useLoadGraphQL` with loading context missing.", () => {
     try {
       const cache = new Cache();
       const wrapper = ({ children }) =>
@@ -92,14 +92,14 @@ export default (tests) => {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Loading context missing.'));
+      deepStrictEqual(result.error, new TypeError("Loading context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadGraphQL` with loading context value not a `Loading` instance.',
+    "`useLoadGraphQL` with loading context value not a `Loading` instance.",
     () => {
       try {
         const cache = new Cache();
@@ -124,7 +124,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Loading context value must be a `Loading` instance.')
+          new TypeError("Loading context value must be a `Loading` instance.")
         );
       } finally {
         cleanup();
@@ -132,7 +132,7 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useLoadGraphQL` functionality.', async () => {
+  tests.add("`useLoadGraphQL` functionality.", async () => {
     try {
       const cache = new Cache();
       const loading = new Loading();
@@ -150,7 +150,7 @@ export default (tests) => {
       });
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, 'function');
+      strictEqual(typeof result.current, "function");
       strictEqual(result.error, undefined);
 
       // Test that re-rendering with the same props doesn’t cause the returned
@@ -164,16 +164,16 @@ export default (tests) => {
       const loadGraphQLTests = new TestDirector();
 
       loadGraphQLTests.add(
-        'Load GraphQL with argument 1 `cacheKey` not a string.',
+        "Load GraphQL with argument 1 `cacheKey` not a string.",
         () => {
           const cacheKey = true;
 
           throws(() => {
             result.current(cacheKey);
-          }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+          }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
           const revertGlobals = revertableGlobals(
-            { NODE_ENV: 'production' },
+            { NODE_ENV: "production" },
             process.env
           );
 
@@ -188,17 +188,17 @@ export default (tests) => {
       );
 
       loadGraphQLTests.add(
-        'Load GraphQL with argument 2 `fetchUri` not a string.',
+        "Load GraphQL with argument 2 `fetchUri` not a string.",
         () => {
-          const cacheKey = '';
+          const cacheKey = "";
           const fetchUri = true;
 
           throws(() => {
             result.current(cacheKey, fetchUri);
-          }, new TypeError('Argument 2 `fetchUri` must be a string.'));
+          }, new TypeError("Argument 2 `fetchUri` must be a string."));
 
           const revertGlobals = revertableGlobals(
-            { NODE_ENV: 'production' },
+            { NODE_ENV: "production" },
             process.env
           );
 
@@ -213,18 +213,18 @@ export default (tests) => {
       );
 
       loadGraphQLTests.add(
-        'Load GraphQL with argument 3 `fetchOptions` not an object.',
+        "Load GraphQL with argument 3 `fetchOptions` not an object.",
         () => {
-          const cacheKey = '';
-          const fetchUri = '';
+          const cacheKey = "";
+          const fetchUri = "";
           const fetchOptions = null;
 
           throws(() => {
             result.current(cacheKey, fetchUri, fetchOptions);
-          }, new TypeError('Argument 3 `fetchOptions` must be an object.'));
+          }, new TypeError("Argument 3 `fetchOptions` must be an object."));
 
           const revertGlobals = revertableGlobals(
-            { NODE_ENV: 'production' },
+            { NODE_ENV: "production" },
             process.env
           );
 
@@ -238,10 +238,10 @@ export default (tests) => {
         }
       );
 
-      loadGraphQLTests.add('Load GraphQL without aborting.', async () => {
-        const fetchUri = 'the-uri';
+      loadGraphQLTests.add("Load GraphQL without aborting.", async () => {
+        const fetchUri = "the-uri";
         const fetchOptions = Object.freeze({ a: 1 });
-        const cacheKey = 'a';
+        const cacheKey = "a";
         const cacheValue = {
           data: {
             a: 1,
@@ -260,7 +260,7 @@ export default (tests) => {
             return new Response(JSON.stringify(cacheValue), {
               status: 200,
               headers: {
-                'Content-Type': 'application/graphql+json',
+                "Content-Type": "application/graphql+json",
               },
             });
           },
@@ -280,7 +280,7 @@ export default (tests) => {
           }
 
           strictEqual(fetchedUri, fetchUri);
-          strictEqual(typeof fetchedOptions, 'object');
+          strictEqual(typeof fetchedOptions, "object");
 
           const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
             fetchedOptions;
@@ -299,12 +299,12 @@ export default (tests) => {
       });
 
       loadGraphQLTests.add(
-        'Load GraphQL aborting, no fetch options `signal`.',
+        "Load GraphQL aborting, no fetch options `signal`.",
         async () => {
-          const fetchUri = 'the-uri';
+          const fetchUri = "the-uri";
           const fetchOptions = Object.freeze({ a: 1 });
-          const fetchAbortError = new AbortError('The operation was aborted.');
-          const cacheKey = 'a';
+          const fetchAbortError = new AbortError("The operation was aborted.");
+          const cacheKey = "a";
 
           let fetchedUri;
           let fetchedOptions;
@@ -317,11 +317,11 @@ export default (tests) => {
 
               return new Promise((resolve, reject) => {
                 const timeout = setTimeout(() => {
-                  reject(fail('Fetch wasn’t aborted.'));
+                  reject(fail("Fetch wasn’t aborted."));
                 }, 800);
 
                 options.signal.addEventListener(
-                  'abort',
+                  "abort",
                   () => {
                     clearTimeout(timeout);
                     reject(fetchAbortError);
@@ -346,7 +346,7 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, 'object');
+            strictEqual(typeof fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
@@ -360,10 +360,10 @@ export default (tests) => {
             deepStrictEqual(await loadGraphQLReturn.promise, {
               errors: [
                 {
-                  message: 'Fetch error.',
+                  message: "Fetch error.",
                   extensions: {
                     client: true,
-                    code: 'FETCH_ERROR',
+                    code: "FETCH_ERROR",
                     fetchErrorMessage: fetchAbortError.message,
                   },
                 },
@@ -382,17 +382,17 @@ export default (tests) => {
       );
 
       loadGraphQLTests.add(
-        'Load GraphQL aborting, fetch options `signal`, not yet aborted.',
+        "Load GraphQL aborting, fetch options `signal`, not yet aborted.",
         async () => {
-          const fetchUri = 'the-uri';
+          const fetchUri = "the-uri";
           const abortController = new AbortController();
           const fetchOptionsWithoutSignal = { a: 1 };
           const fetchOptions = Object.freeze({
             ...fetchOptionsWithoutSignal,
             signal: abortController.signal,
           });
-          const fetchAbortError = new AbortError('The operation was aborted.');
-          const cacheKey = 'a';
+          const fetchAbortError = new AbortError("The operation was aborted.");
+          const cacheKey = "a";
 
           let fetchedUri;
           let fetchedOptions;
@@ -405,11 +405,11 @@ export default (tests) => {
 
               return new Promise((resolve, reject) => {
                 const timeout = setTimeout(() => {
-                  reject(fail('Fetch wasn’t aborted.'));
+                  reject(fail("Fetch wasn’t aborted."));
                 }, 800);
 
                 options.signal.addEventListener(
-                  'abort',
+                  "abort",
                   () => {
                     clearTimeout(timeout);
                     reject(fetchAbortError);
@@ -434,7 +434,7 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, 'object');
+            strictEqual(typeof fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
@@ -448,10 +448,10 @@ export default (tests) => {
             deepStrictEqual(await loadGraphQLReturn.promise, {
               errors: [
                 {
-                  message: 'Fetch error.',
+                  message: "Fetch error.",
                   extensions: {
                     client: true,
-                    code: 'FETCH_ERROR',
+                    code: "FETCH_ERROR",
                     fetchErrorMessage: fetchAbortError.message,
                   },
                 },
@@ -470,9 +470,9 @@ export default (tests) => {
       );
 
       loadGraphQLTests.add(
-        'Load GraphQL aborting, fetch options `signal`, already aborted.',
+        "Load GraphQL aborting, fetch options `signal`, already aborted.",
         async () => {
-          const fetchUri = 'the-uri';
+          const fetchUri = "the-uri";
 
           const abortController = new AbortController();
           abortController.abort();
@@ -482,8 +482,8 @@ export default (tests) => {
             ...fetchOptionsWithoutSignal,
             signal: abortController.signal,
           });
-          const fetchAbortError = new AbortError('The operation was aborted.');
-          const cacheKey = 'a';
+          const fetchAbortError = new AbortError("The operation was aborted.");
+          const cacheKey = "a";
 
           let fetchedUri;
           let fetchedOptions;
@@ -496,7 +496,7 @@ export default (tests) => {
 
               throw options.signal.aborted
                 ? fetchAbortError
-                : fail('Abort signal wasn’t already aborted.');
+                : fail("Abort signal wasn’t already aborted.");
             },
           });
 
@@ -514,7 +514,7 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, 'object');
+            strictEqual(typeof fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
@@ -525,10 +525,10 @@ export default (tests) => {
             deepStrictEqual(await loadGraphQLReturn.promise, {
               errors: [
                 {
-                  message: 'Fetch error.',
+                  message: "Fetch error.",
                   extensions: {
                     client: true,
-                    code: 'FETCH_ERROR',
+                    code: "FETCH_ERROR",
                     fetchErrorMessage: fetchAbortError.message,
                   },
                 },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * React context for a [`Cache`]{@link Cache} instance.
@@ -9,12 +9,12 @@ import React from 'react';
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
  * @example <caption>How to `import`.</caption>
  * ```js
- * import CacheContext from 'graphql-react/CacheContext.mjs';
+ * import CacheContext from "graphql-react/CacheContext.mjs";
  * ```
  */
 const CacheContext = React.createContext();
 
-if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
-  CacheContext.displayName = 'CacheContext';
+if (typeof process === "object" && process.env.NODE_ENV !== "production")
+  CacheContext.displayName = "CacheContext";
 
 export default CacheContext;

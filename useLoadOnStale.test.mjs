@@ -1,35 +1,35 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import cacheEntryStale from './cacheEntryStale.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnStale from './useLoadOnStale.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import cacheEntryStale from "./cacheEntryStale.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoadOnStale from "./useLoadOnStale.mjs";
 
 export default (tests) => {
-  tests.add('`useLoadOnStale` bundle size.', async () => {
+  tests.add("`useLoadOnStale` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useLoadOnStale.mjs', import.meta.url),
+      new URL("./useLoadOnStale.mjs", import.meta.url),
       500
     );
   });
 
-  tests.add('`useLoadOnStale` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useLoadOnStale` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useLoadOnStale(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -42,16 +42,16 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnStale` argument 2 `load` not a function.', () => {
-    const cacheKey = 'a';
+  tests.add("`useLoadOnStale` argument 2 `load` not a function.", () => {
+    const cacheKey = "a";
     const load = true;
 
     throws(() => {
       useLoadOnStale(cacheKey, load);
-    }, new TypeError('Argument 2 `load` must be a function.'));
+    }, new TypeError("Argument 2 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -64,24 +64,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnStale` with cache context missing.', () => {
+  tests.add("`useLoadOnStale` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadOnStale('a', () => {}));
+        var { result } = renderHook(() => useLoadOnStale("a", () => {}));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadOnStale` with cache context value not a `Cache` instance.',
+    "`useLoadOnStale` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -93,7 +93,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnStale('a', () => {}), {
+          var { result } = renderHook(() => useLoadOnStale("a", () => {}), {
             wrapper,
           });
         } finally {
@@ -102,7 +102,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -110,9 +110,9 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useLoadOnStale` functionality.', async () => {
-    const cacheKeyA = 'a';
-    const cacheKeyB = 'b';
+  tests.add("`useLoadOnStale` functionality.", async () => {
+    const cacheKeyA = "a";
+    const cacheKeyB = "b";
     const cacheA = new Cache({
       // Populate the cache entry so it can be staled.
       [cacheKeyA]: 0,

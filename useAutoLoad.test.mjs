@@ -1,32 +1,32 @@
-import { strictEqual, throws } from 'assert';
-import { cleanup, renderHook } from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import cacheEntryDelete from './cacheEntryDelete.mjs';
-import cacheEntryPrune from './cacheEntryPrune.mjs';
-import cacheEntryStale from './cacheEntryStale.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useAutoLoad from './useAutoLoad.mjs';
+import { strictEqual, throws } from "assert";
+import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import cacheEntryDelete from "./cacheEntryDelete.mjs";
+import cacheEntryPrune from "./cacheEntryPrune.mjs";
+import cacheEntryStale from "./cacheEntryStale.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useAutoLoad from "./useAutoLoad.mjs";
 
 export default (tests) => {
-  tests.add('`useAutoLoad` bundle size.', async () => {
-    await assertBundleSize(new URL('./useAutoLoad.mjs', import.meta.url), 900);
+  tests.add("`useAutoLoad` bundle size.", async () => {
+    await assertBundleSize(new URL("./useAutoLoad.mjs", import.meta.url), 900);
   });
 
-  tests.add('`useAutoLoad` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useAutoLoad` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useAutoLoad(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -39,16 +39,16 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useAutoLoad` argument 2 `load` not a function.', () => {
-    const cacheKey = 'a';
+  tests.add("`useAutoLoad` argument 2 `load` not a function.", () => {
+    const cacheKey = "a";
     const load = true;
 
     throws(() => {
       useAutoLoad(cacheKey, load);
-    }, new TypeError('Argument 2 `load` must be a function.'));
+    }, new TypeError("Argument 2 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -61,8 +61,8 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useAutoLoad` functionality.', async () => {
-    const cacheKey = 'a';
+  tests.add("`useAutoLoad` functionality.", async () => {
+    const cacheKey = "a";
     const cache = new Cache({
       // Populate the cache entry so it can be deleted.
       [cacheKey]: 0,
@@ -103,7 +103,7 @@ export default (tests) => {
       );
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, 'function');
+      strictEqual(typeof result.current, "function");
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 1);
       strictEqual(loadCalls[0].hadArgs, false);

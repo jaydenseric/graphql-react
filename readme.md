@@ -41,11 +41,11 @@ To server side render your app, use the [`waterfallRender`](https://github.com/j
 Here is a basic example using the [GitHub GraphQL API](https://docs.github.com/en/graphql), with tips commented:
 
 ```jsx
-import useAutoLoad from 'graphql-react/useAutoLoad.mjs';
-import useCacheEntry from 'graphql-react/useCacheEntry.mjs';
-import useLoadGraphQL from 'graphql-react/useLoadGraphQL.mjs';
-import useWaterfallLoad from 'graphql-react/useWaterfallLoad.mjs';
-import { useCallback } from 'react';
+import useAutoLoad from "graphql-react/useAutoLoad.mjs";
+import useCacheEntry from "graphql-react/useCacheEntry.mjs";
+import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
+import useWaterfallLoad from "graphql-react/useWaterfallLoad.mjs";
+import { useCallback } from "react";
 
 // The query is just a string; no need to use `gql` from `graphql-tag`. The
 // special comment before the string allows editor syntax highlighting, Prettier
@@ -78,13 +78,13 @@ export default function GitHubRepoStars({ repoId }) {
       loadGraphQL(
         cacheKey,
         // Fetch URI.
-        'https://api.github.com/graphql',
+        "https://api.github.com/graphql",
         // Fetch options.
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
+            "Content-Type": "application/json",
+            Accept: "application/json",
             Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
           },
           body: JSON.stringify({
@@ -122,11 +122,11 @@ export default function GitHubRepoStars({ repoId }) {
       ? // Unlike many other GraphQL libraries, detailed loading errors are
         // cached and can be server side rendered without causing a
         // server/client HTML mismatch error.
-        'Error!'
+        "Error!"
       : cacheValue.data.repo.stargazers.totalCount
     : // In this situation no cache value implies loading. Use the
       // `useLoadingEntry` hook to manage loading in detail.
-      'Loading…';
+      "Loading…";
 }
 ```
 
@@ -212,7 +212,7 @@ Cache store.
 _How to `import`._
 
 > ```js
-> import Cache from 'graphql-react/Cache.mjs';
+> import Cache from "graphql-react/Cache.mjs";
 > ```
 
 _Construct a new instance._
@@ -267,7 +267,7 @@ Loading store.
 _How to `import`._
 
 > ```js
-> import Loading from 'graphql-react/Loading.mjs';
+> import Loading from "graphql-react/Loading.mjs";
 > ```
 
 _Construct a new instance._
@@ -329,7 +329,7 @@ Controls a loading [cache value](#type-cachevalue).
 _How to `import`._
 
 > ```js
-> import LoadingCacheValue from 'graphql-react/LoadingCacheValue.mjs';
+> import LoadingCacheValue from "graphql-react/LoadingCacheValue.mjs";
 > ```
 
 #### LoadingCacheValue instance property abortController
@@ -370,7 +370,7 @@ Deletes [cache](#cache-instance-property-store) entries. Useful after a user log
 _How to `import`._
 
 > ```js
-> import cacheDelete from 'graphql-react/cacheDelete.mjs';
+> import cacheDelete from "graphql-react/cacheDelete.mjs";
 > ```
 
 ---
@@ -393,7 +393,7 @@ Deletes a [cache](#cache-instance-property-store) entry.
 _How to `import`._
 
 > ```js
-> import cacheEntryDelete from 'graphql-react/cacheEntryDelete.mjs';
+> import cacheEntryDelete from "graphql-react/cacheEntryDelete.mjs";
 > ```
 
 ---
@@ -417,7 +417,7 @@ Prunes a [cache](#cache-instance-property-store) entry, if no [prune event](#cac
 _How to `import`._
 
 > ```js
-> import cacheEntryPrune from 'graphql-react/cacheEntryPrune.mjs';
+> import cacheEntryPrune from "graphql-react/cacheEntryPrune.mjs";
 > ```
 
 ---
@@ -441,7 +441,7 @@ Sets a [cache](#cache-instance-property-store) entry.
 _How to `import`._
 
 > ```js
-> import cacheEntrySet from 'graphql-react/cacheEntrySet.mjs';
+> import cacheEntrySet from "graphql-react/cacheEntrySet.mjs";
 > ```
 
 ---
@@ -464,7 +464,7 @@ Stales a [cache](#cache-instance-property-store) entry, signalling it should pro
 _How to `import`._
 
 > ```js
-> import cacheEntryStale from 'graphql-react/cacheEntryStale.mjs';
+> import cacheEntryStale from "graphql-react/cacheEntryStale.mjs";
 > ```
 
 ---
@@ -488,7 +488,7 @@ Prunes [cache](#cache-instance-property-store) entries. Useful after a mutation.
 _How to `import`._
 
 > ```js
-> import cachePrune from 'graphql-react/cachePrune.mjs';
+> import cachePrune from "graphql-react/cachePrune.mjs";
 > ```
 
 ---
@@ -511,7 +511,7 @@ Stales [cache](#cache-instance-property-store) entries. Useful after a mutation.
 _How to `import`._
 
 > ```js
-> import cacheStale from 'graphql-react/cacheStale.mjs';
+> import cacheStale from "graphql-react/cacheStale.mjs";
 > ```
 
 ---
@@ -539,7 +539,7 @@ Fetches a GraphQL operation, always resolving a [GraphQL result](#type-graphqlre
 _How to `import`._
 
 > ```js
-> import fetchGraphQL from 'graphql-react/fetchGraphQL.mjs';
+> import fetchGraphQL from "graphql-react/fetchGraphQL.mjs";
 > ```
 
 ---
@@ -561,7 +561,7 @@ This utility exists for user convenience and isn’t used directly by the `graph
 _How to `import`._
 
 > ```js
-> import fetchOptionsGraphQL from 'graphql-react/fetchOptionsGraphQL.mjs';
+> import fetchOptionsGraphQL from "graphql-react/fetchOptionsGraphQL.mjs";
 > ```
 
 ---
@@ -587,15 +587,15 @@ A React component to provide all the React context required to enable the entire
 _How to `import`._
 
 > ```js
-> import Provider from 'graphql-react/Provider.mjs';
+> import Provider from "graphql-react/Provider.mjs";
 > ```
 
 _Provide a [`Cache`](#class-cache) instance for an app._
 
 > ```jsx
-> import Cache from 'graphql-react/Cache.mjs';
-> import Provider from 'graphql-react/Provider.mjs';
-> import React from 'react';
+> import Cache from "graphql-react/Cache.mjs";
+> import Provider from "graphql-react/Provider.mjs";
+> import React from "react";
 >
 > const cache = new Cache();
 >
@@ -619,7 +619,7 @@ A React hook to create a memoized [loader](#type-loader) from another, that auto
 _How to `import`._
 
 > ```js
-> import useAutoAbortLoad from 'graphql-react/useAutoAbortLoad.mjs';
+> import useAutoAbortLoad from "graphql-react/useAutoAbortLoad.mjs";
 > ```
 
 ---
@@ -649,7 +649,7 @@ A React hook to prevent a [cache](#cache-instance-property-store) entry from bei
 _How to `import`._
 
 > ```js
-> import useAutoLoad from 'graphql-react/useAutoLoad.mjs';
+> import useAutoLoad from "graphql-react/useAutoLoad.mjs";
 > ```
 
 ---
@@ -665,7 +665,7 @@ A React hook to get the [cache context](#member-cachecontext).
 _How to `import`._
 
 > ```js
-> import useCache from 'graphql-react/useCache.mjs';
+> import useCache from "graphql-react/useCache.mjs";
 > ```
 
 ---
@@ -685,7 +685,7 @@ A React hook to get a [cache value](#type-cachevalue) using its [cache key](#typ
 _How to `import`._
 
 > ```js
-> import useCacheEntry from 'graphql-react/useCacheEntry.mjs';
+> import useCacheEntry from "graphql-react/useCacheEntry.mjs";
 > ```
 
 ---
@@ -703,7 +703,7 @@ A React hook to prevent a [cache](#cache-instance-property-store) entry from bei
 _How to `import`._
 
 > ```js
-> import useCacheEntryPrunePrevention from 'graphql-react/useCacheEntryPrunePrevention.mjs';
+> import useCacheEntryPrunePrevention from "graphql-react/useCacheEntryPrunePrevention.mjs";
 > ```
 
 ---
@@ -719,7 +719,7 @@ A React hook to get a function for loading a GraphQL operation.
 _How to `import`._
 
 > ```js
-> import useLoadGraphQL from 'graphql-react/useLoadGraphQL.mjs';
+> import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
 > ```
 
 ---
@@ -735,7 +735,7 @@ A React hook to get the [loading context](#member-loadingcontext).
 _How to `import`._
 
 > ```js
-> import useLoading from 'graphql-react/useLoading.mjs';
+> import useLoading from "graphql-react/useLoading.mjs";
 > ```
 
 ---
@@ -755,7 +755,7 @@ A React hook to get the [loading cache values](#class-loadingcachevalue) for a g
 _How to `import`._
 
 > ```js
-> import useLoadingEntry from 'graphql-react/useLoadingEntry.mjs';
+> import useLoadingEntry from "graphql-react/useLoadingEntry.mjs";
 > ```
 
 ---
@@ -774,7 +774,7 @@ A React hook to load a [cache](#cache-instance-property-store) entry after it’
 _How to `import`._
 
 > ```js
-> import useLoadOnDelete from 'graphql-react/useLoadOnDelete.mjs';
+> import useLoadOnDelete from "graphql-react/useLoadOnDelete.mjs";
 > ```
 
 ---
@@ -793,7 +793,7 @@ A React hook to automatically load a [cache](#cache-instance-property-store) ent
 _How to `import`._
 
 > ```js
-> import useLoadOnMount from 'graphql-react/useLoadOnMount.mjs';
+> import useLoadOnMount from "graphql-react/useLoadOnMount.mjs";
 > ```
 
 ---
@@ -812,7 +812,7 @@ A React hook to load a [cache](#cache-instance-property-store) entry after becom
 _How to `import`._
 
 > ```js
-> import useLoadOnStale from 'graphql-react/useLoadOnStale.mjs';
+> import useLoadOnStale from "graphql-react/useLoadOnStale.mjs";
 > ```
 
 ---
@@ -837,7 +837,7 @@ A React hook to load a [cache](#cache-instance-property-store) entry if the [wat
 _How to `import`._
 
 > ```js
-> import useWaterfallLoad from 'graphql-react/useWaterfallLoad.mjs';
+> import useWaterfallLoad from "graphql-react/useWaterfallLoad.mjs";
 > ```
 
 ---
@@ -858,7 +858,7 @@ React context for a [`Cache`](#class-cache) instance.
 _How to `import`._
 
 > ```js
-> import CacheContext from 'graphql-react/CacheContext.mjs';
+> import CacheContext from "graphql-react/CacheContext.mjs";
 > ```
 
 ---
@@ -879,7 +879,7 @@ React context for the client side hydration [time stamp](#type-highrestimestamp)
 _How to `import`._
 
 > ```js
-> import HydrationTimeStampContext from 'graphql-react/HydrationTimeStampContext.mjs';
+> import HydrationTimeStampContext from "graphql-react/HydrationTimeStampContext.mjs";
 > ```
 
 ---
@@ -900,7 +900,7 @@ React context for a [`Loading`](#class-loading) instance.
 _How to `import`._
 
 > ```js
-> import LoadingContext from 'graphql-react/LoadingContext.mjs';
+> import LoadingContext from "graphql-react/LoadingContext.mjs";
 > ```
 
 ---
@@ -916,7 +916,7 @@ Number of milliseconds after the first client render that’s considered the hyd
 _How to `import`._
 
 > ```js
-> import HYDRATION_TIME_MS from 'graphql-react/HYDRATION_TIME_MS.mjs';
+> import HYDRATION_TIME_MS from "graphql-react/HYDRATION_TIME_MS.mjs";
 > ```
 
 ---

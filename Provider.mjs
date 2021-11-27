@@ -1,10 +1,10 @@
-import React from 'react';
-import jsxRuntime from 'react/jsx-runtime.js';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingContext from './LoadingContext.mjs';
+import React from "react";
+import jsxRuntime from "react/jsx-runtime.js";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingContext from "./LoadingContext.mjs";
 
 const { jsx } = jsxRuntime;
 
@@ -23,13 +23,13 @@ const { jsx } = jsxRuntime;
  * @returns {ReactNode} React virtual DOM node.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import Provider from 'graphql-react/Provider.mjs';
+ * import Provider from "graphql-react/Provider.mjs";
  * ```
  * @example <caption>Provide a [`Cache`]{@link Cache} instance for an app.</caption>
  * ```jsx
- * import Cache from 'graphql-react/Cache.mjs';
- * import Provider from 'graphql-react/Provider.mjs';
- * import React from 'react';
+ * import Cache from "graphql-react/Cache.mjs";
+ * import Provider from "graphql-react/Provider.mjs";
+ * import React from "react";
  *
  * const cache = new Cache();
  *
@@ -45,7 +45,7 @@ export default function Provider({ cache, children }) {
   if (!loadingRef.current) loadingRef.current = new Loading();
 
   if (!(cache instanceof Cache))
-    throw new TypeError('Prop `cache` must be a `Cache` instance.');
+    throw new TypeError("Prop `cache` must be a `Cache` instance.");
 
   return jsx(HydrationTimeStampContext.Provider, {
     value: hydrationTimeStampRef.current,

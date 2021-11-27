@@ -1,6 +1,6 @@
-import React from 'react';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import useCache from './useCache.mjs';
+import React from "react";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import useCache from "./useCache.mjs";
 
 /**
  * Cancels an event.
@@ -22,14 +22,14 @@ function cancelEvent(event) {
  * @param {CacheKey} cacheKey Cache key.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useCacheEntryPrunePrevention from 'graphql-react/useCacheEntryPrunePrevention.mjs';
+ * import useCacheEntryPrunePrevention from "graphql-react/useCacheEntryPrunePrevention.mjs";
  * ```
  */
 export default function useCacheEntryPrunePrevention(cacheKey) {
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cacheKey` must be a string."
         : createArgErrorMessageProd(1)
     );
 

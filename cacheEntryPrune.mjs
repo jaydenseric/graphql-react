@@ -1,6 +1,6 @@
-import Cache from './Cache.mjs';
-import cacheEntryDelete from './cacheEntryDelete.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
+import Cache from "./Cache.mjs";
+import cacheEntryDelete from "./cacheEntryDelete.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * Prunes a [cache]{@link Cache#store} entry, if no
@@ -14,21 +14,21 @@ import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
  * @fires Cache#event:delete
  * @example <caption>How to `import`.</caption>
  * ```js
- * import cacheEntryPrune from 'graphql-react/cacheEntryPrune.mjs';
+ * import cacheEntryPrune from "graphql-react/cacheEntryPrune.mjs";
  * ```
  */
 export default function cacheEntryPrune(cache, cacheKey) {
   if (!(cache instanceof Cache))
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cache` must be a `Cache` instance.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cache` must be a `Cache` instance."
         : createArgErrorMessageProd(1)
     );
 
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 2 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 2 `cacheKey` must be a string."
         : createArgErrorMessageProd(2)
     );
 

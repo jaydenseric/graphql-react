@@ -1,21 +1,21 @@
-import { strictEqual } from 'assert';
-import { useContext } from 'react';
-import ReactTestRenderer from 'react-test-renderer';
-import { jsx } from 'react/jsx-runtime.js';
-import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { strictEqual } from "assert";
+import { useContext } from "react";
+import ReactTestRenderer from "react-test-renderer";
+import { jsx } from "react/jsx-runtime.js";
+import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`HydrationTimeStampContext` bundle size.', async () => {
+  tests.add("`HydrationTimeStampContext` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./HydrationTimeStampContext.mjs', import.meta.url),
+      new URL("./HydrationTimeStampContext.mjs", import.meta.url),
       100
     );
   });
 
-  tests.add('`HydrationTimeStampContext` used as a React context.', () => {
+  tests.add("`HydrationTimeStampContext` used as a React context.", () => {
     const TestComponent = () => useContext(HydrationTimeStampContext);
-    const contextValue = 'a';
+    const contextValue = "a";
     const testRenderer = ReactTestRenderer.create(
       jsx(HydrationTimeStampContext.Provider, {
         value: contextValue,

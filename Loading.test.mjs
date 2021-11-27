@@ -1,19 +1,19 @@
-import { deepStrictEqual, strictEqual } from 'assert';
-import Loading from './Loading.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { deepStrictEqual, strictEqual } from "assert";
+import Loading from "./Loading.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`Loading` bundle size.', async () => {
-    await assertBundleSize(new URL('./Loading.mjs', import.meta.url), 120);
+  tests.add("`Loading` bundle size.", async () => {
+    await assertBundleSize(new URL("./Loading.mjs", import.meta.url), 120);
   });
 
-  tests.add('`Loading` constructor.', () => {
+  tests.add("`Loading` constructor.", () => {
     const loading = new Loading();
 
     deepStrictEqual(loading.store, {});
   });
 
-  tests.add('`Loading` events.', () => {
+  tests.add("`Loading` events.", () => {
     const loading = new Loading();
 
     strictEqual(loading instanceof EventTarget, true);
@@ -24,7 +24,7 @@ export default (tests) => {
       listenedEvent = event;
     };
 
-    const eventName = 'a';
+    const eventName = "a";
     const eventDetail = 1;
     const event = new CustomEvent(eventName, {
       detail: eventDetail,

@@ -1,6 +1,6 @@
-import React from 'react';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import useCache from './useCache.mjs';
+import React from "react";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import useCache from "./useCache.mjs";
 
 /**
  * A React hook to load a [cache]{@link Cache#store} entry after becomes
@@ -12,21 +12,21 @@ import useCache from './useCache.mjs';
  * @param {Loader} load Memoized function that starts the loading.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useLoadOnStale from 'graphql-react/useLoadOnStale.mjs';
+ * import useLoadOnStale from "graphql-react/useLoadOnStale.mjs";
  * ```
  */
 export default function useLoadOnStale(cacheKey, load) {
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cacheKey` must be a string."
         : createArgErrorMessageProd(1)
     );
 
-  if (typeof load !== 'function')
+  if (typeof load !== "function")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 2 `load` must be a function.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 2 `load` must be a function."
         : createArgErrorMessageProd(2)
     );
 

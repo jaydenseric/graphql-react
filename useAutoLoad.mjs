@@ -1,9 +1,9 @@
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import useAutoAbortLoad from './useAutoAbortLoad.mjs';
-import useCacheEntryPrunePrevention from './useCacheEntryPrunePrevention.mjs';
-import useLoadOnDelete from './useLoadOnDelete.mjs';
-import useLoadOnMount from './useLoadOnMount.mjs';
-import useLoadOnStale from './useLoadOnStale.mjs';
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
+import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
+import useLoadOnDelete from "./useLoadOnDelete.mjs";
+import useLoadOnMount from "./useLoadOnMount.mjs";
+import useLoadOnStale from "./useLoadOnStale.mjs";
 
 /**
  * A React hook to prevent a [cache]{@link Cache#store} entry from being pruned
@@ -23,21 +23,21 @@ import useLoadOnStale from './useLoadOnStale.mjs';
  * @see [`useWaterfallLoad`]{@link useWaterfallLoad}, often used alongside this hook for SSR loading.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useAutoLoad from 'graphql-react/useAutoLoad.mjs';
+ * import useAutoLoad from "graphql-react/useAutoLoad.mjs";
  * ```
  */
 export default function useAutoLoad(cacheKey, load) {
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cacheKey` must be a string."
         : createArgErrorMessageProd(1)
     );
 
-  if (typeof load !== 'function')
+  if (typeof load !== "function")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 2 `load` must be a function.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 2 `load` must be a function."
         : createArgErrorMessageProd(2)
     );
 

@@ -1,32 +1,32 @@
-import { notStrictEqual, strictEqual, throws } from 'assert';
-import { cleanup, renderHook } from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useAutoAbortLoad from './useAutoAbortLoad.mjs';
+import { notStrictEqual, strictEqual, throws } from "assert";
+import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 
 export default (tests) => {
-  tests.add('`useAutoAbortLoad` bundle size.', async () => {
+  tests.add("`useAutoAbortLoad` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useAutoAbortLoad.mjs', import.meta.url),
+      new URL("./useAutoAbortLoad.mjs", import.meta.url),
       300
     );
   });
 
-  tests.add('`useAutoAbortLoad` argument 1 `load` not a function.', () => {
+  tests.add("`useAutoAbortLoad` argument 1 `load` not a function.", () => {
     const load = true;
 
     throws(() => {
       useAutoAbortLoad(load);
-    }, new TypeError('Argument 1 `load` must be a function.'));
+    }, new TypeError("Argument 1 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -39,7 +39,7 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useAutoAbortLoad` functionality.', async () => {
+  tests.add("`useAutoAbortLoad` functionality.", async () => {
     const cache = new Cache();
     const loading = new Loading();
     const loadCalls = [];
@@ -49,7 +49,7 @@ export default (tests) => {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
         cache,
-        'a',
+        "a",
         Promise.resolve(1),
         new AbortController()
       );
@@ -68,7 +68,7 @@ export default (tests) => {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
         cache,
-        'a',
+        "a",
         Promise.resolve(1),
         new AbortController()
       );
@@ -100,7 +100,7 @@ export default (tests) => {
       );
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, 'function');
+      strictEqual(typeof result.current, "function");
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 0);
 
@@ -144,7 +144,7 @@ export default (tests) => {
       rerender({ load: loadB });
 
       strictEqual(result.all.length, 3);
-      strictEqual(typeof result.current, 'function');
+      strictEqual(typeof result.current, "function");
       notStrictEqual(result.current, result.all[1]);
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 2);

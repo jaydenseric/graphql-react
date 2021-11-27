@@ -1,36 +1,36 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import cacheEntryDelete from './cacheEntryDelete.mjs';
-import cacheEntrySet from './cacheEntrySet.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnDelete from './useLoadOnDelete.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import cacheEntryDelete from "./cacheEntryDelete.mjs";
+import cacheEntrySet from "./cacheEntrySet.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoadOnDelete from "./useLoadOnDelete.mjs";
 
 export default (tests) => {
-  tests.add('`useLoadOnDelete` bundle size.', async () => {
+  tests.add("`useLoadOnDelete` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useLoadOnDelete.mjs', import.meta.url),
+      new URL("./useLoadOnDelete.mjs", import.meta.url),
       500
     );
   });
 
-  tests.add('`useLoadOnDelete` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useLoadOnDelete` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useLoadOnDelete(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -43,16 +43,16 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnDelete` argument 2 `load` not a function.', () => {
-    const cacheKey = 'a';
+  tests.add("`useLoadOnDelete` argument 2 `load` not a function.", () => {
+    const cacheKey = "a";
     const load = true;
 
     throws(() => {
       useLoadOnDelete(cacheKey, load);
-    }, new TypeError('Argument 2 `load` must be a function.'));
+    }, new TypeError("Argument 2 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -65,24 +65,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnDelete` with cache context missing.', () => {
+  tests.add("`useLoadOnDelete` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadOnDelete('a', () => {}));
+        var { result } = renderHook(() => useLoadOnDelete("a", () => {}));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadOnDelete` with cache context value not a `Cache` instance.',
+    "`useLoadOnDelete` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -94,7 +94,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnDelete('a', () => {}), {
+          var { result } = renderHook(() => useLoadOnDelete("a", () => {}), {
             wrapper,
           });
         } finally {
@@ -103,7 +103,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -111,9 +111,9 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useLoadOnDelete` functionality.', async () => {
-    const cacheKeyA = 'a';
-    const cacheKeyB = 'b';
+  tests.add("`useLoadOnDelete` functionality.", async () => {
+    const cacheKeyA = "a";
+    const cacheKeyB = "b";
     const cacheA = new Cache({
       // Populate the cache entry so it can be deleted.
       [cacheKeyA]: 0,

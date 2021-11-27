@@ -1,36 +1,36 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import HYDRATION_TIME_MS from './HYDRATION_TIME_MS.mjs';
-import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadOnMount from './useLoadOnMount.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";
+import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoadOnMount from "./useLoadOnMount.mjs";
 
 export default (tests) => {
-  tests.add('`useLoadOnMount` bundle size.', async () => {
+  tests.add("`useLoadOnMount` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useLoadOnMount.mjs', import.meta.url),
+      new URL("./useLoadOnMount.mjs", import.meta.url),
       600
     );
   });
 
-  tests.add('`useLoadOnMount` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useLoadOnMount` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useLoadOnMount(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -43,16 +43,16 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnMount` argument 2 `load` not a function.', () => {
-    const cacheKey = 'a';
+  tests.add("`useLoadOnMount` argument 2 `load` not a function.", () => {
+    const cacheKey = "a";
     const load = true;
 
     throws(() => {
       useLoadOnMount(cacheKey, load);
-    }, new TypeError('Argument 2 `load` must be a function.'));
+    }, new TypeError("Argument 2 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -65,24 +65,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadOnMount` with cache context missing.', () => {
+  tests.add("`useLoadOnMount` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadOnMount('a', () => {}));
+        var { result } = renderHook(() => useLoadOnMount("a", () => {}));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadOnMount` with cache context value not a `Cache` instance.',
+    "`useLoadOnMount` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -94,7 +94,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnMount('a', () => {}), {
+          var { result } = renderHook(() => useLoadOnMount("a", () => {}), {
             wrapper,
           });
         } finally {
@@ -103,7 +103,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -112,7 +112,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadOnMount` with hydration time stamp context value not undefined or a number.',
+    "`useLoadOnMount` with hydration time stamp context value not undefined or a number.",
     () => {
       try {
         const cache = new Cache();
@@ -128,7 +128,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnMount('a', () => {}), {
+          var { result } = renderHook(() => useLoadOnMount("a", () => {}), {
             wrapper,
           });
         } finally {
@@ -137,7 +137,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Hydration time stamp context value must be a number.')
+          new TypeError("Hydration time stamp context value must be a number.")
         );
       } finally {
         cleanup();
@@ -146,10 +146,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadOnMount` with hydration time stamp context undefined, without initial cache values.',
+    "`useLoadOnMount` with hydration time stamp context undefined, without initial cache values.",
     async () => {
-      const cacheKeyA = 'a';
-      const cacheKeyB = 'b';
+      const cacheKeyA = "a";
+      const cacheKeyB = "b";
       const cacheA = new Cache();
       const cacheB = new Cache();
 
@@ -297,10 +297,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadOnMount` with hydration time stamp context undefined, with initial cache values.',
+    "`useLoadOnMount` with hydration time stamp context undefined, with initial cache values.",
     async () => {
-      const cacheKeyA = 'a';
-      const cacheKeyB = 'b';
+      const cacheKeyA = "a";
+      const cacheKeyB = "b";
       const cacheA = new Cache({
         [cacheKeyA]: 0,
       });
@@ -453,10 +453,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadOnMount` with hydration time stamp context defined, without initial cache values.',
+    "`useLoadOnMount` with hydration time stamp context defined, without initial cache values.",
     async () => {
-      const cacheKeyA = 'a';
-      const cacheKeyB = 'b';
+      const cacheKeyA = "a";
+      const cacheKeyB = "b";
       const cacheA = new Cache();
       const cacheB = new Cache();
       const hydrationTimeStamp = performance.now();
@@ -608,10 +608,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadOnMount` with hydration time stamp context defined, with initial cache values.',
+    "`useLoadOnMount` with hydration time stamp context defined, with initial cache values.",
     async () => {
-      const cacheKeyA = 'a';
-      const cacheKeyB = 'b';
+      const cacheKeyA = "a";
+      const cacheKeyB = "b";
       const cacheA = new Cache({
         [cacheKeyA]: 0,
       });

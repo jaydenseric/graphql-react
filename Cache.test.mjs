@@ -1,23 +1,23 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { deepStrictEqual, strictEqual, throws } from "assert";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`Cache` bundle size.', async () => {
-    await assertBundleSize(new URL('./Cache.mjs', import.meta.url), 250);
+  tests.add("`Cache` bundle size.", async () => {
+    await assertBundleSize(new URL("./Cache.mjs", import.meta.url), 250);
   });
 
-  tests.add('`Cache` constructor argument 1 `store`, not an object.', () => {
+  tests.add("`Cache` constructor argument 1 `store`, not an object.", () => {
     const store = null;
 
     throws(() => {
       new Cache(store);
-    }, new TypeError('Constructor argument 1 `store` must be an object.'));
+    }, new TypeError("Constructor argument 1 `store` must be an object."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -30,13 +30,13 @@ export default (tests) => {
     }
   });
 
-  tests.add('`Cache` constructor argument 1 `store`, missing', () => {
+  tests.add("`Cache` constructor argument 1 `store`, missing", () => {
     const cache = new Cache();
 
     deepStrictEqual(cache.store, {});
   });
 
-  tests.add('`Cache` constructor argument 1 `store`, object.', () => {
+  tests.add("`Cache` constructor argument 1 `store`, object.", () => {
     const initialStore = {
       a: 1,
       b: 2,
@@ -46,7 +46,7 @@ export default (tests) => {
     deepStrictEqual(cache.store, initialStore);
   });
 
-  tests.add('`Cache` events.', () => {
+  tests.add("`Cache` events.", () => {
     const cache = new Cache();
 
     strictEqual(cache instanceof EventTarget, true);
@@ -57,7 +57,7 @@ export default (tests) => {
       listenedEvent = event;
     };
 
-    const eventName = 'a';
+    const eventName = "a";
     const eventDetail = 1;
     const event = new CustomEvent(eventName, {
       detail: eventDetail,

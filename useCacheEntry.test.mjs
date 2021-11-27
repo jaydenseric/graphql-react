@@ -1,37 +1,37 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import cacheEntryDelete from './cacheEntryDelete.mjs';
-import cacheEntrySet from './cacheEntrySet.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useCacheEntry from './useCacheEntry.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import cacheEntryDelete from "./cacheEntryDelete.mjs";
+import cacheEntrySet from "./cacheEntrySet.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useCacheEntry from "./useCacheEntry.mjs";
 
 export default (tests) => {
-  tests.add('`useCacheEntry` bundle size.', async () => {
+  tests.add("`useCacheEntry` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useCacheEntry.mjs', import.meta.url),
+      new URL("./useCacheEntry.mjs", import.meta.url),
       550
     );
   });
 
-  tests.add('`useCacheEntry` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useCacheEntry` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useCacheEntry(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -44,24 +44,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useCacheEntry` with cache context missing.', () => {
+  tests.add("`useCacheEntry` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useCacheEntry('a'));
+        var { result } = renderHook(() => useCacheEntry("a"));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useCacheEntry` with cache context value not a `Cache` instance.',
+    "`useCacheEntry` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -73,14 +73,14 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useCacheEntry('a'), { wrapper });
+          var { result } = renderHook(() => useCacheEntry("a"), { wrapper });
         } finally {
           revertConsole();
         }
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -89,7 +89,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useCacheEntry` without initial cache values for each cache key used.',
+    "`useCacheEntry` without initial cache values for each cache key used.",
     () => {
       try {
         const cache = new Cache();
@@ -99,7 +99,7 @@ export default (tests) => {
             children,
           });
 
-        const cacheKeyA = 'a';
+        const cacheKeyA = "a";
 
         const { result, rerender } = renderHook(
           ({ cacheKey }) => useCacheEntry(cacheKey),
@@ -115,7 +115,7 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        const cacheValueA2 = 'a2';
+        const cacheValueA2 = "a2";
 
         act(() => {
           cacheEntrySet(cache, cacheKeyA, cacheValueA2);
@@ -133,7 +133,7 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        const cacheKeyB = 'b';
+        const cacheKeyB = "b";
 
         rerender({ cacheKey: cacheKeyB });
 
@@ -141,7 +141,7 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        const cacheValueB2 = 'b2';
+        const cacheValueB2 = "b2";
 
         act(() => {
           cacheEntrySet(cache, cacheKeyB, cacheValueB2);
@@ -165,13 +165,13 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useCacheEntry` with initial cache values for each cache key used, replacing cache values.',
+    "`useCacheEntry` with initial cache values for each cache key used, replacing cache values.",
     () => {
       try {
-        const cacheKeyA = 'a';
-        const cacheValueA1 = 'a1';
-        const cacheKeyB = 'b';
-        const cacheValueB1 = 'b1';
+        const cacheKeyA = "a";
+        const cacheValueA1 = "a1";
+        const cacheKeyB = "b";
+        const cacheValueB1 = "b1";
         const cache = new Cache({
           [cacheKeyA]: cacheValueA1,
           [cacheKeyB]: cacheValueB1,
@@ -196,7 +196,7 @@ export default (tests) => {
         strictEqual(result.current, cacheValueA1);
         strictEqual(result.error, undefined);
 
-        const cacheValueA2 = 'a2';
+        const cacheValueA2 = "a2";
 
         act(() => {
           cacheEntrySet(cache, cacheKeyA, cacheValueA2);
@@ -220,7 +220,7 @@ export default (tests) => {
         strictEqual(result.current, cacheValueB1);
         strictEqual(result.error, undefined);
 
-        const cacheValueB2 = 'b2';
+        const cacheValueB2 = "b2";
 
         act(() => {
           cacheEntrySet(cache, cacheKeyB, cacheValueB2);
@@ -244,10 +244,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useCacheEntry` with initial cache value, mutating cache value.',
+    "`useCacheEntry` with initial cache value, mutating cache value.",
     () => {
       try {
-        const cacheKey = 'a';
+        const cacheKey = "a";
         const cacheValue = { a: 1 };
         const cache = new Cache({
           [cacheKey]: cacheValue,

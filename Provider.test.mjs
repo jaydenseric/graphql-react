@@ -1,34 +1,34 @@
-import { strictEqual, throws } from 'assert';
-import { useContext } from 'react';
-import ReactTestRenderer from 'react-test-renderer';
-import { jsx } from 'react/jsx-runtime.js';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import HydrationTimeStampContext from './HydrationTimeStampContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingContext from './LoadingContext.mjs';
-import Provider from './Provider.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import suppressReactRenderErrorConsoleOutput from './test/suppressReactRenderErrorConsoleOutput.mjs';
+import { strictEqual, throws } from "assert";
+import { useContext } from "react";
+import ReactTestRenderer from "react-test-renderer";
+import { jsx } from "react/jsx-runtime.js";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingContext from "./LoadingContext.mjs";
+import Provider from "./Provider.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import suppressReactRenderErrorConsoleOutput from "./test/suppressReactRenderErrorConsoleOutput.mjs";
 
 export default (tests) => {
-  tests.add('`Provider` bundle size.', async () => {
-    await assertBundleSize(new URL('./Provider.mjs', import.meta.url), 500);
+  tests.add("`Provider` bundle size.", async () => {
+    await assertBundleSize(new URL("./Provider.mjs", import.meta.url), 500);
   });
 
-  tests.add('`Provider` with prop `cache` missing.', () => {
+  tests.add("`Provider` with prop `cache` missing.", () => {
     const revertConsole = suppressReactRenderErrorConsoleOutput();
 
     try {
       throws(() => {
         ReactTestRenderer.create(jsx(Provider, {}));
-      }, new TypeError('Prop `cache` must be a `Cache` instance.'));
+      }, new TypeError("Prop `cache` must be a `Cache` instance."));
     } finally {
       revertConsole();
     }
   });
 
-  tests.add('`Provider` used correctly.', () => {
+  tests.add("`Provider` used correctly.", () => {
     const results = [];
     const TestComponent = () => {
       results.push({
@@ -47,7 +47,7 @@ export default (tests) => {
     );
 
     strictEqual(results.length, 1);
-    strictEqual(typeof results[0].hydrationTimeStampContextValue, 'number');
+    strictEqual(typeof results[0].hydrationTimeStampContextValue, "number");
     strictEqual(
       performance.now() - results[0].hydrationTimeStampContextValue < 100,
       true

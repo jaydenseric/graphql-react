@@ -1,38 +1,38 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import cacheEntryPrune from './cacheEntryPrune.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useCacheEntryPrunePrevention from './useCacheEntryPrunePrevention.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import cacheEntryPrune from "./cacheEntryPrune.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 
 export default (tests) => {
-  tests.add('`useCacheEntryPrunePrevention` bundle size.', async () => {
+  tests.add("`useCacheEntryPrunePrevention` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useCacheEntryPrunePrevention.mjs', import.meta.url),
+      new URL("./useCacheEntryPrunePrevention.mjs", import.meta.url),
       450
     );
   });
 
   tests.add(
-    '`useCacheEntryPrunePrevention` argument 1 `cacheKey` not a string.',
+    "`useCacheEntryPrunePrevention` argument 1 `cacheKey` not a string.",
     () => {
       const cacheKey = true;
 
       throws(() => {
         useCacheEntryPrunePrevention(cacheKey);
-      }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+      }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -47,18 +47,18 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useCacheEntryPrunePrevention` with cache context missing.',
+    "`useCacheEntryPrunePrevention` with cache context missing.",
     () => {
       try {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useCacheEntryPrunePrevention('a'));
+          var { result } = renderHook(() => useCacheEntryPrunePrevention("a"));
         } finally {
           revertConsole();
         }
 
-        deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+        deepStrictEqual(result.error, new TypeError("Cache context missing."));
       } finally {
         cleanup();
       }
@@ -66,7 +66,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useCacheEntryPrunePrevention` with cache context value not a `Cache` instance.',
+    "`useCacheEntryPrunePrevention` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -78,7 +78,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useCacheEntryPrunePrevention('a'), {
+          var { result } = renderHook(() => useCacheEntryPrunePrevention("a"), {
             wrapper,
           });
         } finally {
@@ -87,7 +87,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -95,10 +95,10 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useCacheEntryPrunePrevention` functionality.', () => {
+  tests.add("`useCacheEntryPrunePrevention` functionality.", () => {
     try {
-      const cacheKeyA = 'a';
-      const cacheKeyB = 'b';
+      const cacheKeyA = "a";
+      const cacheKeyB = "b";
       const initialCacheStore = {
         [cacheKeyA]: 1,
         [cacheKeyB]: 2,

@@ -1,7 +1,7 @@
-import React from 'react';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import useCache from './useCache.mjs';
-import useForceUpdate from './useForceUpdate.mjs';
+import React from "react";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import useCache from "./useCache.mjs";
+import useForceUpdate from "./useForceUpdate.mjs";
 
 /**
  * A React hook to get a [cache value]{@link CacheValue} using its
@@ -12,14 +12,14 @@ import useForceUpdate from './useForceUpdate.mjs';
  * @returns {CacheValue} Cache value, if present.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useCacheEntry from 'graphql-react/useCacheEntry.mjs';
+ * import useCacheEntry from "graphql-react/useCacheEntry.mjs";
  * ```
  */
 export default function useCacheEntry(cacheKey) {
-  if (typeof cacheKey !== 'string')
+  if (typeof cacheKey !== "string")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `cacheKey` must be a string.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `cacheKey` must be a string."
         : createArgErrorMessageProd(1)
     );
 
@@ -45,7 +45,7 @@ export default function useCacheEntry(cacheKey) {
 
   const value = cache.store[cacheKey];
 
-  if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
+  if (typeof process === "object" && process.env.NODE_ENV !== "production")
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useDebugValue(value);
 

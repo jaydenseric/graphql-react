@@ -1,7 +1,7 @@
-import Cache from './Cache.mjs';
-import Loading from './Loading.mjs';
-import cacheEntrySet from './cacheEntrySet.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
+import Cache from "./Cache.mjs";
+import Loading from "./Loading.mjs";
+import cacheEntrySet from "./cacheEntrySet.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * Controls a loading [cache value]{@link CacheValue}.
@@ -17,43 +17,43 @@ import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
  * @fires Loading#event:end
  * @example <caption>How to `import`.</caption>
  * ```js
- * import LoadingCacheValue from 'graphql-react/LoadingCacheValue.mjs';
+ * import LoadingCacheValue from "graphql-react/LoadingCacheValue.mjs";
  * ```
  */
 export default class LoadingCacheValue {
   constructor(loading, cache, cacheKey, loadingResult, abortController) {
     if (!(loading instanceof Loading))
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Argument 1 `loading` must be a `Loading` instance.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Argument 1 `loading` must be a `Loading` instance."
           : createArgErrorMessageProd(1)
       );
 
     if (!(cache instanceof Cache))
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Argument 2 `cache` must be a `Cache` instance.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Argument 2 `cache` must be a `Cache` instance."
           : createArgErrorMessageProd(2)
       );
 
-    if (typeof cacheKey !== 'string')
+    if (typeof cacheKey !== "string")
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Argument 3 `cacheKey` must be a string.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Argument 3 `cacheKey` must be a string."
           : createArgErrorMessageProd(3)
       );
 
     if (!(loadingResult instanceof Promise))
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Argument 4 `loadingResult` must be a `Promise` instance.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Argument 4 `loadingResult` must be a `Promise` instance."
           : createArgErrorMessageProd(4)
       );
 
     if (!(abortController instanceof AbortController))
       throw new TypeError(
-        typeof process === 'object' && process.env.NODE_ENV !== 'production'
-          ? 'Argument 5 `abortController` must be an `AbortController` instance.'
+        typeof process === "object" && process.env.NODE_ENV !== "production"
+          ? "Argument 5 `abortController` must be an `AbortController` instance."
           : createArgErrorMessageProd(5)
       );
 

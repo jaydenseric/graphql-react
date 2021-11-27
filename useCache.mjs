@@ -1,6 +1,6 @@
-import React from 'react';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
+import React from "react";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
 
 /**
  * A React hook to get the [cache context]{@link CacheContext}.
@@ -9,20 +9,20 @@ import CacheContext from './CacheContext.mjs';
  * @returns {Cache} The cache.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useCache from 'graphql-react/useCache.mjs';
+ * import useCache from "graphql-react/useCache.mjs";
  * ```
  */
 export default function useCache() {
   const cache = React.useContext(CacheContext);
 
-  if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
+  if (typeof process === "object" && process.env.NODE_ENV !== "production")
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useDebugValue(cache);
 
-  if (cache === undefined) throw new TypeError('Cache context missing.');
+  if (cache === undefined) throw new TypeError("Cache context missing.");
 
   if (!(cache instanceof Cache))
-    throw new TypeError('Cache context value must be a `Cache` instance.');
+    throw new TypeError("Cache context value must be a `Cache` instance.");
 
   return cache;
 }

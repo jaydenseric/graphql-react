@@ -1,30 +1,30 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { deepStrictEqual, strictEqual, throws } from "assert";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`LoadingCacheValue` bundle size.', async () => {
+  tests.add("`LoadingCacheValue` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./LoadingCacheValue.mjs', import.meta.url),
+      new URL("./LoadingCacheValue.mjs", import.meta.url),
       650
     );
   });
 
   tests.add(
-    '`LoadingCacheValue` constructor argument 1 `loading` not a `Loading` instance.',
+    "`LoadingCacheValue` constructor argument 1 `loading` not a `Loading` instance.",
     () => {
       const loading = true;
 
       throws(() => {
         new LoadingCacheValue(loading);
-      }, new TypeError('Argument 1 `loading` must be a `Loading` instance.'));
+      }, new TypeError("Argument 1 `loading` must be a `Loading` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -39,17 +39,17 @@ export default (tests) => {
   );
 
   tests.add(
-    '`LoadingCacheValue` constructor argument 2 `cache` not a `Cache` instance.',
+    "`LoadingCacheValue` constructor argument 2 `cache` not a `Cache` instance.",
     () => {
       const loading = new Loading();
       const cache = true;
 
       throws(() => {
         new LoadingCacheValue(loading, cache);
-      }, new TypeError('Argument 2 `cache` must be a `Cache` instance.'));
+      }, new TypeError("Argument 2 `cache` must be a `Cache` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -64,7 +64,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`LoadingCacheValue` constructor argument 3 `cacheKey` not a string.',
+    "`LoadingCacheValue` constructor argument 3 `cacheKey` not a string.",
     () => {
       const loading = new Loading();
       const cache = new Cache();
@@ -72,10 +72,10 @@ export default (tests) => {
 
       throws(() => {
         new LoadingCacheValue(loading, cache, cacheKey);
-      }, new TypeError('Argument 3 `cacheKey` must be a string.'));
+      }, new TypeError("Argument 3 `cacheKey` must be a string."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -90,19 +90,19 @@ export default (tests) => {
   );
 
   tests.add(
-    '`LoadingCacheValue` constructor argument 4 `loadingResult` not a `Promise` instance.',
+    "`LoadingCacheValue` constructor argument 4 `loadingResult` not a `Promise` instance.",
     () => {
       const loading = new Loading();
       const cache = new Cache();
-      const cacheKey = 'a';
+      const cacheKey = "a";
       const loadingResult = true;
 
       throws(() => {
         new LoadingCacheValue(loading, cache, cacheKey, loadingResult);
-      }, new TypeError('Argument 4 `loadingResult` must be a `Promise` instance.'));
+      }, new TypeError("Argument 4 `loadingResult` must be a `Promise` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -117,11 +117,11 @@ export default (tests) => {
   );
 
   tests.add(
-    '`LoadingCacheValue` constructor argument 5 `abortController` not an `AbortController` instance.',
+    "`LoadingCacheValue` constructor argument 5 `abortController` not an `AbortController` instance.",
     () => {
       const loading = new Loading();
       const cache = new Cache();
-      const cacheKey = 'a';
+      const cacheKey = "a";
       const loadingResult = Promise.resolve();
       const abortController = true;
 
@@ -133,10 +133,10 @@ export default (tests) => {
           loadingResult,
           abortController
         );
-      }, new TypeError('Argument 5 `abortController` must be an `AbortController` instance.'));
+      }, new TypeError("Argument 5 `abortController` must be an `AbortController` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -156,19 +156,19 @@ export default (tests) => {
     }
   );
 
-  tests.add('`LoadingCacheValue` construction, single loading.', async () => {
-    const cacheKey = 'a';
+  tests.add("`LoadingCacheValue` construction, single loading.", async () => {
+    const cacheKey = "a";
     const cache = new Cache();
     const loading = new Loading();
 
     let events = [];
 
     cache.addEventListener(`${cacheKey}/set`, (event) => {
-      events.push({ for: 'cache', event });
+      events.push({ for: "cache", event });
     });
 
     const loadingListener = (event) => {
-      events.push({ for: 'loading', event });
+      events.push({ for: "loading", event });
     };
 
     loading.addEventListener(`${cacheKey}/start`, loadingListener);
@@ -190,7 +190,7 @@ export default (tests) => {
 
     strictEqual(events.length, 1);
 
-    strictEqual(events[0].for, 'loading');
+    strictEqual(events[0].for, "loading");
     strictEqual(events[0].event instanceof CustomEvent, true);
     strictEqual(events[0].event.type, `${cacheKey}/start`);
     strictEqual(events[0].event.cancelable, false);
@@ -201,7 +201,7 @@ export default (tests) => {
     });
     deepStrictEqual(cache.store, {});
 
-    strictEqual(typeof loadingCacheValue.timeStamp, 'number');
+    strictEqual(typeof loadingCacheValue.timeStamp, "number");
     strictEqual(performance.now() - loadingCacheValue.timeStamp < 50, true);
     strictEqual(loadingCacheValue.abortController, abortController);
     strictEqual(loadingCacheValue.promise instanceof Promise, true);
@@ -216,13 +216,13 @@ export default (tests) => {
 
     strictEqual(events.length, 2);
 
-    strictEqual(events[0].for, 'cache');
+    strictEqual(events[0].for, "cache");
     strictEqual(events[0].event instanceof CustomEvent, true);
     strictEqual(events[0].event.type, `${cacheKey}/set`);
     strictEqual(events[0].event.cancelable, false);
     deepStrictEqual(events[0].event.detail, { cacheValue });
 
-    strictEqual(events[1].for, 'loading');
+    strictEqual(events[1].for, "loading");
     strictEqual(events[1].event instanceof CustomEvent, true);
     strictEqual(events[1].event.type, `${cacheKey}/end`);
     strictEqual(events[1].event.cancelable, false);
@@ -235,20 +235,20 @@ export default (tests) => {
   });
 
   tests.add(
-    '`LoadingCacheValue` construction, multiple loading, first ends first.',
+    "`LoadingCacheValue` construction, multiple loading, first ends first.",
     async () => {
-      const cacheKey = 'a';
+      const cacheKey = "a";
       const cache = new Cache();
       const loading = new Loading();
 
       let events = [];
 
       cache.addEventListener(`${cacheKey}/set`, (event) => {
-        events.push({ for: 'cache', event });
+        events.push({ for: "cache", event });
       });
 
       const loadingListener = (event) => {
-        events.push({ for: 'loading', event });
+        events.push({ for: "loading", event });
       };
 
       loading.addEventListener(`${cacheKey}/start`, loadingListener);
@@ -270,7 +270,7 @@ export default (tests) => {
 
       strictEqual(events.length, 1);
 
-      strictEqual(events[0].for, 'loading');
+      strictEqual(events[0].for, "loading");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/start`);
       strictEqual(events[0].event.cancelable, false);
@@ -283,7 +283,7 @@ export default (tests) => {
       });
       deepStrictEqual(cache.store, {});
 
-      strictEqual(typeof firstLoadingCacheValue.timeStamp, 'number');
+      strictEqual(typeof firstLoadingCacheValue.timeStamp, "number");
       strictEqual(
         performance.now() - firstLoadingCacheValue.timeStamp < 50,
         true
@@ -309,7 +309,7 @@ export default (tests) => {
 
       strictEqual(events.length, 1);
 
-      strictEqual(events[0].for, 'loading');
+      strictEqual(events[0].for, "loading");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/start`);
       strictEqual(events[0].event.cancelable, false);
@@ -322,7 +322,7 @@ export default (tests) => {
       });
       deepStrictEqual(cache.store, {});
 
-      strictEqual(typeof secondLoadingCacheValue.timeStamp, 'number');
+      strictEqual(typeof secondLoadingCacheValue.timeStamp, "number");
       strictEqual(
         performance.now() - secondLoadingCacheValue.timeStamp < 50,
         true
@@ -347,13 +347,13 @@ export default (tests) => {
 
       strictEqual(events.length, 2);
 
-      strictEqual(events[0].for, 'cache');
+      strictEqual(events[0].for, "cache");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/set`);
       strictEqual(events[0].event.cancelable, false);
       deepStrictEqual(events[0].event.detail, { cacheValue: firstCacheValue });
 
-      strictEqual(events[1].for, 'loading');
+      strictEqual(events[1].for, "loading");
       strictEqual(events[1].event instanceof CustomEvent, true);
       strictEqual(events[1].event.type, `${cacheKey}/end`);
       strictEqual(events[1].event.cancelable, false);
@@ -378,13 +378,13 @@ export default (tests) => {
 
       strictEqual(events.length, 2);
 
-      strictEqual(events[0].for, 'cache');
+      strictEqual(events[0].for, "cache");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/set`);
       strictEqual(events[0].event.cancelable, false);
       deepStrictEqual(events[0].event.detail, { cacheValue: secondCacheValue });
 
-      strictEqual(events[1].for, 'loading');
+      strictEqual(events[1].for, "loading");
       strictEqual(events[1].event instanceof CustomEvent, true);
       strictEqual(events[1].event.type, `${cacheKey}/end`);
       strictEqual(events[1].event.cancelable, false);
@@ -400,20 +400,20 @@ export default (tests) => {
   );
 
   tests.add(
-    '`LoadingCacheValue` construction, multiple loading, first ends last.',
+    "`LoadingCacheValue` construction, multiple loading, first ends last.",
     async () => {
-      const cacheKey = 'a';
+      const cacheKey = "a";
       const cache = new Cache();
       const loading = new Loading();
 
       let events = [];
 
       cache.addEventListener(`${cacheKey}/set`, (event) => {
-        events.push({ for: 'cache', event });
+        events.push({ for: "cache", event });
       });
 
       const loadingListener = (event) => {
-        events.push({ for: 'loading', event });
+        events.push({ for: "loading", event });
       };
 
       loading.addEventListener(`${cacheKey}/start`, loadingListener);
@@ -435,7 +435,7 @@ export default (tests) => {
 
       strictEqual(events.length, 1);
 
-      strictEqual(events[0].for, 'loading');
+      strictEqual(events[0].for, "loading");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/start`);
       strictEqual(events[0].event.cancelable, false);
@@ -448,7 +448,7 @@ export default (tests) => {
       });
       deepStrictEqual(cache.store, {});
 
-      strictEqual(typeof firstLoadingCacheValue.timeStamp, 'number');
+      strictEqual(typeof firstLoadingCacheValue.timeStamp, "number");
       strictEqual(
         performance.now() - firstLoadingCacheValue.timeStamp < 50,
         true
@@ -474,7 +474,7 @@ export default (tests) => {
 
       strictEqual(events.length, 1);
 
-      strictEqual(events[0].for, 'loading');
+      strictEqual(events[0].for, "loading");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/start`);
       strictEqual(events[0].event.cancelable, false);
@@ -487,7 +487,7 @@ export default (tests) => {
       });
       deepStrictEqual(cache.store, {});
 
-      strictEqual(typeof secondLoadingCacheValue.timeStamp, 'number');
+      strictEqual(typeof secondLoadingCacheValue.timeStamp, "number");
       strictEqual(
         performance.now() - secondLoadingCacheValue.timeStamp < 50,
         true
@@ -539,13 +539,13 @@ export default (tests) => {
 
       strictEqual(events.length, 4);
 
-      strictEqual(events[0].for, 'cache');
+      strictEqual(events[0].for, "cache");
       strictEqual(events[0].event instanceof CustomEvent, true);
       strictEqual(events[0].event.type, `${cacheKey}/set`);
       strictEqual(events[0].event.cancelable, false);
       deepStrictEqual(events[0].event.detail, { cacheValue: firstCacheValue });
 
-      strictEqual(events[1].for, 'loading');
+      strictEqual(events[1].for, "loading");
       strictEqual(events[1].event instanceof CustomEvent, true);
       strictEqual(events[1].event.type, `${cacheKey}/end`);
       strictEqual(events[1].event.cancelable, false);
@@ -553,13 +553,13 @@ export default (tests) => {
         loadingCacheValue: firstLoadingCacheValue,
       });
 
-      strictEqual(events[2].for, 'cache');
+      strictEqual(events[2].for, "cache");
       strictEqual(events[2].event instanceof CustomEvent, true);
       strictEqual(events[2].event.type, `${cacheKey}/set`);
       strictEqual(events[2].event.cancelable, false);
       deepStrictEqual(events[2].event.detail, { cacheValue: secondCacheValue });
 
-      strictEqual(events[3].for, 'loading');
+      strictEqual(events[3].for, "loading");
       strictEqual(events[3].event instanceof CustomEvent, true);
       strictEqual(events[3].event.type, `${cacheKey}/end`);
       strictEqual(events[3].event.cancelable, false);
@@ -569,29 +569,29 @@ export default (tests) => {
     }
   );
 
-  tests.add('`LoadingCacheValue` construction, aborting loading.', async () => {
-    const cacheKey = 'a';
+  tests.add("`LoadingCacheValue` construction, aborting loading.", async () => {
+    const cacheKey = "a";
     const cache = new Cache();
     const loading = new Loading();
 
     let events = [];
 
     cache.addEventListener(`${cacheKey}/set`, (event) => {
-      events.push({ for: 'cache', event });
+      events.push({ for: "cache", event });
     });
 
     const loadingListener = (event) => {
-      events.push({ for: 'loading', event });
+      events.push({ for: "loading", event });
     };
 
     loading.addEventListener(`${cacheKey}/start`, loadingListener);
     loading.addEventListener(`${cacheKey}/end`, loadingListener);
 
-    const cacheValue = 'Aborted.';
+    const cacheValue = "Aborted.";
     const abortController = new AbortController();
     const loadingResult = new Promise((resolve) => {
       abortController.signal.addEventListener(
-        'abort',
+        "abort",
         () => {
           resolve(cacheValue);
         },
@@ -609,7 +609,7 @@ export default (tests) => {
 
     strictEqual(events.length, 1);
 
-    strictEqual(events[0].for, 'loading');
+    strictEqual(events[0].for, "loading");
     strictEqual(events[0].event instanceof CustomEvent, true);
     strictEqual(events[0].event.type, `${cacheKey}/start`);
     strictEqual(events[0].event.cancelable, false);
@@ -620,7 +620,7 @@ export default (tests) => {
     });
     deepStrictEqual(cache.store, {});
 
-    strictEqual(typeof loadingCacheValue.timeStamp, 'number');
+    strictEqual(typeof loadingCacheValue.timeStamp, "number");
     strictEqual(performance.now() - loadingCacheValue.timeStamp < 50, true);
     strictEqual(loadingCacheValue.abortController, abortController);
     strictEqual(loadingCacheValue.promise instanceof Promise, true);
@@ -633,7 +633,7 @@ export default (tests) => {
 
     strictEqual(events.length, 1);
 
-    strictEqual(events[0].for, 'loading');
+    strictEqual(events[0].for, "loading");
     strictEqual(events[0].event instanceof CustomEvent, true);
     strictEqual(events[0].event.type, `${cacheKey}/end`);
     strictEqual(events[0].event.cancelable, false);

@@ -8,7 +8,7 @@
  * @type {number}
  * @example <caption>How to `import`.</caption>
  * ```js
- * import HYDRATION_TIME_MS from 'graphql-react/HYDRATION_TIME_MS.mjs';
+ * import HYDRATION_TIME_MS from "graphql-react/HYDRATION_TIME_MS.mjs";
  * ```
  */
 export default 1000;

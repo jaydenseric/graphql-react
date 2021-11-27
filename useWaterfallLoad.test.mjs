@@ -1,39 +1,39 @@
-import { deepStrictEqual, rejects, strictEqual, throws } from 'assert';
+import { deepStrictEqual, rejects, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { renderToStaticMarkup } from 'react-dom/server.js';
-import waterfallRender from 'react-waterfall-render/public/waterfallRender.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useCacheEntry from './useCacheEntry.mjs';
-import useWaterfallLoad from './useWaterfallLoad.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { renderToStaticMarkup } from "react-dom/server.js";
+import waterfallRender from "react-waterfall-render/public/waterfallRender.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useCacheEntry from "./useCacheEntry.mjs";
+import useWaterfallLoad from "./useWaterfallLoad.mjs";
 
 export default (tests) => {
-  tests.add('`useWaterfallLoad` bundle size.', async () => {
+  tests.add("`useWaterfallLoad` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useWaterfallLoad.mjs', import.meta.url),
+      new URL("./useWaterfallLoad.mjs", import.meta.url),
       1300
     );
   });
 
-  tests.add('`useWaterfallLoad` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useWaterfallLoad` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useWaterfallLoad(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -46,16 +46,16 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useWaterfallLoad` argument 2 `load` not a function.', () => {
-    const cacheKey = 'a';
+  tests.add("`useWaterfallLoad` argument 2 `load` not a function.", () => {
+    const cacheKey = "a";
     const load = true;
 
     throws(() => {
       useWaterfallLoad(cacheKey, load);
-    }, new TypeError('Argument 2 `load` must be a function.'));
+    }, new TypeError("Argument 2 `load` must be a function."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -68,24 +68,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useWaterfallLoad` with cache context missing.', () => {
+  tests.add("`useWaterfallLoad` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useWaterfallLoad('a', () => {}));
+        var { result } = renderHook(() => useWaterfallLoad("a", () => {}));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useWaterfallLoad` with cache context value not a `Cache` instance.',
+    "`useWaterfallLoad` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -97,7 +97,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useWaterfallLoad('a', () => {}), {
+          var { result } = renderHook(() => useWaterfallLoad("a", () => {}), {
             wrapper,
           });
         } finally {
@@ -106,7 +106,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -115,7 +115,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useWaterfallLoad` with waterfall render context value undefined.',
+    "`useWaterfallLoad` with waterfall render context value undefined.",
     () => {
       try {
         const cache = new Cache();
@@ -129,7 +129,7 @@ export default (tests) => {
 
         const { result } = renderHook(
           () =>
-            useWaterfallLoad('a', () => {
+            useWaterfallLoad("a", () => {
               didLoad = true;
             }),
           { wrapper }
@@ -146,12 +146,12 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useWaterfallLoad` with waterfall render context value defined, without initial cache value, invalid `load` return.',
+    "`useWaterfallLoad` with waterfall render context value defined, without initial cache value, invalid `load` return.",
     async () => {
       const cache = new Cache();
 
       const TestComponent = () => {
-        useWaterfallLoad('a', () => true);
+        useWaterfallLoad("a", () => true);
 
         return null;
       };
@@ -165,17 +165,17 @@ export default (tests) => {
           renderToStaticMarkup
         ),
         new TypeError(
-          'Argument 2 `load` must return a `LoadingCacheValue` instance.'
+          "Argument 2 `load` must return a `LoadingCacheValue` instance."
         )
       );
     }
   );
 
   tests.add(
-    '`useWaterfallLoad` with waterfall render context value defined, without initial cache value, valid `load` return.',
+    "`useWaterfallLoad` with waterfall render context value defined, without initial cache value, valid `load` return.",
     async () => {
-      const cacheKey = 'a';
-      const cacheValue = 'b';
+      const cacheKey = "a";
+      const cacheValue = "b";
       const cache = new Cache();
       const loading = new Loading();
       const loadCalls = [];
@@ -221,10 +221,10 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useWaterfallLoad` with waterfall render context value defined, with initial cache value, valid `load` return.',
+    "`useWaterfallLoad` with waterfall render context value defined, with initial cache value, valid `load` return.",
     async () => {
-      const cacheKey = 'a';
-      const cacheValue = 'b';
+      const cacheKey = "a";
+      const cacheValue = "b";
       const cache = new Cache({
         [cacheKey]: cacheValue,
       });
@@ -240,7 +240,7 @@ export default (tests) => {
           loading,
           cache,
           cacheKey,
-          Promise.resolve('c'),
+          Promise.resolve("c"),
           new AbortController()
         );
       }

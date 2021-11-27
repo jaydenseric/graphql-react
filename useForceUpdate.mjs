@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * A React hook to force the component to update and re-render.

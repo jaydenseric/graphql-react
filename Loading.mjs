@@ -4,7 +4,7 @@
  * @name Loading
  * @example <caption>How to `import`.</caption>
  * ```js
- * import Loading from 'graphql-react/Loading.mjs';
+ * import Loading from "graphql-react/Loading.mjs";
  * ```
  * @example <caption>Construct a new instance.</caption>
  * ```js

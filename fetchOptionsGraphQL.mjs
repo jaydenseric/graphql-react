@@ -1,4 +1,4 @@
-import extractFiles from 'extract-files/public/extractFiles.js';
+import extractFiles from "extract-files/public/extractFiles.js";
 
 /**
  * Creates default [`fetch` options]{@link FetchOptions} for a
@@ -19,13 +19,13 @@ import extractFiles from 'extract-files/public/extractFiles.js';
  * @returns {FetchOptions} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import fetchOptionsGraphQL from 'graphql-react/fetchOptionsGraphQL.mjs';
+ * import fetchOptionsGraphQL from "graphql-react/fetchOptionsGraphQL.mjs";
  * ```
  */
 export default function fetchOptionsGraphQL(operation) {
   const fetchOptions = {
-    method: 'POST',
-    headers: { Accept: 'application/json' },
+    method: "POST",
+    headers: { Accept: "application/json" },
   };
 
   const { clone, files } = extractFiles(operation);
@@ -37,14 +37,14 @@ export default function fetchOptionsGraphQL(operation) {
 
     const form = new FormData();
 
-    form.set('operations', operationJSON);
+    form.set("operations", operationJSON);
 
     const map = {};
     let i = 0;
     files.forEach((paths) => {
       map[++i] = paths;
     });
-    form.set('map', JSON.stringify(map));
+    form.set("map", JSON.stringify(map));
 
     i = 0;
     files.forEach((paths, file) => {
@@ -53,7 +53,7 @@ export default function fetchOptionsGraphQL(operation) {
 
     fetchOptions.body = form;
   } else {
-    fetchOptions.headers['Content-Type'] = 'application/json';
+    fetchOptions.headers["Content-Type"] = "application/json";
     fetchOptions.body = operationJSON;
   }
 

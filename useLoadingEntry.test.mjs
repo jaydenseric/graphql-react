@@ -1,37 +1,37 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import Loading from './Loading.mjs';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import LoadingContext from './LoadingContext.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoadingEntry from './useLoadingEntry.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import LoadingContext from "./LoadingContext.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoadingEntry from "./useLoadingEntry.mjs";
 
 export default (tests) => {
-  tests.add('`useLoadingEntry` bundle size.', async () => {
+  tests.add("`useLoadingEntry` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./useLoadingEntry.mjs', import.meta.url),
+      new URL("./useLoadingEntry.mjs", import.meta.url),
       500
     );
   });
 
-  tests.add('`useLoadingEntry` argument 1 `cacheKey` not a string.', () => {
+  tests.add("`useLoadingEntry` argument 1 `cacheKey` not a string.", () => {
     const cacheKey = true;
 
     throws(() => {
       useLoadingEntry(cacheKey);
-    }, new TypeError('Argument 1 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 1 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -44,24 +44,24 @@ export default (tests) => {
     }
   });
 
-  tests.add('`useLoadingEntry` with loading context missing.', () => {
+  tests.add("`useLoadingEntry` with loading context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadingEntry('a'));
+        var { result } = renderHook(() => useLoadingEntry("a"));
       } finally {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Loading context missing.'));
+      deepStrictEqual(result.error, new TypeError("Loading context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoadingEntry` with loading context value not a `Loading` instance.',
+    "`useLoadingEntry` with loading context value not a `Loading` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -73,14 +73,14 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadingEntry('a'), { wrapper });
+          var { result } = renderHook(() => useLoadingEntry("a"), { wrapper });
         } finally {
           revertConsole();
         }
 
         deepStrictEqual(
           result.error,
-          new TypeError('Loading context value must be a `Loading` instance.')
+          new TypeError("Loading context value must be a `Loading` instance.")
         );
       } finally {
         cleanup();
@@ -89,7 +89,7 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadingEntry` without initial loading for each cache key used.',
+    "`useLoadingEntry` without initial loading for each cache key used.",
     async () => {
       try {
         const loading = new Loading();
@@ -100,7 +100,7 @@ export default (tests) => {
             children,
           });
 
-        const cacheKeyA = 'a';
+        const cacheKeyA = "a";
 
         const { result, rerender } = renderHook(
           ({ cacheKey }) => useLoadingEntry(cacheKey),
@@ -147,7 +147,7 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        const cacheKeyB = 'b';
+        const cacheKeyB = "b";
 
         rerender({ cacheKey: cacheKeyB });
 
@@ -192,12 +192,12 @@ export default (tests) => {
   );
 
   tests.add(
-    '`useLoadingEntry` with initial loading for each cache key used.',
+    "`useLoadingEntry` with initial loading for each cache key used.",
     async () => {
       try {
         const loading = new Loading();
         const cache = new Cache();
-        const cacheKeyA = 'a';
+        const cacheKeyA = "a";
 
         let loadingA1ResultResolve;
 
@@ -275,7 +275,7 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        const cacheKeyB = 'b';
+        const cacheKeyB = "b";
 
         let loadingB1ResultResolve;
 

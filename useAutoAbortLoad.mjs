@@ -1,5 +1,5 @@
-import React from 'react';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
+import React from "react";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * A React hook to create a memoized [loader]{@link Loader} from another, that
@@ -12,14 +12,14 @@ import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
  * @returns {Loader} Memoized function that starts the loading.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useAutoAbortLoad from 'graphql-react/useAutoAbortLoad.mjs';
+ * import useAutoAbortLoad from "graphql-react/useAutoAbortLoad.mjs";
  * ```
  */
 export default function useAutoAbortLoad(load) {
-  if (typeof load !== 'function')
+  if (typeof load !== "function")
     throw new TypeError(
-      typeof process === 'object' && process.env.NODE_ENV !== 'production'
-        ? 'Argument 1 `load` must be a function.'
+      typeof process === "object" && process.env.NODE_ENV !== "production"
+        ? "Argument 1 `load` must be a function."
         : createArgErrorMessageProd(1)
     );
 

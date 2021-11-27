@@ -1,21 +1,21 @@
-import { deepStrictEqual, strictEqual } from 'assert';
+import { deepStrictEqual, strictEqual } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import Loading from './Loading.mjs';
-import LoadingContext from './LoadingContext.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useLoading from './useLoading.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import Loading from "./Loading.mjs";
+import LoadingContext from "./LoadingContext.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useLoading from "./useLoading.mjs";
 
 export default (tests) => {
-  tests.add('`useLoading` bundle size.', async () => {
-    await assertBundleSize(new URL('./useLoading.mjs', import.meta.url), 300);
+  tests.add("`useLoading` bundle size.", async () => {
+    await assertBundleSize(new URL("./useLoading.mjs", import.meta.url), 300);
   });
 
-  tests.add('`useLoading` with loading context missing.', () => {
+  tests.add("`useLoading` with loading context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
@@ -25,14 +25,14 @@ export default (tests) => {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Loading context missing.'));
+      deepStrictEqual(result.error, new TypeError("Loading context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useLoading` with loading context value not a `Loading` instance.',
+    "`useLoading` with loading context value not a `Loading` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -51,7 +51,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Loading context value must be a `Loading` instance.')
+          new TypeError("Loading context value must be a `Loading` instance.")
         );
       } finally {
         cleanup();
@@ -59,7 +59,7 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useLoading` getting the loading.', () => {
+  tests.add("`useLoading` getting the loading.", () => {
     try {
       const wrapper = ({ loading, children }) =>
         jsx(LoadingContext.Provider, {

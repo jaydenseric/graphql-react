@@ -1,6 +1,6 @@
-import React from 'react';
-import Loading from './Loading.mjs';
-import LoadingContext from './LoadingContext.mjs';
+import React from "react";
+import Loading from "./Loading.mjs";
+import LoadingContext from "./LoadingContext.mjs";
 
 /**
  * A React hook to get the [loading context]{@link LoadingContext}.
@@ -9,20 +9,20 @@ import LoadingContext from './LoadingContext.mjs';
  * @returns {Loading} Loading.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useLoading from 'graphql-react/useLoading.mjs';
+ * import useLoading from "graphql-react/useLoading.mjs";
  * ```
  */
 export default function useLoading() {
   const loading = React.useContext(LoadingContext);
 
-  if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
+  if (typeof process === "object" && process.env.NODE_ENV !== "production")
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useDebugValue(loading);
 
-  if (loading === undefined) throw new TypeError('Loading context missing.');
+  if (loading === undefined) throw new TypeError("Loading context missing.");
 
   if (!(loading instanceof Loading))
-    throw new TypeError('Loading context value must be a `Loading` instance.');
+    throw new TypeError("Loading context value must be a `Loading` instance.");
 
   return loading;
 }

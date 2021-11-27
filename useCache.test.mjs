@@ -1,21 +1,21 @@
-import { deepStrictEqual, strictEqual } from 'assert';
+import { deepStrictEqual, strictEqual } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
-} from '@testing-library/react-hooks/lib/pure.js';
-import { jsx } from 'react/jsx-runtime.js';
-import Cache from './Cache.mjs';
-import CacheContext from './CacheContext.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
-import useCache from './useCache.mjs';
+} from "@testing-library/react-hooks/lib/pure.js";
+import { jsx } from "react/jsx-runtime.js";
+import Cache from "./Cache.mjs";
+import CacheContext from "./CacheContext.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
+import useCache from "./useCache.mjs";
 
 export default (tests) => {
-  tests.add('`useCache` bundle size.', async () => {
-    await assertBundleSize(new URL('./useCache.mjs', import.meta.url), 350);
+  tests.add("`useCache` bundle size.", async () => {
+    await assertBundleSize(new URL("./useCache.mjs", import.meta.url), 350);
   });
 
-  tests.add('`useCache` with cache context missing.', () => {
+  tests.add("`useCache` with cache context missing.", () => {
     try {
       const revertConsole = suppressErrorOutput();
 
@@ -25,14 +25,14 @@ export default (tests) => {
         revertConsole();
       }
 
-      deepStrictEqual(result.error, new TypeError('Cache context missing.'));
+      deepStrictEqual(result.error, new TypeError("Cache context missing."));
     } finally {
       cleanup();
     }
   });
 
   tests.add(
-    '`useCache` with cache context value not a `Cache` instance.',
+    "`useCache` with cache context value not a `Cache` instance.",
     () => {
       try {
         const wrapper = ({ children }) =>
@@ -51,7 +51,7 @@ export default (tests) => {
 
         deepStrictEqual(
           result.error,
-          new TypeError('Cache context value must be a `Cache` instance.')
+          new TypeError("Cache context value must be a `Cache` instance.")
         );
       } finally {
         cleanup();
@@ -59,7 +59,7 @@ export default (tests) => {
     }
   );
 
-  tests.add('`useCache` getting the cache.', () => {
+  tests.add("`useCache` getting the cache.", () => {
     try {
       const wrapper = ({ cache, children }) =>
         jsx(CacheContext.Provider, {

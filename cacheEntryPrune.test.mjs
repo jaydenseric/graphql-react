@@ -1,29 +1,29 @@
-import { deepStrictEqual, strictEqual, throws } from 'assert';
-import revertableGlobals from 'revertable-globals';
-import Cache from './Cache.mjs';
-import cacheEntryPrune from './cacheEntryPrune.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import assertBundleSize from './test/assertBundleSize.mjs';
+import { deepStrictEqual, strictEqual, throws } from "assert";
+import revertableGlobals from "revertable-globals";
+import Cache from "./Cache.mjs";
+import cacheEntryPrune from "./cacheEntryPrune.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
-  tests.add('`cacheEntryPrune` bundle size.', async () => {
+  tests.add("`cacheEntryPrune` bundle size.", async () => {
     await assertBundleSize(
-      new URL('./cacheEntryPrune.mjs', import.meta.url),
+      new URL("./cacheEntryPrune.mjs", import.meta.url),
       350
     );
   });
 
   tests.add(
-    '`cacheEntryPrune` argument 1 `cache` not a `Cache` instance.',
+    "`cacheEntryPrune` argument 1 `cache` not a `Cache` instance.",
     () => {
       const cache = true;
 
       throws(() => {
         cacheEntryPrune(cache);
-      }, new TypeError('Argument 1 `cache` must be a `Cache` instance.'));
+      }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
 
       const revertGlobals = revertableGlobals(
-        { NODE_ENV: 'production' },
+        { NODE_ENV: "production" },
         process.env
       );
 
@@ -37,16 +37,16 @@ export default (tests) => {
     }
   );
 
-  tests.add('`cacheEntryPrune` argument 2 `cacheKey` not a string.', () => {
+  tests.add("`cacheEntryPrune` argument 2 `cacheKey` not a string.", () => {
     const cache = new Cache();
     const cacheKey = true;
 
     throws(() => {
       cacheEntryPrune(cache, cacheKey);
-    }, new TypeError('Argument 2 `cacheKey` must be a string.'));
+    }, new TypeError("Argument 2 `cacheKey` must be a string."));
 
     const revertGlobals = revertableGlobals(
-      { NODE_ENV: 'production' },
+      { NODE_ENV: "production" },
       process.env
     );
 
@@ -59,7 +59,7 @@ export default (tests) => {
     }
   });
 
-  tests.add('`cacheEntryPrune` with entry not populated.', () => {
+  tests.add("`cacheEntryPrune` with entry not populated.", () => {
     const initialCacheStore = { a: 1 };
     const cache = new Cache({ ...initialCacheStore });
     const events = [];
@@ -67,19 +67,19 @@ export default (tests) => {
       events.push(event);
     };
 
-    cache.addEventListener('b/prune', listener);
-    cache.addEventListener('b/delete', listener);
+    cache.addEventListener("b/prune", listener);
+    cache.addEventListener("b/delete", listener);
 
-    cacheEntryPrune(cache, 'b');
+    cacheEntryPrune(cache, "b");
 
     deepStrictEqual(events, []);
     deepStrictEqual(cache.store, initialCacheStore);
   });
 
   tests.add(
-    '`cacheEntryPrune` with entry populated, prune event not canceled.',
+    "`cacheEntryPrune` with entry populated, prune event not canceled.",
     () => {
-      const pruneCacheKey = 'b';
+      const pruneCacheKey = "b";
       const cache = new Cache({ a: 1, [pruneCacheKey]: 2 });
       const events = [];
       const listener = (event) => {
@@ -107,9 +107,9 @@ export default (tests) => {
   );
 
   tests.add(
-    '`cacheEntryPrune` with entry populated, prune event canceled.',
+    "`cacheEntryPrune` with entry populated, prune event canceled.",
     () => {
-      const pruneCacheKey = 'b';
+      const pruneCacheKey = "b";
       const initialCacheStore = { a: 1, [pruneCacheKey]: 2 };
       const cache = new Cache({ ...initialCacheStore });
       const events = [];

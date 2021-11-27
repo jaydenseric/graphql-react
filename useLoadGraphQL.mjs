@@ -1,9 +1,9 @@
-import React from 'react';
-import LoadingCacheValue from './LoadingCacheValue.mjs';
-import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
-import fetchGraphQL from './fetchGraphQL.mjs';
-import useCache from './useCache.mjs';
-import useLoading from './useLoading.mjs';
+import React from "react";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
+import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
+import fetchGraphQL from "./fetchGraphQL.mjs";
+import useCache from "./useCache.mjs";
+import useLoading from "./useLoading.mjs";
 
 /**
  * A React hook to get a function for loading a GraphQL operation.
@@ -12,7 +12,7 @@ import useLoading from './useLoading.mjs';
  * @returns {LoadGraphQL} Loads a GraphQL operation.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import useLoadGraphQL from 'graphql-react/useLoadGraphQL.mjs';
+ * import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
  * ```
  */
 export default function useLoadGraphQL() {
@@ -21,28 +21,28 @@ export default function useLoadGraphQL() {
 
   return React.useCallback(
     (cacheKey, fetchUri, fetchOptions) => {
-      if (typeof cacheKey !== 'string')
+      if (typeof cacheKey !== "string")
         throw new TypeError(
-          typeof process === 'object' && process.env.NODE_ENV !== 'production'
-            ? 'Argument 1 `cacheKey` must be a string.'
+          typeof process === "object" && process.env.NODE_ENV !== "production"
+            ? "Argument 1 `cacheKey` must be a string."
             : createArgErrorMessageProd(1)
         );
 
-      if (typeof fetchUri !== 'string')
+      if (typeof fetchUri !== "string")
         throw new TypeError(
-          typeof process === 'object' && process.env.NODE_ENV !== 'production'
-            ? 'Argument 2 `fetchUri` must be a string.'
+          typeof process === "object" && process.env.NODE_ENV !== "production"
+            ? "Argument 2 `fetchUri` must be a string."
             : createArgErrorMessageProd(2)
         );
 
       if (
-        typeof fetchOptions !== 'object' ||
+        typeof fetchOptions !== "object" ||
         !fetchOptions ||
         Array.isArray(fetchOptions)
       )
         throw new TypeError(
-          typeof process === 'object' && process.env.NODE_ENV !== 'production'
-            ? 'Argument 3 `fetchOptions` must be an object.'
+          typeof process === "object" && process.env.NODE_ENV !== "production"
+            ? "Argument 3 `fetchOptions` must be an object."
             : createArgErrorMessageProd(3)
         );
 
@@ -58,7 +58,7 @@ export default function useLoadGraphQL() {
           : // Signal not already aborted, so setup a listener to abort when it
             // does.
             signal.addEventListener(
-              'abort',
+              "abort",
               () => {
                 abortController.abort();
               },

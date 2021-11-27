@@ -1,7 +1,7 @@
-const ERROR_CODE_FETCH_ERROR = 'FETCH_ERROR';
-const ERROR_CODE_RESPONSE_HTTP_STATUS = 'RESPONSE_HTTP_STATUS';
-const ERROR_CODE_RESPONSE_JSON_PARSE_ERROR = 'RESPONSE_JSON_PARSE_ERROR';
-const ERROR_CODE_RESPONSE_MALFORMED = 'RESPONSE_MALFORMED';
+const ERROR_CODE_FETCH_ERROR = "FETCH_ERROR";
+const ERROR_CODE_RESPONSE_HTTP_STATUS = "RESPONSE_HTTP_STATUS";
+const ERROR_CODE_RESPONSE_JSON_PARSE_ERROR = "RESPONSE_JSON_PARSE_ERROR";
+const ERROR_CODE_RESPONSE_MALFORMED = "RESPONSE_MALFORMED";
 
 /**
  * Fetches a GraphQL operation, always resolving a
@@ -24,15 +24,15 @@ const ERROR_CODE_RESPONSE_MALFORMED = 'RESPONSE_MALFORMED';
  * @returns {Promise<GraphQLResult>} Resolves a result suitable for use as a [cache value]{@link CacheValue}. Shouldn’t reject.
  * @example <caption>How to `import`.</caption>
  * ```js
- * import fetchGraphQL from 'graphql-react/fetchGraphQL.mjs';
+ * import fetchGraphQL from "graphql-react/fetchGraphQL.mjs";
  * ```
  */
 export default function fetchGraphQL(fetchUri, fetchOptions) {
   const result = { errors: [] };
   const fetcher =
-    typeof fetch === 'function'
+    typeof fetch === "function"
       ? fetch
-      : () => Promise.reject(new TypeError('Global `fetch` API unavailable.'));
+      : () => Promise.reject(new TypeError("Global `fetch` API unavailable."));
 
   return fetcher(fetchUri, fetchOptions)
     .then(
@@ -41,7 +41,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
         // Allow the response to be read in the cache value, but prevent it from
         // serializing to JSON when sending SSR cache to the client for
         // hydration.
-        Object.defineProperty(result, 'response', { value: response });
+        Object.defineProperty(result, "response", { value: response });
 
         if (!response.ok)
           result.errors.push({
@@ -61,22 +61,22 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
             // the GraphQL spec.
             // https://spec.graphql.org/June2018/#sec-Response-Format
 
-            if (typeof json !== 'object' || !json || Array.isArray(json))
+            if (typeof json !== "object" || !json || Array.isArray(json))
               result.errors.push({
-                message: 'Response JSON isn’t an object.',
+                message: "Response JSON isn’t an object.",
                 extensions: {
                   client: true,
                   code: ERROR_CODE_RESPONSE_MALFORMED,
                 },
               });
             else {
-              const hasErrors = 'errors' in json;
-              const hasData = 'data' in json;
+              const hasErrors = "errors" in json;
+              const hasData = "data" in json;
 
               if (!hasErrors && !hasData)
                 result.errors.push({
                   message:
-                    'Response JSON is missing an `errors` or `data` property.',
+                    "Response JSON is missing an `errors` or `data` property.",
                   extensions: {
                     client: true,
                     code: ERROR_CODE_RESPONSE_MALFORMED,
@@ -89,7 +89,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                   if (!Array.isArray(json.errors))
                     result.errors.push({
                       message:
-                        'Response JSON `errors` property isn’t an array.',
+                        "Response JSON `errors` property isn’t an array.",
                       extensions: {
                         client: true,
                         code: ERROR_CODE_RESPONSE_MALFORMED,
@@ -102,12 +102,12 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                 if (hasData)
                   if (
                     // Note that `null` is an object.
-                    typeof json.data !== 'object' ||
+                    typeof json.data !== "object" ||
                     Array.isArray(json.data)
                   )
                     result.errors.push({
                       message:
-                        'Response JSON `data` property isn’t an object or null.',
+                        "Response JSON `data` property isn’t an object or null.",
                       extensions: {
                         client: true,
                         code: ERROR_CODE_RESPONSE_MALFORMED,
@@ -121,7 +121,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
           // Response JSON parse error.
           ({ message }) => {
             result.errors.push({
-              message: 'Response JSON parse error.',
+              message: "Response JSON parse error.",
               extensions: {
                 client: true,
                 code: ERROR_CODE_RESPONSE_JSON_PARSE_ERROR,
@@ -135,7 +135,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
       // Fetch error.
       ({ message }) => {
         result.errors.push({
-          message: 'Fetch error.',
+          message: "Fetch error.",
           extensions: {
             client: true,
             code: ERROR_CODE_FETCH_ERROR,

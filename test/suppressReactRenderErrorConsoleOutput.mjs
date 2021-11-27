@@ -1,4 +1,4 @@
-import filterConsole from 'filter-console';
+import filterConsole from "filter-console";
 
 /**
  * Replaces the `console` global to suppress React render error output. Useful
@@ -11,6 +11,6 @@ import filterConsole from 'filter-console';
  */
 export default function suppressReactRenderErrorConsoleOutput() {
   return filterConsole([/^The above error occurred in the <\w+> component:/u], {
-    methods: ['error'],
+    methods: ["error"],
   });
 }

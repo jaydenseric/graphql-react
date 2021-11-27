@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * React context for the client side hydration [time stamp]{@link HighResTimeStamp}.
@@ -9,12 +9,12 @@ import React from 'react';
  * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
  * @example <caption>How to `import`.</caption>
  * ```js
- * import HydrationTimeStampContext from 'graphql-react/HydrationTimeStampContext.mjs';
+ * import HydrationTimeStampContext from "graphql-react/HydrationTimeStampContext.mjs";
  * ```
  */
 const HydrationTimeStampContext = React.createContext();
 
-if (typeof process === 'object' && process.env.NODE_ENV !== 'production')
-  HydrationTimeStampContext.displayName = 'HydrationTimeStampContext';
+if (typeof process === "object" && process.env.NODE_ENV !== "production")
+  HydrationTimeStampContext.displayName = "HydrationTimeStampContext";
 
 export default HydrationTimeStampContext;
