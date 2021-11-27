@@ -17,7 +17,7 @@ export default (tests) => {
   tests.add('`useLoadOnStale` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useLoadOnStale.mjs', import.meta.url),
-      800
+      500
     );
   });
 

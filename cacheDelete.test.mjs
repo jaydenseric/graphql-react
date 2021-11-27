@@ -7,7 +7,7 @@ import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`cacheDelete` bundle size.', async () => {
-    await assertBundleSize(new URL('./cacheDelete.mjs', import.meta.url), 500);
+    await assertBundleSize(new URL('./cacheDelete.mjs', import.meta.url), 400);
   });
 
   tests.add('`cacheDelete` argument 1 `cache` not a `Cache` instance.', () => {

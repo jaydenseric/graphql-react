@@ -13,7 +13,7 @@ import suppressReactRenderErrorConsoleOutput from './test/suppressReactRenderErr
 
 export default (tests) => {
   tests.add('`Provider` bundle size.', async () => {
-    await assertBundleSize(new URL('./Provider.mjs', import.meta.url), 900);
+    await assertBundleSize(new URL('./Provider.mjs', import.meta.url), 500);
   });
 
   tests.add('`Provider` with prop `cache` missing.', () => {

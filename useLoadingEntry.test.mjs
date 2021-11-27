@@ -19,7 +19,7 @@ export default (tests) => {
   tests.add('`useLoadingEntry` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useLoadingEntry.mjs', import.meta.url),
-      800
+      500
     );
   });
 

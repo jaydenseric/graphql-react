@@ -6,7 +6,7 @@ import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`Cache` bundle size.', async () => {
-    await assertBundleSize(new URL('./Cache.mjs', import.meta.url), 300);
+    await assertBundleSize(new URL('./Cache.mjs', import.meta.url), 250);
   });
 
   tests.add('`Cache` constructor argument 1 `store`, not an object.', () => {

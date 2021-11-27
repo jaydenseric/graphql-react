@@ -18,7 +18,7 @@ export default (tests) => {
   tests.add('`useLoadOnMount` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useLoadOnMount.mjs', import.meta.url),
-      900
+      600
     );
   });
 

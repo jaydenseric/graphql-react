@@ -1,4 +1,3 @@
-import isObject from 'isobject/index.cjs.js';
 import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
 
 /**
@@ -19,7 +18,7 @@ export default class Cache extends EventTarget {
   constructor(store = {}) {
     super();
 
-    if (!isObject(store))
+    if (typeof store !== 'object' || !store || Array.isArray(store))
       throw new TypeError(
         typeof process === 'object' && process.env.NODE_ENV !== 'production'
           ? 'Constructor argument 1 `store` must be an object.'

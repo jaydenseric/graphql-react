@@ -1,5 +1,3 @@
-import isObject from 'isobject/index.cjs.js';
-
 const ERROR_CODE_FETCH_ERROR = 'FETCH_ERROR';
 const ERROR_CODE_RESPONSE_HTTP_STATUS = 'RESPONSE_HTTP_STATUS';
 const ERROR_CODE_RESPONSE_JSON_PARSE_ERROR = 'RESPONSE_JSON_PARSE_ERROR';
@@ -63,7 +61,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
             // the GraphQL spec.
             // https://spec.graphql.org/June2018/#sec-Response-Format
 
-            if (!isObject(json))
+            if (typeof json !== 'object' || !json || Array.isArray(json))
               result.errors.push({
                 message: 'Response JSON isn’t an object.',
                 extensions: {
@@ -102,7 +100,11 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                 // The `data` field should be either an object, null, or not set.
                 // https://spec.graphql.org/June2018/#sec-Data
                 if (hasData)
-                  if (!isObject(json.data) && json.data !== null)
+                  if (
+                    // Note that `null` is an object.
+                    typeof json.data !== 'object' ||
+                    Array.isArray(json.data)
+                  )
                     result.errors.push({
                       message:
                         'Response JSON `data` property isn’t an object or null.',

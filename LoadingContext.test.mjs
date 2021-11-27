@@ -9,7 +9,7 @@ export default (tests) => {
   tests.add('`LoadingContext` bundle size.', async () => {
     await assertBundleSize(
       new URL('./LoadingContext.mjs', import.meta.url),
-      350
+      100
     );
   });
 

@@ -12,7 +12,7 @@ import useLoading from './useLoading.mjs';
 
 export default (tests) => {
   tests.add('`useLoading` bundle size.', async () => {
-    await assertBundleSize(new URL('./useLoading.mjs', import.meta.url), 500);
+    await assertBundleSize(new URL('./useLoading.mjs', import.meta.url), 300);
   });
 
   tests.add('`useLoading` with loading context missing.', () => {

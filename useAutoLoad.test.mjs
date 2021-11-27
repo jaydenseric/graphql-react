@@ -15,7 +15,7 @@ import useAutoLoad from './useAutoLoad.mjs';
 
 export default (tests) => {
   tests.add('`useAutoLoad` bundle size.', async () => {
-    await assertBundleSize(new URL('./useAutoLoad.mjs', import.meta.url), 1400);
+    await assertBundleSize(new URL('./useAutoLoad.mjs', import.meta.url), 900);
   });
 
   tests.add('`useAutoLoad` argument 1 `cacheKey` not a string.', () => {

@@ -1,4 +1,3 @@
-import isObject from 'isobject/index.cjs.js';
 import React from 'react';
 import LoadingCacheValue from './LoadingCacheValue.mjs';
 import createArgErrorMessageProd from './createArgErrorMessageProd.mjs';
@@ -36,7 +35,11 @@ export default function useLoadGraphQL() {
             : createArgErrorMessageProd(2)
         );
 
-      if (!isObject(fetchOptions))
+      if (
+        typeof fetchOptions !== 'object' ||
+        !fetchOptions ||
+        Array.isArray(fetchOptions)
+      )
         throw new TypeError(
           typeof process === 'object' && process.env.NODE_ENV !== 'production'
             ? 'Argument 3 `fetchOptions` must be an object.'

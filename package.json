@@ -102,7 +102,6 @@
   },
   "dependencies": {
     "extract-files": "^11.0.0",
-    "isobject": "^4.0.0",
     "react-waterfall-render": "^2.0.0"
   },
   "devDependencies": {

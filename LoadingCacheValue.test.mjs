@@ -10,7 +10,7 @@ export default (tests) => {
   tests.add('`LoadingCacheValue` bundle size.', async () => {
     await assertBundleSize(
       new URL('./LoadingCacheValue.mjs', import.meta.url),
-      850
+      650
     );
   });
 

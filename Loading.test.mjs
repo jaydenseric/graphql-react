@@ -4,7 +4,7 @@ import assertBundleSize from './test/assertBundleSize.mjs';
 
 export default (tests) => {
   tests.add('`Loading` bundle size.', async () => {
-    await assertBundleSize(new URL('./Loading.mjs', import.meta.url), 200);
+    await assertBundleSize(new URL('./Loading.mjs', import.meta.url), 120);
   });
 
   tests.add('`Loading` constructor.', () => {

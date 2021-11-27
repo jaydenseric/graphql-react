@@ -12,7 +12,7 @@ import useCache from './useCache.mjs';
 
 export default (tests) => {
   tests.add('`useCache` bundle size.', async () => {
-    await assertBundleSize(new URL('./useCache.mjs', import.meta.url), 600);
+    await assertBundleSize(new URL('./useCache.mjs', import.meta.url), 350);
   });
 
   tests.add('`useCache` with cache context missing.', () => {

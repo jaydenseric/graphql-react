@@ -9,7 +9,7 @@ export default (tests) => {
   tests.add('`cacheEntryDelete` bundle size.', async () => {
     await assertBundleSize(
       new URL('./cacheEntryDelete.mjs', import.meta.url),
-      500
+      350
     );
   });
 

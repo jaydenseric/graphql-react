@@ -18,7 +18,7 @@ export default (tests) => {
   tests.add('`useCacheEntryPrunePrevention` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useCacheEntryPrunePrevention.mjs', import.meta.url),
-      700
+      450
     );
   });
 

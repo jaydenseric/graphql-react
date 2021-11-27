@@ -14,7 +14,7 @@ export default (tests) => {
   tests.add('`useAutoAbortLoad` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useAutoAbortLoad.mjs', import.meta.url),
-      500
+      300
     );
   });
 

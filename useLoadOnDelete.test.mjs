@@ -18,7 +18,7 @@ export default (tests) => {
   tests.add('`useLoadOnDelete` bundle size.', async () => {
     await assertBundleSize(
       new URL('./useLoadOnDelete.mjs', import.meta.url),
-      800
+      500
     );
   });
 

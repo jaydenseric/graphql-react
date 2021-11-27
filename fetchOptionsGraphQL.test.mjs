@@ -8,7 +8,7 @@ export default (tests) => {
   tests.add('`fetchOptionsGraphQL` bundle size.', async () => {
     await assertBundleSize(
       new URL('./fetchOptionsGraphQL.mjs', import.meta.url),
-      800
+      1200
     );
   });
 
