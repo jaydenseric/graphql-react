@@ -1,12 +1,10 @@
 import { notStrictEqual, strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 
@@ -19,24 +17,9 @@ export default (tests) => {
   });
 
   tests.add("`useAutoAbortLoad` argument 1 `load` not a function.", () => {
-    const load = true;
-
     throws(() => {
-      useAutoAbortLoad(load);
+      useAutoAbortLoad(true);
     }, new TypeError("Argument 1 `load` must be a function."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useAutoAbortLoad(load);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useAutoAbortLoad` functionality.", async () => {

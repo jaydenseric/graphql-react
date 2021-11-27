@@ -6,12 +6,10 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadingEntry from "./useLoadingEntry.mjs";
 
@@ -24,24 +22,9 @@ export default (tests) => {
   });
 
   tests.add("`useLoadingEntry` argument 1 `cacheKey` not a string.", () => {
-    const cacheKey = true;
-
     throws(() => {
-      useLoadingEntry(cacheKey);
+      useLoadingEntry(true);
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useLoadingEntry(cacheKey);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useLoadingEntry` with loading context missing.", () => {

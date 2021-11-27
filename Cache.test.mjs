@@ -1,33 +1,16 @@
 import { deepStrictEqual, strictEqual, throws } from "assert";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
   tests.add("`Cache` bundle size.", async () => {
-    await assertBundleSize(new URL("./Cache.mjs", import.meta.url), 250);
+    await assertBundleSize(new URL("./Cache.mjs", import.meta.url), 200);
   });
 
   tests.add("`Cache` constructor argument 1 `store`, not an object.", () => {
-    const store = null;
-
     throws(() => {
-      new Cache(store);
+      new Cache(null);
     }, new TypeError("Constructor argument 1 `store` must be an object."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        new Cache(store);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`Cache` constructor argument 1 `store`, missing", () => {

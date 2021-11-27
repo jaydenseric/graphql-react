@@ -15,7 +15,6 @@ import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import cacheDelete from "./cacheDelete.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadGraphQL from "./useLoadGraphQL.mjs";
 
@@ -164,75 +163,27 @@ export default (tests) => {
       loadGraphQLTests.add(
         "Load GraphQL with argument 1 `cacheKey` not a string.",
         () => {
-          const cacheKey = true;
-
           throws(() => {
-            result.current(cacheKey);
+            result.current(true);
           }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-          const revertGlobals = revertableGlobals(
-            { NODE_ENV: "production" },
-            process.env
-          );
-
-          try {
-            throws(() => {
-              result.current(cacheKey);
-            }, new TypeError(createArgErrorMessageProd(1)));
-          } finally {
-            revertGlobals();
-          }
         }
       );
 
       loadGraphQLTests.add(
         "Load GraphQL with argument 2 `fetchUri` not a string.",
         () => {
-          const cacheKey = "";
-          const fetchUri = true;
-
           throws(() => {
-            result.current(cacheKey, fetchUri);
+            result.current("a", true);
           }, new TypeError("Argument 2 `fetchUri` must be a string."));
-
-          const revertGlobals = revertableGlobals(
-            { NODE_ENV: "production" },
-            process.env
-          );
-
-          try {
-            throws(() => {
-              result.current(cacheKey, fetchUri);
-            }, new TypeError(createArgErrorMessageProd(2)));
-          } finally {
-            revertGlobals();
-          }
         }
       );
 
       loadGraphQLTests.add(
         "Load GraphQL with argument 3 `fetchOptions` not an object.",
         () => {
-          const cacheKey = "";
-          const fetchUri = "";
-          const fetchOptions = null;
-
           throws(() => {
-            result.current(cacheKey, fetchUri, fetchOptions);
+            result.current("a", "", null);
           }, new TypeError("Argument 3 `fetchOptions` must be an object."));
-
-          const revertGlobals = revertableGlobals(
-            { NODE_ENV: "production" },
-            process.env
-          );
-
-          try {
-            throws(() => {
-              result.current(cacheKey, fetchUri, fetchOptions);
-            }, new TypeError(createArgErrorMessageProd(3)));
-          } finally {
-            revertGlobals();
-          }
         }
       );
 

@@ -14,7 +14,6 @@ import React from "react";
  */
 const LoadingContext = React.createContext();
 
-if (typeof process === "object" && process.env.NODE_ENV !== "production")
-  LoadingContext.displayName = "LoadingContext";
+LoadingContext.displayName = "LoadingContext";
 
 export default LoadingContext;

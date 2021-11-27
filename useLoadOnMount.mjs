@@ -1,7 +1,6 @@
 import React from "react";
 import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import useCache from "./useCache.mjs";
 
 /**
@@ -22,18 +21,10 @@ import useCache from "./useCache.mjs";
  */
 export default function useLoadOnMount(cacheKey, load) {
   if (typeof cacheKey !== "string")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `cacheKey` must be a string."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `cacheKey` must be a string.");
 
   if (typeof load !== "function")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 2 `load` must be a function."
-        : createArgErrorMessageProd(2)
-    );
+    throw new TypeError("Argument 2 `load` must be a function.");
 
   const cache = useCache();
   const hydrationTimeStamp = React.useContext(HydrationTimeStampContext);

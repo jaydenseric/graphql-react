@@ -6,12 +6,10 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 
@@ -24,24 +22,9 @@ export default (tests) => {
   });
 
   tests.add("`useCacheEntry` argument 1 `cacheKey` not a string.", () => {
-    const cacheKey = true;
-
     throws(() => {
-      useCacheEntry(cacheKey);
+      useCacheEntry(true);
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useCacheEntry(cacheKey);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useCacheEntry` with cache context missing.", () => {

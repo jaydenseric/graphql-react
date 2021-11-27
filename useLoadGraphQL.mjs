@@ -1,6 +1,5 @@
 import React from "react";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import fetchGraphQL from "./fetchGraphQL.mjs";
 import useCache from "./useCache.mjs";
 import useLoading from "./useLoading.mjs";
@@ -22,29 +21,17 @@ export default function useLoadGraphQL() {
   return React.useCallback(
     (cacheKey, fetchUri, fetchOptions) => {
       if (typeof cacheKey !== "string")
-        throw new TypeError(
-          typeof process === "object" && process.env.NODE_ENV !== "production"
-            ? "Argument 1 `cacheKey` must be a string."
-            : createArgErrorMessageProd(1)
-        );
+        throw new TypeError("Argument 1 `cacheKey` must be a string.");
 
       if (typeof fetchUri !== "string")
-        throw new TypeError(
-          typeof process === "object" && process.env.NODE_ENV !== "production"
-            ? "Argument 2 `fetchUri` must be a string."
-            : createArgErrorMessageProd(2)
-        );
+        throw new TypeError("Argument 2 `fetchUri` must be a string.");
 
       if (
         typeof fetchOptions !== "object" ||
         !fetchOptions ||
         Array.isArray(fetchOptions)
       )
-        throw new TypeError(
-          typeof process === "object" && process.env.NODE_ENV !== "production"
-            ? "Argument 3 `fetchOptions` must be an object."
-            : createArgErrorMessageProd(3)
-        );
+        throw new TypeError("Argument 3 `fetchOptions` must be an object.");
 
       // Avoid mutating the input fetch options.
       const { signal, ...modifiedFetchOptions } = fetchOptions;

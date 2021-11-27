@@ -5,12 +5,10 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadOnMount from "./useLoadOnMount.mjs";
 
@@ -23,46 +21,15 @@ export default (tests) => {
   });
 
   tests.add("`useLoadOnMount` argument 1 `cacheKey` not a string.", () => {
-    const cacheKey = true;
-
     throws(() => {
-      useLoadOnMount(cacheKey);
+      useLoadOnMount(true);
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useLoadOnMount(cacheKey);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useLoadOnMount` argument 2 `load` not a function.", () => {
-    const cacheKey = "a";
-    const load = true;
-
     throws(() => {
-      useLoadOnMount(cacheKey, load);
+      useLoadOnMount("a", true);
     }, new TypeError("Argument 2 `load` must be a function."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useLoadOnMount(cacheKey, load);
-      }, new TypeError(createArgErrorMessageProd(2)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useLoadOnMount` with cache context missing.", () => {

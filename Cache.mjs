@@ -1,5 +1,3 @@
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
-
 /**
  * Cache store.
  * @kind class
@@ -19,11 +17,7 @@ export default class Cache extends EventTarget {
     super();
 
     if (typeof store !== "object" || !store || Array.isArray(store))
-      throw new TypeError(
-        typeof process === "object" && process.env.NODE_ENV !== "production"
-          ? "Constructor argument 1 `store` must be an object."
-          : createArgErrorMessageProd(1)
-      );
+      throw new TypeError("Constructor argument 1 `store` must be an object.");
 
     /**
      * Store of cache [keys]{@link CacheKey} and [values]{@link CacheValue}.

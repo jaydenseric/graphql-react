@@ -1,5 +1,4 @@
 import React from "react";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * A React hook to create a memoized [loader]{@link Loader} from another, that
@@ -17,11 +16,7 @@ import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
  */
 export default function useAutoAbortLoad(load) {
   if (typeof load !== "function")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `load` must be a function."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `load` must be a function.");
 
   const lastLoadingCacheValueRef = React.useRef();
 

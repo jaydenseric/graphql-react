@@ -1,9 +1,7 @@
 import { deepStrictEqual, strictEqual, throws } from "assert";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
@@ -17,142 +15,51 @@ export default (tests) => {
   tests.add(
     "`LoadingCacheValue` constructor argument 1 `loading` not a `Loading` instance.",
     () => {
-      const loading = true;
-
       throws(() => {
-        new LoadingCacheValue(loading);
+        new LoadingCacheValue(true);
       }, new TypeError("Argument 1 `loading` must be a `Loading` instance."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          new LoadingCacheValue(loading);
-        }, new TypeError(createArgErrorMessageProd(1)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 
   tests.add(
     "`LoadingCacheValue` constructor argument 2 `cache` not a `Cache` instance.",
     () => {
-      const loading = new Loading();
-      const cache = true;
-
       throws(() => {
-        new LoadingCacheValue(loading, cache);
+        new LoadingCacheValue(new Loading(), true);
       }, new TypeError("Argument 2 `cache` must be a `Cache` instance."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          new LoadingCacheValue(loading, cache);
-        }, new TypeError(createArgErrorMessageProd(2)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 
   tests.add(
     "`LoadingCacheValue` constructor argument 3 `cacheKey` not a string.",
     () => {
-      const loading = new Loading();
-      const cache = new Cache();
-      const cacheKey = true;
-
       throws(() => {
-        new LoadingCacheValue(loading, cache, cacheKey);
+        new LoadingCacheValue(new Loading(), new Cache(), true);
       }, new TypeError("Argument 3 `cacheKey` must be a string."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          new LoadingCacheValue(loading, cache, cacheKey);
-        }, new TypeError(createArgErrorMessageProd(3)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 
   tests.add(
     "`LoadingCacheValue` constructor argument 4 `loadingResult` not a `Promise` instance.",
     () => {
-      const loading = new Loading();
-      const cache = new Cache();
-      const cacheKey = "a";
-      const loadingResult = true;
-
       throws(() => {
-        new LoadingCacheValue(loading, cache, cacheKey, loadingResult);
+        new LoadingCacheValue(new Loading(), new Cache(), "a", true);
       }, new TypeError("Argument 4 `loadingResult` must be a `Promise` instance."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          new LoadingCacheValue(loading, cache, cacheKey, loadingResult);
-        }, new TypeError(createArgErrorMessageProd(4)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 
   tests.add(
     "`LoadingCacheValue` constructor argument 5 `abortController` not an `AbortController` instance.",
     () => {
-      const loading = new Loading();
-      const cache = new Cache();
-      const cacheKey = "a";
-      const loadingResult = Promise.resolve();
-      const abortController = true;
-
       throws(() => {
         new LoadingCacheValue(
-          loading,
-          cache,
-          cacheKey,
-          loadingResult,
-          abortController
+          new Loading(),
+          new Cache(),
+          "a",
+          Promise.resolve(),
+          true
         );
       }, new TypeError("Argument 5 `abortController` must be an `AbortController` instance."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          new LoadingCacheValue(
-            loading,
-            cache,
-            cacheKey,
-            loadingResult,
-            abortController
-          );
-        }, new TypeError(createArgErrorMessageProd(5)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 

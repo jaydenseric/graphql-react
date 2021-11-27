@@ -14,7 +14,6 @@ import React from "react";
  */
 const HydrationTimeStampContext = React.createContext();
 
-if (typeof process === "object" && process.env.NODE_ENV !== "production")
-  HydrationTimeStampContext.displayName = "HydrationTimeStampContext";
+HydrationTimeStampContext.displayName = "HydrationTimeStampContext";
 
 export default HydrationTimeStampContext;

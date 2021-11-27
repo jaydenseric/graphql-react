@@ -1,4 +1,3 @@
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 import useLoadOnDelete from "./useLoadOnDelete.mjs";
@@ -28,18 +27,10 @@ import useLoadOnStale from "./useLoadOnStale.mjs";
  */
 export default function useAutoLoad(cacheKey, load) {
   if (typeof cacheKey !== "string")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `cacheKey` must be a string."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `cacheKey` must be a string.");
 
   if (typeof load !== "function")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 2 `load` must be a function."
-        : createArgErrorMessageProd(2)
-    );
+    throw new TypeError("Argument 2 `load` must be a function.");
 
   useCacheEntryPrunePrevention(cacheKey);
 

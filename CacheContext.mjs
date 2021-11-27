@@ -14,7 +14,6 @@ import React from "react";
  */
 const CacheContext = React.createContext();
 
-if (typeof process === "object" && process.env.NODE_ENV !== "production")
-  CacheContext.displayName = "CacheContext";
+CacheContext.displayName = "CacheContext";
 
 export default CacheContext;

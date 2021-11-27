@@ -6,7 +6,7 @@ import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
   tests.add("`CacheContext` bundle size.", async () => {
-    await assertBundleSize(new URL("./CacheContext.mjs", import.meta.url), 100);
+    await assertBundleSize(new URL("./CacheContext.mjs", import.meta.url), 120);
   });
 
   tests.add("`CacheContext` used as a React context.", () => {

@@ -1,5 +1,4 @@
 import React from "react";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import useCache from "./useCache.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 
@@ -17,11 +16,7 @@ import useForceUpdate from "./useForceUpdate.mjs";
  */
 export default function useCacheEntry(cacheKey) {
   if (typeof cacheKey !== "string")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `cacheKey` must be a string."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `cacheKey` must be a string.");
 
   const cache = useCache();
   const forceUpdate = useForceUpdate();
@@ -45,9 +40,7 @@ export default function useCacheEntry(cacheKey) {
 
   const value = cache.store[cacheKey];
 
-  if (typeof process === "object" && process.env.NODE_ENV !== "production")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useDebugValue(value);
+  React.useDebugValue(value);
 
   return value;
 }

@@ -8,7 +8,7 @@ export default (tests) => {
   tests.add("`HydrationTimeStampContext` bundle size.", async () => {
     await assertBundleSize(
       new URL("./HydrationTimeStampContext.mjs", import.meta.url),
-      100
+      150
     );
   });
 

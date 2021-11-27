@@ -1,5 +1,4 @@
 import React from "react";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import useCache from "./useCache.mjs";
 
 /**
@@ -27,11 +26,7 @@ function cancelEvent(event) {
  */
 export default function useCacheEntryPrunePrevention(cacheKey) {
   if (typeof cacheKey !== "string")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `cacheKey` must be a string."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `cacheKey` must be a string.");
 
   const cache = useCache();
 

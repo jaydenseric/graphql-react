@@ -1,5 +1,4 @@
 import Cache from "./Cache.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 
 /**
  * Sets a [cache]{@link Cache#store} entry.
@@ -16,18 +15,10 @@ import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
  */
 export default function cacheEntrySet(cache, cacheKey, cacheValue) {
   if (!(cache instanceof Cache))
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 1 `cache` must be a `Cache` instance."
-        : createArgErrorMessageProd(1)
-    );
+    throw new TypeError("Argument 1 `cache` must be a `Cache` instance.");
 
   if (typeof cacheKey !== "string")
-    throw new TypeError(
-      typeof process === "object" && process.env.NODE_ENV !== "production"
-        ? "Argument 2 `cacheKey` must be a string."
-        : createArgErrorMessageProd(2)
-    );
+    throw new TypeError("Argument 2 `cacheKey` must be a string.");
 
   cache.store[cacheKey] = cacheValue;
 

@@ -5,12 +5,10 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadOnDelete from "./useLoadOnDelete.mjs";
 
@@ -23,46 +21,15 @@ export default (tests) => {
   });
 
   tests.add("`useLoadOnDelete` argument 1 `cacheKey` not a string.", () => {
-    const cacheKey = true;
-
     throws(() => {
-      useLoadOnDelete(cacheKey);
+      useLoadOnDelete(true);
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useLoadOnDelete(cacheKey);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useLoadOnDelete` argument 2 `load` not a function.", () => {
-    const cacheKey = "a";
-    const load = true;
-
     throws(() => {
-      useLoadOnDelete(cacheKey, load);
+      useLoadOnDelete("a", true);
     }, new TypeError("Argument 2 `load` must be a function."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useLoadOnDelete(cacheKey, load);
-      }, new TypeError(createArgErrorMessageProd(2)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useLoadOnDelete` with cache context missing.", () => {

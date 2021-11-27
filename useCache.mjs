@@ -15,9 +15,7 @@ import CacheContext from "./CacheContext.mjs";
 export default function useCache() {
   const cache = React.useContext(CacheContext);
 
-  if (typeof process === "object" && process.env.NODE_ENV !== "production")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useDebugValue(cache);
+  React.useDebugValue(cache);
 
   if (cache === undefined) throw new TypeError("Cache context missing.");
 

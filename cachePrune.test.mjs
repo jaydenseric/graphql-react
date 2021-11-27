@@ -1,8 +1,6 @@
 import { deepStrictEqual, strictEqual, throws } from "assert";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import cachePrune from "./cachePrune.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
@@ -11,46 +9,15 @@ export default (tests) => {
   });
 
   tests.add("`cachePrune` argument 1 `cache` not a `Cache` instance.", () => {
-    const cache = true;
-
     throws(() => {
-      cachePrune(cache);
+      cachePrune(true);
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        cachePrune(cache);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`cachePrune` argument 2 `cacheKeyMatcher` not a function.", () => {
-    const cache = new Cache();
-    const cacheKey = true;
-
     throws(() => {
-      cachePrune(cache, cacheKey);
+      cachePrune(new Cache(), true);
     }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        cachePrune(cache, cacheKey);
-      }, new TypeError(createArgErrorMessageProd(2)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`cachePrune` argument 2 `cacheKeyMatcher` unused.", () => {

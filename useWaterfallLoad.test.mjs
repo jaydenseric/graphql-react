@@ -7,12 +7,10 @@ import {
 import React from "react";
 import ReactDOMServer from "react-dom/server.js";
 import waterfallRender from "react-waterfall-render/public/waterfallRender.js";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 import useWaterfallLoad from "./useWaterfallLoad.mjs";
@@ -26,46 +24,15 @@ export default (tests) => {
   });
 
   tests.add("`useWaterfallLoad` argument 1 `cacheKey` not a string.", () => {
-    const cacheKey = true;
-
     throws(() => {
-      useWaterfallLoad(cacheKey);
+      useWaterfallLoad(true);
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useWaterfallLoad(cacheKey);
-      }, new TypeError(createArgErrorMessageProd(1)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useWaterfallLoad` argument 2 `load` not a function.", () => {
-    const cacheKey = "a";
-    const load = true;
-
     throws(() => {
-      useWaterfallLoad(cacheKey, load);
+      useWaterfallLoad("a", true);
     }, new TypeError("Argument 2 `load` must be a function."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        useWaterfallLoad(cacheKey, load);
-      }, new TypeError(createArgErrorMessageProd(2)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`useWaterfallLoad` with cache context missing.", () => {

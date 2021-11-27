@@ -15,9 +15,7 @@ import LoadingContext from "./LoadingContext.mjs";
 export default function useLoading() {
   const loading = React.useContext(LoadingContext);
 
-  if (typeof process === "object" && process.env.NODE_ENV !== "production")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useDebugValue(loading);
+  React.useDebugValue(loading);
 
   if (loading === undefined) throw new TypeError("Loading context missing.");
 

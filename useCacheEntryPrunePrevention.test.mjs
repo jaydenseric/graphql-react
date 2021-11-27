@@ -6,11 +6,9 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 
@@ -25,24 +23,9 @@ export default (tests) => {
   tests.add(
     "`useCacheEntryPrunePrevention` argument 1 `cacheKey` not a string.",
     () => {
-      const cacheKey = true;
-
       throws(() => {
-        useCacheEntryPrunePrevention(cacheKey);
+        useCacheEntryPrunePrevention(true);
       }, new TypeError("Argument 1 `cacheKey` must be a string."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          useCacheEntryPrunePrevention(cacheKey);
-        }, new TypeError(createArgErrorMessageProd(1)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 

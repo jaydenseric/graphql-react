@@ -1,8 +1,6 @@
 import { deepStrictEqual, strictEqual, throws } from "assert";
-import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import cacheEntryStale from "./cacheEntryStale.mjs";
-import createArgErrorMessageProd from "./createArgErrorMessageProd.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
 export default (tests) => {
@@ -16,47 +14,16 @@ export default (tests) => {
   tests.add(
     "`cacheEntryStale` argument 1 `cache` not a `Cache` instance.",
     () => {
-      const cache = true;
-
       throws(() => {
-        cacheEntryStale(cache);
+        cacheEntryStale(true);
       }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
-
-      const revertGlobals = revertableGlobals(
-        { NODE_ENV: "production" },
-        process.env
-      );
-
-      try {
-        throws(() => {
-          cacheEntryStale(cache);
-        }, new TypeError(createArgErrorMessageProd(1)));
-      } finally {
-        revertGlobals();
-      }
     }
   );
 
   tests.add("`cacheEntryStale` argument 2 `cacheKey` not a string.", () => {
-    const cache = new Cache();
-    const cacheKey = true;
-
     throws(() => {
-      cacheEntryStale(cache, cacheKey);
+      cacheEntryStale(new Cache(), true);
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
-
-    const revertGlobals = revertableGlobals(
-      { NODE_ENV: "production" },
-      process.env
-    );
-
-    try {
-      throws(() => {
-        cacheEntryStale(cache, cacheKey);
-      }, new TypeError(createArgErrorMessageProd(2)));
-    } finally {
-      revertGlobals();
-    }
   });
 
   tests.add("`cacheEntryStale` with entry not populated.", () => {
