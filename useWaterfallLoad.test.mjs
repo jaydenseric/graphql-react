@@ -4,7 +4,7 @@ import {
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
-import { renderToStaticMarkup } from "react-dom/server.js";
+import ReactDOMServer from "react-dom/server.js";
 import waterfallRender from "react-waterfall-render/public/waterfallRender.js";
 import { jsx } from "react/jsx-runtime.js";
 import revertableGlobals from "revertable-globals";
@@ -162,7 +162,7 @@ export default (tests) => {
             value: cache,
             children: jsx(TestComponent, {}),
           }),
-          renderToStaticMarkup
+          ReactDOMServer.renderToStaticMarkup
         ),
         new TypeError(
           "Argument 2 `load` must return a `LoadingCacheValue` instance."
@@ -208,7 +208,7 @@ export default (tests) => {
           value: cache,
           children: jsx(TestComponent, {}),
         }),
-        renderToStaticMarkup
+        ReactDOMServer.renderToStaticMarkup
       );
 
       deepStrictEqual(loadCalls, [false]);
@@ -259,7 +259,7 @@ export default (tests) => {
           value: cache,
           children: jsx(TestComponent, {}),
         }),
-        renderToStaticMarkup
+        ReactDOMServer.renderToStaticMarkup
       );
 
       deepStrictEqual(loadCalls, []);

@@ -18,6 +18,7 @@
 - Simplified package scripts.
 - Removed the [`isobject`](https://npm.im/isobject) dependency.
 - Refactored the `useCacheEntryPrunePrevention` React hook to avoid the `React.useCallback` React hook.
+- Avoid named imports from non ESM React packages.
 - Configured polyfilled globals in ESLint config for [`eslint-plugin-compat`](https://npm.im/eslint-plugin-compat).
 - Fixed JSDoc grammar typos.
 - Reorganized the test file structure.

@@ -45,7 +45,7 @@ import useAutoLoad from "graphql-react/useAutoLoad.mjs";
 import useCacheEntry from "graphql-react/useCacheEntry.mjs";
 import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
 import useWaterfallLoad from "graphql-react/useWaterfallLoad.mjs";
-import { useCallback } from "react";
+import React from "react";
 
 // The query is just a string; no need to use `gql` from `graphql-tag`. The
 // special comment before the string allows editor syntax highlighting, Prettier
@@ -71,7 +71,7 @@ export default function GitHubRepoStars({ repoId }) {
   // GraphQL (e.g. fetching from a REST API) can be made.
   const loadGraphQL = useLoadGraphQL();
 
-  const load = useCallback(
+  const load = React.useCallback(
     () =>
       // To be DRY, utilize a custom hook for each API your app loads from, e.g.
       // `useLoadGraphQLGitHub`.

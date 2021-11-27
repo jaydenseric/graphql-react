@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import { useContext } from "react";
+import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 import { jsx } from "react/jsx-runtime.js";
 import CacheContext from "./CacheContext.mjs";
@@ -11,7 +11,7 @@ export default (tests) => {
   });
 
   tests.add("`CacheContext` used as a React context.", () => {
-    const TestComponent = () => useContext(CacheContext);
+    const TestComponent = () => React.useContext(CacheContext);
     const contextValue = "a";
     const testRenderer = ReactTestRenderer.create(
       jsx(CacheContext.Provider, {

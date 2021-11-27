@@ -1,5 +1,5 @@
 import { strictEqual, throws } from "assert";
-import { useContext } from "react";
+import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 import { jsx } from "react/jsx-runtime.js";
 import Cache from "./Cache.mjs";
@@ -32,9 +32,11 @@ export default (tests) => {
     const results = [];
     const TestComponent = () => {
       results.push({
-        hydrationTimeStampContextValue: useContext(HydrationTimeStampContext),
-        cacheContextValue: useContext(CacheContext),
-        loadingContextValue: useContext(LoadingContext),
+        hydrationTimeStampContextValue: React.useContext(
+          HydrationTimeStampContext
+        ),
+        cacheContextValue: React.useContext(CacheContext),
+        loadingContextValue: React.useContext(LoadingContext),
       });
       return null;
     };
