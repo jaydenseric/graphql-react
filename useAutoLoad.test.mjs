@@ -1,6 +1,6 @@
 import { strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
-import { jsx } from "react/jsx-runtime.js";
+import React from "react";
 import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -89,10 +89,7 @@ export default (tests) => {
     }
 
     const wrapper = ({ children }) =>
-      jsx(CacheContext.Provider, {
-        value: cache,
-        children,
-      });
+      React.createElement(CacheContext.Provider, { value: cache }, children);
 
     try {
       // Test load on mount.

@@ -6,7 +6,7 @@ import {
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
 import { AbortError, Response } from "node-fetch";
-import { jsx } from "react/jsx-runtime.js";
+import React from "react";
 import revertableGlobals from "revertable-globals";
 import TestDirector from "test-director";
 import Cache from "./Cache.mjs";
@@ -48,10 +48,7 @@ export default (tests) => {
     () => {
       try {
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: true,
-            children,
-          });
+          React.createElement(CacheContext.Provider, { value: true }, children);
 
         const revertConsole = suppressErrorOutput();
 
@@ -77,10 +74,7 @@ export default (tests) => {
     try {
       const cache = new Cache();
       const wrapper = ({ children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children,
-        });
+        React.createElement(CacheContext.Provider, { value: cache }, children);
 
       const revertConsole = suppressErrorOutput();
 
@@ -104,13 +98,15 @@ export default (tests) => {
       try {
         const cache = new Cache();
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children: jsx(LoadingContext.Provider, {
-              value: true,
-              children,
-            }),
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            React.createElement(
+              LoadingContext.Provider,
+              { value: true },
+              children
+            )
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -137,13 +133,15 @@ export default (tests) => {
       const cache = new Cache();
       const loading = new Loading();
       const wrapper = ({ children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children: jsx(LoadingContext.Provider, {
-            value: loading,
-            children,
-          }),
-        });
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(
+            LoadingContext.Provider,
+            { value: loading },
+            children
+          )
+        );
 
       const { result, rerender } = renderHook(() => useLoadGraphQL(), {
         wrapper,

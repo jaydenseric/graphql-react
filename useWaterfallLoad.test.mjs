@@ -4,9 +4,9 @@ import {
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import React from "react";
 import ReactDOMServer from "react-dom/server.js";
 import waterfallRender from "react-waterfall-render/public/waterfallRender.js";
-import { jsx } from "react/jsx-runtime.js";
 import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -89,10 +89,7 @@ export default (tests) => {
     () => {
       try {
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: true,
-            children,
-          });
+          React.createElement(CacheContext.Provider, { value: true }, children);
 
         const revertConsole = suppressErrorOutput();
 
@@ -120,10 +117,11 @@ export default (tests) => {
       try {
         const cache = new Cache();
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children,
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            children
+          );
 
         let didLoad = false;
 
@@ -158,10 +156,11 @@ export default (tests) => {
 
       await rejects(
         waterfallRender(
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children: jsx(TestComponent, {}),
-          }),
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            React.createElement(TestComponent)
+          ),
           ReactDOMServer.renderToStaticMarkup
         ),
         new TypeError(
@@ -204,10 +203,11 @@ export default (tests) => {
       };
 
       const html = await waterfallRender(
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children: jsx(TestComponent, {}),
-        }),
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(TestComponent)
+        ),
         ReactDOMServer.renderToStaticMarkup
       );
 
@@ -255,10 +255,11 @@ export default (tests) => {
       };
 
       const html = await waterfallRender(
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children: jsx(TestComponent, {}),
-        }),
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(TestComponent)
+        ),
         ReactDOMServer.renderToStaticMarkup
       );
 

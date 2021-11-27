@@ -5,7 +5,7 @@ import {
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
-import { jsx } from "react/jsx-runtime.js";
+import React from "react";
 import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -65,10 +65,7 @@ export default (tests) => {
     () => {
       try {
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: true,
-            children,
-          });
+          React.createElement(CacheContext.Provider, { value: true }, children);
 
         const revertConsole = suppressErrorOutput();
 
@@ -94,10 +91,11 @@ export default (tests) => {
       try {
         const cache = new Cache();
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children,
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            children
+          );
 
         const cacheKeyA = "a";
 
@@ -177,10 +175,11 @@ export default (tests) => {
           [cacheKeyB]: cacheValueB1,
         });
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children,
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            children
+          );
 
         const { result, rerender } = renderHook(
           ({ cacheKey }) => useCacheEntry(cacheKey),
@@ -253,10 +252,11 @@ export default (tests) => {
           [cacheKey]: cacheValue,
         });
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children,
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            children
+          );
 
         const { result } = renderHook(() => useCacheEntry(cacheKey), {
           wrapper,

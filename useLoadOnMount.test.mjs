@@ -4,7 +4,7 @@ import {
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
-import { jsx } from "react/jsx-runtime.js";
+import React from "react";
 import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -86,10 +86,7 @@ export default (tests) => {
     () => {
       try {
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: true,
-            children,
-          });
+          React.createElement(CacheContext.Provider, { value: true }, children);
 
         const revertConsole = suppressErrorOutput();
 
@@ -117,13 +114,15 @@ export default (tests) => {
       try {
         const cache = new Cache();
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: cache,
-            children: jsx(HydrationTimeStampContext.Provider, {
-              value: true,
-              children,
-            }),
-          });
+          React.createElement(
+            CacheContext.Provider,
+            { value: cache },
+            React.createElement(
+              HydrationTimeStampContext.Provider,
+              { value: true },
+              children
+            )
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -172,10 +171,7 @@ export default (tests) => {
       }
 
       const wrapper = ({ cache, children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children,
-        });
+        React.createElement(CacheContext.Provider, { value: cache }, children);
 
       try {
         const { result, rerender } = renderHook(
@@ -328,10 +324,7 @@ export default (tests) => {
       }
 
       const wrapper = ({ cache, children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children,
-        });
+        React.createElement(CacheContext.Provider, { value: cache }, children);
 
       try {
         const { result, rerender } = renderHook(
@@ -480,13 +473,15 @@ export default (tests) => {
       }
 
       const wrapper = ({ cache, children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children: jsx(HydrationTimeStampContext.Provider, {
-            value: hydrationTimeStamp,
-            children,
-          }),
-        });
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(
+            HydrationTimeStampContext.Provider,
+            { value: hydrationTimeStamp },
+            children
+          )
+        );
 
       try {
         const { result, rerender } = renderHook(
@@ -640,13 +635,15 @@ export default (tests) => {
       }
 
       const wrapper = ({ cache, children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children: jsx(HydrationTimeStampContext.Provider, {
-            value: hydrationTimeStamp,
-            children,
-          }),
-        });
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(
+            HydrationTimeStampContext.Provider,
+            { value: hydrationTimeStamp },
+            children
+          )
+        );
 
       try {
         const { result, rerender } = renderHook(

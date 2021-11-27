@@ -5,7 +5,7 @@ import {
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
-import { jsx } from "react/jsx-runtime.js";
+import React from "react";
 import revertableGlobals from "revertable-globals";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -70,10 +70,7 @@ export default (tests) => {
     () => {
       try {
         const wrapper = ({ children }) =>
-          jsx(CacheContext.Provider, {
-            value: true,
-            children,
-          });
+          React.createElement(CacheContext.Provider, { value: true }, children);
 
         const revertConsole = suppressErrorOutput();
 
@@ -105,10 +102,7 @@ export default (tests) => {
       };
       const cache = new Cache({ ...initialCacheStore });
       const wrapper = ({ children }) =>
-        jsx(CacheContext.Provider, {
-          value: cache,
-          children,
-        });
+        React.createElement(CacheContext.Provider, { value: cache }, children);
 
       const { result, rerender } = renderHook(
         ({ cacheKey }) => useCacheEntryPrunePrevention(cacheKey),

@@ -1,12 +1,9 @@
 import React from "react";
-import jsxRuntime from "react/jsx-runtime.js";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
-
-const { jsx } = jsxRuntime;
 
 /**
  * A React component to provide all the React context required to enable the
@@ -47,14 +44,17 @@ export default function Provider({ cache, children }) {
   if (!(cache instanceof Cache))
     throw new TypeError("Prop `cache` must be a `Cache` instance.");
 
-  return jsx(HydrationTimeStampContext.Provider, {
-    value: hydrationTimeStampRef.current,
-    children: jsx(CacheContext.Provider, {
-      value: cache,
-      children: jsx(LoadingContext.Provider, {
-        value: loadingRef.current,
-        children,
-      }),
-    }),
-  });
+  return React.createElement(
+    HydrationTimeStampContext.Provider,
+    { value: hydrationTimeStampRef.current },
+    React.createElement(
+      CacheContext.Provider,
+      { value: cache },
+      React.createElement(
+        LoadingContext.Provider,
+        { value: loadingRef.current },
+        children
+      )
+    )
+  );
 }

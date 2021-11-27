@@ -1,7 +1,6 @@
 import { strictEqual, throws } from "assert";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
-import { jsx } from "react/jsx-runtime.js";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
@@ -21,7 +20,7 @@ export default (tests) => {
 
     try {
       throws(() => {
-        ReactTestRenderer.create(jsx(Provider, {}));
+        ReactTestRenderer.create(React.createElement(Provider));
       }, new TypeError("Prop `cache` must be a `Cache` instance."));
     } finally {
       revertConsole();
@@ -42,10 +41,11 @@ export default (tests) => {
     };
     const cache = new Cache();
     const testRenderer = ReactTestRenderer.create(
-      jsx(Provider, {
-        cache,
-        children: jsx(TestComponent, {}),
-      })
+      React.createElement(
+        Provider,
+        { cache },
+        React.createElement(TestComponent)
+      )
     );
 
     strictEqual(results.length, 1);
@@ -58,12 +58,15 @@ export default (tests) => {
     strictEqual(results[0].loadingContextValue instanceof Loading, true);
 
     testRenderer.update(
-      jsx(Provider, {
-        // Force the component to re-render by setting a new, useless prop.
-        a: true,
-        cache,
-        children: jsx(TestComponent, {}),
-      })
+      React.createElement(
+        Provider,
+        {
+          // Force the component to re-render by setting a new, useless prop.
+          a: true,
+          cache,
+        },
+        React.createElement(TestComponent)
+      )
     );
 
     strictEqual(results.length, 2);
