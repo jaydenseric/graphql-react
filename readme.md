@@ -990,7 +990,7 @@ A GraphQL result.
 
 #### See
 
-- [GraphQL spec for a response](https://spec.graphql.org/June2018/#sec-Response).
+- [GraphQL spec for a response](https://spec.graphql.org/October2021/#sec-Response).
 
 ---
 
@@ -1009,7 +1009,7 @@ A GraphQL result error; either created by the GraphQL server, or by whatever loa
 
 #### See
 
-- [GraphQL spec for response errors](https://spec.graphql.org/June2018/#sec-Errors).
+- [GraphQL spec for response errors](https://spec.graphql.org/October2021/#sec-Errors).
 
 ---
 

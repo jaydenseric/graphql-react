@@ -51,7 +51,7 @@
  * @type {object}
  * @prop {object} [data] GraphQL response data.
  * @prop {Array<GraphQLResultError>} [errors] GraphQL response errors from the server, along with any loading errors added on the client.
- * @see [GraphQL spec for a response](https://spec.graphql.org/June2018/#sec-Response).
+ * @see [GraphQL spec for a response](https://spec.graphql.org/October2021/#sec-Response).
  */
 
 /**
@@ -64,7 +64,7 @@
  * @prop {Array<{line: number, column: number}>} [locations] GraphQL query locations related to the error.
  * @prop {Array<string>} [path] [GraphQL result]{@link GraphQLResult} `data` field path related to the error.
  * @prop {object} [extensions] Custom error data. If the error was created on the client and not the GraphQL server, this property should be present and contain at least `client: true`, although `code` and error specific properties may be present.
- * @see [GraphQL spec for response errors](https://spec.graphql.org/June2018/#sec-Errors).
+ * @see [GraphQL spec for response errors](https://spec.graphql.org/October2021/#sec-Errors).
  */
 
 /**

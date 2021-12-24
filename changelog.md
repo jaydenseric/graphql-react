@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Updated GraphQL spec URLs in JSDoc and regular comments.
 
 ## 16.0.0
 

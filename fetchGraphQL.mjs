@@ -59,7 +59,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
           (json) => {
             // It’s not safe to assume that the response data format conforms to
             // the GraphQL spec.
-            // https://spec.graphql.org/June2018/#sec-Response-Format
+            // https://spec.graphql.org/October2021/#sec-Response-Format
 
             if (typeof json !== "object" || !json || Array.isArray(json))
               result.errors.push({
@@ -84,7 +84,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                 });
               else {
                 // The `errors` field should be either an array, or not set.
-                // https://spec.graphql.org/June2018/#sec-Errors
+                // https://spec.graphql.org/October2021/#sec-Errors
                 if (hasErrors)
                   if (!Array.isArray(json.errors))
                     result.errors.push({
@@ -98,7 +98,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                   else result.errors.push(...json.errors);
 
                 // The `data` field should be either an object, null, or not set.
-                // https://spec.graphql.org/June2018/#sec-Data
+                // https://spec.graphql.org/October2021/#sec-Data
                 if (hasData)
                   if (
                     // Note that `null` is an object.
