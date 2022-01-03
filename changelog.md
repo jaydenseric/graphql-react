@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Updated the [`react-waterfall-render`](https://npm.im/react-waterfall-render) dependency.
+
 ### Patch
 
 - Updated dev dependencies.
