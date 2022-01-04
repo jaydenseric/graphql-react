@@ -10,6 +10,7 @@
 
 - Updated dev dependencies.
 - Sorted the contents of the package `files` and `exports` fields.
+- Replaced the [`formdata-node`](https://npm.im/formdata-node) dev dependency with [`formdata-polyfill`](https://npm.im/formdata-polyfill) and [`fetch-blob`](https://npm.im/fetch-blob).
 - Updated GraphQL spec URLs in JSDoc and regular comments.
 
 ## 16.0.0
