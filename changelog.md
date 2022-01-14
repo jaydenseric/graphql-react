@@ -16,6 +16,7 @@
 - Check TypeScript types via a new package `types` script.
 - Replaced the [`formdata-node`](https://npm.im/formdata-node) dev dependency with [`formdata-polyfill`](https://npm.im/formdata-polyfill) and [`fetch-blob`](https://npm.im/fetch-blob).
 - Updated GraphQL spec URLs in JSDoc and regular comments.
+- Added a `license.md` MIT License file, fixing [#54](https://github.com/jaydenseric/graphql-react/issues/54).
 
 ## 16.0.0
 
