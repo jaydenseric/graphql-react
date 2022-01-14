@@ -1,18 +1,17 @@
+// @ts-check
+
 import React from "react";
 
+/** @typedef {import("./Loading.mjs").default} Loading */
+
 /**
- * React context for a [`Loading`]{@link Loading} instance.
- * @kind member
- * @name LoadingContext
- * @type {object}
- * @prop {Function} Provider [React context provider component](https://reactjs.org/docs/context.html#contextprovider).
- * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
- * @example <caption>How to import.</caption>
- * ```js
- * import LoadingContext from "graphql-react/LoadingContext.mjs";
- * ```
+ * [React context](https://reactjs.org/docs/context.html) for a
+ * {@linkcode Loading} instance.
+ * @type {React.Context<Loading | undefined>}
  */
-const LoadingContext = React.createContext();
+const LoadingContext = React.createContext(
+  /** @type {Loading | undefined} */ (undefined)
+);
 
 LoadingContext.displayName = "LoadingContext";
 

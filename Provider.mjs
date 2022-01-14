@@ -1,3 +1,5 @@
+// @ts-check
+
 import React from "react";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -6,39 +8,40 @@ import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 
 /**
- * A React component to provide all the React context required to enable the
- * entire `graphql-react` API:
+ * A React component to provide all the React context required to fully enable
+ * [`graphql-react`](https://npm.im/graphql-react) functionality:
  *
- * - [Hydration time stamp context]{@link HydrationTimeStampContext}
- * - [Cache context]{@link CacheContext}
- * - [Loading context]{@link LoadingContext}
- * @kind function
- * @name Provider
- * @param {object} props Component props.
- * @param {Cache} props.cache [`Cache`]{@link Cache} instance.
- * @param {ReactNode} [props.children] React children.
- * @returns {ReactNode} React virtual DOM node.
- * @example <caption>How to import.</caption>
+ * - {@linkcode HydrationTimeStampContext}
+ * - {@linkcode CacheContext}
+ * - {@linkcode LoadingContext}
+ * @param {ProviderProps} props React component props.
+ * @example
+ * Provide a {@linkcode Cache} instance for an app:
+ *
  * ```js
- * import Provider from "graphql-react/Provider.mjs";
- * ```
- * @example <caption>Provide a [`Cache`]{@link Cache} instance for an app.</caption>
- * ```jsx
  * import Cache from "graphql-react/Cache.mjs";
  * import Provider from "graphql-react/Provider.mjs";
  * import React from "react";
  *
  * const cache = new Cache();
  *
- * const App = ({ children }) => <Provider cache={cache}>{children}</Provider>;
+ * function App({ children }) {
+ *   return React.createElement(Provider, { cache }, children);
+ * }
  * ```
  */
 export default function Provider({ cache, children }) {
-  const hydrationTimeStampRef = React.useRef();
+  const hydrationTimeStampRef = React.useRef(
+    /** @type {DOMHighResTimeStamp | undefined} */ (undefined)
+  );
+
   if (!hydrationTimeStampRef.current)
     hydrationTimeStampRef.current = performance.now();
 
-  const loadingRef = React.useRef();
+  const loadingRef = React.useRef(
+    /** @type {Loading | undefined} */ (undefined)
+  );
+
   if (!loadingRef.current) loadingRef.current = new Loading();
 
   if (!(cache instanceof Cache))
@@ -58,3 +61,10 @@ export default function Provider({ cache, children }) {
     )
   );
 }
+
+/**
+ * {@linkcode Provider} React component props.
+ * @typedef {object} ProviderProps
+ * @prop {Cache} cache {@linkcode Cache} instance.
+ * @prop {React.ReactNode} [children] React children.
+ */

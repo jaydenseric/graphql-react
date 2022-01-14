@@ -1,18 +1,25 @@
+// @ts-check
+
 import { strictEqual } from "assert";
 import {
   act,
   cleanup,
   renderHook,
 } from "@testing-library/react-hooks/lib/pure.js";
+import assertTypeOf from "./test/assertTypeOf.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 
+/**
+ * Adds `useForceUpdate` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useForceUpdate` forcing an update.", async () => {
     try {
       const { result } = renderHook(() => useForceUpdate());
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
 
       act(() => {
@@ -20,7 +27,7 @@ export default (tests) => {
       });
 
       strictEqual(result.all.length, 2);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
 
       act(() => {
@@ -28,7 +35,7 @@ export default (tests) => {
       });
 
       strictEqual(result.all.length, 3);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
     } finally {
       cleanup();

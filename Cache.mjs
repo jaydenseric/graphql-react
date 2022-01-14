@@ -1,18 +1,15 @@
+// @ts-check
+
 /**
  * Cache store.
- * @kind class
- * @name Cache
- * @param {object} [store={}] Initial [cache store]{@link Cache#store}. Useful for hydrating cache data from a server side render prior to the initial client side render.
- * @example <caption>How to import.</caption>
- * ```js
- * import Cache from "graphql-react/Cache.mjs";
- * ```
- * @example <caption>Construct a new instance.</caption>
- * ```js
- * const cache = new Cache();
- * ```
+ * @see {@link CacheEventMap `CacheEventMap`} for a map of possible events.
  */
 export default class Cache extends EventTarget {
+  /**
+   * @param {CacheStore} [store] Initial {@link Cache.store cache store} record.
+   *   Defaults to `{}`. Useful for hydrating cache data from a server side
+   *   render prior to the initial client side render.
+   */
   constructor(store = {}) {
     super();
 
@@ -20,50 +17,54 @@ export default class Cache extends EventTarget {
       throw new TypeError("Constructor argument 1 `store` must be an object.");
 
     /**
-     * Store of cache [keys]{@link CacheKey} and [values]{@link CacheValue}.
-     * @kind member
-     * @name Cache#store
-     * @type {object}
+     * Store of cache {@link CacheKey keys} and associated
+     * {@link CacheValue values}.
+     * @type {CacheStore}
      */
     this.store = store;
   }
 }
 
 /**
- * Signals that a [cache store]{@link Cache#store} entry was set. The event name
- * starts with the [cache key]{@link CacheKey} of the set entry, followed by
- * `/set`.
- * @kind event
- * @name Cache#event:set
- * @type {CustomEvent}
- * @prop {object} detail Event detail.
- * @prop {CacheValue} detail.cacheValue Cache value that was set.
+ * Map of possible {@linkcode Cache} events. Note that the keys don’t match the
+ * dispatched event names that dynamically contain the associated
+ * {@link CacheKey cache key}.
+ * @typedef {object} CacheEventMap
+ * @prop {CustomEvent<CacheEventSetDetail>} set Signals that a
+ *   {@link Cache.store cache store} entry was set. The event name starts with
+ *   the {@link CacheKey cache key} of the set entry, followed by `/set`.
+ * @prop {CustomEvent} stale Signals that a {@link Cache.store cache store}
+ *   entry is now stale (often due to a mutation) and should probably be
+ *   reloaded. The event name starts with the
+ *   {@link CacheKey cache key} of the stale entry, followed by `/stale`.
+ * @prop {CustomEvent} prune Signals that a {@link Cache.store cache store}
+ *   entry will be deleted unless the event is canceled via
+ *   `event.preventDefault()`. The event name starts with the
+ *   {@link CacheKey cache key} of the entry being pruned, followed by `/prune`.
+ * @prop {CustomEvent} delete Signals that a {@link Cache.store cache store}
+ *   entry was deleted. The event name starts with the
+ *   {@link CacheKey cache key} of the deleted entry, followed by `/delete`.
  */
 
 /**
- * Signals that a [cache store]{@link Cache#store} entry is now stale (often due
- * to a mutation) and should probably be reloaded. The event name starts with
- * the [cache key]{@link CacheKey} of the stale entry, followed by `/stale`.
- * @kind event
- * @name Cache#event:stale
- * @type {CustomEvent}
+ * @typedef {object} CacheEventSetDetail
+ * @prop {CacheValue} cacheValue The set {@link CacheValue cache value}.
  */
 
 /**
- * Signals that a [cache store]{@link Cache#store} entry will be deleted unless
- * the event is canceled via `event.preventDefault()`. The event name starts
- * with the [cache key]{@link CacheKey} of the entry being pruned, followed by
- * `/prune`.
- * @kind event
- * @name Cache#event:prune
- * @type {CustomEvent}
+ * A unique key to access a {@link CacheValue cache value}.
+ * @typedef {string} CacheKey
  */
 
 /**
- * Signals that a [cache store]{@link Cache#store} entry was deleted. The event
- * name starts with the [cache key]{@link CacheKey} of the deleted entry,
- * followed by `/delete`.
- * @kind event
- * @name Cache#event:delete
- * @type {CustomEvent}
+ * A {@link Cache.store cache store} value. If server side rendering, it should
+ * be JSON serializable for client hydration. It should contain information
+ * about any errors that occurred during loading so they can be rendered, and if
+ * server side rendering, be hydrated on the client.
+ * @typedef {unknown} CacheValue
+ */
+
+/**
+ * Cache store record.
+ * @typedef {Record<CacheKey, CacheValue>} CacheStore
  */

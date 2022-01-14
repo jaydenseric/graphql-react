@@ -1,20 +1,17 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+
 /**
- * Prunes a [cache]{@link Cache#store} entry, if no
- * [prune event]{@link Cache#event:prune} listener cancels the
- * [cache]{@link Cache#store} entry deletion via `event.preventDefault()`.
- * @kind function
- * @name cacheEntryPrune
+ * Prunes a {@link Cache.store cache store} entry (if present) by dispatching
+ * the {@linkcode Cache} event {@link CacheEventMap.prune `prune`} and if no
+ * listener cancels it via `event.preventDefault()`, using
+ * {@linkcode cacheEntryDelete}.
  * @param {Cache} cache Cache to update.
- * @param {CacheKey} cacheKey Cache key.
- * @fires Cache#event:prune
- * @fires Cache#event:delete
- * @example <caption>How to import.</caption>
- * ```js
- * import cacheEntryPrune from "graphql-react/cacheEntryPrune.mjs";
- * ```
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryPrune(cache, cacheKey) {
   if (!(cache instanceof Cache))

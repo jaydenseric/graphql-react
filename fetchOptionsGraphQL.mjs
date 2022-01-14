@@ -1,35 +1,38 @@
+// @ts-check
+
 import extractFiles from "extract-files/public/extractFiles.js";
 
+/** @typedef {import("./types.mjs").GraphQLOperation} GraphQLOperation */
+
 /**
- * Creates default [`fetch` options]{@link FetchOptions} for a
- * [GraphQL operation]{@link GraphQLOperation}. If the
- * [GraphQL operation]{@link GraphQLOperation} contains files to upload, the
- * options will be for a
+ * Creates default {@link RequestInit `fetch` options} for a
+ * {@link GraphQLOperation GraphQL operation}. If the operation contains files
+ * to upload, the options will be for a
  * [GraphQL multipart request](https://github.com/jaydenseric/graphql-multipart-request-spec),
  * otherwise they will be for a regular
  * [GraphQL `POST` request](https://github.com/graphql/graphql-over-http/blob/main/spec/GraphQLOverHTTP.md#post).
  *
- * This utility exists for user convenience and isn’t used directly by the
- * `graphql-react` API. If there is no chance the
- * [GraphQL operation]{@link GraphQLOperation} contains files, avoid using this
- * utility for a smaller bundle size.
- * @kind function
- * @name fetchOptionsGraphQL
+ * This utility exists for convenience in projects and isn’t used directly by
+ * this library. Avoid using it if there’s no chance the operation contains
+ * files.
  * @param {GraphQLOperation} operation GraphQL operation.
- * @returns {FetchOptions} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
- * @example <caption>How to import.</caption>
- * ```js
- * import fetchOptionsGraphQL from "graphql-react/fetchOptionsGraphQL.mjs";
- * ```
+ * @returns {RequestInit} [`fetch`](https://developer.mozilla.org/docs/Web/API/Fetch_API) options.
  */
 export default function fetchOptionsGraphQL(operation) {
+  /** @type {RequestInit} */
   const fetchOptions = {
     method: "POST",
-    headers: { Accept: "application/json" },
+    headers: {
+      Accept: "application/json",
+    },
   };
 
-  const { clone, files } = extractFiles(operation);
-  const operationJSON = JSON.stringify(clone);
+  const result = extractFiles(operation);
+
+  /** @type {Map<File | Blob, Array<string>>} */
+  const files = result.files;
+
+  const operationJSON = JSON.stringify(result.clone);
 
   if (files.size) {
     // See the GraphQL multipart request spec:
@@ -39,7 +42,9 @@ export default function fetchOptionsGraphQL(operation) {
 
     form.set("operations", operationJSON);
 
+    /** @type {Record<string, Array<string>>} */
     const map = {};
+
     let i = 0;
     files.forEach((paths) => {
       map[++i] = paths;
@@ -48,12 +53,19 @@ export default function fetchOptionsGraphQL(operation) {
 
     i = 0;
     files.forEach((paths, file) => {
-      form.set(`${++i}`, file, file.name);
+      form.set(
+        `${++i}`,
+        file,
+        // @ts-ignore It’s ok to be undefined for a `Blob` instance.
+        file.name
+      );
     });
 
     fetchOptions.body = form;
   } else {
-    fetchOptions.headers["Content-Type"] = "application/json";
+    /** @type {Record<string, string>} */ (fetchOptions.headers)[
+      "Content-Type"
+    ] = "application/json";
     fetchOptions.body = operationJSON;
   }
 

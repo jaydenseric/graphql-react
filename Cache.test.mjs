@@ -1,7 +1,14 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import Cache from "./Cache.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
+/**
+ * Adds `Cache` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`Cache` bundle size.", async () => {
     await assertBundleSize(new URL("./Cache.mjs", import.meta.url), 200);
@@ -9,7 +16,10 @@ export default (tests) => {
 
   tests.add("`Cache` constructor argument 1 `store`, not an object.", () => {
     throws(() => {
-      new Cache(null);
+      new Cache(
+        // @ts-expect-error Testing invalid.
+        null
+      );
     }, new TypeError("Constructor argument 1 `store` must be an object."));
   });
 
@@ -32,25 +42,23 @@ export default (tests) => {
   tests.add("`Cache` events.", () => {
     const cache = new Cache();
 
-    strictEqual(cache instanceof EventTarget, true);
+    assertInstanceOf(cache, EventTarget);
 
-    let listenedEvent;
+    /** @type {Event | null} */
+    let listenedEvent = null;
 
+    /** @type {EventListener} */
     const listener = (event) => {
       listenedEvent = event;
     };
 
     const eventName = "a";
-    const eventDetail = 1;
-    const event = new CustomEvent(eventName, {
-      detail: eventDetail,
-    });
+    const event = new CustomEvent(eventName);
 
     cache.addEventListener(eventName, listener);
     cache.dispatchEvent(event);
 
-    deepStrictEqual(listenedEvent, event);
-    strictEqual(listenedEvent.detail, eventDetail);
+    strictEqual(listenedEvent, event);
 
     listenedEvent = null;
 

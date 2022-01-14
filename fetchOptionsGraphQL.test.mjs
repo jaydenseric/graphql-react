@@ -1,10 +1,17 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual } from "assert";
 import { File } from "fetch-blob/file.js";
 import { FormData } from "formdata-polyfill/esm.min.js";
 import revertableGlobals from "revertable-globals";
 import fetchOptionsGraphQL from "./fetchOptionsGraphQL.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
+/**
+ * Adds `fetchOptionsGraphQL` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`fetchOptionsGraphQL` bundle size.", async () => {
     await assertBundleSize(
@@ -39,7 +46,7 @@ export default (tests) => {
 
       strictEqual(options.method, "POST");
       deepStrictEqual(options.headers, { Accept: "application/json" });
-      strictEqual(options.body instanceof FormData, true);
+      assertInstanceOf(options.body, FormData);
 
       const formDataEntries = Array.from(options.body.entries());
 
@@ -50,7 +57,7 @@ export default (tests) => {
       ]);
       deepStrictEqual(formDataEntries[1], ["map", '{"1":["variables.a"]}']);
       strictEqual(formDataEntries[2][0], "1");
-      strictEqual(formDataEntries[2][1] instanceof File, true);
+      assertInstanceOf(formDataEntries[2][1], File);
       strictEqual(formDataEntries[2][1].name, fileName);
     } finally {
       revertGlobals();

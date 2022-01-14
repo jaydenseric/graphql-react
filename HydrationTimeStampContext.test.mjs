@@ -1,9 +1,15 @@
+// @ts-check
+
 import { strictEqual } from "assert";
 import React from "react";
-import ReactTestRenderer from "react-test-renderer";
+import ReactDOMServer from "react-dom/server.js";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
+/**
+ * Adds `HydrationTimeStampContext` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`HydrationTimeStampContext` bundle size.", async () => {
     await assertBundleSize(
@@ -13,16 +19,24 @@ export default (tests) => {
   });
 
   tests.add("`HydrationTimeStampContext` used as a React context.", () => {
-    const TestComponent = () => React.useContext(HydrationTimeStampContext);
-    const contextValue = "a";
-    const testRenderer = ReactTestRenderer.create(
+    let contextValue;
+
+    /** Test component. */
+    function TestComponent() {
+      contextValue = React.useContext(HydrationTimeStampContext);
+      return null;
+    }
+
+    const value = 1;
+
+    ReactDOMServer.renderToStaticMarkup(
       React.createElement(
         HydrationTimeStampContext.Provider,
-        { value: contextValue },
+        { value },
         React.createElement(TestComponent)
       )
     );
 
-    strictEqual(testRenderer.toJSON(), contextValue);
+    strictEqual(contextValue, value);
   });
 };

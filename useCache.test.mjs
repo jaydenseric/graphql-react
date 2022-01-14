@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual } from "assert";
 import {
   cleanup,
@@ -10,6 +12,10 @@ import CacheContext from "./CacheContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCache from "./useCache.mjs";
 
+/**
+ * Adds `useCache` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useCache` bundle size.", async () => {
     await assertBundleSize(new URL("./useCache.mjs", import.meta.url), 350);
@@ -35,8 +41,16 @@ export default (tests) => {
     "`useCache` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -58,6 +72,7 @@ export default (tests) => {
 
   tests.add("`useCache` getting the cache.", () => {
     try {
+      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
       const wrapper = ({ cache, children }) =>
         React.createElement(CacheContext.Provider, { value: cache }, children);
 

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { notStrictEqual, strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
@@ -6,8 +8,13 @@ import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertTypeOf from "./test/assertTypeOf.mjs";
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 
+/**
+ * Adds `useAutoAbortLoad` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useAutoAbortLoad` bundle size.", async () => {
     await assertBundleSize(
@@ -18,16 +25,27 @@ export default (tests) => {
 
   tests.add("`useAutoAbortLoad` argument 1 `load` not a function.", () => {
     throws(() => {
-      useAutoAbortLoad(true);
+      useAutoAbortLoad(
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 1 `load` must be a function."));
   });
 
   tests.add("`useAutoAbortLoad` functionality.", async () => {
     const cache = new Cache();
     const loading = new Loading();
+
+    /**
+     * @type {Array<{
+     *   loader: import("./types.mjs").Loader,
+     *   hadArgs: boolean,
+     *   loadingCacheValue: LoadingCacheValue
+     * }>}
+     */
     const loadCalls = [];
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @type {import("./types.mjs").Loader} */
     function loadA() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -46,7 +64,7 @@ export default (tests) => {
       return loadingCacheValue;
     }
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @type {import("./types.mjs").Loader} */
     function loadB() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -65,6 +83,7 @@ export default (tests) => {
       return loadingCacheValue;
     }
 
+    /** @param {{ children?: React.ReactNode }} props Props. */
     const wrapper = ({ children }) =>
       React.createElement(CacheContext.Provider, { value: cache }, children);
 
@@ -80,7 +99,7 @@ export default (tests) => {
       );
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 0);
 
@@ -124,7 +143,7 @@ export default (tests) => {
       rerender({ load: loadB });
 
       strictEqual(result.all.length, 3);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       notStrictEqual(result.current, result.all[1]);
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 2);

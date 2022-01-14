@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
@@ -9,9 +11,28 @@ import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadOnMount from "./useLoadOnMount.mjs";
 
+/**
+ * A dummy loader for testing.
+ * @type {import("./types.mjs").Loader}
+ */
+const dummyLoader = () =>
+  new LoadingCacheValue(
+    new Loading(),
+    new Cache(),
+    "a",
+    Promise.resolve(),
+    new AbortController()
+  );
+
+/**
+ * Adds `useLoadOnMount` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useLoadOnMount` bundle size.", async () => {
     await assertBundleSize(
@@ -22,13 +43,21 @@ export default (tests) => {
 
   tests.add("`useLoadOnMount` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useLoadOnMount(true);
+      useLoadOnMount(
+        // @ts-expect-error Testing invalid.
+        true,
+        dummyLoader
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
   tests.add("`useLoadOnMount` argument 2 `load` not a function.", () => {
     throws(() => {
-      useLoadOnMount("a", true);
+      useLoadOnMount(
+        "a",
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
 
@@ -37,7 +66,7 @@ export default (tests) => {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadOnMount("a", () => {}));
+        var { result } = renderHook(() => useLoadOnMount("a", dummyLoader));
       } finally {
         revertConsole();
       }
@@ -52,13 +81,21 @@ export default (tests) => {
     "`useLoadOnMount` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnMount("a", () => {}), {
+          var { result } = renderHook(() => useLoadOnMount("a", dummyLoader), {
             wrapper,
           });
         } finally {
@@ -80,13 +117,18 @@ export default (tests) => {
     () => {
       try {
         const cache = new Cache();
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,
             { value: cache },
             React.createElement(
               HydrationTimeStampContext.Provider,
-              { value: true },
+              {
+                // @ts-expect-error Testing invalid.
+                value: true,
+              },
               children
             )
           );
@@ -94,7 +136,7 @@ export default (tests) => {
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnMount("a", () => {}), {
+          var { result } = renderHook(() => useLoadOnMount("a", dummyLoader), {
             wrapper,
           });
         } finally {
@@ -119,24 +161,30 @@ export default (tests) => {
       const cacheA = new Cache();
       const cacheB = new Cache();
 
+      /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
       let loadCalls = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadA() {
         loadCalls.push({
           loader: loadA,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadB() {
         loadCalls.push({
           loader: loadB,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
+      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
       const wrapper = ({ cache, children }) =>
         React.createElement(CacheContext.Provider, { value: cache }, children);
 
@@ -272,24 +320,30 @@ export default (tests) => {
         [cacheKeyB]: 0,
       });
 
+      /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
       let loadCalls = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadA() {
         loadCalls.push({
           loader: loadA,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadB() {
         loadCalls.push({
           loader: loadB,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
+      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
       const wrapper = ({ cache, children }) =>
         React.createElement(CacheContext.Provider, { value: cache }, children);
 
@@ -421,24 +475,30 @@ export default (tests) => {
       const cacheB = new Cache();
       const hydrationTimeStamp = performance.now();
 
+      /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
       let loadCalls = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadA() {
         loadCalls.push({
           loader: loadA,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadB() {
         loadCalls.push({
           loader: loadB,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
+      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
       const wrapper = ({ cache, children }) =>
         React.createElement(
           CacheContext.Provider,
@@ -583,24 +643,30 @@ export default (tests) => {
       });
       const hydrationTimeStamp = performance.now();
 
+      /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
       let loadCalls = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadA() {
         loadCalls.push({
           loader: loadA,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function loadB() {
         loadCalls.push({
           loader: loadB,
           hadArgs: !!arguments.length,
         });
+
+        return dummyLoader();
       }
 
+      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
       const wrapper = ({ cache, children }) =>
         React.createElement(
           CacheContext.Provider,

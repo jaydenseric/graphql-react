@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
@@ -7,11 +9,30 @@ import {
 import React from "react";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadOnDelete from "./useLoadOnDelete.mjs";
 
+/**
+ * A dummy loader for testing.
+ * @type {import("./types.mjs").Loader}
+ */
+const dummyLoader = () =>
+  new LoadingCacheValue(
+    new Loading(),
+    new Cache(),
+    "a",
+    Promise.resolve(),
+    new AbortController()
+  );
+
+/**
+ * Adds `useLoadOnDelete` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useLoadOnDelete` bundle size.", async () => {
     await assertBundleSize(
@@ -22,13 +43,21 @@ export default (tests) => {
 
   tests.add("`useLoadOnDelete` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useLoadOnDelete(true);
+      useLoadOnDelete(
+        // @ts-expect-error Testing invalid.
+        true,
+        dummyLoader
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
   tests.add("`useLoadOnDelete` argument 2 `load` not a function.", () => {
     throws(() => {
-      useLoadOnDelete("a", true);
+      useLoadOnDelete(
+        "a",
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
 
@@ -37,7 +66,7 @@ export default (tests) => {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useLoadOnDelete("a", () => {}));
+        var { result } = renderHook(() => useLoadOnDelete("a", dummyLoader));
       } finally {
         revertConsole();
       }
@@ -52,13 +81,21 @@ export default (tests) => {
     "`useLoadOnDelete` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useLoadOnDelete("a", () => {}), {
+          var { result } = renderHook(() => useLoadOnDelete("a", dummyLoader), {
             wrapper,
           });
         } finally {
@@ -88,24 +125,30 @@ export default (tests) => {
       [cacheKeyB]: 0,
     });
 
+    /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @type {import("./types.mjs").Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
         hadArgs: !!arguments.length,
       });
+
+      return dummyLoader();
     }
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @type {import("./types.mjs").Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
         hadArgs: !!arguments.length,
       });
+
+      return dummyLoader();
     }
 
+    /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
     const wrapper = ({ cache, children }) =>
       React.createElement(CacheContext.Provider, { value: cache }, children);
 

@@ -5,11 +5,14 @@
 ### Major
 
 - Updated the [`react-waterfall-render`](https://npm.im/react-waterfall-render) dependency.
+- Implemented TypeScript types via JSDoc comments, fixing [#6](https://github.com/jaydenseric/graphql-react/issues/6).
 
 ### Patch
 
 - Updated dev dependencies.
 - Sorted the contents of the package `files` and `exports` fields.
+- Removed the [`jsdoc-md`](https://npm.im/jsdoc-md) dev dependency and the package `docs-update` and `docs-check` scripts, replacing the readme “API” section with a manually written “Exports” section.
+- Check TypeScript types via a new package `types` script.
 - Replaced the [`formdata-node`](https://npm.im/formdata-node) dev dependency with [`formdata-polyfill`](https://npm.im/formdata-polyfill) and [`fetch-blob`](https://npm.im/fetch-blob).
 - Updated GraphQL spec URLs in JSDoc and regular comments.
 

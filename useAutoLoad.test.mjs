@@ -1,3 +1,5 @@
+// @ts-check
+
 import { strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
 import React from "react";
@@ -9,8 +11,13 @@ import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
 import cacheEntryStale from "./cacheEntryStale.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertTypeOf from "./test/assertTypeOf.mjs";
 import useAutoLoad from "./useAutoLoad.mjs";
 
+/**
+ * Adds `useAutoLoad` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useAutoLoad` bundle size.", async () => {
     await assertBundleSize(new URL("./useAutoLoad.mjs", import.meta.url), 900);
@@ -18,13 +25,27 @@ export default (tests) => {
 
   tests.add("`useAutoLoad` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useAutoLoad(true);
+      useAutoLoad(
+        // @ts-expect-error Testing invalid.
+        true,
+        new LoadingCacheValue(
+          new Loading(),
+          new Cache(),
+          "a",
+          Promise.resolve(),
+          new AbortController()
+        )
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
   tests.add("`useAutoLoad` argument 2 `load` not a function.", () => {
     throws(() => {
-      useAutoLoad("a", true);
+      useAutoLoad(
+        "a",
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
 
@@ -35,9 +56,16 @@ export default (tests) => {
       [cacheKey]: 0,
     });
     const loading = new Loading();
+
+    /**
+     * @type {Array<{
+     *   hadArgs: boolean,
+     *   loadingCacheValue: LoadingCacheValue
+     * }>}
+     */
     const loadCalls = [];
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @type {import("./types.mjs").Loader} */
     function load() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -55,6 +83,7 @@ export default (tests) => {
       return loadingCacheValue;
     }
 
+    /** @param {{ children?: React.ReactNode }} props Props. */
     const wrapper = ({ children }) =>
       React.createElement(CacheContext.Provider, { value: cache }, children);
 
@@ -67,7 +96,7 @@ export default (tests) => {
       );
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
       strictEqual(loadCalls.length, 1);
       strictEqual(loadCalls[0].hadArgs, false);

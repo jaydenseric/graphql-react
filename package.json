@@ -44,6 +44,7 @@
     "LoadingCacheValue.mjs",
     "LoadingContext.mjs",
     "Provider.mjs",
+    "types.mjs",
     "useAutoAbortLoad.mjs",
     "useAutoLoad.mjs",
     "useCache.mjs",
@@ -78,6 +79,7 @@
     "./LoadingContext.mjs": "./LoadingContext.mjs",
     "./package.json": "./package.json",
     "./Provider.mjs": "./Provider.mjs",
+    "./types.mjs": "./types.mjs",
     "./useAutoAbortLoad.mjs": "./useAutoAbortLoad.mjs",
     "./useAutoLoad.mjs": "./useAutoLoad.mjs",
     "./useCache.mjs": "./useCache.mjs",
@@ -105,6 +107,10 @@
   },
   "devDependencies": {
     "@testing-library/react-hooks": "^7.0.2",
+    "@types/node": "^17.0.7",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-test-renderer": "^17.0.1",
     "abort-controller": "^3.0.0",
     "coverage-node": "^5.0.1",
     "esbuild": "^0.14.10",
@@ -123,22 +129,21 @@
     "filter-console": "^1.0.0",
     "formdata-polyfill": "^4.0.10",
     "gzip-size": "^7.0.0",
-    "jsdoc-md": "^11.0.2",
     "node-fetch": "^3.1.0",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
     "revertable-globals": "^2.0.0",
-    "test-director": "^8.0.1"
+    "test-director": "^8.0.1",
+    "typescript": "^4.6.0-dev.20220103"
   },
   "scripts": {
-    "docs-update": "jsdoc-md",
-    "docs-check": "jsdoc-md -c",
     "eslint": "eslint .",
     "prettier": "prettier -c .",
+    "types": "tsc -p jsconfig.json",
     "tests": "coverage-node test.mjs",
-    "test": "npm run eslint && npm run prettier && npm run docs-check && npm run tests",
+    "test": "npm run eslint && npm run prettier && npm run types && npm run tests",
     "prepublishOnly": "npm test"
   }
 }

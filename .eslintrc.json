@@ -1,6 +1,9 @@
 {
   "extends": ["env"],
   "settings": {
+    "jsdoc": {
+      "mode": "typescript"
+    },
     "polyfills": [
       "AbortController",
       "CustomEvent",
@@ -10,5 +13,10 @@
       "FormData",
       "performance"
     ]
+  },
+  "rules": {
+    "jsdoc/require-description": "off",
+    "jsdoc/require-returns": "off",
+    "jsdoc/valid-types": "off"
   }
 }

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
@@ -10,9 +12,14 @@ import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
+import Deferred from "./test/Deferred.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadingEntry from "./useLoadingEntry.mjs";
 
+/**
+ * Adds `useLoadingEntry` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useLoadingEntry` bundle size.", async () => {
     await assertBundleSize(
@@ -23,7 +30,10 @@ export default (tests) => {
 
   tests.add("`useLoadingEntry` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useLoadingEntry(true);
+      useLoadingEntry(
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
@@ -47,10 +57,14 @@ export default (tests) => {
     "`useLoadingEntry` with loading context value not a `Loading` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             LoadingContext.Provider,
-            { value: true },
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
             children
           );
 
@@ -78,6 +92,8 @@ export default (tests) => {
       try {
         const loading = new Loading();
         const cache = new Cache();
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             LoadingContext.Provider,
@@ -101,12 +117,10 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        let loadingA1ResultResolve;
+        const { promise: loadingA1Result, resolve: loadingA1ResultResolve } =
+          new Deferred();
 
-        const loadingA1Result = new Promise((resolve) => {
-          loadingA1ResultResolve = resolve;
-        });
-
+        /** @type {LoadingCacheValue | undefined} */
         let loadingA1CacheValue;
 
         act(() => {
@@ -125,7 +139,7 @@ export default (tests) => {
 
         await act(async () => {
           loadingA1ResultResolve({});
-          await loadingA1CacheValue.promise;
+          await /** @type {LoadingCacheValue} */ (loadingA1CacheValue).promise;
         });
 
         strictEqual(result.all.length, 3);
@@ -140,12 +154,10 @@ export default (tests) => {
         strictEqual(result.current, undefined);
         strictEqual(result.error, undefined);
 
-        let loadingB1ResultResolve;
+        const { promise: loadingB1Result, resolve: loadingB1ResultResolve } =
+          new Deferred();
 
-        const loadingB1Result = new Promise((resolve) => {
-          loadingB1ResultResolve = resolve;
-        });
-
+        /** @type {LoadingCacheValue | undefined} */
         let loadingB1CacheValue;
 
         act(() => {
@@ -164,7 +176,7 @@ export default (tests) => {
 
         await act(async () => {
           loadingB1ResultResolve({});
-          await loadingB1CacheValue.promise;
+          await /** @type {LoadingCacheValue} */ (loadingB1CacheValue).promise;
         });
 
         strictEqual(result.all.length, 6);
@@ -183,12 +195,8 @@ export default (tests) => {
         const loading = new Loading();
         const cache = new Cache();
         const cacheKeyA = "a";
-
-        let loadingA1ResultResolve;
-
-        const loadingA1Result = new Promise((resolve) => {
-          loadingA1ResultResolve = resolve;
-        });
+        const { promise: loadingA1Result, resolve: loadingA1ResultResolve } =
+          new Deferred();
         const loadingA1CacheValue = new LoadingCacheValue(
           loading,
           cache,
@@ -197,6 +205,7 @@ export default (tests) => {
           new AbortController()
         );
 
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             LoadingContext.Provider,
@@ -218,12 +227,10 @@ export default (tests) => {
         deepStrictEqual(result.current, new Set([loadingA1CacheValue]));
         strictEqual(result.error, undefined);
 
-        let loadingA2ResultResolve;
+        const { promise: loadingA2Result, resolve: loadingA2ResultResolve } =
+          new Deferred();
 
-        const loadingA2Result = new Promise((resolve) => {
-          loadingA2ResultResolve = resolve;
-        });
-
+        /** @type {LoadingCacheValue | undefined} */
         let loadingA2CacheValue;
 
         act(() => {
@@ -254,7 +261,7 @@ export default (tests) => {
 
         await act(async () => {
           loadingA2ResultResolve({});
-          await loadingA2CacheValue.promise;
+          await /** @type {LoadingCacheValue} */ (loadingA2CacheValue).promise;
         });
 
         strictEqual(result.all.length, 4);
@@ -262,13 +269,10 @@ export default (tests) => {
         strictEqual(result.error, undefined);
 
         const cacheKeyB = "b";
+        const { promise: loadingB1Result, resolve: loadingB1ResultResolve } =
+          new Deferred();
 
-        let loadingB1ResultResolve;
-
-        const loadingB1Result = new Promise((resolve) => {
-          loadingB1ResultResolve = resolve;
-        });
-
+        /** @type {LoadingCacheValue | undefined} */
         let loadingB1CacheValue;
 
         loadingB1CacheValue = new LoadingCacheValue(
@@ -287,7 +291,7 @@ export default (tests) => {
 
         await act(async () => {
           loadingB1ResultResolve({});
-          await loadingB1CacheValue.promise;
+          await /** @type {LoadingCacheValue} */ (loadingB1CacheValue).promise;
         });
 
         strictEqual(result.all.length, 6);

@@ -1,18 +1,16 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+
 /**
- * Prunes [cache]{@link Cache#store} entries. Useful after a mutation.
- * @kind function
- * @name cachePrune
+ * Prunes {@link Cache.store cache store} entries by using
+ * {@linkcode cacheEntryPrune} for each entry. Useful after a mutation.
  * @param {Cache} cache Cache to update.
- * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to prune. By default all are matched.
- * @fires Cache#event:prune
- * @fires Cache#event:delete
- * @example <caption>How to import.</caption>
- * ```js
- * import cachePrune from "graphql-react/cachePrune.mjs";
- * ```
+ * @param {import("./types.mjs").CacheKeyMatcher} [cacheKeyMatcher] Matches
+ *   {@link CacheKey cache keys} to prune. By default all are matched.
  */
 export default function cachePrune(cache, cacheKeyMatcher) {
   if (!(cache instanceof Cache))

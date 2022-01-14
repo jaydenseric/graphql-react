@@ -1,25 +1,26 @@
+// @ts-check
+
 import React from "react";
 import WaterfallRenderContext from "react-waterfall-render/WaterfallRenderContext.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import useCache from "./useCache.mjs";
 
+/** @typedef {import("./useAutoLoad.mjs").default} useAutoLoad */
+
 /**
- * A React hook to load a [cache]{@link Cache#store} entry if the
+ * A React hook to load a {@link Cache.store cache store} entry if the
  * [waterfall render context](https://github.com/jaydenseric/react-waterfall-render#member-waterfallrendercontext)
  * is populated, i.e. when
  * [waterfall rendering](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender)
  * for either a server side render or to preload components in a browser
  * environment.
- * @kind function
- * @name useWaterfallLoad
- * @param {CacheKey} cacheKey Cache key.
- * @param {Loader} load Memoized function that starts the loading.
- * @returns {boolean} Did loading start. If so, it’s efficient for the component to return `null` since this render will be discarded anyway for a re-render onces the loading ends.
- * @see [`useAutoLoad`]{@link useAutoLoad}, often used alongside this hook.
- * @example <caption>How to import.</caption>
- * ```js
- * import useWaterfallLoad from "graphql-react/useWaterfallLoad.mjs";
- * ```
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {import("./types.mjs").Loader} load Memoized function that starts the
+ *   loading.
+ * @returns {boolean} Did loading start. If so, it’s efficient for the component
+ *   to return `null` since this render will be discarded anyway for a re-render
+ *   onces the loading ends.
+ * @see {@link useAutoLoad `useAutoLoad`}, often used alongside this hook.
  */
 export default function useWaterfallLoad(cacheKey, load) {
   if (typeof cacheKey !== "string")

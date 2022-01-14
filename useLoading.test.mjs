@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual } from "assert";
 import {
   cleanup,
@@ -10,6 +12,10 @@ import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoading from "./useLoading.mjs";
 
+/**
+ * Adds `useLoading` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useLoading` bundle size.", async () => {
     await assertBundleSize(new URL("./useLoading.mjs", import.meta.url), 300);
@@ -35,10 +41,14 @@ export default (tests) => {
     "`useLoading` with loading context value not a `Loading` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             LoadingContext.Provider,
-            { value: true },
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
             children
           );
 
@@ -62,6 +72,7 @@ export default (tests) => {
 
   tests.add("`useLoading` getting the loading.", () => {
     try {
+      /** @param {{ loading: Loading, children?: React.ReactNode }} props Props. */
       const wrapper = ({ loading, children }) =>
         React.createElement(
           LoadingContext.Provider,

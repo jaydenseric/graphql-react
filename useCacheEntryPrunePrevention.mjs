@@ -1,28 +1,15 @@
+// @ts-check
+
 import React from "react";
 import useCache from "./useCache.mjs";
 
-/**
- * Cancels an event.
- * @kind function
- * @name cancelEvent
- * @param {Event} event Event.
- * @ignore
- */
-function cancelEvent(event) {
-  event.preventDefault();
-}
+/** @typedef {import("./Cache.mjs").default} Cache */
 
 /**
- * A React hook to prevent a [cache]{@link Cache#store} entry from being pruned,
- * by canceling the cache entry deletion for
- * [prune events]{@link Cache#event:prune} with `event.preventDefault()`.
- * @kind function
- * @name useCacheEntryPrunePrevention
- * @param {CacheKey} cacheKey Cache key.
- * @example <caption>How to import.</caption>
- * ```js
- * import useCacheEntryPrunePrevention from "graphql-react/useCacheEntryPrunePrevention.mjs";
- * ```
+ * A React hook to prevent a {@link Cache.store cache store} entry from being
+ * pruned, by canceling the cache entry deletion for
+ * {@link Cache#event:prune prune events} with `event.preventDefault()`.
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
  */
 export default function useCacheEntryPrunePrevention(cacheKey) {
   if (typeof cacheKey !== "string")
@@ -39,4 +26,12 @@ export default function useCacheEntryPrunePrevention(cacheKey) {
       cache.removeEventListener(eventNamePrune, cancelEvent);
     };
   }, [cache, cacheKey]);
+}
+
+/**
+ * Cancels an event.
+ * @param {Event} event Event.
+ */
+function cancelEvent(event) {
+  event.preventDefault();
 }

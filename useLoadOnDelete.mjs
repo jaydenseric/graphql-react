@@ -1,18 +1,17 @@
+// @ts-check
+
 import React from "react";
 import useCache from "./useCache.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+
 /**
- * A React hook to load a [cache]{@link Cache#store} entry after it’s
- * [deleted]{@link Cache#event:delete}, if there isn’t loading for the
- * [cache key]{@link CacheKey} that started after.
- * @kind function
- * @name useLoadOnDelete
+ * A React hook to load a {@link Cache.store cache store} entry after it’s
+ * {@link Cache#event:delete deleted}, if there isn’t loading for the
+ * {@link CacheKey cache key} that started after.
  * @param {CacheKey} cacheKey Cache key.
- * @param {Loader} load Memoized function that starts the loading.
- * @example <caption>How to import.</caption>
- * ```js
- * import useLoadOnDelete from "graphql-react/useLoadOnDelete.mjs";
- * ```
+ * @param {import("./types.mjs").Loader} load Memoized function that starts the
+ *   loading.
  */
 export default function useLoadOnDelete(cacheKey, load) {
   if (typeof cacheKey !== "string")

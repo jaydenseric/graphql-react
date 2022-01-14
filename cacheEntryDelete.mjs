@@ -1,16 +1,14 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+
 /**
- * Deletes a [cache]{@link Cache#store} entry.
- * @kind function
- * @name cacheEntryDelete
+ * Deletes a {@link Cache.store cache store} entry, dispatching the
+ * {@linkcode Cache} event {@link CacheEventMap.delete `delete`}.
  * @param {Cache} cache Cache to update.
- * @param {CacheKey} cacheKey Cache key.
- * @fires Cache#event:delete
- * @example <caption>How to import.</caption>
- * ```js
- * import cacheEntryDelete from "graphql-react/cacheEntryDelete.mjs";
- * ```
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryDelete(cache, cacheKey) {
   if (!(cache instanceof Cache))

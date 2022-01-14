@@ -1,9 +1,12 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual } from "assert";
 import { Response } from "node-fetch";
 import revertableGlobals from "revertable-globals";
 import fetchGraphQL from "./fetchGraphQL.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
+/** @type {ResponseInit} */
 const graphqlResponseOptions = {
   status: 200,
   headers: {
@@ -11,9 +14,13 @@ const graphqlResponseOptions = {
   },
 };
 
+/**
+ * Adds `fetchGraphQL` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`fetchGraphQL` bundle size.", async () => {
-    await assertBundleSize(new URL("./fetchGraphQL.mjs", import.meta.url), 800);
+    await assertBundleSize(new URL("./fetchGraphQL.mjs", import.meta.url), 600);
   });
 
   tests.add("`fetchGraphQL` with global `fetch` API unavailable.", async () => {
@@ -39,6 +46,10 @@ export default (tests) => {
     const fetchOptions = {};
     const fetchErrorMessage = "Message.";
     const revertGlobals = revertableGlobals({
+      /**
+       * @param {string} uri Fetch URI.
+       * @param {RequestInit} options Fetch options.
+       */
       async fetch(uri, options) {
         fetchedUri = uri;
         fetchedOptions = options;
@@ -81,6 +92,11 @@ export default (tests) => {
       const responseJson = "{";
       const fetchResponse = new Response(responseJson, graphqlResponseOptions);
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -139,6 +155,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -201,6 +222,11 @@ export default (tests) => {
       const fetchOptions = {};
       const fetchResponse = new Response("null", graphqlResponseOptions);
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -249,6 +275,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -302,6 +333,11 @@ export default (tests) => {
       const fetchOptions = {};
       const fetchResponse = new Response("{}", graphqlResponseOptions);
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -351,6 +387,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -408,6 +449,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -456,6 +502,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -512,6 +563,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -560,6 +616,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -599,6 +660,11 @@ export default (tests) => {
         statusText: "Unauthorized",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -656,6 +722,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -702,6 +773,11 @@ export default (tests) => {
         }
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -753,6 +829,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -801,6 +882,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -858,6 +944,11 @@ export default (tests) => {
         graphqlResponseOptions
       );
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;
@@ -897,6 +988,11 @@ export default (tests) => {
         statusText: "Internal Server Error",
       });
       const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         * @returns {Promise<Response>} Response.
+         */
         async fetch(uri, options) {
           fetchedUri = uri;
           fetchedOptions = options;

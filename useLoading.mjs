@@ -1,16 +1,12 @@
+// @ts-check
+
 import React from "react";
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 
 /**
- * A React hook to get the [loading context]{@link LoadingContext}.
- * @kind function
- * @name useLoading
+ * A React hook to use the {@linkcode CacheContext}.
  * @returns {Loading} Loading.
- * @example <caption>How to import.</caption>
- * ```js
- * import useLoading from "graphql-react/useLoading.mjs";
- * ```
  */
 export default function useLoading() {
   const loading = React.useContext(LoadingContext);

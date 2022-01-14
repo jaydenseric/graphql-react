@@ -1,16 +1,12 @@
+// @ts-check
+
 import React from "react";
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 
 /**
- * A React hook to get the [cache context]{@link CacheContext}.
- * @kind function
- * @name useCache
+ * A React hook to use the {@linkcode CacheContext}.
  * @returns {Cache} The cache.
- * @example <caption>How to import.</caption>
- * ```js
- * import useCache from "graphql-react/useCache.mjs";
- * ```
  */
 export default function useCache() {
   const cache = React.useContext(CacheContext);

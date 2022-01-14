@@ -1,24 +1,25 @@
+// @ts-check
+
+/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+/** @typedef {import("./types.mjs").Loader} Loader */
+
 import React from "react";
 
 /**
- * A React hook to create a memoized [loader]{@link Loader} from another, that
- * automatically aborts previous loading that started via this hook when new
- * loading starts via this hook, the hook arguments change, or the component
- * unmounts.
- * @kind function
- * @name useAutoAbortLoad
+ * A React hook to create a memoized {@link Loader loader} from
+ * another, that automatically aborts previous loading that started via this
+ * hook when new loading starts via this hook, the hook arguments change, or the
+ * component unmounts.
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {Loader} Memoized function that starts the loading.
- * @example <caption>How to import.</caption>
- * ```js
- * import useAutoAbortLoad from "graphql-react/useAutoAbortLoad.mjs";
- * ```
  */
 export default function useAutoAbortLoad(load) {
   if (typeof load !== "function")
     throw new TypeError("Argument 1 `load` must be a function.");
 
-  const lastLoadingCacheValueRef = React.useRef();
+  const lastLoadingCacheValueRef = React.useRef(
+    /** @type {LoadingCacheValue | undefined} */ (undefined)
+  );
 
   React.useEffect(
     () => () => {
@@ -46,7 +47,7 @@ export default function useAutoAbortLoad(load) {
     // This might not be worth the bundle size increase.
     loadingCacheValue.promise.then(() => {
       if (lastLoadingCacheValueRef.current === loadingCacheValue)
-        lastLoadingCacheValueRef.current = null;
+        lastLoadingCacheValueRef.current = undefined;
     });
 
     return loadingCacheValue;

@@ -1,9 +1,16 @@
+// @ts-check
+
 import { strictEqual } from "assert";
 import React from "react";
-import ReactTestRenderer from "react-test-renderer";
+import ReactDOMServer from "react-dom/server.js";
+import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
+/**
+ * Adds `LoadingContext` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`LoadingContext` bundle size.", async () => {
     await assertBundleSize(
@@ -13,16 +20,24 @@ export default (tests) => {
   });
 
   tests.add("`LoadingContext` used as a React context.", () => {
-    const TestComponent = () => React.useContext(LoadingContext);
-    const contextValue = "a";
-    const testRenderer = ReactTestRenderer.create(
+    let contextValue;
+
+    /** Test component. */
+    function TestComponent() {
+      contextValue = React.useContext(LoadingContext);
+      return null;
+    }
+
+    const value = new Loading();
+
+    ReactDOMServer.renderToStaticMarkup(
       React.createElement(
         LoadingContext.Provider,
-        { value: contextValue },
+        { value },
         React.createElement(TestComponent)
       )
     );
 
-    strictEqual(testRenderer.toJSON(), contextValue);
+    strictEqual(contextValue, value);
   });
 };

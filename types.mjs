@@ -1,104 +1,133 @@
-/**
- * A unique key to access a [cache value]{@link CacheValue}.
- * @kind typedef
- * @name CacheKey
- * @type {string}
- */
+// @ts-check
+
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+/** @typedef {import("./fetchGraphQL.mjs").default} fetchGraphQL */
+/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+
+// Prevent a TypeScript error when importing this module in a JSDoc type.
+export {};
+
+// This module contains types that aren’t specific to a single module.
 
 /**
- * A [cache]{@link Cache#store} value. If server side rendering, it should be
- * JSON serializable for client hydration. It should contain information about
- * any errors that occurred during loading so they can be rendered, and if
- * server side rendering, be hydrated on the client.
- * @kind typedef
- * @name CacheValue
- * @type {*}
- */
-
-/**
- * Matches a [cache key]{@link CacheKey} against a custom condition.
- * @kind typedef
- * @name CacheKeyMatcher
- * @type {Function}
+ * Matches a {@link CacheKey cache key} against a custom condition.
+ * @callback CacheKeyMatcher
  * @param {CacheKey} cacheKey Cache key.
- * @returns {boolean} Does the [cache key]{@link CacheKey} match the custom condition.
- */
-
-/**
- * [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
- * options, called `init` in official specs.
- * @kind typedef
- * @name FetchOptions
- * @type {object}
- * @see [MDN `fetch` parameters docs](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#parameters).
- * @see [Polyfillable `fetch` options](https://github.github.io/fetch/#options). Don’t use other options if `fetch` is polyfilled for Node.js or legacy browsers.
+ * @returns {boolean} Does the `cacheKey` match the custom condition.
  */
 
 /**
  * A GraphQL operation. Additional properties may be used; all are sent to the
  * GraphQL server.
- * @kind typedef
- * @name GraphQLOperation
- * @type {object}
+ * @typedef {object} GraphQLOperation
  * @prop {string} query GraphQL queries or mutations.
- * @prop {object} [variables] Variables used in the `query`.
+ * @prop {Record<string, unknown>} [variables] Variables used in the GraphQL
+ *   queries or mutations.
  */
 
 /**
  * A GraphQL result.
- * @kind typedef
- * @name GraphQLResult
- * @type {object}
- * @prop {object} [data] GraphQL response data.
- * @prop {Array<GraphQLResultError>} [errors] GraphQL response errors from the server, along with any loading errors added on the client.
  * @see [GraphQL spec for a response](https://spec.graphql.org/October2021/#sec-Response).
+ * @template [ErrorTypes=GraphQLResultError]
+ * @typedef {object} GraphQLResult
+ * @prop {Response} [response] The GraphQL server response. Non-enumerable to
+ *   prevent it from serializing to JSON when sending SSR cache to the client
+ *   for hydration.
+ * @prop {Array<ErrorTypes>} [errors] GraphQL errors from the server, along with
+ *   any loading errors added on the client.
+ * @prop {Record<string, unknown> | null} [data] GraphQL data.
  */
 
 /**
- * A GraphQL result error; either created by the GraphQL server, or by whatever
- * loaded the GraphQL on the client (e.g. [`fetchGraphQL`]{@link fetchGraphQL}).
- * @kind typedef
- * @name GraphQLResultError
- * @type {object}
- * @prop {object} message Error message.
- * @prop {Array<{line: number, column: number}>} [locations] GraphQL query locations related to the error.
- * @prop {Array<string>} [path] [GraphQL result]{@link GraphQLResult} `data` field path related to the error.
- * @prop {object} [extensions] Custom error data. If the error was created on the client and not the GraphQL server, this property should be present and contain at least `client: true`, although `code` and error specific properties may be present.
+ * A {@link GraphQLResult.errors GraphQL result error}; either created by the
+ * GraphQL server, or by whatever loaded the GraphQL on the client (e.g.
+ * {@linkcode fetchGraphQL}).
  * @see [GraphQL spec for response errors](https://spec.graphql.org/October2021/#sec-Errors).
+ * @template [Extensions=Record<string, unknown>] Custom error data.
+ * @typedef {object} GraphQLResultError
+ * @prop {string} message Error message.
+ * @prop {Array<{ line: number; column: number }>} [locations] GraphQL query
+ *   locations related to the error.
+ * @prop {Array<string | number>} [path] GraphQL result
+ *   {@link GraphQLResult.data `data`} property path related to the error.
+ * @prop {Extensions} [extensions] Custom error data. If the error was created
+ *   on the client and not the GraphQL server, this property should be present
+ *   and contain at least `client: true`, although `code` and error specific
+ *   properties may be present.
  */
 
 /**
- * Milliseconds since the
- * [performance time origin](https://developer.mozilla.org/en-US/docs/Web/API/Performance/timeOrigin)
- * (when the current JavaScript environment started running).
- * @kind typedef
- * @name HighResTimeStamp
- * @type {number}
- * @see [MDN `DOMHighResTimeStamp` docs](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp).
+ * A {@link GraphQLResult GraphQL result} loading error generated by the client,
+ * not the GraphQL server.
+ * @template {string} Code
+ * @template [Extensions={}]
+ * @typedef {Pick<
+ *   GraphQLResultError<GraphQLResultErrorLoadingMeta & Extensions>,
+ *   "message" | "extensions"
+ * >} GraphQLResultErrorLoading
+ *
  */
 
 /**
- * Starts [loading a cache value]{@link LoadingCacheValue}.
- * @kind typedef
- * @name Loader
- * @type {Function}
+ * @typedef {object} GraphQLResultErrorLoadingMeta
+ * @prop {true} client Indicates that this error was generated by the client and
+ *   wasn’t present in the GraphQL response.
+ * @prop {string} code Error code.
+ */
+
+/**
+ * The GraphQL request had a fetch error, e.g. the `fetch` global isn’t defined,
+ * or the network is offline.
+ * @typedef {GraphQLResultErrorLoading<
+ *   "FETCH_ERROR",
+ *   GraphQLResultErrorLoadingFetchDetails
+ * >} GraphQLResultErrorLoadingFetch
+ */
+
+/**
+ * @typedef {object} GraphQLResultErrorLoadingFetchDetails
+ * @prop {string} fetchErrorMessage Fetch error message.
+ */
+
+/**
+ * The GraphQL request had a fetch error, e.g. the `fetch` global isn’t defined,
+ * or the network is offline.
+ * @typedef {GraphQLResultErrorLoading<
+ *   "RESPONSE_HTTP_STATUS",
+ *   GraphQLResultErrorResponseHttpStatusDetails
+ * >} GraphQLResultErrorResponseHttpStatus
+ */
+
+/**
+ * @typedef {object} GraphQLResultErrorResponseHttpStatusDetails
+ * @prop {number} statusCode HTTP status code in the error range.
+ * @prop {string} statusText HTTP status text.
+ */
+
+/**
+ * The GraphQL response JSON had a parse error.
+ * @typedef {GraphQLResultErrorLoading<
+ *   "RESPONSE_JSON_PARSE_ERROR",
+ *   GraphQLResultErrorResponseJsonParseDetails
+ * >} GraphQLResultErrorResponseJsonParse
+ */
+
+/**
+ * @typedef {object} GraphQLResultErrorResponseJsonParseDetails
+ * @prop {string} jsonParseErrorMessage JSON parse error message.
+ */
+
+/**
+ * The GraphQL response JSON was malformed because it wasn’t an object, was
+ * missing an `errors` or `data` property, the `errors` property wasn’t an
+ * array, or the `data` property wasn’t an object or `null`.
+ * @typedef {GraphQLResultErrorLoading<
+ *   "RESPONSE_MALFORMED"
+ * >} GraphQLResultErrorResponseMalformed
+ */
+
+/**
+ * Starts {@link LoadingCacheValue loading a cache value}.
+ * @callback Loader
  * @returns {LoadingCacheValue} The loading cache value.
- */
-
-/**
- * Loads a GraphQL operation, using the [GraphQL fetcher]{@link fetchGraphQL}.
- * @kind typedef
- * @name LoadGraphQL
- * @type {Loader}
- * @param {CacheKey} cacheKey Cache key to store the loading result under.
- * @param {string} fetchUri [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) URI.
- * @param {FetchOptions} fetchOptions [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) options.
- * @returns {LoadingCacheValue} The loading cache value.
- */
-
-/**
- * A React virtual DOM node; anything that can be rendered.
- * @kind typedef
- * @name ReactNode
- * @type {undefined|null|boolean|number|string|React.Element|Array<ReactNode>}
  */

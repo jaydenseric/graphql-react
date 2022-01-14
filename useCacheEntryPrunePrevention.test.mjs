@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
@@ -12,6 +14,10 @@ import cacheEntryPrune from "./cacheEntryPrune.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 
+/**
+ * Adds `useCacheEntryPrunePrevention` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useCacheEntryPrunePrevention` bundle size.", async () => {
     await assertBundleSize(
@@ -24,7 +30,10 @@ export default (tests) => {
     "`useCacheEntryPrunePrevention` argument 1 `cacheKey` not a string.",
     () => {
       throws(() => {
-        useCacheEntryPrunePrevention(true);
+        useCacheEntryPrunePrevention(
+          // @ts-expect-error Testing invalid.
+          true
+        );
       }, new TypeError("Argument 1 `cacheKey` must be a string."));
     }
   );
@@ -52,8 +61,16 @@ export default (tests) => {
     "`useCacheEntryPrunePrevention` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -84,6 +101,8 @@ export default (tests) => {
         [cacheKeyB]: 2,
       };
       const cache = new Cache({ ...initialCacheStore });
+
+      /** @param {{ children?: React.ReactNode }} props Props. */
       const wrapper = ({ children }) =>
         React.createElement(CacheContext.Provider, { value: cache }, children);
 

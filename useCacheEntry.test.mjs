@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
@@ -13,6 +15,10 @@ import cacheEntrySet from "./cacheEntrySet.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 
+/**
+ * Adds `useCacheEntry` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useCacheEntry` bundle size.", async () => {
     await assertBundleSize(
@@ -23,7 +29,10 @@ export default (tests) => {
 
   tests.add("`useCacheEntry` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useCacheEntry(true);
+      useCacheEntry(
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
@@ -47,8 +56,16 @@ export default (tests) => {
     "`useCacheEntry` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -73,6 +90,8 @@ export default (tests) => {
     () => {
       try {
         const cache = new Cache();
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,
@@ -157,6 +176,8 @@ export default (tests) => {
           [cacheKeyA]: cacheValueA1,
           [cacheKeyB]: cacheValueB1,
         });
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,
@@ -234,6 +255,8 @@ export default (tests) => {
         const cache = new Cache({
           [cacheKey]: cacheValue,
         });
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,

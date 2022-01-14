@@ -1,23 +1,9 @@
-import events from "events";
-import { performance } from "perf_hooks";
-import { AbortController, AbortSignal } from "abort-controller";
-import { Event, EventTarget } from "event-target-shim";
+// @ts-check
 
-if (!("performance" in global)) global.performance = performance;
-
-if (!("EventTarget" in global))
-  global.EventTarget = events.EventTarget || EventTarget;
-
-if (!("Event" in global)) global.Event = events.Event || Event;
-
-if (!("CustomEvent" in global))
-  global.CustomEvent = class CustomEvent extends global.Event {
-    constructor(eventName, { detail, ...eventOptions } = {}) {
-      super(eventName, eventOptions);
-      this.detail = detail;
-    }
-  };
-
-if (!("AbortSignal" in global)) global.AbortSignal = AbortSignal;
-
-if (!("AbortController" in global)) global.AbortController = AbortController;
+// Some globals depend on others so the order is important.
+import "./polyfills/performance.mjs";
+import "./polyfills/EventTarget.mjs";
+import "./polyfills/Event.mjs";
+import "./polyfills/CustomEvent.mjs";
+import "./polyfills/AbortSignal.mjs";
+import "./polyfills/AbortController.mjs";

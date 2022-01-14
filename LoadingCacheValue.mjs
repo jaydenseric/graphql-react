@@ -1,25 +1,34 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
+/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+/** @typedef {import("./Loading.mjs").LoadingEventMap} LoadingEventMap */
+
 /**
- * Controls a loading [cache value]{@link CacheValue}.
- * @kind class
- * @name LoadingCacheValue
- * @param {Loading} loading Loading to update.
- * @param {Cache} cache Cache to update.
- * @param {CacheKey} cacheKey Cache key.
- * @param {Promise<CacheValue>} loadingResult Resolves the loading result (including any loading errors) to be set as the [cache value]{@link CacheValue} if loading isn’t aborted. Shouldn’t reject.
- * @param {AbortController} abortController Aborts this loading and skips setting the loading result as the [cache value]{@link CacheValue}. Has no effect after loading ends.
- * @fires Loading#event:start
- * @fires Cache#event:set
- * @fires Loading#event:end
- * @example <caption>How to import.</caption>
- * ```js
- * import LoadingCacheValue from "graphql-react/LoadingCacheValue.mjs";
- * ```
+ * Controls loading a {@link CacheValue cache value}. It dispatches this
+ * sequence of events:
+ *
+ * 1. {@linkcode Loading} event {@link LoadingEventMap.start `start`}.
+ * 2. {@linkcode Cache} event {@link CacheEventMap.set `set`}.
+ * 3. {@linkcode Loading} event {@link LoadingEventMap.end `end`}.
  */
 export default class LoadingCacheValue {
+  /**
+   * @param {Loading} loading Loading to update.
+   * @param {Cache} cache Cache to update.
+   * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+   * @param {Promise<CacheValue>} loadingResult Resolves the loading result
+   *   (including any loading errors) to be set as the
+   *   {@link CacheValue cache value} if loading isn’t aborted. Shouldn’t
+   *   reject.
+   * @param {AbortController} abortController Aborts this loading and skips
+   *   setting the loading result as the {@link CacheValue cache value}. Has no
+   *   effect after loading ends.
+   */
   constructor(loading, cache, cacheKey, loadingResult, abortController) {
     if (!(loading instanceof Loading))
       throw new TypeError("Argument 1 `loading` must be a `Loading` instance.");
@@ -42,17 +51,13 @@ export default class LoadingCacheValue {
 
     /**
      * When this loading started.
-     * @kind member
-     * @name LoadingCacheValue#timeStamp
-     * @type {HighResTimeStamp}
+     * @type {DOMHighResTimeStamp}
      */
     this.timeStamp = performance.now();
 
     /**
      * Aborts this loading and skips setting the loading result as the
-     * [cache value]{@link CacheValue}. Has no effect after loading ends.
-     * @kind member
-     * @name LoadingCacheValue#abortController
+     * {@link CacheValue cache value}. Has no effect after loading ends.
      * @type {AbortController}
      */
     this.abortController = abortController;
@@ -66,6 +71,7 @@ export default class LoadingCacheValue {
     // and the loading store is updated for sync code following construction of
     // a new instance.
 
+    /** @type {((value?: unknown) => void) | undefined} */
     let loadingAddedResolve;
 
     const loadingAdded = new Promise((resolve) => {
@@ -73,11 +79,9 @@ export default class LoadingCacheValue {
     });
 
     /**
-     * Resolves the loading result, after the [cache value]{@link CacheValue}
-     * has been set if the loading wasn’t aborted. Shouldn’t reject.
-     * @kind member
-     * @name LoadingCacheValue#promise
-     * @type {Promise<*>}
+     * Resolves the loading result, after the {@link CacheValue cache value} has
+     * been set if the loading wasn’t aborted. Shouldn’t reject.
+     * @type {Promise<CacheValue>}
      */
     this.promise = loadingResult.then(async (result) => {
       await loadingAdded;
@@ -122,7 +126,7 @@ export default class LoadingCacheValue {
 
     loadingSet.add(this);
 
-    loadingAddedResolve();
+    /** @type {(value?: unknown) => void} */ (loadingAddedResolve)();
 
     loading.dispatchEvent(
       new CustomEvent(`${cacheKey}/start`, {

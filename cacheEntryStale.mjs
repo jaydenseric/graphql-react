@@ -1,17 +1,15 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+
 /**
- * Stales a [cache]{@link Cache#store} entry, signalling it should probably be
- * reloaded.
- * @kind function
- * @name cacheEntryStale
+ * Stales a {@link Cache.store cache store} entry (throwing an error if missing)
+ * by dispatching the {@linkcode Cache} event
+ * {@link CacheEventMap.stale `stale`} to signal it should probably be reloaded.
  * @param {Cache} cache Cache to update.
- * @param {CacheKey} cacheKey Cache key.
- * @fires Cache#event:stale
- * @example <caption>How to import.</caption>
- * ```js
- * import cacheEntryStale from "graphql-react/cacheEntryStale.mjs";
- * ```
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryStale(cache, cacheKey) {
   if (!(cache instanceof Cache))

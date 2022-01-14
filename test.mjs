@@ -1,3 +1,5 @@
+// @ts-check
+
 import "./test/polyfills.mjs";
 import TestDirector from "test-director";
 import test_Cache from "./Cache.test.mjs";

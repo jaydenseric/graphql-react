@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, rejects, strictEqual, throws } from "assert";
 import {
   cleanup,
@@ -15,6 +17,23 @@ import assertBundleSize from "./test/assertBundleSize.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 import useWaterfallLoad from "./useWaterfallLoad.mjs";
 
+/**
+ * A dummy loader for testing.
+ * @type {import("./types.mjs").Loader}
+ */
+const dummyLoader = () =>
+  new LoadingCacheValue(
+    new Loading(),
+    new Cache(),
+    "a",
+    Promise.resolve(),
+    new AbortController()
+  );
+
+/**
+ * Adds `useWaterfallLoad` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useWaterfallLoad` bundle size.", async () => {
     await assertBundleSize(
@@ -25,13 +44,21 @@ export default (tests) => {
 
   tests.add("`useWaterfallLoad` argument 1 `cacheKey` not a string.", () => {
     throws(() => {
-      useWaterfallLoad(true);
+      useWaterfallLoad(
+        // @ts-expect-error Testing invalid.
+        true,
+        dummyLoader
+      );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
   tests.add("`useWaterfallLoad` argument 2 `load` not a function.", () => {
     throws(() => {
-      useWaterfallLoad("a", true);
+      useWaterfallLoad(
+        "a",
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
 
@@ -40,7 +67,7 @@ export default (tests) => {
       const revertConsole = suppressErrorOutput();
 
       try {
-        var { result } = renderHook(() => useWaterfallLoad("a", () => {}));
+        var { result } = renderHook(() => useWaterfallLoad("a", dummyLoader));
       } finally {
         revertConsole();
       }
@@ -55,15 +82,26 @@ export default (tests) => {
     "`useWaterfallLoad` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
         try {
-          var { result } = renderHook(() => useWaterfallLoad("a", () => {}), {
-            wrapper,
-          });
+          var { result } = renderHook(
+            () => useWaterfallLoad("a", dummyLoader),
+            {
+              wrapper,
+            }
+          );
         } finally {
           revertConsole();
         }
@@ -83,6 +121,8 @@ export default (tests) => {
     () => {
       try {
         const cache = new Cache();
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,
@@ -96,6 +136,8 @@ export default (tests) => {
           () =>
             useWaterfallLoad("a", () => {
               didLoad = true;
+
+              return dummyLoader();
             }),
           { wrapper }
         );
@@ -116,7 +158,12 @@ export default (tests) => {
       const cache = new Cache();
 
       const TestComponent = () => {
-        useWaterfallLoad("a", () => true);
+        useWaterfallLoad(
+          "a",
+          () =>
+            // @ts-expect-error Testing invalid.
+            true
+        );
 
         return null;
       };
@@ -144,10 +191,14 @@ export default (tests) => {
       const cacheValue = "b";
       const cache = new Cache();
       const loading = new Loading();
+
+      /** @type {Array<boolean>} */
       const loadCalls = [];
+
+      /** @type {Array<boolean>} */
       const hookReturns = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function load() {
         loadCalls.push(!!arguments.length);
 
@@ -161,12 +212,17 @@ export default (tests) => {
       }
 
       const TestComponent = () => {
+        const cacheValue = /** @type {string | undefined} */ (
+          useCacheEntry(cacheKey)
+        );
+
         const didLoad = useWaterfallLoad(cacheKey, load);
+
         hookReturns.push(didLoad);
 
-        const cacheValue = useCacheEntry(cacheKey);
-
-        return didLoad ? null : cacheValue;
+        return !cacheValue || didLoad
+          ? null
+          : React.createElement(React.Fragment, null, cacheValue);
       };
 
       const html = await waterfallRender(
@@ -196,10 +252,14 @@ export default (tests) => {
         [cacheKey]: cacheValue,
       });
       const loading = new Loading();
+
+      /** @type {Array<boolean>} */
       const loadCalls = [];
+
+      /** @type {Array<boolean>} */
       const hookReturns = [];
 
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @type {import("./types.mjs").Loader} */
       function load() {
         loadCalls.push(!!arguments.length);
 
@@ -213,12 +273,17 @@ export default (tests) => {
       }
 
       const TestComponent = () => {
+        const cacheValue = /** @type {string | undefined} */ (
+          useCacheEntry(cacheKey)
+        );
+
         const didLoad = useWaterfallLoad(cacheKey, load);
+
         hookReturns.push(didLoad);
 
-        const cacheValue = useCacheEntry(cacheKey);
-
-        return didLoad ? null : cacheValue;
+        return !cacheValue || didLoad
+          ? null
+          : React.createElement(React.Fragment, null, cacheValue);
       };
 
       const html = await waterfallRender(

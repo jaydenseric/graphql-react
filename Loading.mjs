@@ -1,51 +1,48 @@
+// @ts-check
+
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
+/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+
 /**
  * Loading store.
- * @kind class
- * @name Loading
- * @example <caption>How to import.</caption>
- * ```js
- * import Loading from "graphql-react/Loading.mjs";
- * ```
- * @example <caption>Construct a new instance.</caption>
- * ```js
- * const loading = new Loading();
- * ```
+ * @see {@link LoadingEventMap `LoadingEventMap`} for a map of possible events.
  */
 export default class Loading extends EventTarget {
   constructor() {
     super();
 
     /**
-     * Loading store, keyed by [cache key]{@link CacheKey}. Multiple
-     * [loading cache values]{@link LoadingCacheValue} for the same key are set
-     * in the order they started.
-     * @kind member
-     * @name Loading#store
-     * @type {object<CacheKey, Set<LoadingCacheValue>>}
+     * Store of loading {@link CacheKey cache keys} and associated
+     * {@link LoadingCacheValue loading cache values}. Multiple for the same key
+     * are set in the order loading started.
+     * @type {Record<CacheKey, Set<LoadingCacheValue>>}
      */
     this.store = {};
   }
 }
 
 /**
- * Signals the start of [loading a cache value]{@link LoadingCacheValue}. The
- * event name starts with the [cache key]{@link CacheKey}, followed by `/start`.
- * @kind event
- * @name Loading#event:start
- * @type {LoadingCacheValue}
- * @type {CustomEvent}
- * @prop {object} detail Event detail.
- * @prop {LoadingCacheValue} detail.loadingCacheValue Loading cache value that started.
+ * Map of possible {@linkcode Loading} events. Note that the keys don’t match
+ * the dispatched event names that dynamically contain the associated
+ * {@link CacheKey cache key}.
+ * @typedef {object} LoadingEventMap
+ * @prop {CustomEvent<LoadingEventStartDetail>} start Signals the start of
+ *   {@link LoadingCacheValue loading a cache value}. The event name starts with
+ *   the {@link CacheKey cache key}, followed by `/start`.
+ * @prop {CustomEvent<LoadingEventEndDetail>} end Signals the end of
+ *   {@link LoadingCacheValue loading a cache value}; either the loading
+ *   finished and the {@link CacheValue cache value} was set, the loading was
+ *   aborted, or there was an error. The event name starts with the
+ *   {@link CacheKey cache key}, followed by `/end`.
  */
 
 /**
- * Signals the end of [loading a cache value]{@link LoadingCacheValue}; either
- * the loading finished and the [cache value]{@link CacheValue} was set, the
- * loading was aborted, or there was an error. The event name starts with the
- * [cache key]{@link CacheKey}, followed by `/end`.
- * @kind event
- * @name Loading#event:end
- * @type {CustomEvent}
- * @prop {object} detail Event detail.
- * @prop {LoadingCacheValue} detail.loadingCacheValue Loading cache value that ended.
+ * @typedef {object} LoadingEventStartDetail
+ * @prop {LoadingCacheValue} loadingCacheValue Loading cache value that started.
+ */
+
+/**
+ * @typedef {object} LoadingEventEndDetail
+ * @prop {LoadingCacheValue} loadingCacheValue Loading cache value that ended.
  */

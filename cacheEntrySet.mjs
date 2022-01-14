@@ -1,17 +1,15 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+
 /**
- * Sets a [cache]{@link Cache#store} entry.
- * @kind function
- * @name cacheEntrySet
+ * Sets a {@link Cache.store cache store} entry, dispatching the
+ * {@linkcode Cache} event {@link CacheEventMap.set `set`}.
  * @param {Cache} cache Cache to update.
- * @param {CacheKey} cacheKey Cache key.
- * @param {CacheValue} cacheValue Cache value.
- * @fires Cache#event:set
- * @example <caption>How to import.</caption>
- * ```js
- * import cacheEntrySet from "graphql-react/cacheEntrySet.mjs";
- * ```
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {import("./Cache.mjs").CacheValue} cacheValue Cache value.
  */
 export default function cacheEntrySet(cache, cacheKey, cacheValue) {
   if (!(cache instanceof Cache))

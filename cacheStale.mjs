@@ -1,17 +1,16 @@
+// @ts-check
+
 import Cache from "./Cache.mjs";
 import cacheEntryStale from "./cacheEntryStale.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+
 /**
- * Stales [cache]{@link Cache#store} entries. Useful after a mutation.
- * @kind function
- * @name cacheStale
+ * Stales {@link Cache.store cache store} entries by using
+ * {@linkcode cacheEntryStale} for each entry. Useful after a mutation.
  * @param {Cache} cache Cache to update.
- * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches [cache keys]{@link CacheKey} to stale. By default all are matched.
- * @fires Cache#event:stale
- * @example <caption>How to import.</caption>
- * ```js
- * import cacheStale from "graphql-react/cacheStale.mjs";
- * ```
+ * @param {import("./types.mjs").CacheKeyMatcher} [cacheKeyMatcher] Matches
+ *   {@link CacheKey cache keys} to stale. By default all are matched.
  */
 export default function cacheStale(cache, cacheKeyMatcher) {
   if (!(cache instanceof Cache))

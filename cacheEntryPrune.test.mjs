@@ -1,8 +1,15 @@
+// @ts-check
+
 import { deepStrictEqual, strictEqual, throws } from "assert";
 import Cache from "./Cache.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
+/**
+ * Adds `cacheEntryPrune` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`cacheEntryPrune` bundle size.", async () => {
     await assertBundleSize(
@@ -15,21 +22,33 @@ export default (tests) => {
     "`cacheEntryPrune` argument 1 `cache` not a `Cache` instance.",
     () => {
       throws(() => {
-        cacheEntryPrune(true);
+        cacheEntryPrune(
+          // @ts-expect-error Testing invalid.
+          true,
+          "a"
+        );
       }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
     }
   );
 
   tests.add("`cacheEntryPrune` argument 2 `cacheKey` not a string.", () => {
     throws(() => {
-      cacheEntryPrune(new Cache(), true);
+      cacheEntryPrune(
+        new Cache(),
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
   });
 
   tests.add("`cacheEntryPrune` with entry not populated.", () => {
     const initialCacheStore = { a: 1 };
     const cache = new Cache({ ...initialCacheStore });
+
+    /** @type {Array<Event>} */
     const events = [];
+
+    /** @type {EventListener} */
     const listener = (event) => {
       events.push(event);
     };
@@ -48,7 +67,11 @@ export default (tests) => {
     () => {
       const pruneCacheKey = "b";
       const cache = new Cache({ a: 1, [pruneCacheKey]: 2 });
+
+      /** @type {Array<Event>} */
       const events = [];
+
+      /** @type {EventListener} */
       const listener = (event) => {
         events.push(event);
       };
@@ -60,12 +83,12 @@ export default (tests) => {
 
       strictEqual(events.length, 2);
 
-      strictEqual(events[0] instanceof CustomEvent, true);
+      assertInstanceOf(events[0], CustomEvent);
       strictEqual(events[0].type, `${pruneCacheKey}/prune`);
       strictEqual(events[0].cancelable, true);
       strictEqual(events[0].defaultPrevented, false);
 
-      strictEqual(events[1] instanceof CustomEvent, true);
+      assertInstanceOf(events[1], CustomEvent);
       strictEqual(events[1].type, `${pruneCacheKey}/delete`);
       strictEqual(events[1].cancelable, false);
 
@@ -79,6 +102,8 @@ export default (tests) => {
       const pruneCacheKey = "b";
       const initialCacheStore = { a: 1, [pruneCacheKey]: 2 };
       const cache = new Cache({ ...initialCacheStore });
+
+      /** @type {Array<Event>} */
       const events = [];
 
       cache.addEventListener(`${pruneCacheKey}/prune`, (event) => {
@@ -93,7 +118,7 @@ export default (tests) => {
 
       strictEqual(events.length, 1);
 
-      strictEqual(events[0] instanceof CustomEvent, true);
+      assertInstanceOf(events[0], CustomEvent);
       strictEqual(events[0].type, `${pruneCacheKey}/prune`);
       strictEqual(events[0].cancelable, true);
       strictEqual(events[0].defaultPrevented, true);

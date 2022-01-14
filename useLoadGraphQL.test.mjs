@@ -1,3 +1,5 @@
+// @ts-check
+
 import { deepStrictEqual, fail, strictEqual, throws } from "assert";
 import {
   act,
@@ -16,8 +18,14 @@ import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import cacheDelete from "./cacheDelete.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertInstanceOf from "./test/assertInstanceOf.mjs";
+import assertTypeOf from "./test/assertTypeOf.mjs";
 import useLoadGraphQL from "./useLoadGraphQL.mjs";
 
+/**
+ * Adds `useLoadGraphQL` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`useLoadGraphQL` bundle size.", async () => {
     await assertBundleSize(
@@ -46,8 +54,16 @@ export default (tests) => {
     "`useLoadGraphQL` with cache context value not a `Cache` instance.",
     () => {
       try {
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
-          React.createElement(CacheContext.Provider, { value: true }, children);
+          React.createElement(
+            CacheContext.Provider,
+            {
+              // @ts-expect-error Testing invalid.
+              value: true,
+            },
+            children
+          );
 
         const revertConsole = suppressErrorOutput();
 
@@ -72,6 +88,7 @@ export default (tests) => {
   tests.add("`useLoadGraphQL` with loading context missing.", () => {
     try {
       const cache = new Cache();
+      /** @param {{ children?: React.ReactNode }} props Props. */
       const wrapper = ({ children }) =>
         React.createElement(CacheContext.Provider, { value: cache }, children);
 
@@ -96,13 +113,18 @@ export default (tests) => {
     () => {
       try {
         const cache = new Cache();
+
+        /** @param {{ children?: React.ReactNode }} props Props. */
         const wrapper = ({ children }) =>
           React.createElement(
             CacheContext.Provider,
             { value: cache },
             React.createElement(
               LoadingContext.Provider,
-              { value: true },
+              {
+                // @ts-expect-error Testing invalid.
+                value: true,
+              },
               children
             )
           );
@@ -131,6 +153,8 @@ export default (tests) => {
     try {
       const cache = new Cache();
       const loading = new Loading();
+
+      /** @param {{ children?: React.ReactNode }} props Props. */
       const wrapper = ({ children }) =>
         React.createElement(
           CacheContext.Provider,
@@ -147,7 +171,7 @@ export default (tests) => {
       });
 
       strictEqual(result.all.length, 1);
-      strictEqual(typeof result.current, "function");
+      assertTypeOf(result.current, "function");
       strictEqual(result.error, undefined);
 
       // Test that re-rendering with the same props doesn’t cause the returned
@@ -164,7 +188,12 @@ export default (tests) => {
         "Load GraphQL with argument 1 `cacheKey` not a string.",
         () => {
           throws(() => {
-            result.current(true);
+            result.current(
+              // @ts-expect-error Testing invalid.
+              true,
+              "",
+              {}
+            );
           }, new TypeError("Argument 1 `cacheKey` must be a string."));
         }
       );
@@ -173,7 +202,12 @@ export default (tests) => {
         "Load GraphQL with argument 2 `fetchUri` not a string.",
         () => {
           throws(() => {
-            result.current("a", true);
+            result.current(
+              "a",
+              // @ts-expect-error Testing invalid.
+              true,
+              {}
+            );
           }, new TypeError("Argument 2 `fetchUri` must be a string."));
         }
       );
@@ -182,14 +216,19 @@ export default (tests) => {
         "Load GraphQL with argument 3 `fetchOptions` not an object.",
         () => {
           throws(() => {
-            result.current("a", "", null);
+            result.current(
+              "a",
+              "",
+              // @ts-expect-error Testing invalid.
+              null
+            );
           }, new TypeError("Argument 3 `fetchOptions` must be an object."));
         }
       );
 
       loadGraphQLTests.add("Load GraphQL without aborting.", async () => {
         const fetchUri = "the-uri";
-        const fetchOptions = Object.freeze({ a: 1 });
+        const fetchOptions = Object.freeze({ body: "a" });
         const cacheKey = "a";
         const cacheValue = {
           data: {
@@ -197,11 +236,20 @@ export default (tests) => {
           },
         };
 
+        /** @type {string | undefined} */
         let fetchedUri;
+
+        /** @type {RequestInit | undefined} */
         let fetchedOptions;
+
+        /** @type {LoadingCacheValue | undefined} */
         let loadGraphQLReturn;
 
         const revertGlobals = revertableGlobals({
+          /**
+           * @param {string} uri Fetch URI.
+           * @param {RequestInit} options Fetch options.
+           */
           async fetch(uri, options) {
             fetchedUri = uri;
             fetchedOptions = options;
@@ -229,14 +277,15 @@ export default (tests) => {
           }
 
           strictEqual(fetchedUri, fetchUri);
-          strictEqual(typeof fetchedOptions, "object");
+          assertTypeOf(fetchedOptions, "object");
 
           const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
             fetchedOptions;
 
-          strictEqual(fetchedOptionsSignal instanceof AbortSignal, true);
+          assertInstanceOf(fetchedOptionsSignal, AbortSignal);
           deepStrictEqual(fetchedOptionsRest, fetchOptions);
-          strictEqual(loadGraphQLReturn instanceof LoadingCacheValue, true);
+
+          assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
           deepStrictEqual(await loadGraphQLReturn.promise, cacheValue);
           deepStrictEqual(cache.store, {
             [cacheKey]: cacheValue,
@@ -251,15 +300,24 @@ export default (tests) => {
         "Load GraphQL aborting, no fetch options `signal`.",
         async () => {
           const fetchUri = "the-uri";
-          const fetchOptions = Object.freeze({ a: 1 });
+          const fetchOptions = Object.freeze({ body: "a" });
           const fetchAbortError = new AbortError("The operation was aborted.");
           const cacheKey = "a";
 
+          /** @type {string | undefined} */
           let fetchedUri;
+
+          /** @type {RequestInit | undefined} */
           let fetchedOptions;
+
+          /** @type {LoadingCacheValue | undefined} */
           let loadGraphQLReturn;
 
           const revertGlobals = revertableGlobals({
+            /**
+             * @param {string} uri Fetch URI.
+             * @param {RequestInit} options Fetch options.
+             */
             async fetch(uri, options) {
               fetchedUri = uri;
               fetchedOptions = options;
@@ -268,6 +326,8 @@ export default (tests) => {
                 const timeout = setTimeout(() => {
                   reject(fail("Fetch wasn’t aborted."));
                 }, 800);
+
+                assertInstanceOf(options.signal, AbortSignal);
 
                 options.signal.addEventListener(
                   "abort",
@@ -295,14 +355,14 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, "object");
+            assertTypeOf(fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
 
-            strictEqual(fetchedOptionsSignal instanceof AbortSignal, true);
+            assertInstanceOf(fetchedOptionsSignal, AbortSignal);
             deepStrictEqual(fetchedOptionsRest, fetchOptions);
-            strictEqual(loadGraphQLReturn instanceof LoadingCacheValue, true);
+            assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
 
             loadGraphQLReturn.abortController.abort();
 
@@ -335,7 +395,7 @@ export default (tests) => {
         async () => {
           const fetchUri = "the-uri";
           const abortController = new AbortController();
-          const fetchOptionsWithoutSignal = { a: 1 };
+          const fetchOptionsWithoutSignal = { body: "a" };
           const fetchOptions = Object.freeze({
             ...fetchOptionsWithoutSignal,
             signal: abortController.signal,
@@ -343,11 +403,20 @@ export default (tests) => {
           const fetchAbortError = new AbortError("The operation was aborted.");
           const cacheKey = "a";
 
+          /** @type {string | undefined} */
           let fetchedUri;
+
+          /** @type {RequestInit | undefined} */
           let fetchedOptions;
+
+          /** @type {LoadingCacheValue | undefined} */
           let loadGraphQLReturn;
 
           const revertGlobals = revertableGlobals({
+            /**
+             * @param {string} uri Fetch URI.
+             * @param {RequestInit} options Fetch options.
+             */
             async fetch(uri, options) {
               fetchedUri = uri;
               fetchedOptions = options;
@@ -356,6 +425,8 @@ export default (tests) => {
                 const timeout = setTimeout(() => {
                   reject(fail("Fetch wasn’t aborted."));
                 }, 800);
+
+                assertInstanceOf(options.signal, AbortSignal);
 
                 options.signal.addEventListener(
                   "abort",
@@ -383,14 +454,14 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, "object");
+            assertTypeOf(fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
 
-            strictEqual(fetchedOptionsSignal instanceof AbortSignal, true);
+            assertInstanceOf(fetchedOptionsSignal, AbortSignal);
             deepStrictEqual(fetchedOptionsRest, fetchOptionsWithoutSignal);
-            strictEqual(loadGraphQLReturn instanceof LoadingCacheValue, true);
+            assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
 
             abortController.abort();
 
@@ -422,11 +493,11 @@ export default (tests) => {
         "Load GraphQL aborting, fetch options `signal`, already aborted.",
         async () => {
           const fetchUri = "the-uri";
-
           const abortController = new AbortController();
+
           abortController.abort();
 
-          const fetchOptionsWithoutSignal = { a: 1 };
+          const fetchOptionsWithoutSignal = { body: "a" };
           const fetchOptions = Object.freeze({
             ...fetchOptionsWithoutSignal,
             signal: abortController.signal,
@@ -434,14 +505,25 @@ export default (tests) => {
           const fetchAbortError = new AbortError("The operation was aborted.");
           const cacheKey = "a";
 
+          /** @type {string | undefined} */
           let fetchedUri;
+
+          /** @type {RequestInit | undefined} */
           let fetchedOptions;
+
+          /** @type {LoadingCacheValue | undefined} */
           let loadGraphQLReturn;
 
           const revertGlobals = revertableGlobals({
+            /**
+             * @param {string} uri Fetch URI.
+             * @param {RequestInit} options Fetch options.
+             */
             async fetch(uri, options) {
               fetchedUri = uri;
               fetchedOptions = options;
+
+              assertInstanceOf(options.signal, AbortSignal);
 
               throw options.signal.aborted
                 ? fetchAbortError
@@ -463,14 +545,14 @@ export default (tests) => {
             }
 
             strictEqual(fetchedUri, fetchUri);
-            strictEqual(typeof fetchedOptions, "object");
+            assertTypeOf(fetchedOptions, "object");
 
             const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
               fetchedOptions;
 
-            strictEqual(fetchedOptionsSignal instanceof AbortSignal, true);
+            assertInstanceOf(fetchedOptionsSignal, AbortSignal);
             deepStrictEqual(fetchedOptionsRest, fetchOptionsWithoutSignal);
-            strictEqual(loadGraphQLReturn instanceof LoadingCacheValue, true);
+            assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
             deepStrictEqual(await loadGraphQLReturn.promise, {
               errors: [
                 {

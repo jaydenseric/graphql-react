@@ -1,18 +1,18 @@
+// @ts-check
+
 import React from "react";
 import useForceUpdate from "./useForceUpdate.mjs";
 import useLoading from "./useLoading.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+
 /**
- * A React hook to get the [loading cache values]{@link LoadingCacheValue} for
- * a given [cache key]{@link CacheKey}.
- * @kind function
- * @name useLoadingEntry
+ * A React hook to get the {@link LoadingCacheValue loading cache values} for
+ * a given {@link CacheKey cache key}.
  * @param {CacheKey} cacheKey Cache key.
- * @returns {Set<LoadingCacheValue>|undefined} Loading cache values, if present.
- * @example <caption>How to import.</caption>
- * ```js
- * import useLoadingEntry from "graphql-react/useLoadingEntry.mjs";
- * ```
+ * @returns {Set<LoadingCacheValue> | undefined} Loading cache values, if
+ *   present.
  */
 export default function useLoadingEntry(cacheKey) {
   if (typeof cacheKey !== "string")

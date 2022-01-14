@@ -1,3 +1,5 @@
+// @ts-check
+
 import { strictEqual, throws } from "assert";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
@@ -8,8 +10,14 @@ import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import Provider from "./Provider.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import assertInstanceOf from "./test/assertInstanceOf.mjs";
+import assertTypeOf from "./test/assertTypeOf.mjs";
 import suppressReactRenderErrorConsoleOutput from "./test/suppressReactRenderErrorConsoleOutput.mjs";
 
+/**
+ * Adds `Provider` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`Provider` bundle size.", async () => {
     await assertBundleSize(new URL("./Provider.mjs", import.meta.url), 500);
@@ -20,7 +28,13 @@ export default (tests) => {
 
     try {
       throws(() => {
-        ReactTestRenderer.create(React.createElement(Provider));
+        ReactTestRenderer.create(
+          React.createElement(
+            Provider,
+            // @ts-expect-error Testing invalid.
+            {}
+          )
+        );
       }, new TypeError("Prop `cache` must be a `Cache` instance."));
     } finally {
       revertConsole();
@@ -28,8 +42,17 @@ export default (tests) => {
   });
 
   tests.add("`Provider` used correctly.", () => {
+    /**
+     * @type {Array<{
+     *   hydrationTimeStampContextValue: number | undefined,
+     *   cacheContextValue: Cache | undefined,
+     *   loadingContextValue: Loading | undefined
+     * }>}
+     */
     const results = [];
-    const TestComponent = () => {
+
+    /** Test component. */
+    function TestComponent() {
       results.push({
         hydrationTimeStampContextValue: React.useContext(
           HydrationTimeStampContext
@@ -38,7 +61,8 @@ export default (tests) => {
         loadingContextValue: React.useContext(LoadingContext),
       });
       return null;
-    };
+    }
+
     const cache = new Cache();
     const testRenderer = ReactTestRenderer.create(
       React.createElement(
@@ -49,19 +73,20 @@ export default (tests) => {
     );
 
     strictEqual(results.length, 1);
-    strictEqual(typeof results[0].hydrationTimeStampContextValue, "number");
+    assertTypeOf(results[0].hydrationTimeStampContextValue, "number");
     strictEqual(
       performance.now() - results[0].hydrationTimeStampContextValue < 100,
       true
     );
     strictEqual(results[0].cacheContextValue, cache);
-    strictEqual(results[0].loadingContextValue instanceof Loading, true);
+    assertInstanceOf(results[0].loadingContextValue, Loading);
 
     testRenderer.update(
       React.createElement(
         Provider,
         {
-          // Force the component to re-render by setting a new, useless prop.
+          // @ts-ignore Force the component to re-render by setting a new
+          // arbitrary prop.
           a: true,
           cache,
         },

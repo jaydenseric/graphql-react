@@ -1,18 +1,17 @@
+// @ts-check
+
 import React from "react";
 import useCache from "./useCache.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 
+/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
+/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
+
 /**
- * A React hook to get a [cache value]{@link CacheValue} using its
- * [cache key]{@link CacheKey}.
- * @kind function
- * @name useCacheEntry
+ * A React hook to get a {@link CacheValue cache value} using its
+ * {@link CacheKey cache key}.
  * @param {CacheKey} cacheKey Cache key.
  * @returns {CacheValue} Cache value, if present.
- * @example <caption>How to import.</caption>
- * ```js
- * import useCacheEntry from "graphql-react/useCacheEntry.mjs";
- * ```
  */
 export default function useCacheEntry(cacheKey) {
   if (typeof cacheKey !== "string")

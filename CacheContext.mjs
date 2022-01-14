@@ -1,18 +1,17 @@
+// @ts-check
+
 import React from "react";
 
+/** @typedef {import("./Cache.mjs").default} Cache */
+
 /**
- * React context for a [`Cache`]{@link Cache} instance.
- * @kind member
- * @name CacheContext
- * @type {object}
- * @prop {Function} Provider [React context provider component](https://reactjs.org/docs/context.html#contextprovider).
- * @prop {Function} Consumer [React context consumer component](https://reactjs.org/docs/context.html#contextconsumer).
- * @example <caption>How to import.</caption>
- * ```js
- * import CacheContext from "graphql-react/CacheContext.mjs";
- * ```
+ * [React context](https://reactjs.org/docs/context.html) for a
+ * {@linkcode Cache} instance.
+ * @type {React.Context<Cache | undefined>}
  */
-const CacheContext = React.createContext();
+const CacheContext = React.createContext(
+  /** @type {Cache | undefined} */ (undefined)
+);
 
 CacheContext.displayName = "CacheContext";
 

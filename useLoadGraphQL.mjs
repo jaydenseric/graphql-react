@@ -1,3 +1,5 @@
+// @ts-check
+
 import React from "react";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import fetchGraphQL from "./fetchGraphQL.mjs";
@@ -6,13 +8,7 @@ import useLoading from "./useLoading.mjs";
 
 /**
  * A React hook to get a function for loading a GraphQL operation.
- * @kind function
- * @name useLoadGraphQL
  * @returns {LoadGraphQL} Loads a GraphQL operation.
- * @example <caption>How to import.</caption>
- * ```js
- * import useLoadGraphQL from "graphql-react/useLoadGraphQL.mjs";
- * ```
  */
 export default function useLoadGraphQL() {
   const cache = useCache();
@@ -33,8 +29,17 @@ export default function useLoadGraphQL() {
       )
         throw new TypeError("Argument 3 `fetchOptions` must be an object.");
 
-      // Avoid mutating the input fetch options.
-      const { signal, ...modifiedFetchOptions } = fetchOptions;
+      /** @type {RequestInit["signal"]} */
+      let signal;
+
+      /**
+       * Fetch options, modified without mutating the input.
+       * @type {RequestInit}
+       */
+      let modifiedFetchOptions;
+
+      ({ signal, ...modifiedFetchOptions } = fetchOptions);
+
       const abortController = new AbortController();
 
       // Respect an existing abort controller signal.
@@ -69,3 +74,15 @@ export default function useLoadGraphQL() {
     [cache, loading]
   );
 }
+
+/**
+ * Loads a GraphQL operation, using {@linkcode fetchGraphQL}.
+ * @callback LoadGraphQL
+ * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key to store the
+ *   loading result under.
+ * @param {string} fetchUri [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
+ *   URI.
+ * @param {RequestInit} fetchOptions [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
+ *   options.
+ * @returns {LoadingCacheValue} The loading cache value.
+ */
