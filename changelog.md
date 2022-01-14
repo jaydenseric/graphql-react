@@ -4,6 +4,7 @@
 
 ### Major
 
+- Updated the [`extract-files`](https://npm.im/extract-files) dependency.
 - Updated the [`react-waterfall-render`](https://npm.im/react-waterfall-render) dependency.
 - Implemented TypeScript types via JSDoc comments, fixing [#6](https://github.com/jaydenseric/graphql-react/issues/6).
 

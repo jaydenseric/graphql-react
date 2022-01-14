@@ -1,6 +1,7 @@
 // @ts-check
 
-import extractFiles from "extract-files/public/extractFiles.js";
+import extractFiles from "extract-files/extractFiles.mjs";
+import isExtractableFile from "extract-files/isExtractableFile.mjs";
 
 /** @typedef {import("./types.mjs").GraphQLOperation} GraphQLOperation */
 
@@ -27,12 +28,8 @@ export default function fetchOptionsGraphQL(operation) {
     },
   };
 
-  const result = extractFiles(operation);
-
-  /** @type {Map<File | Blob, Array<string>>} */
-  const files = result.files;
-
-  const operationJSON = JSON.stringify(result.clone);
+  const { clone, files } = extractFiles(operation, isExtractableFile);
+  const operationJSON = JSON.stringify(clone);
 
   if (files.size) {
     // See the GraphQL multipart request spec:
@@ -56,7 +53,7 @@ export default function fetchOptionsGraphQL(operation) {
       form.set(
         `${++i}`,
         file,
-        // @ts-ignore It’s ok to be undefined for a `Blob` instance.
+        // @ts-ignore It’s ok for `name` to be undefined for a `Blob` instance.
         file.name
       );
     });
