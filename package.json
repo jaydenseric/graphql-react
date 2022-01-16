@@ -114,7 +114,7 @@
     "abort-controller": "^3.0.0",
     "coverage-node": "^5.0.1",
     "esbuild": "^0.14.11",
-    "eslint": "^8.6.0",
+    "eslint": "^8.7.0",
     "eslint-config-env": "^23.0.2",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-compat": "^4.0.1",
@@ -129,14 +129,14 @@
     "filter-console": "^1.0.0",
     "formdata-polyfill": "^4.0.10",
     "gzip-size": "^7.0.0",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^3.1.1",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
     "revertable-globals": "^3.0.0",
     "test-director": "^8.0.1",
-    "typescript": "^4.6.0-dev.20220110"
+    "typescript": "^4.6.0-dev.20220116"
   },
   "scripts": {
     "eslint": "eslint .",
