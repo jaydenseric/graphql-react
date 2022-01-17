@@ -6,14 +6,13 @@ import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import useCache from "./useCache.mjs";
 
 /** @typedef {import("./useAutoLoad.mjs").default} useAutoLoad */
+/** @typedef {import("react-waterfall-render/waterfallRender.mjs").default} waterfallRender */
 
 /**
  * A React hook to load a {@link Cache.store cache store} entry if the
- * [waterfall render context](https://github.com/jaydenseric/react-waterfall-render#member-waterfallrendercontext)
- * is populated, i.e. when
- * [waterfall rendering](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender)
- * for either a server side render or to preload components in a browser
- * environment.
+ * {@link WaterfallRenderContext waterfall render context} is populated, i.e.
+ * when {@link waterfallRender waterfall rendering} for either a server side
+ * render or to preload components in a browser environment.
  * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
  * @param {import("./types.mjs").Loader} load Memoized function that starts the
  *   loading.
