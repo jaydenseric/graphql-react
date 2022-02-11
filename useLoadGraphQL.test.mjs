@@ -1,22 +1,23 @@
 // @ts-check
 
-import { deepStrictEqual, fail, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { deepStrictEqual, fail, strictEqual, throws } from "assert";
 import { AbortError, Response } from "node-fetch";
 import React from "react";
 import revertableGlobals from "revertable-globals";
 import TestDirector from "test-director";
+
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
+import cacheDelete from "./cacheDelete.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
-import cacheDelete from "./cacheDelete.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";

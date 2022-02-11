@@ -1,8 +1,9 @@
 // @ts-check
 
 import React from "react";
-import LoadingCacheValue from "./LoadingCacheValue.mjs";
+
 import fetchGraphQL from "./fetchGraphQL.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import useCache from "./useCache.mjs";
 import useLoading from "./useLoading.mjs";
 

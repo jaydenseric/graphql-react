@@ -3,7 +3,6 @@
 import { AssertionError } from "assert";
 import { inspect } from "util";
 
-// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Asserts a value is a given type.
  * @template {keyof TypeMap} ExpectedType

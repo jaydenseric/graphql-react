@@ -1,13 +1,14 @@
 // @ts-check
 
 import { deepStrictEqual, strictEqual, throws } from "assert";
+
 import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
-import Deferred from "./test/Deferred.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";
+import Deferred from "./test/Deferred.mjs";
 
 /**
  * Adds `LoadingCacheValue` tests.

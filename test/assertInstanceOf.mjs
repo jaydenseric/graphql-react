@@ -3,7 +3,6 @@
 import { AssertionError } from "assert";
 import { inspect } from "util";
 
-// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Asserts a value is an instance of a given class.
  * @template ExpectedClass

@@ -1,8 +1,9 @@
 // @ts-check
 
-import { notStrictEqual, strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
+import { notStrictEqual, strictEqual, throws } from "assert";
 import React from "react";
+
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";

@@ -1,12 +1,13 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { deepStrictEqual, strictEqual } from "assert";
 import React from "react";
+
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";

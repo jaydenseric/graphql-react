@@ -1,11 +1,12 @@
 // @ts-check
 
-import { strictEqual } from "assert";
 import {
   act,
   cleanup,
   renderHook,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { strictEqual } from "assert";
+
 import assertTypeOf from "./test/assertTypeOf.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 

@@ -1,6 +1,7 @@
 // @ts-check
 
 import React from "react";
+
 import useCache from "./useCache.mjs";
 
 /** @typedef {import("./Cache.mjs").default} Cache */

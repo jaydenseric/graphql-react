@@ -3,6 +3,7 @@
 import { deepStrictEqual, strictEqual } from "assert";
 import { Response } from "node-fetch";
 import revertableGlobals from "revertable-globals";
+
 import fetchGraphQL from "./fetchGraphQL.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 

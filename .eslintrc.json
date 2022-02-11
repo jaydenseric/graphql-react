@@ -1,22 +1,31 @@
 {
-  "extends": ["env"],
-  "settings": {
-    "jsdoc": {
-      "mode": "typescript"
-    },
-    "polyfills": [
-      "AbortController",
-      "CustomEvent",
-      "Event",
-      "EventTarget",
-      "fetch",
-      "FormData",
-      "performance"
-    ]
+  "extends": ["eslint:recommended", "plugin:react-hooks/recommended"],
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": true
   },
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["simple-import-sort"],
   "rules": {
-    "jsdoc/require-description": "off",
-    "jsdoc/require-returns": "off",
-    "jsdoc/valid-types": "off"
-  }
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.mjs"],
+      "parserOptions": {
+        "sourceType": "module"
+      },
+      "globals": {
+        "__dirname": "off",
+        "__filename": "off",
+        "exports": "off",
+        "module": "off",
+        "require": "off"
+      }
+    }
+  ]
 }

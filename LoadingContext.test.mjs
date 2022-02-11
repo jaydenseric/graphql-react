@@ -3,6 +3,7 @@
 import { strictEqual } from "assert";
 import React from "react";
 import ReactDOMServer from "react-dom/server.js";
+
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";

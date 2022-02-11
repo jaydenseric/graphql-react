@@ -1,12 +1,13 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import React from "react";
+
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";

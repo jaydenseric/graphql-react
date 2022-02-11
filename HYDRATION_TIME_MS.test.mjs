@@ -1,6 +1,7 @@
 // @ts-check
 
 import { strictEqual } from "assert";
+
 import HYDRATION_TIME_MS from "./HYDRATION_TIME_MS.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 

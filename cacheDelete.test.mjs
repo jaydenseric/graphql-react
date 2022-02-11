@@ -1,6 +1,7 @@
 // @ts-check
 
 import { deepStrictEqual, strictEqual, throws } from "assert";
+
 import Cache from "./Cache.mjs";
 import cacheDelete from "./cacheDelete.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";

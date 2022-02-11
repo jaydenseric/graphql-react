@@ -1,19 +1,20 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual, throws } from "assert";
 import {
   act,
   cleanup,
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { deepStrictEqual, strictEqual, throws } from "assert";
 import React from "react";
+
 import Cache from "./Cache.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import LoadingContext from "./LoadingContext.mjs";
-import Deferred from "./test/Deferred.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import Deferred from "./test/Deferred.mjs";
 import useLoadingEntry from "./useLoadingEntry.mjs";
 
 /**

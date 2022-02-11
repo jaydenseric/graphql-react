@@ -1,8 +1,8 @@
 // @ts-check
 
 import Cache from "./Cache.mjs";
-import Loading from "./Loading.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
+import Loading from "./Loading.mjs";
 
 /** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
 /** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */

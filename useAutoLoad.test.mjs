@@ -1,15 +1,16 @@
 // @ts-check
 
-import { strictEqual, throws } from "assert";
 import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
+import { strictEqual, throws } from "assert";
 import React from "react";
+
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
-import Loading from "./Loading.mjs";
-import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
 import cacheEntryStale from "./cacheEntryStale.mjs";
+import Loading from "./Loading.mjs";
+import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";
 import useAutoLoad from "./useAutoLoad.mjs";

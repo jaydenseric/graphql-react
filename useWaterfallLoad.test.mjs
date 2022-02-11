@@ -1,14 +1,15 @@
 // @ts-check
 
-import { deepStrictEqual, rejects, strictEqual, throws } from "assert";
 import {
   cleanup,
   renderHook,
   suppressErrorOutput,
 } from "@testing-library/react-hooks/lib/pure.js";
+import { deepStrictEqual, rejects, strictEqual, throws } from "assert";
 import React from "react";
 import ReactDOMServer from "react-dom/server.js";
 import waterfallRender from "react-waterfall-render/waterfallRender.mjs";
+
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
