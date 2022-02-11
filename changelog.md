@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Updated dev dependencies.
+
 ## 17.0.0
 
 ### Major
