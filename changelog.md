@@ -14,6 +14,7 @@
 
 - Updated dev dependencies.
 - Simplified dev dependencies and config for ESLint.
+- Updated GitHub Actions CI config.
 - Fixed issues with GraphQL result related types from `types.mjs`.
 - Improved various JSDoc descriptions.
 - Improved the types relating to the `Deferred` class used in tests.
