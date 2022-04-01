@@ -129,7 +129,7 @@
     "react-test-renderer": "^17.0.2",
     "revertable-globals": "^3.0.0",
     "test-director": "^8.0.2",
-    "typescript": "^4.7.0-dev.20220329"
+    "typescript": "^4.7.0-dev.20220331"
   },
   "scripts": {
     "eslint": "eslint .",
