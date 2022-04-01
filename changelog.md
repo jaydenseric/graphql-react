@@ -8,7 +8,7 @@
 
 ### Minor
 
-- Added a new `FetchGraphQLResultErrorLoading` to `fetchGraphQL.mjs` containing the GraphQL result error types related to loading that are generated on the client, not the GraphQL server.
+- Added the new type `FetchGraphQLResultErrorLoading` to `fetchGraphQL.mjs` containing the GraphQL result error types related to loading that are generated on the client, not the GraphQL server.
 
 ### Patch
 
