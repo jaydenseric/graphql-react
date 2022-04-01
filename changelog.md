@@ -2,10 +2,20 @@
 
 ## Next
 
+### Major
+
+- Renamed the type `FetchGraphQLResultErrors` to `FetchGraphQLResultError` in `fetchGraphQL.mjs`.
+
+### Minor
+
+- Added a new `FetchGraphQLResultErrorLoading` to `fetchGraphQL.mjs` containing the GraphQL result error types related to loading that are generated on the client, not the GraphQL server.
+
 ### Patch
 
 - Updated dev dependencies.
 - Simplified dev dependencies and config for ESLint.
+- Fixed issues with GraphQL result related types from `types.mjs`.
+- Improved various JSDoc descriptions.
 
 ## 17.0.0
 

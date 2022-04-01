@@ -11,7 +11,8 @@ const ERROR_CODE_RESPONSE_MALFORMED = "RESPONSE_MALFORMED";
 /**
  * Fetches a GraphQL operation, always resolving a
  * {@link GraphQLResult GraphQL result} suitable for use as a
- * {@link CacheValue cache value}, even if there are errors.
+ * {@link CacheValue cache value}, even if there are
+ * {@link FetchGraphQLResultError errors}.
  * @param {string} fetchUri Fetch URI for the GraphQL API.
  * @param {RequestInit} [fetchOptions] Fetch options.
  * @returns {Promise<FetchGraphQLResult>} Resolves a result suitable for use as
@@ -25,7 +26,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
   /** @type {FetchGraphQLResult} */
   const result = {};
 
-  /** @type {Array<FetchGraphQLResultErrors>} */
+  /** @type {Array<FetchGraphQLResultError>} */
   const resultErrors = [];
 
   const fetcher =
@@ -164,19 +165,25 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
 }
 
 /**
- * {@link GraphQLResult GraphQL result} when using {@linkcode fetchGraphQL}.
+ * {@linkcode fetchGraphQL} {@link GraphQLResult GraphQL result}.
  * @typedef {import("./types.mjs").GraphQLResult<
- *   FetchGraphQLResultErrors
+ *   FetchGraphQLResultError
  * >} FetchGraphQLResult
  */
 
 /**
- * {@link GraphQLResult.errors GraphQL result errors} that are possible when
- * using {@linkcode fetchGraphQL}.
- * @typedef {import("./types.mjs").GraphQLResultError
- *   | import("./types.mjs").GraphQLResultErrorLoadingFetch
+ * {@linkcode fetchGraphQL} {@link GraphQLResult.errors GraphQL result error}.
+ * @typedef {FetchGraphQLResultErrorLoading
+ *   | import("./types.mjs").GraphQLResultError
+ * } FetchGraphQLResultError
+ */
+
+/**
+ * {@linkcode fetchGraphQL} {@link GraphQLResult.errors GraphQL result error}
+ * that’s generated on the client, not the GraphQL server.
+ * @typedef {import("./types.mjs").GraphQLResultErrorLoadingFetch
  *   | import("./types.mjs").GraphQLResultErrorResponseHttpStatus
  *   | import("./types.mjs").GraphQLResultErrorResponseJsonParse
  *   | import("./types.mjs").GraphQLResultErrorResponseMalformed
- * } FetchGraphQLResultErrors
+ * } FetchGraphQLResultErrorLoading
  */
