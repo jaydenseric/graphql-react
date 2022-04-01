@@ -9,7 +9,7 @@ import useCache from "./useCache.mjs";
 /** @typedef {import("./Cache.mjs").default} Cache */
 
 /**
- * A React hook to automatically load a {@link Cache.store cache store} entry
+ * React hook to automatically load a {@link Cache.store cache store} entry
  * after the component mounts or the {@link CacheContext cache context} or any
  * of the arguments change, except during the
  * {@link HYDRATION_TIME_MS hydration time} if the

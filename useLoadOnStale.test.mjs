@@ -17,7 +17,7 @@ import assertBundleSize from "./test/assertBundleSize.mjs";
 import useLoadOnStale from "./useLoadOnStale.mjs";
 
 /**
- * A dummy loader for testing.
+ * Dummy loader for testing.
  * @type {import("./types.mjs").Loader}
  */
 const dummyLoader = () =>

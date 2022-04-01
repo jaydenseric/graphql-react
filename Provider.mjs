@@ -9,7 +9,7 @@ import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 
 /**
- * A React component to provide all the React context required to fully enable
+ * React component to provide all the React context required to fully enable
  * [`graphql-react`](https://npm.im/graphql-react) functionality:
  *
  * - {@linkcode HydrationTimeStampContext}

@@ -6,7 +6,7 @@ import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 
 /**
- * A React hook to use the {@linkcode CacheContext}.
+ * React hook to use the {@linkcode CacheContext}.
  * @returns {Cache} The cache.
  */
 export default function useCache() {

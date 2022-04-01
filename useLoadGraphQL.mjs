@@ -8,7 +8,7 @@ import useCache from "./useCache.mjs";
 import useLoading from "./useLoading.mjs";
 
 /**
- * A React hook to get a function for loading a GraphQL operation.
+ * React hook to get a function for loading a GraphQL operation.
  * @returns {LoadGraphQL} Loads a GraphQL operation.
  */
 export default function useLoadGraphQL() {

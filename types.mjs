@@ -17,7 +17,7 @@ export {};
  */
 
 /**
- * A GraphQL operation. Additional properties may be used; all are sent to the
+ * GraphQL operation. Additional properties may be used; all are sent to the
  * GraphQL server.
  * @typedef {object} GraphQLOperation
  * @prop {string} query GraphQL queries or mutations.
@@ -26,7 +26,7 @@ export {};
  */
 
 /**
- * A GraphQL result.
+ * GraphQL result.
  * @see [GraphQL spec for a response](https://spec.graphql.org/October2021/#sec-Response).
  * @template [ErrorTypes=GraphQLResultError] Possible error types.
  * @typedef {object} GraphQLResult
@@ -39,7 +39,7 @@ export {};
  */
 
 /**
- * A {@link GraphQLResult.errors GraphQL result error}.
+ * {@link GraphQLResult.errors GraphQL result error}.
  * @see [GraphQL spec for response errors](https://spec.graphql.org/October2021/#sec-Errors).
  * @template {Record<string, unknown>} [Extensions=Record<string, unknown>]
  *   Extensions to a standard GraphQL error.
@@ -53,7 +53,7 @@ export {};
  */
 
 /**
- * A {@link GraphQLResult GraphQL result} loading error generated on the client,
+ * {@link GraphQLResult GraphQL result} loading error generated on the client,
  * not the GraphQL server.
  * @template {string} Code Error code.
  * @template {Record<string, unknown>} [Extensions={}] Error specific details.

@@ -10,7 +10,7 @@ import useCache from "./useCache.mjs";
 /** @typedef {import("react-waterfall-render/waterfallRender.mjs").default} waterfallRender */
 
 /**
- * A React hook to load a {@link Cache.store cache store} entry if the
+ * React hook to load a {@link Cache.store cache store} entry if the
  * {@link WaterfallRenderContext waterfall render context} is populated, i.e.
  * when {@link waterfallRender waterfall rendering} for either a server side
  * render or to preload components in a browser environment.

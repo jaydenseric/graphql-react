@@ -19,7 +19,7 @@ import useCacheEntry from "./useCacheEntry.mjs";
 import useWaterfallLoad from "./useWaterfallLoad.mjs";
 
 /**
- * A dummy loader for testing.
+ * Dummy loader for testing.
  * @type {import("./types.mjs").Loader}
  */
 const dummyLoader = () =>

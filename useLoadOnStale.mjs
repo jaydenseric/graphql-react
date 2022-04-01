@@ -7,7 +7,7 @@ import useCache from "./useCache.mjs";
 /** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
 
 /**
- * A React hook to load a {@link Cache.store cache store} entry after becomes
+ * React hook to load a {@link Cache.store cache store} entry after becomes
  * {@link Cache#event:stale stale}, if there isn’t loading for the
  * {@link CacheKey cache key} that started after.
  * @param {CacheKey} cacheKey Cache key.

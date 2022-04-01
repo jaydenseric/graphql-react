@@ -9,8 +9,8 @@ import useLoading from "./useLoading.mjs";
 /** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
 
 /**
- * A React hook to get the {@link LoadingCacheValue loading cache values} for
- * a given {@link CacheKey cache key}.
+ * React hook to get the {@link LoadingCacheValue loading cache values} for a
+ * given {@link CacheKey cache key}.
  * @param {CacheKey} cacheKey Cache key.
  * @returns {Set<LoadingCacheValue> | undefined} Loading cache values, if
  *   present.

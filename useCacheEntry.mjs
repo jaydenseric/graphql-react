@@ -9,7 +9,7 @@ import useForceUpdate from "./useForceUpdate.mjs";
 /** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
 
 /**
- * A React hook to get a {@link CacheValue cache value} using its
+ * React hook to get a {@link CacheValue cache value} using its
  * {@link CacheKey cache key}.
  * @param {CacheKey} cacheKey Cache key.
  * @returns {CacheValue} Cache value, if present.

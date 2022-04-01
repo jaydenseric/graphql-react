@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * A deferred promise that can be externally resolved or rejected.
+ * Deferred promise that can be externally resolved or rejected.
  * @template T
  */
 export default class Deferred {

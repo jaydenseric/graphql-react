@@ -10,7 +10,7 @@ import useLoadOnStale from "./useLoadOnStale.mjs";
 /** @typedef {import("./types.mjs").Loader} Loader */
 
 /**
- * A React hook to prevent a {@link Cache.store cache store} entry from being
+ * React hook to prevent a {@link Cache.store cache store} entry from being
  * pruned while the component is mounted and automatically keep it loaded.
  * Previous loading that started via this hook aborts when new loading starts
  * via this hook, the hook arguments change, or the component unmounts.

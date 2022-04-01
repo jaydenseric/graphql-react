@@ -52,12 +52,12 @@ export default class Cache extends EventTarget {
  */
 
 /**
- * A unique key to access a {@link CacheValue cache value}.
+ * Unique key to access a {@link CacheValue cache value}.
  * @typedef {string} CacheKey
  */
 
 /**
- * A {@link Cache.store cache store} value. If server side rendering, it should
+ * {@link Cache.store Cache store} value. If server side rendering, it should
  * be JSON serializable for client hydration. It should contain information
  * about any errors that occurred during loading so they can be rendered, and if
  * server side rendering, be hydrated on the client.

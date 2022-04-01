@@ -6,10 +6,10 @@
 import React from "react";
 
 /**
- * A React hook to create a memoized {@link Loader loader} from
- * another, that automatically aborts previous loading that started via this
- * hook when new loading starts via this hook, the hook arguments change, or the
- * component unmounts.
+ * React hook to create a memoized {@link Loader loader} from another, that
+ * automatically aborts previous loading that started via this hook when new
+ * loading starts via this hook, the hook arguments change, or the component
+ * unmounts.
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {Loader} Memoized function that starts the loading.
  */

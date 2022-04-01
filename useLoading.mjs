@@ -6,7 +6,7 @@ import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 
 /**
- * A React hook to use the {@linkcode CacheContext}.
+ * React hook to use the {@linkcode CacheContext}.
  * @returns {Loading} Loading.
  */
 export default function useLoading() {
