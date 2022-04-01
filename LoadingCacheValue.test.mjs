@@ -123,7 +123,8 @@ export default (tests) => {
     loading.addEventListener(`${cacheKey}/end`, loadingListener);
 
     const { promise: loadingResult, resolve: loadingResultResolve } =
-      new Deferred();
+      /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+      (new Deferred());
     const abortController = new AbortController();
     const loadingCacheValue = new LoadingCacheValue(
       loading,
@@ -204,7 +205,9 @@ export default (tests) => {
       const {
         promise: firstLoadingResult,
         resolve: firstLoadingResultResolve,
-      } = new Deferred();
+      } =
+        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        (new Deferred());
       const firstAbortController = new AbortController();
       const firstLoadingCacheValue = new LoadingCacheValue(
         loading,
@@ -242,7 +245,9 @@ export default (tests) => {
       const {
         promise: secondLoadingResult,
         resolve: secondLoadingResultResolve,
-      } = new Deferred();
+      } =
+        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        (new Deferred());
       const secondAbortController = new AbortController();
       const secondLoadingCacheValue = new LoadingCacheValue(
         loading,
@@ -369,7 +374,9 @@ export default (tests) => {
       const {
         promise: firstLoadingResult,
         resolve: firstLoadingResultResolve,
-      } = new Deferred();
+      } =
+        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        (new Deferred());
       const firstAbortController = new AbortController();
       const firstLoadingCacheValue = new LoadingCacheValue(
         loading,
@@ -407,7 +414,9 @@ export default (tests) => {
       const {
         promise: secondLoadingResult,
         resolve: secondLoadingResultResolve,
-      } = new Deferred();
+      } =
+        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        (new Deferred());
       const secondAbortController = new AbortController();
       const secondLoadingCacheValue = new LoadingCacheValue(
         loading,
