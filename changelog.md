@@ -6,6 +6,7 @@
 
 - Updated dev dependencies.
 - Updated `jsconfig.json` `compilerOptions.module` to `nodenext`.
+- Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 
 ## 18.0.0
 

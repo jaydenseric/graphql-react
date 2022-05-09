@@ -25,18 +25,26 @@ export default (tests) => {
   });
 
   tests.add("`fetchGraphQL` with global `fetch` API unavailable.", async () => {
-    deepStrictEqual(await fetchGraphQL("http://localhost"), {
-      errors: [
-        {
-          message: "Fetch error.",
-          extensions: {
-            client: true,
-            code: "FETCH_ERROR",
-            fetchErrorMessage: "Global `fetch` API unavailable.",
-          },
-        },
-      ],
+    const revertGlobals = revertableGlobals({
+      fetch: undefined,
     });
+
+    try {
+      deepStrictEqual(await fetchGraphQL("http://localhost"), {
+        errors: [
+          {
+            message: "Fetch error.",
+            extensions: {
+              client: true,
+              code: "FETCH_ERROR",
+              fetchErrorMessage: "Global `fetch` API unavailable.",
+            },
+          },
+        ],
+      });
+    } finally {
+      revertGlobals();
+    }
   });
 
   tests.add("`fetchGraphQL` with a fetch error.", async () => {
