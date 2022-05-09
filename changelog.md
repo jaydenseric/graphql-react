@@ -2,11 +2,17 @@
 
 ## Next
 
+### Major
+
+- Updated Node.js support to `^14.17.0 || ^16.0.0 || >= 18.0.0`.
+
 ### Patch
 
 - Updated dev dependencies.
 - Removed the [`fetch-blob`](https://npm.im/fetch-blob) and [`formdata-node`](https://npm.im/formdata-node) dev dependencies. Instead, `File` and `FormData` are imported from [`node-fetch`](https://npm.im/node-fetch).
 - Updated `jsconfig.json` `compilerOptions.module` to `nodenext`.
+- Updated GitHub Actions CI config:
+  - Run tests with Node.js v14, v16, v18.
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 
 ## 18.0.0
