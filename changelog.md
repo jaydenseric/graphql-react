@@ -1,5 +1,12 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Updated dev dependencies.
+- Updated `jsconfig.json` `compilerOptions.module` to `nodenext`.
+
 ## 18.0.0
 
 ### Major

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "node12",
+    "module": "nodenext",
     "noEmit": true,
     "strict": true
   },
