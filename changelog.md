@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Removed the [`fetch-blob`](https://npm.im/fetch-blob) and [`formdata-node`](https://npm.im/formdata-node) dev dependencies. Instead, `File` and `FormData` are imported from [`node-fetch`](https://npm.im/node-fetch).
 - Updated `jsconfig.json` `compilerOptions.module` to `nodenext`.
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 

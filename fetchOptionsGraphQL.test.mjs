@@ -1,8 +1,7 @@
 // @ts-check
 
 import { deepStrictEqual, strictEqual } from "assert";
-import { File } from "fetch-blob/file.js";
-import { FormData } from "formdata-polyfill/esm.min.js";
+import { File, FormData } from "node-fetch";
 import revertableGlobals from "revertable-globals";
 
 import fetchOptionsGraphQL from "./fetchOptionsGraphQL.mjs";
