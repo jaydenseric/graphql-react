@@ -14,6 +14,7 @@
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v14, v16, v18.
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
+- Fixed some JSDoc links.
 
 ## 18.0.0
 
