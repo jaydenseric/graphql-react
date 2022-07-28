@@ -1,16 +1,14 @@
 // @ts-check
 
-import {
-  cleanup,
-  renderHook,
-  suppressErrorOutput,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { deepStrictEqual, strictEqual } from "assert";
+import { deepStrictEqual, ok, strictEqual } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useCache from "./useCache.mjs";
 
 /**
@@ -23,82 +21,88 @@ export default (tests) => {
   });
 
   tests.add("`useCache` with cache context missing.", () => {
-    try {
-      const revertConsole = suppressErrorOutput();
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      try {
-        var { result } = renderHook(() => useCache());
-      } finally {
-        revertConsole();
-      }
+    createReactTestRenderer(
+      React.createElement(ReactHookTest, {
+        useHook: useCache,
+        results,
+      })
+    );
 
-      deepStrictEqual(result.error, new TypeError("Cache context missing."));
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
   tests.add(
     "`useCache` with cache context value not a `Cache` instance.",
     () => {
-      try {
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const revertConsole = suppressErrorOutput();
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
+          React.createElement(ReactHookTest, {
+            useHook: useCache,
+            results,
+          })
+        )
+      );
 
-        try {
-          var { result } = renderHook(() => useCache(), { wrapper });
-        } finally {
-          revertConsole();
-        }
-
-        deepStrictEqual(
-          result.error,
-          new TypeError("Cache context value must be a `Cache` instance.")
-        );
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context value must be a `Cache` instance.")
+      );
     }
   );
 
   tests.add("`useCache` getting the cache.", () => {
-    try {
-      /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
-      const wrapper = ({ cache, children }) =>
-        React.createElement(CacheContext.Provider, { value: cache }, children);
+    const cacheA = new Cache();
 
-      const cacheA = new Cache();
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      const { result, rerender } = renderHook(() => useCache(), {
-        wrapper,
-        initialProps: {
-          cache: cacheA,
-        },
-      });
+    const testRenderer = createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        { value: cacheA },
+        React.createElement(ReactHookTest, {
+          useHook: useCache,
+          results,
+        })
+      )
+    );
 
-      strictEqual(result.all.length, 1);
-      strictEqual(result.current, cacheA);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
+    strictEqual(results[0].returned, cacheA);
 
-      const cacheB = new Cache();
+    const cacheB = new Cache();
 
-      rerender({ cache: cacheB });
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cacheB },
+          React.createElement(ReactHookTest, {
+            useHook: useCache,
+            results,
+          })
+        )
+      );
+    });
 
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, cacheB);
-      strictEqual(result.error, undefined);
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 2);
+    ok("returned" in results[1]);
+    strictEqual(results[1].returned, cacheB);
   });
 };

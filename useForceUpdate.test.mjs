@@ -1,13 +1,12 @@
 // @ts-check
 
-import {
-  act,
-  cleanup,
-  renderHook,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { strictEqual } from "assert";
+import { ok, strictEqual } from "assert";
+import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import assertTypeOf from "./test/assertTypeOf.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 
 /**
@@ -16,30 +15,40 @@ import useForceUpdate from "./useForceUpdate.mjs";
  */
 export default (tests) => {
   tests.add("`useForceUpdate` forcing an update.", async () => {
-    try {
-      const { result } = renderHook(() => useForceUpdate());
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      strictEqual(result.all.length, 1);
-      assertTypeOf(result.current, "function");
-      strictEqual(result.error, undefined);
+    createReactTestRenderer(
+      React.createElement(ReactHookTest, {
+        useHook: useForceUpdate,
+        results,
+      })
+    );
 
-      act(() => {
-        result.current();
-      });
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
 
-      strictEqual(result.all.length, 2);
-      assertTypeOf(result.current, "function");
-      strictEqual(result.error, undefined);
+    const result1Returned = results[0].returned;
 
-      act(() => {
-        result.current();
-      });
+    assertTypeOf(result1Returned, "function");
 
-      strictEqual(result.all.length, 3);
-      assertTypeOf(result.current, "function");
-      strictEqual(result.error, undefined);
-    } finally {
-      cleanup();
-    }
+    ReactTestRenderer.act(() => {
+      result1Returned();
+    });
+
+    strictEqual(results.length, 2);
+    ok("returned" in results[1]);
+
+    const result2Returned = results[1].returned;
+
+    assertTypeOf(result2Returned, "function");
+
+    ReactTestRenderer.act(() => {
+      result2Returned();
+    });
+
+    strictEqual(results.length, 3);
+    ok("returned" in results[2]);
+    assertTypeOf(results[2].returned, "function");
   });
 };

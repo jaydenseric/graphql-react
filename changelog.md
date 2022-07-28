@@ -9,6 +9,7 @@
 ### Patch
 
 - Updated dev dependencies.
+- Removed the [`@testing-library/react-hooks`](https://npm.im/@testing-library/react-hooks) dev dependency and rewrote React hook tests using [`react-test-renderer`](https://npm.im/react-test-renderer), a new test utility function `createReactTestRenderer`, and a custom React component `ReactHookTest`.
 - Removed the [`fetch-blob`](https://npm.im/fetch-blob) and [`formdata-node`](https://npm.im/formdata-node) dev dependencies. Instead, `File` and `FormData` are imported from [`node-fetch`](https://npm.im/node-fetch).
 - Updated `jsconfig.json` `compilerOptions.module` to `nodenext`.
 - Updated GitHub Actions CI config:

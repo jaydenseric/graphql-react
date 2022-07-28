@@ -1,19 +1,15 @@
 // @ts-check
-
-import {
-  act,
-  cleanup,
-  renderHook,
-  suppressErrorOutput,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { deepStrictEqual, strictEqual, throws } from "assert";
+import { deepStrictEqual, ok, strictEqual, throws } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 
 /**
@@ -38,266 +34,265 @@ export default (tests) => {
   });
 
   tests.add("`useCacheEntry` with cache context missing.", () => {
-    try {
-      const revertConsole = suppressErrorOutput();
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      try {
-        var { result } = renderHook(() => useCacheEntry("a"));
-      } finally {
-        revertConsole();
-      }
+    createReactTestRenderer(
+      React.createElement(ReactHookTest, {
+        useHook: () => useCacheEntry("a"),
+        results,
+      })
+    );
 
-      deepStrictEqual(result.error, new TypeError("Cache context missing."));
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
   tests.add(
     "`useCacheEntry` with cache context value not a `Cache` instance.",
     () => {
-      try {
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const revertConsole = suppressErrorOutput();
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntry("a"),
+            results,
+          })
+        )
+      );
 
-        try {
-          var { result } = renderHook(() => useCacheEntry("a"), { wrapper });
-        } finally {
-          revertConsole();
-        }
-
-        deepStrictEqual(
-          result.error,
-          new TypeError("Cache context value must be a `Cache` instance.")
-        );
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context value must be a `Cache` instance.")
+      );
     }
   );
 
   tests.add(
     "`useCacheEntry` without initial cache values for each cache key used.",
     () => {
-      try {
-        const cache = new Cache();
+      const cache = new Cache();
+      const cacheKeyA = "a";
 
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
+
+      const testRenderer = createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntry(cacheKeyA),
+            results,
+          })
+        )
+      );
+
+      strictEqual(results.length, 1);
+      ok("returned" in results[0]);
+      strictEqual(results[0].returned, undefined);
+
+      const cacheValueA2 = "a2";
+
+      ReactTestRenderer.act(() => {
+        cacheEntrySet(cache, cacheKeyA, cacheValueA2);
+      });
+
+      strictEqual(results.length, 2);
+      ok("returned" in results[1]);
+      strictEqual(results[1].returned, cacheValueA2);
+
+      ReactTestRenderer.act(() => {
+        cacheEntryDelete(cache, cacheKeyA);
+      });
+
+      strictEqual(results.length, 3);
+      ok("returned" in results[2]);
+      strictEqual(results[2].returned, undefined);
+
+      const cacheKeyB = "b";
+
+      ReactTestRenderer.act(() => {
+        testRenderer.update(
           React.createElement(
             CacheContext.Provider,
             { value: cache },
-            children
-          );
-
-        const cacheKeyA = "a";
-
-        const { result, rerender } = renderHook(
-          ({ cacheKey }) => useCacheEntry(cacheKey),
-          {
-            wrapper,
-            initialProps: {
-              cacheKey: cacheKeyA,
-            },
-          }
+            React.createElement(ReactHookTest, {
+              useHook: () => useCacheEntry(cacheKeyB),
+              results,
+            })
+          )
         );
+      });
 
-        strictEqual(result.all.length, 1);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 4);
+      ok("returned" in results[3]);
+      strictEqual(results[3].returned, undefined);
 
-        const cacheValueA2 = "a2";
+      const cacheValueB2 = "b2";
 
-        act(() => {
-          cacheEntrySet(cache, cacheKeyA, cacheValueA2);
-        });
+      ReactTestRenderer.act(() => {
+        cacheEntrySet(cache, cacheKeyB, cacheValueB2);
+      });
 
-        strictEqual(result.all.length, 2);
-        strictEqual(result.current, cacheValueA2);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 5);
+      ok("returned" in results[4]);
+      strictEqual(results[4].returned, cacheValueB2);
 
-        act(() => {
-          cacheEntryDelete(cache, cacheKeyA);
-        });
+      ReactTestRenderer.act(() => {
+        cacheEntryDelete(cache, cacheKeyB);
+      });
 
-        strictEqual(result.all.length, 3);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-
-        const cacheKeyB = "b";
-
-        rerender({ cacheKey: cacheKeyB });
-
-        strictEqual(result.all.length, 4);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-
-        const cacheValueB2 = "b2";
-
-        act(() => {
-          cacheEntrySet(cache, cacheKeyB, cacheValueB2);
-        });
-
-        strictEqual(result.all.length, 5);
-        strictEqual(result.current, cacheValueB2);
-        strictEqual(result.error, undefined);
-
-        act(() => {
-          cacheEntryDelete(cache, cacheKeyB);
-        });
-
-        strictEqual(result.all.length, 6);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 6);
+      ok("returned" in results[5]);
+      strictEqual(results[5].returned, undefined);
     }
   );
 
   tests.add(
     "`useCacheEntry` with initial cache values for each cache key used, replacing cache values.",
     () => {
-      try {
-        const cacheKeyA = "a";
-        const cacheValueA1 = "a1";
-        const cacheKeyB = "b";
-        const cacheValueB1 = "b1";
-        const cache = new Cache({
-          [cacheKeyA]: cacheValueA1,
-          [cacheKeyB]: cacheValueB1,
-        });
+      const cacheKeyA = "a";
+      const cacheValueA1 = "a1";
+      const cacheKeyB = "b";
+      const cacheValueB1 = "b1";
+      const cache = new Cache({
+        [cacheKeyA]: cacheValueA1,
+        [cacheKeyB]: cacheValueB1,
+      });
 
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
+
+      const testRenderer = createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntry(cacheKeyA),
+            results,
+          })
+        )
+      );
+
+      strictEqual(results.length, 1);
+      ok("returned" in results[0]);
+      strictEqual(results[0].returned, cacheValueA1);
+
+      const cacheValueA2 = "a2";
+
+      ReactTestRenderer.act(() => {
+        cacheEntrySet(cache, cacheKeyA, cacheValueA2);
+      });
+
+      strictEqual(results.length, 2);
+      ok("returned" in results[1]);
+      strictEqual(results[1].returned, cacheValueA2);
+
+      ReactTestRenderer.act(() => {
+        cacheEntryDelete(cache, cacheKeyA);
+      });
+
+      strictEqual(results.length, 3);
+      ok("returned" in results[2]);
+      strictEqual(results[2].returned, undefined);
+
+      ReactTestRenderer.act(() => {
+        testRenderer.update(
           React.createElement(
             CacheContext.Provider,
             { value: cache },
-            children
-          );
-
-        const { result, rerender } = renderHook(
-          ({ cacheKey }) => useCacheEntry(cacheKey),
-          {
-            wrapper,
-            initialProps: {
-              cacheKey: cacheKeyA,
-            },
-          }
+            React.createElement(ReactHookTest, {
+              useHook: () => useCacheEntry(cacheKeyB),
+              results,
+            })
+          )
         );
+      });
 
-        strictEqual(result.all.length, 1);
-        strictEqual(result.current, cacheValueA1);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 4);
+      ok("returned" in results[3]);
+      strictEqual(results[3].returned, cacheValueB1);
 
-        const cacheValueA2 = "a2";
+      const cacheValueB2 = "b2";
 
-        act(() => {
-          cacheEntrySet(cache, cacheKeyA, cacheValueA2);
-        });
+      ReactTestRenderer.act(() => {
+        cacheEntrySet(cache, cacheKeyB, cacheValueB2);
+      });
 
-        strictEqual(result.all.length, 2);
-        strictEqual(result.current, cacheValueA2);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 5);
+      ok("returned" in results[4]);
+      strictEqual(results[4].returned, cacheValueB2);
 
-        act(() => {
-          cacheEntryDelete(cache, cacheKeyA);
-        });
+      ReactTestRenderer.act(() => {
+        cacheEntryDelete(cache, cacheKeyB);
+      });
 
-        strictEqual(result.all.length, 3);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-
-        rerender({ cacheKey: cacheKeyB });
-
-        strictEqual(result.all.length, 4);
-        strictEqual(result.current, cacheValueB1);
-        strictEqual(result.error, undefined);
-
-        const cacheValueB2 = "b2";
-
-        act(() => {
-          cacheEntrySet(cache, cacheKeyB, cacheValueB2);
-        });
-
-        strictEqual(result.all.length, 5);
-        strictEqual(result.current, cacheValueB2);
-        strictEqual(result.error, undefined);
-
-        act(() => {
-          cacheEntryDelete(cache, cacheKeyB);
-        });
-
-        strictEqual(result.all.length, 6);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 6);
+      ok("returned" in results[5]);
+      strictEqual(results[5].returned, undefined);
     }
   );
 
   tests.add(
     "`useCacheEntry` with initial cache value, mutating cache value.",
     () => {
-      try {
-        const cacheKey = "a";
-        const cacheValue = { a: 1 };
-        const cache = new Cache({
-          [cacheKey]: cacheValue,
-        });
+      const cacheKey = "a";
+      const cacheValue = { a: 1 };
+      const cache = new Cache({
+        [cacheKey]: cacheValue,
+      });
 
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            { value: cache },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const { result } = renderHook(() => useCacheEntry(cacheKey), {
-          wrapper,
-        });
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntry(cacheKey),
+            results,
+          })
+        )
+      );
 
-        strictEqual(result.all.length, 1);
-        strictEqual(result.current, cacheValue);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 1);
+      ok("returned" in results[0]);
+      strictEqual(results[0].returned, cacheValue);
 
-        act(() => {
-          cacheValue.a = 2;
-          cache.dispatchEvent(
-            new CustomEvent(`${cacheKey}/set`, {
-              detail: {
-                cacheValue,
-              },
-            })
-          );
-        });
+      ReactTestRenderer.act(() => {
+        cacheValue.a = 2;
+        cache.dispatchEvent(
+          new CustomEvent(`${cacheKey}/set`, {
+            detail: {
+              cacheValue,
+            },
+          })
+        );
+      });
 
-        strictEqual(result.all.length, 2);
-        strictEqual(result.current, cacheValue);
-        strictEqual(result.error, undefined);
+      strictEqual(results.length, 2);
+      ok("returned" in results[1]);
+      strictEqual(results[1].returned, cacheValue);
 
-        act(() => {
-          cacheEntryDelete(cache, cacheKey);
-        });
+      ReactTestRenderer.act(() => {
+        cacheEntryDelete(cache, cacheKey);
+      });
 
-        strictEqual(result.all.length, 3);
-        strictEqual(result.current, undefined);
-        strictEqual(result.error, undefined);
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 3);
+      ok("returned" in results[2]);
+      strictEqual(results[2].returned, undefined);
     }
   );
 };

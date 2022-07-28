@@ -1,12 +1,8 @@
 // @ts-check
 
-import {
-  cleanup,
-  renderHook,
-  suppressErrorOutput,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { deepStrictEqual, strictEqual, throws } from "assert";
+import { deepStrictEqual, ok, strictEqual, throws } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -14,6 +10,8 @@ import cacheEntryStale from "./cacheEntryStale.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useLoadOnStale from "./useLoadOnStale.mjs";
 
 /**
@@ -62,53 +60,47 @@ export default (tests) => {
   });
 
   tests.add("`useLoadOnStale` with cache context missing.", () => {
-    try {
-      const revertConsole = suppressErrorOutput();
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      try {
-        var { result } = renderHook(() => useLoadOnStale("a", dummyLoader));
-      } finally {
-        revertConsole();
-      }
+    createReactTestRenderer(
+      React.createElement(ReactHookTest, {
+        useHook: () => useLoadOnStale("a", dummyLoader),
+        results,
+      })
+    );
 
-      deepStrictEqual(result.error, new TypeError("Cache context missing."));
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
   tests.add(
     "`useLoadOnStale` with cache context value not a `Cache` instance.",
     () => {
-      try {
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const revertConsole = suppressErrorOutput();
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
+          React.createElement(ReactHookTest, {
+            useHook: () => useLoadOnStale("a", dummyLoader),
+            results,
+          })
+        )
+      );
 
-        try {
-          var { result } = renderHook(() => useLoadOnStale("a", dummyLoader), {
-            wrapper,
-          });
-        } finally {
-          revertConsole();
-        }
-
-        deepStrictEqual(
-          result.error,
-          new TypeError("Cache context value must be a `Cache` instance.")
-        );
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context value must be a `Cache` instance.")
+      );
     }
   );
 
@@ -148,109 +140,124 @@ export default (tests) => {
       return dummyLoader();
     }
 
-    /** @param {{ cache: Cache, children?: React.ReactNode }} props Props. */
-    const wrapper = ({ cache, children }) =>
-      React.createElement(CacheContext.Provider, { value: cache }, children);
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-    try {
-      const { result, rerender } = renderHook(
-        ({ cacheKey, load }) => useLoadOnStale(cacheKey, load),
-        {
-          wrapper,
-          initialProps: {
-            cache: cacheA,
-            cacheKey: cacheKeyA,
-            load: loadA,
-          },
-        }
+    const testRenderer = createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        { value: cacheA },
+        React.createElement(ReactHookTest, {
+          useHook: () => useLoadOnStale(cacheKeyA, loadA),
+          results,
+        })
+      )
+    );
+
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
+    strictEqual(results[0].returned, undefined);
+
+    cacheEntryStale(cacheA, cacheKeyA);
+
+    deepStrictEqual(loadCalls, [
+      {
+        loader: loadA,
+        hadArgs: false,
+      },
+    ]);
+
+    loadCalls = [];
+
+    // Test that re-rendering with the a different cache causes the listener
+    // to be moved to the new cache.
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cacheB },
+          React.createElement(ReactHookTest, {
+            useHook: () => useLoadOnStale(cacheKeyA, loadA),
+            results,
+          })
+        )
       );
+    });
 
-      strictEqual(result.all.length, 1);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 2);
+    ok("returned" in results[1]);
+    strictEqual(results[1].returned, undefined);
 
-      cacheEntryStale(cacheA, cacheKeyA);
+    cacheEntryStale(cacheB, cacheKeyA);
 
-      deepStrictEqual(loadCalls, [
-        {
-          loader: loadA,
-          hadArgs: false,
-        },
-      ]);
+    deepStrictEqual(loadCalls, [
+      {
+        loader: loadA,
+        hadArgs: false,
+      },
+    ]);
 
-      loadCalls = [];
+    loadCalls = [];
 
-      // Test that re-rendering with the a different cache causes the listener
-      // to be moved to the new cache.
-      rerender({
-        cache: cacheB,
-        cacheKey: cacheKeyA,
-        load: loadA,
-      });
+    // Test that re-rendering with a different cache key causes the listener
+    // to be updated.
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cacheB },
+          React.createElement(ReactHookTest, {
+            useHook: () => useLoadOnStale(cacheKeyB, loadA),
+            results,
+          })
+        )
+      );
+    });
 
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 3);
+    ok("returned" in results[2]);
+    strictEqual(results[2].returned, undefined);
 
-      cacheEntryStale(cacheB, cacheKeyA);
+    cacheEntryStale(cacheB, cacheKeyB);
 
-      deepStrictEqual(loadCalls, [
-        {
-          loader: loadA,
-          hadArgs: false,
-        },
-      ]);
+    deepStrictEqual(loadCalls, [
+      {
+        loader: loadA,
+        hadArgs: false,
+      },
+    ]);
 
-      loadCalls = [];
+    loadCalls = [];
 
-      // Test that re-rendering with a different cache key causes the listener
-      // to be updated.
-      rerender({
-        cache: cacheB,
-        cacheKey: cacheKeyB,
-        load: loadA,
-      });
+    // Test that re-rendering with a different loader causes the listener
+    // to be updated.
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cacheB },
+          React.createElement(ReactHookTest, {
+            useHook: () => useLoadOnStale(cacheKeyB, loadB),
+            results,
+          })
+        )
+      );
+    });
 
-      strictEqual(result.all.length, 3);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 4);
+    ok("returned" in results[3]);
+    strictEqual(results[3].returned, undefined);
 
-      cacheEntryStale(cacheB, cacheKeyB);
+    cacheEntryStale(cacheB, cacheKeyB);
 
-      deepStrictEqual(loadCalls, [
-        {
-          loader: loadA,
-          hadArgs: false,
-        },
-      ]);
+    deepStrictEqual(loadCalls, [
+      {
+        loader: loadB,
+        hadArgs: false,
+      },
+    ]);
 
-      loadCalls = [];
-
-      // Test that re-rendering with a different loader causes the listener
-      // to be updated.
-      rerender({
-        cache: cacheB,
-        cacheKey: cacheKeyB,
-        load: loadB,
-      });
-
-      strictEqual(result.all.length, 4);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
-
-      cacheEntryStale(cacheB, cacheKeyB);
-
-      deepStrictEqual(loadCalls, [
-        {
-          loader: loadB,
-          hadArgs: false,
-        },
-      ]);
-
-      // Nothing should have caused a re-render.
-      strictEqual(result.all.length, 4);
-    } finally {
-      cleanup();
-    }
+    // Nothing should have caused a re-render.
+    strictEqual(results.length, 4);
   });
 };

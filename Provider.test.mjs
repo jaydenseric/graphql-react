@@ -82,18 +82,20 @@ export default (tests) => {
     strictEqual(results[0].cacheContextValue, cache);
     assertInstanceOf(results[0].loadingContextValue, Loading);
 
-    testRenderer.update(
-      React.createElement(
-        Provider,
-        {
-          // @ts-ignore Force the component to re-render by setting a new
-          // arbitrary prop.
-          a: true,
-          cache,
-        },
-        React.createElement(TestComponent)
-      )
-    );
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          Provider,
+          {
+            // @ts-ignore Force the component to re-render by setting a new
+            // arbitrary prop.
+            a: true,
+            cache,
+          },
+          React.createElement(TestComponent)
+        )
+      );
+    });
 
     strictEqual(results.length, 2);
     strictEqual(

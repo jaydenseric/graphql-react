@@ -1,8 +1,8 @@
 // @ts-check
 
-import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
-import { strictEqual, throws } from "assert";
+import { ok, strictEqual, throws } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -13,6 +13,8 @@ import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useAutoLoad from "./useAutoLoad.mjs";
 
 /**
@@ -84,86 +86,91 @@ export default (tests) => {
       return loadingCacheValue;
     }
 
-    /** @param {{ children?: React.ReactNode }} props Props. */
-    const wrapper = ({ children }) =>
-      React.createElement(CacheContext.Provider, { value: cache }, children);
+    // Test load on mount.
 
-    try {
-      // Test load on mount.
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      const { result, rerender, unmount } = renderHook(
-        () => useAutoLoad(cacheKey, load),
-        { wrapper }
-      );
+    const testRenderer = createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        { value: cache },
+        React.createElement(ReactHookTest, {
+          useHook: () => useAutoLoad(cacheKey, load),
+          results,
+        })
+      )
+    );
 
-      strictEqual(result.all.length, 1);
-      assertTypeOf(result.current, "function");
-      strictEqual(result.error, undefined);
-      strictEqual(loadCalls.length, 1);
-      strictEqual(loadCalls[0].hadArgs, false);
-      strictEqual(
-        loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
+    assertTypeOf(results[0].returned, "function");
+    strictEqual(loadCalls.length, 1);
+    strictEqual(loadCalls[0].hadArgs, false);
+    strictEqual(
+      loadCalls[0].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
 
-      // Test that the returned auto abort load function is memoized, and that
-      // re-rendering doesn’t result in another load.
+    // Test that the returned auto abort load function is memoized, and that
+    // re-rendering doesn’t result in another load.
 
-      rerender();
+    ReactTestRenderer.act(() => {
+      results[0].rerender();
+    });
 
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, result.all[0]);
-      strictEqual(result.error, undefined);
-      strictEqual(loadCalls.length, 1);
+    strictEqual(results.length, 2);
+    ok("returned" in results[1]);
+    strictEqual(results[1].returned, results[0].returned);
+    strictEqual(loadCalls.length, 1);
 
-      // Test prune prevention.
+    // Test prune prevention.
 
-      cacheEntryPrune(cache, cacheKey);
+    cacheEntryPrune(cache, cacheKey);
 
-      strictEqual(cacheKey in cache.store, true);
+    strictEqual(cacheKey in cache.store, true);
 
-      // Test load on stale.
+    // Test load on stale.
 
-      cacheEntryStale(cache, cacheKey);
+    cacheEntryStale(cache, cacheKey);
 
-      strictEqual(loadCalls.length, 2);
-      strictEqual(
-        loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-      strictEqual(loadCalls[1].hadArgs, false);
-      strictEqual(
-        loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
+    strictEqual(loadCalls.length, 2);
+    strictEqual(
+      loadCalls[0].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
+    strictEqual(loadCalls[1].hadArgs, false);
+    strictEqual(
+      loadCalls[1].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
 
-      // Test load on delete.
+    // Test load on delete.
 
-      cacheEntryDelete(cache, cacheKey);
+    cacheEntryDelete(cache, cacheKey);
 
-      strictEqual(loadCalls.length, 3);
-      strictEqual(
-        loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-      strictEqual(loadCalls[2].hadArgs, false);
-      strictEqual(
-        loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
+    strictEqual(loadCalls.length, 3);
+    strictEqual(
+      loadCalls[1].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
+    strictEqual(loadCalls[2].hadArgs, false);
+    strictEqual(
+      loadCalls[2].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
 
-      // Nothing should have caused a re-render.
-      strictEqual(result.all.length, 2);
+    // Nothing should have caused a re-render.
+    strictEqual(results.length, 2);
 
-      // Test that the last loading is aborted on unmount.
-      unmount();
+    // Test that the last loading is aborted on unmount.
+    ReactTestRenderer.act(() => {
+      testRenderer.unmount();
+    });
 
-      strictEqual(
-        loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-    } finally {
-      cleanup();
-    }
+    strictEqual(
+      loadCalls[2].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
   });
 };

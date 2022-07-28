@@ -1,11 +1,6 @@
 // @ts-check
 
-import {
-  cleanup,
-  renderHook,
-  suppressErrorOutput,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { deepStrictEqual, rejects, strictEqual, throws } from "assert";
+import { deepStrictEqual, ok, rejects, strictEqual, throws } from "assert";
 import React from "react";
 import ReactDOMServer from "react-dom/server.js";
 import waterfallRender from "react-waterfall-render/waterfallRender.mjs";
@@ -15,6 +10,8 @@ import CacheContext from "./CacheContext.mjs";
 import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useCacheEntry from "./useCacheEntry.mjs";
 import useWaterfallLoad from "./useWaterfallLoad.mjs";
 
@@ -64,92 +61,80 @@ export default (tests) => {
   });
 
   tests.add("`useWaterfallLoad` with cache context missing.", () => {
-    try {
-      const revertConsole = suppressErrorOutput();
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      try {
-        var { result } = renderHook(() => useWaterfallLoad("a", dummyLoader));
-      } finally {
-        revertConsole();
-      }
+    createReactTestRenderer(
+      React.createElement(ReactHookTest, {
+        useHook: () => useWaterfallLoad("a", dummyLoader),
+        results,
+      })
+    );
 
-      deepStrictEqual(result.error, new TypeError("Cache context missing."));
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
   tests.add(
     "`useWaterfallLoad` with cache context value not a `Cache` instance.",
     () => {
-      try {
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const revertConsole = suppressErrorOutput();
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
+          React.createElement(ReactHookTest, {
+            useHook: () => useWaterfallLoad("a", dummyLoader),
+            results,
+          })
+        )
+      );
 
-        try {
-          var { result } = renderHook(
-            () => useWaterfallLoad("a", dummyLoader),
-            {
-              wrapper,
-            }
-          );
-        } finally {
-          revertConsole();
-        }
-
-        deepStrictEqual(
-          result.error,
-          new TypeError("Cache context value must be a `Cache` instance.")
-        );
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context value must be a `Cache` instance.")
+      );
     }
   );
 
   tests.add(
     "`useWaterfallLoad` with waterfall render context value undefined.",
     () => {
-      try {
-        const cache = new Cache();
+      const cache = new Cache();
 
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            { value: cache },
-            children
-          );
+      let didLoad = false;
 
-        let didLoad = false;
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const { result } = renderHook(
-          () =>
-            useWaterfallLoad("a", () => {
-              didLoad = true;
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () =>
+              useWaterfallLoad("a", () => {
+                didLoad = true;
 
-              return dummyLoader();
-            }),
-          { wrapper }
-        );
+                return dummyLoader();
+              }),
+            results,
+          })
+        )
+      );
 
-        strictEqual(didLoad, false);
-        strictEqual(result.all.length, 1);
-        strictEqual(result.current, false);
-        strictEqual(result.error, undefined);
-      } finally {
-        cleanup();
-      }
+      strictEqual(didLoad, false);
+      strictEqual(results.length, 1);
+      ok("returned" in results[0]);
+      strictEqual(results[0].returned, false);
     }
   );
 

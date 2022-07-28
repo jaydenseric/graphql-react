@@ -1,8 +1,8 @@
 // @ts-check
 
-import { cleanup, renderHook } from "@testing-library/react-hooks/lib/pure.js";
-import { notStrictEqual, strictEqual, throws } from "assert";
+import { notStrictEqual, ok, strictEqual, throws } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -10,6 +10,8 @@ import Loading from "./Loading.mjs";
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 
 /**
@@ -84,95 +86,104 @@ export default (tests) => {
       return loadingCacheValue;
     }
 
-    /** @param {{ children?: React.ReactNode }} props Props. */
-    const wrapper = ({ children }) =>
-      React.createElement(CacheContext.Provider, { value: cache }, children);
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-    try {
-      const { result, rerender, unmount } = renderHook(
-        ({ load }) => useAutoAbortLoad(load),
-        {
-          wrapper,
-          initialProps: {
-            load: loadA,
-          },
-        }
+    const testRenderer = createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        { value: cache },
+        React.createElement(ReactHookTest, {
+          useHook: () => useAutoAbortLoad(loadA),
+          results,
+        })
+      )
+    );
+
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
+    assertTypeOf(results[0].returned, "function");
+    strictEqual(loadCalls.length, 0);
+
+    // Test that the returned auto abort load function is memoized.
+    ReactTestRenderer.act(() => {
+      results[0].rerender();
+    });
+
+    strictEqual(results.length, 2);
+    strictEqual(loadCalls.length, 0);
+
+    // Start the first loading.
+    results[0].returned();
+
+    strictEqual(loadCalls.length, 1);
+    strictEqual(loadCalls[0].loader, loadA);
+    strictEqual(loadCalls[0].hadArgs, false);
+    strictEqual(
+      loadCalls[0].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
+
+    // Start the second loading, before the first ends. This should abort the
+    // first.
+    results[0].returned();
+
+    strictEqual(loadCalls.length, 2);
+    strictEqual(
+      loadCalls[0].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
+    strictEqual(loadCalls[1].hadArgs, false);
+    strictEqual(loadCalls[1].loader, loadA);
+    strictEqual(
+      loadCalls[1].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
+
+    // Test that changing the loader causes the returned memoized auto abort
+    // load function to change, and the last loading to abort.
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () => useAutoAbortLoad(loadB),
+            results,
+          })
+        )
       );
+    });
 
-      strictEqual(result.all.length, 1);
-      assertTypeOf(result.current, "function");
-      strictEqual(result.error, undefined);
-      strictEqual(loadCalls.length, 0);
+    strictEqual(results.length, 3);
+    ok("returned" in results[2]);
+    assertTypeOf(results[2].returned, "function");
+    notStrictEqual(results[2].returned, results[1]);
+    strictEqual(loadCalls.length, 2);
+    strictEqual(
+      loadCalls[1].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
 
-      // Test that the returned auto abort load function is memoized.
-      rerender();
+    // Test that the returned newly memoized abort load function works.
+    results[2].returned();
 
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, result.all[0]);
-      strictEqual(result.error, undefined);
-      strictEqual(loadCalls.length, 0);
+    strictEqual(loadCalls.length, 3);
+    strictEqual(loadCalls[2].loader, loadB);
+    strictEqual(loadCalls[2].hadArgs, false);
+    strictEqual(
+      loadCalls[2].loadingCacheValue.abortController.signal.aborted,
+      false
+    );
 
-      // Start the first loading.
-      result.current();
+    // Test that the last loading is aborted on unmount.
+    ReactTestRenderer.act(() => {
+      testRenderer.unmount();
+    });
 
-      strictEqual(loadCalls.length, 1);
-      strictEqual(loadCalls[0].loader, loadA);
-      strictEqual(loadCalls[0].hadArgs, false);
-      strictEqual(
-        loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
-
-      // Start the second loading, before the first ends. This should abort the
-      // first.
-      result.current();
-
-      strictEqual(loadCalls.length, 2);
-      strictEqual(
-        loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-      strictEqual(loadCalls[1].hadArgs, false);
-      strictEqual(loadCalls[1].loader, loadA);
-      strictEqual(
-        loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
-
-      // Test that changing the loader causes the returned memoized auto abort
-      // load function to change, and the last loading to abort.
-      rerender({ load: loadB });
-
-      strictEqual(result.all.length, 3);
-      assertTypeOf(result.current, "function");
-      notStrictEqual(result.current, result.all[1]);
-      strictEqual(result.error, undefined);
-      strictEqual(loadCalls.length, 2);
-      strictEqual(
-        loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-
-      // Test that the returned newly memoized abort load function works.
-      result.current();
-
-      strictEqual(loadCalls.length, 3);
-      strictEqual(loadCalls[2].loader, loadB);
-      strictEqual(loadCalls[2].hadArgs, false);
-      strictEqual(
-        loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-        false
-      );
-
-      // Test that the last loading is aborted on unmount.
-      unmount();
-
-      strictEqual(
-        loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-        true
-      );
-    } finally {
-      cleanup();
-    }
+    strictEqual(
+      loadCalls[2].loadingCacheValue.abortController.signal.aborted,
+      true
+    );
   });
 };

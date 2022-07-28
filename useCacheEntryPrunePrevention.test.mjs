@@ -1,18 +1,15 @@
 // @ts-check
 
-import {
-  act,
-  cleanup,
-  renderHook,
-  suppressErrorOutput,
-} from "@testing-library/react-hooks/lib/pure.js";
-import { deepStrictEqual, strictEqual, throws } from "assert";
+import { deepStrictEqual, ok, strictEqual, throws } from "assert";
 import React from "react";
+import ReactTestRenderer from "react-test-renderer";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
+import ReactHookTest from "./test/ReactHookTest.mjs";
 import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 
 /**
@@ -42,125 +39,123 @@ export default (tests) => {
   tests.add(
     "`useCacheEntryPrunePrevention` with cache context missing.",
     () => {
-      try {
-        const revertConsole = suppressErrorOutput();
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        try {
-          var { result } = renderHook(() => useCacheEntryPrunePrevention("a"));
-        } finally {
-          revertConsole();
-        }
+      createReactTestRenderer(
+        React.createElement(ReactHookTest, {
+          useHook: () => useCacheEntryPrunePrevention("a"),
+          results,
+        })
+      );
 
-        deepStrictEqual(result.error, new TypeError("Cache context missing."));
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context missing.")
+      );
     }
   );
 
   tests.add(
     "`useCacheEntryPrunePrevention` with cache context value not a `Cache` instance.",
     () => {
-      try {
-        /** @param {{ children?: React.ReactNode }} props Props. */
-        const wrapper = ({ children }) =>
-          React.createElement(
-            CacheContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            children
-          );
+      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      const results = [];
 
-        const revertConsole = suppressErrorOutput();
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntryPrunePrevention("a"),
+            results,
+          })
+        )
+      );
 
-        try {
-          var { result } = renderHook(() => useCacheEntryPrunePrevention("a"), {
-            wrapper,
-          });
-        } finally {
-          revertConsole();
-        }
-
-        deepStrictEqual(
-          result.error,
-          new TypeError("Cache context value must be a `Cache` instance.")
-        );
-      } finally {
-        cleanup();
-      }
+      strictEqual(results.length, 1);
+      ok("threw" in results[0]);
+      deepStrictEqual(
+        results[0].threw,
+        new TypeError("Cache context value must be a `Cache` instance.")
+      );
     }
   );
 
   tests.add("`useCacheEntryPrunePrevention` functionality.", () => {
-    try {
-      const cacheKeyA = "a";
-      const cacheKeyB = "b";
-      const initialCacheStore = {
-        [cacheKeyA]: 1,
-        [cacheKeyB]: 2,
-      };
-      const cache = new Cache({ ...initialCacheStore });
+    const cacheKeyA = "a";
+    const cacheKeyB = "b";
+    const initialCacheStore = {
+      [cacheKeyA]: 1,
+      [cacheKeyB]: 2,
+    };
+    const cache = new Cache({ ...initialCacheStore });
 
-      /** @param {{ children?: React.ReactNode }} props Props. */
-      const wrapper = ({ children }) =>
-        React.createElement(CacheContext.Provider, { value: cache }, children);
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      const { result, rerender } = renderHook(
-        ({ cacheKey }) => useCacheEntryPrunePrevention(cacheKey),
-        {
-          wrapper,
-          initialProps: {
-            cacheKey: cacheKeyA,
-          },
-        }
+    const testRenderer = createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        { value: cache },
+        React.createElement(ReactHookTest, {
+          useHook: () => useCacheEntryPrunePrevention(cacheKeyA),
+          results,
+        })
+      )
+    );
+
+    strictEqual(results.length, 1);
+    ok("returned" in results[0]);
+    strictEqual(results[0].returned, undefined);
+
+    ReactTestRenderer.act(() => {
+      // This cache entry prune should be prevented.
+      cacheEntryPrune(cache, cacheKeyA);
+    });
+
+    deepStrictEqual(cache.store, initialCacheStore);
+
+    strictEqual(results.length, 1);
+
+    ReactTestRenderer.act(() => {
+      testRenderer.update(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(ReactHookTest, {
+            useHook: () => useCacheEntryPrunePrevention(cacheKeyB),
+            results,
+          })
+        )
       );
+    });
 
-      strictEqual(result.all.length, 1);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 2);
+    ok("returned" in results[1]);
+    strictEqual(results[1].returned, undefined);
 
-      act(() => {
-        // This cache entry prune should be prevented.
-        cacheEntryPrune(cache, cacheKeyA);
-      });
+    ReactTestRenderer.act(() => {
+      // This cache entry prune should be prevented.
+      cacheEntryPrune(cache, cacheKeyB);
+    });
 
-      deepStrictEqual(cache.store, initialCacheStore);
+    deepStrictEqual(cache.store, initialCacheStore);
 
-      strictEqual(result.all.length, 1);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    strictEqual(results.length, 2);
 
-      rerender({ cacheKey: cacheKeyB });
+    ReactTestRenderer.act(() => {
+      // This cache entry prune should no longer be prevented.
+      cacheEntryPrune(cache, cacheKeyA);
+    });
 
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
+    deepStrictEqual(cache.store, { [cacheKeyB]: 2 });
 
-      act(() => {
-        // This cache entry prune should be prevented.
-        cacheEntryPrune(cache, cacheKeyB);
-      });
-
-      deepStrictEqual(cache.store, initialCacheStore);
-
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
-
-      act(() => {
-        // This cache entry prune should no longer be prevented.
-        cacheEntryPrune(cache, cacheKeyA);
-      });
-
-      deepStrictEqual(cache.store, { [cacheKeyB]: 2 });
-
-      strictEqual(result.all.length, 2);
-      strictEqual(result.current, undefined);
-      strictEqual(result.error, undefined);
-    } finally {
-      cleanup();
-    }
+    strictEqual(results.length, 2);
   });
 };
