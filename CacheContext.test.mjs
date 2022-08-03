@@ -20,7 +20,6 @@ export default (tests) => {
   tests.add("`CacheContext` used as a React context.", () => {
     let contextValue;
 
-    /** Test component. */
     function TestComponent() {
       contextValue = React.useContext(CacheContext);
       return null;

@@ -22,7 +22,6 @@ export default (tests) => {
   tests.add("`HydrationTimeStampContext` used as a React context.", () => {
     let contextValue;
 
-    /** Test component. */
     function TestComponent() {
       contextValue = React.useContext(HydrationTimeStampContext);
       return null;

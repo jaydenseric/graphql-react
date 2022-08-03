@@ -52,7 +52,6 @@ export default (tests) => {
      */
     const results = [];
 
-    /** Test component. */
     function TestComponent() {
       results.push({
         hydrationTimeStampContextValue: React.useContext(
