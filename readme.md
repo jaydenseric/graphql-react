@@ -35,7 +35,7 @@ To server side render your app, use the [`waterfallRender`](https://github.com/j
 
 ## Examples
 
-- [Next.js example](https://github.com/jaydenseric/graphql-react-examples) deployed at [graphql-react.vercel.app](https://graphql-react.vercel.app).
+- [`graphql-react` examples repo](https://github.com/jaydenseric/graphql-react-examples), a [Deno](https://deno.land) [Ruck](https://ruck.tech) web app deployed at [graphql-react-examples.fly.dev](https://graphql-react-examples.fly.dev).
 - [Official Next.js example](https://github.com/vercel/next.js/tree/canary/examples/with-graphql-react) (often outdated as the Next.js team can be extremely slow to review and merge pull requests).
 
 Here is a basic example using the [GitHub GraphQL API](https://docs.github.com/en/graphql), with tips commented:
