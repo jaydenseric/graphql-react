@@ -23,8 +23,8 @@
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 - Use `globalThis` instead of `global` in tests.
 - Use `ReactTestRenderer` instead of `ReactDOMServer.renderToStaticMarkup` in some React context related tests.
-- Fixed some JSDoc links.
 - Removed some unnecessary JSDoc comments in tests.
+- Fixed some JSDoc links.
 - Revamped the readme:
   - Removed the badges.
   - Updated the “Examples” section to reflect the [`graphql-react` examples repo](https://github.com/jaydenseric/graphql-react-examples) migration from [Node.js](https://nodejs.org), [Next.js](https://nextjs.org), and [Vercel](https://vercel.com) to [Deno](https://deno.land), [Ruck](https://ruck.tech), and [Fly.io](https://fly.io).
