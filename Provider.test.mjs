@@ -13,6 +13,7 @@ import Provider from "./Provider.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 import assertTypeOf from "./test/assertTypeOf.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import suppressReactRenderErrorConsoleOutput from "./test/suppressReactRenderErrorConsoleOutput.mjs";
 
 /**
@@ -29,7 +30,7 @@ export default (tests) => {
 
     try {
       throws(() => {
-        ReactTestRenderer.create(
+        createReactTestRenderer(
           React.createElement(
             Provider,
             // @ts-expect-error Testing invalid.
@@ -64,7 +65,7 @@ export default (tests) => {
     }
 
     const cache = new Cache();
-    const testRenderer = ReactTestRenderer.create(
+    const testRenderer = createReactTestRenderer(
       React.createElement(
         Provider,
         { cache },
