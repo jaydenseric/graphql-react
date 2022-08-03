@@ -13,19 +13,35 @@ The [exports](#exports) can also be used to custom load, cache and server side r
 
 ## Installation
 
-First, polyfill any required globals (see [_**Requirements**_](#requirements)) that are missing in your server and client environments.
+> **Note**
+>
+> For a [Next.js](https://nextjs.org) project, see the [`next-graphql-react`](https://npm.im/next-graphql-react) installation instructions.
 
-### Next.js setup
-
-See the [`next-graphql-react`](https://npm.im/next-graphql-react) setup instructions.
-
-### Custom React setup
-
-To install with [npm](https://npmjs.com/get-npm), run:
+For [Node.js](https://nodejs.org), to install [`graphql-react`](https://npm.im/graphql-react) and its [`react`](https://npm.im/react) peer dependency with [npm](https://npmjs.com/get-npm), run:
 
 ```sh
-npm install graphql-react
+npm install graphql-react react
 ```
+
+For [Deno](https://deno.land) and browsers, an example import map (realistically use 4 import maps, with optimal URLs for server vs client and development vs production):
+
+```json
+{
+  "imports": {
+    "extract-files/": "https://unpkg.com/extract-files@12.0.0/",
+    "graphql-react/": "https://unpkg.com/graphql-react@18.0.0/",
+    "react": "https://esm.sh/react@18.2.0",
+    "react-waterfall-render/": "https://unpkg.com/react-waterfall-render@4.0.1/"
+  }
+}
+```
+
+These dependencies might not need to be in the import map, depending on what [`graphql-react`](https://npm.im/graphql-react) modules the project imports from:
+
+- [`extract-files`](https://npm.im/extract-files)
+- [`react-waterfall-render`](https://npm.im/react-waterfall-render)
+
+Polyfill any required globals (see [_**Requirements**_](#requirements)) that are missing in your server and client environments.
 
 Create a single [`Cache`](#class-cache) instance and use the [`Provider`](#function-dataprovider) component to provide it for your app.
 
@@ -130,8 +146,11 @@ export default function GitHubRepoStars({ repoId }) {
 
 ## Requirements
 
-- [Node.js](https://nodejs.org): `^14.17.0 || ^16.0.0 || >= 18.0.0`
-- [Browsers](https://npm.im/browserslist): `> 0.5%, not OperaMini all, not dead`
+Supported runtime environments:
+
+- [Node.js](https://nodejs.org) versions `^14.17.0 || ^16.0.0 || >= 18.0.0`.
+- [Deno](https://deno.land), importing from a CDN that might require an import map for dependencies.
+- Browsers matching the [Browserslist](https://npm.im/browserslist) query `> 0.5%, not OperaMini all, not dead`.
 
 Consider polyfilling:
 
@@ -143,9 +162,15 @@ Consider polyfilling:
 - [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 - [`performance`](https://developer.mozilla.org/en-US/docs/Web/API/Window/performance)
 
+Non [Deno](https://deno.land) projects must configure [TypeScript](https://typescriptlang.org) to use types from the ECMAScript modules that have a `// @ts-check` comment:
+
+- [`compilerOptions.allowJs`](https://typescriptlang.org/tsconfig#allowJs) should be `true`.
+- [`compilerOptions.maxNodeModuleJsDepth`](https://typescriptlang.org/tsconfig#maxNodeModuleJsDepth) should be reasonably large, e.g. `10`.
+- [`compilerOptions.module`](https://typescriptlang.org/tsconfig#module) should be `"node16"` or `"nodenext"`.
+
 ## Exports
 
-These ECMAScript modules are published to [npm](https://npmjs.com) and exported via the [`package.json`](./package.json) `exports` field:
+The [npm](https://npmjs.com) package [`graphql-react`](https://npm.im/graphql-react) features [optimal JavaScript module design](https://jaydenseric.com/blog/optimal-javascript-module-design). It doesn’t have a main index module, so use deep imports from the ECMAScript modules that are exported via the [`package.json`](./package.json) field [`exports`](https://nodejs.org/api/packages.html#exports):
 
 - [`Cache.mjs`](./Cache.mjs)
 - [`CacheContext.mjs`](./CacheContext.mjs)

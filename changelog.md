@@ -25,6 +25,7 @@
 - Revamped the readme:
   - Removed the badges.
   - Updated the “Examples” section to reflect the [`graphql-react` examples repo](https://github.com/jaydenseric/graphql-react-examples) migration from [Node.js](https://nodejs.org), [Next.js](https://nextjs.org), and [Vercel](https://vercel.com) to [Deno](https://deno.land), [Ruck](https://ruck.tech), and [Fly.io](https://fly.io).
+  - Added information about Deno, import maps, TypeScript config, and [optimal JavaScript module design](https://jaydenseric.com/blog/optimal-javascript-module-design).
 
 ## 18.0.0
 
