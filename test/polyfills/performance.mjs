@@ -2,6 +2,6 @@
 
 import { performance } from "perf_hooks";
 
-if (!("performance" in global))
+if (!("performance" in globalThis))
   // @ts-ignore Node.js has a partial implementation.
-  global.performance = performance;
+  globalThis.performance = performance;

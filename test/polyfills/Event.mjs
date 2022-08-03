@@ -2,4 +2,4 @@
 
 import { Event } from "event-target-shim";
 
-if (!("Event" in global)) global.Event = Event;
+if (!("Event" in globalThis)) globalThis.Event = Event;

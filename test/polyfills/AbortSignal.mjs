@@ -4,4 +4,4 @@
 
 import { AbortSignal } from "abort-controller";
 
-if (!("AbortSignal" in global)) global.AbortSignal = AbortSignal;
+if (!("AbortSignal" in globalThis)) globalThis.AbortSignal = AbortSignal;

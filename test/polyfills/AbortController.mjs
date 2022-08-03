@@ -4,4 +4,5 @@
 
 import { AbortController } from "abort-controller";
 
-if (!("AbortController" in global)) global.AbortController = AbortController;
+if (!("AbortController" in globalThis))
+  globalThis.AbortController = AbortController;

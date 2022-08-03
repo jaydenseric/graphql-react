@@ -1,12 +1,12 @@
 // @ts-check
 
-if (!("CustomEvent" in global))
-  global.CustomEvent =
+if (!("CustomEvent" in globalThis))
+  globalThis.CustomEvent =
     /**
      * `CustomEvent` polyfill.
-     * @type {typeof global.CustomEvent}
+     * @type {typeof globalThis.CustomEvent}
      */
-    class CustomEvent extends global.Event {
+    class CustomEvent extends globalThis.Event {
       /**
        * @param {string} type Event type.
        * @param {CustomEventInit} [eventInitDict] Custom event options.
