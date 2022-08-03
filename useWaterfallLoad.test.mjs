@@ -2,7 +2,7 @@
 
 import { deepStrictEqual, ok, rejects, strictEqual, throws } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server.js";
+import ReactDOMServer from "react-dom/server";
 import waterfallRender from "react-waterfall-render/waterfallRender.mjs";
 
 import Cache from "./Cache.mjs";

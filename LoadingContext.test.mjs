@@ -2,7 +2,7 @@
 
 import { strictEqual } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server.js";
+import ReactDOMServer from "react-dom/server";
 
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";

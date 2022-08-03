@@ -2,7 +2,7 @@
 
 import { strictEqual } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server.js";
+import ReactDOMServer from "react-dom/server";
 
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";

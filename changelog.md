@@ -8,7 +8,8 @@
 
 ### Patch
 
-- Updated dev dependencies.
+- Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.14 - 18`.
+- Updated dependencies.
 - Removed the [`@testing-library/react-hooks`](https://npm.im/@testing-library/react-hooks) dev dependency and rewrote React hook tests using [`react-test-renderer`](https://npm.im/react-test-renderer), a new test utility function `createReactTestRenderer`, and a custom React component `ReactHookTest`.
 - Removed the [`fetch-blob`](https://npm.im/fetch-blob) and [`formdata-node`](https://npm.im/formdata-node) dev dependencies. Instead, `File` and `FormData` are imported from [`node-fetch`](https://npm.im/node-fetch).
 - Updated `jsconfig.json`:
@@ -17,6 +18,7 @@
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v14, v16, v18.
 - Removed the now redundant `not IE > 0` from the Browserslist query.
+- Updated `react-dom/server` imports in tests to suit React v18.
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 - Fixed some JSDoc links.
 

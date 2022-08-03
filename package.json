@@ -98,18 +98,18 @@
   },
   "browserslist": "Node 14.17 - 15 and Node < 15, Node 16 - 17 and Node < 17, Node >= 18, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
-    "react": "16.14 - 17",
-    "react-dom": "16.14 - 17"
+    "react": "16.14 - 18",
+    "react-dom": "16.14 - 18"
   },
   "dependencies": {
     "extract-files": "^12.0.0",
-    "react-waterfall-render": "^4.0.0"
+    "react-waterfall-render": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.6.3",
-    "@types/react": "^17.0.48",
-    "@types/react-dom": "^17.0.17",
-    "@types/react-test-renderer": "^17.0.2",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-test-renderer": "^18.0.0",
     "abort-controller": "^3.0.0",
     "coverage-node": "^6.1.0",
     "esbuild": "^0.14.53",
@@ -121,9 +121,9 @@
     "gzip-size": "^7.0.0",
     "node-fetch": "^3.2.10",
     "prettier": "^2.7.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-test-renderer": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
     "revertable-globals": "^3.0.0",
     "test-director": "^8.0.2",
     "typescript": "^4.7.4"
