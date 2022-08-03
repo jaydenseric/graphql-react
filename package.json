@@ -98,8 +98,7 @@
   },
   "browserslist": "Node 14.17 - 15 and Node < 15, Node 16 - 17 and Node < 17, Node >= 18, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
-    "react": "16.14 - 18",
-    "react-dom": "16.14 - 18"
+    "react": "16.14 - 18"
   },
   "dependencies": {
     "extract-files": "^12.0.0",

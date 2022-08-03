@@ -8,7 +8,8 @@
 
 ### Patch
 
-- Updated the [`react`](https://npm.im/react) and [`react-dom`](https://npm.im/react-dom) peer dependencies to `16.14 - 18`.
+- Updated the [`react`](https://npm.im/react) peer dependency to `16.14 - 18`.
+- Removed the redundant [`react-dom`](https://npm.im/react-dom) peer dependency.
 - Updated dependencies.
 - Removed the [`@testing-library/react-hooks`](https://npm.im/@testing-library/react-hooks) dev dependency and rewrote React hook tests using [`react-test-renderer`](https://npm.im/react-test-renderer), a new test utility function `createReactTestRenderer`, and a custom React component `ReactHookTest`.
 - Removed the [`fetch-blob`](https://npm.im/fetch-blob) and [`formdata-node`](https://npm.im/formdata-node) dev dependencies. Instead, `File` and `FormData` are imported from [`node-fetch`](https://npm.im/node-fetch).
