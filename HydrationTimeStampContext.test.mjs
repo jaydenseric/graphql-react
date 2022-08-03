@@ -2,10 +2,10 @@
 
 import { strictEqual } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 
 /**
  * Adds `HydrationTimeStampContext` tests.
@@ -29,7 +29,7 @@ export default (tests) => {
 
     const value = 1;
 
-    ReactDOMServer.renderToStaticMarkup(
+    createReactTestRenderer(
       React.createElement(
         HydrationTimeStampContext.Provider,
         { value },

@@ -2,11 +2,11 @@
 
 import { strictEqual } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 
 import Loading from "./Loading.mjs";
 import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 
 /**
  * Adds `LoadingContext` tests.
@@ -30,7 +30,7 @@ export default (tests) => {
 
     const value = new Loading();
 
-    ReactDOMServer.renderToStaticMarkup(
+    createReactTestRenderer(
       React.createElement(
         LoadingContext.Provider,
         { value },

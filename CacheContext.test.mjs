@@ -2,11 +2,11 @@
 
 import { strictEqual } from "assert";
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
+import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 
 /**
  * Adds `CacheContext` tests.
@@ -27,7 +27,7 @@ export default (tests) => {
 
     const value = new Cache();
 
-    ReactDOMServer.renderToStaticMarkup(
+    createReactTestRenderer(
       React.createElement(
         CacheContext.Provider,
         { value },

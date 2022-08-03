@@ -22,6 +22,7 @@
 - Updated `react-dom/server` imports in tests to suit React v18.
 - Fixed the `fetchGraphQL` test with the global `fetch` API unavailable for new versions of Node.js that have the `fetch` global.
 - Use `globalThis` instead of `global` in tests.
+- Use `ReactTestRenderer` instead of `ReactDOMServer.renderToStaticMarkup` in some React context related tests.
 - Fixed some JSDoc links.
 - Removed some unnecessary JSDoc comments in tests.
 - Revamped the readme:
