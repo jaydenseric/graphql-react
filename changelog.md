@@ -1,6 +1,6 @@
 # graphql-react changelog
 
-## Next
+## 19.0.0
 
 ### Major
 

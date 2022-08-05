@@ -1,6 +1,6 @@
 {
   "name": "graphql-react",
-  "version": "18.0.0",
+  "version": "19.0.0",
   "description": "A GraphQL client for React using modern context and hooks APIs that’s lightweight (< 4 kB) but powerful; the first Relay and Apollo alternative with server side rendering.",
   "license": "MIT",
   "author": {
