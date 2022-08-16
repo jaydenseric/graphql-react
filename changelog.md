@@ -1,5 +1,11 @@
 # graphql-react changelog
 
+## Next
+
+### Patch
+
+- Added [Browserslist](https://browsersl.ist) links to the readme.
+
 ## 19.0.0
 
 ### Major
