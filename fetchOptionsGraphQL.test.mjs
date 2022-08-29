@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual } from "assert";
+import { deepStrictEqual, strictEqual } from "node:assert";
 import { File, FormData } from "node-fetch";
 import revertableGlobals from "revertable-globals";
 

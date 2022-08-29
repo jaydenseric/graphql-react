@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, fail, ok, strictEqual, throws } from "assert";
+import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
 import { AbortError, Response } from "node-fetch";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";

@@ -1,7 +1,7 @@
 // @ts-check
 
-import { AssertionError } from "assert";
-import { inspect } from "util";
+import { AssertionError } from "node:assert";
+import { inspect } from "node:util";
 
 /**
  * Asserts a value is a given type.

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, ok, rejects, strictEqual, throws } from "assert";
+import { deepStrictEqual, ok, rejects, strictEqual, throws } from "node:assert";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import waterfallRender from "react-waterfall-render/waterfallRender.mjs";

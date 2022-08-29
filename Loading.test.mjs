@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual } from "assert";
+import { deepStrictEqual, strictEqual } from "node:assert";
 
 import Loading from "./Loading.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
