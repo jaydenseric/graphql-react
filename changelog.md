@@ -2,8 +2,13 @@
 
 ## Next
 
+### Major
+
+- Updated the [`react-waterfall-render`](https://npm.im/react-waterfall-render) dependency to v5.
+
 ### Patch
 
+- Updated the [`extract-files`](https://npm.im/extract-files) dependency to v13.
 - Updated dev dependencies.
 - Added missing readme “Installation” section import map instructions for [`is-plain-obj`](https://npm.im/is-plain-obj).
 - Added [Browserslist](https://browsersl.ist) links to the readme.

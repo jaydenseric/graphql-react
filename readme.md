@@ -28,12 +28,12 @@ For [Deno](https://deno.land) and browsers, an example import map (realistically
 ```json
 {
   "imports": {
-    "extract-files/": "https://unpkg.com/extract-files@12.0.0/",
+    "extract-files/": "https://unpkg.com/extract-files@13.0.0/",
     "graphql-react/": "https://unpkg.com/graphql-react@19.0.0/",
     "is-plain-obj": "https://unpkg.com/is-plain-obj@4.1.0/index.js",
     "is-plain-obj/": "https://unpkg.com/is-plain-obj@4.1.0/",
     "react": "https://esm.sh/react@18.2.0",
-    "react-waterfall-render/": "https://unpkg.com/react-waterfall-render@4.0.1/"
+    "react-waterfall-render/": "https://unpkg.com/react-waterfall-render@5.0.0/"
   }
 }
 ```
