@@ -46,9 +46,9 @@ These dependencies might not need to be in the import map, depending on what [`g
 
 Polyfill any required globals (see [_**Requirements**_](#requirements)) that are missing in your server and client environments.
 
-Create a single [`Cache`](#class-cache) instance and use the [`Provider`](#function-dataprovider) component to provide it for your app.
+Create a single [`Cache`](./Cache.mjs) instance and use the [`Provider`](./Provider.mjs) component to provide it for your app.
 
-To server side render your app, use the [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) function from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
+To server side render your app, use the function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#exports) from [`react-waterfall-render`](https://npm.im/react-waterfall-render).
 
 ## Examples
 
