@@ -11,6 +11,7 @@
 - Updated the [`extract-files`](https://npm.im/extract-files) dependency to v13.
 - Updated dev dependencies.
 - Use the `node:` URL scheme for Node.js builtin module imports in tests.
+- Updated ESLint config.
 - Added missing readme “Installation” section import map instructions for [`is-plain-obj`](https://npm.im/is-plain-obj).
 - Added [Browserslist](https://browsersl.ist) links to the readme.
 

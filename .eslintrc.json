@@ -1,7 +1,7 @@
 {
   "extends": ["eslint:recommended", "plugin:react-hooks/recommended"],
   "env": {
-    "es2021": true,
+    "es2022": true,
     "node": true,
     "browser": true
   },
