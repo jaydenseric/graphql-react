@@ -16,6 +16,7 @@
 - Added missing readme “Installation” section import map instructions for [`is-plain-obj`](https://npm.im/is-plain-obj).
 - Added [Browserslist](https://browsersl.ist) links to the readme.
 - Fixed broken links in the readme.
+- Fixed a broken link in the v13.0.0 changelog entry.
 
 ## 19.0.0
 
@@ -201,7 +202,7 @@
     - `useLoading`
     - `useLoadingEntry`
     - `useWaterfallLoad`
-  - The [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render#function-waterfallrender) function from [`react-waterfall-render`](https://npm.im/react-waterfall-render) should now be used for server side rendering, fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
+  - The function [`waterfallRender`](https://github.com/jaydenseric/react-waterfall-render/tree/v1.0.0#function-waterfallrender) from [`react-waterfall-render`](https://npm.im/react-waterfall-render) should now be used for server side rendering, fixing [#57](https://github.com/jaydenseric/graphql-react/issues/57).
   - In addition to the previously required globals, consider polyfilling:
     - [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
     - [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
