@@ -6,7 +6,7 @@
  */
 export default class Cache extends EventTarget {
   /**
-   * @param {CacheStore} [store] Initial {@link Cache.store cache store} record.
+   * @param {CacheStore} [store] Initial {@link Cache.store cache store}.
    *   Defaults to `{}`. Useful for hydrating cache data from a server side
    *   render prior to the initial client side render.
    */
@@ -65,6 +65,6 @@ export default class Cache extends EventTarget {
  */
 
 /**
- * Cache store record.
- * @typedef {Record<CacheKey, CacheValue>} CacheStore
+ * Cache store.
+ * @typedef {{ [cacheKey: CacheKey]: CacheValue }} CacheStore
  */

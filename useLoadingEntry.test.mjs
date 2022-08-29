@@ -109,7 +109,7 @@ export default (tests) => {
       strictEqual(results[0].returned, undefined);
 
       const { promise: loadingA1Result, resolve: loadingA1ResultResolve } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
 
       /** @type {LoadingCacheValue | undefined} */
@@ -158,7 +158,7 @@ export default (tests) => {
       strictEqual(results[3].returned, undefined);
 
       const { promise: loadingB1Result, resolve: loadingB1ResultResolve } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
 
       /** @type {LoadingCacheValue | undefined} */
@@ -196,7 +196,7 @@ export default (tests) => {
       const cache = new Cache();
       const cacheKeyA = "a";
       const { promise: loadingA1Result, resolve: loadingA1ResultResolve } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
       const loadingA1CacheValue = new LoadingCacheValue(
         loading,
@@ -225,7 +225,7 @@ export default (tests) => {
       deepStrictEqual(results[0].returned, new Set([loadingA1CacheValue]));
 
       const { promise: loadingA2Result, resolve: loadingA2ResultResolve } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
 
       /** @type {LoadingCacheValue | undefined} */
@@ -268,7 +268,7 @@ export default (tests) => {
 
       const cacheKeyB = "b";
       const { promise: loadingB1Result, resolve: loadingB1ResultResolve } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
 
       /** @type {LoadingCacheValue | undefined} */

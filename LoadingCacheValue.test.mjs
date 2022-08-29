@@ -123,7 +123,7 @@ export default (tests) => {
     loading.addEventListener(`${cacheKey}/end`, loadingListener);
 
     const { promise: loadingResult, resolve: loadingResultResolve } =
-      /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+      /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
       (new Deferred());
     const abortController = new AbortController();
     const loadingCacheValue = new LoadingCacheValue(
@@ -206,7 +206,7 @@ export default (tests) => {
         promise: firstLoadingResult,
         resolve: firstLoadingResultResolve,
       } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
       const firstAbortController = new AbortController();
       const firstLoadingCacheValue = new LoadingCacheValue(
@@ -246,7 +246,7 @@ export default (tests) => {
         promise: secondLoadingResult,
         resolve: secondLoadingResultResolve,
       } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
       const secondAbortController = new AbortController();
       const secondLoadingCacheValue = new LoadingCacheValue(
@@ -375,7 +375,7 @@ export default (tests) => {
         promise: firstLoadingResult,
         resolve: firstLoadingResultResolve,
       } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
       const firstAbortController = new AbortController();
       const firstLoadingCacheValue = new LoadingCacheValue(
@@ -415,7 +415,7 @@ export default (tests) => {
         promise: secondLoadingResult,
         resolve: secondLoadingResultResolve,
       } =
-        /** @type {Deferred<Readonly<Record<string, unknown>>>} */
+        /** @type {Deferred<Readonly<{ [key: string]: unknown }>>} */
         (new Deferred());
       const secondAbortController = new AbortController();
       const secondLoadingCacheValue = new LoadingCacheValue(

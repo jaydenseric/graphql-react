@@ -21,8 +21,8 @@ export {};
  * GraphQL server.
  * @typedef {object} GraphQLOperation
  * @prop {string} query GraphQL queries or mutations.
- * @prop {Record<string, unknown>} [variables] Variables used in the GraphQL
- *   queries or mutations.
+ * @prop {{ [variableName: string ]: unknown}} [variables] Variables used in the
+ *   GraphQL queries or mutations.
  */
 
 /**
@@ -35,14 +35,16 @@ export {};
  *   for hydration.
  * @prop {Array<ErrorTypes>} [errors] GraphQL errors from the server, along with
  *   any loading errors added on the client.
- * @prop {Record<string, unknown> | null} [data] GraphQL data.
+ * @prop {{ [key: string]: unknown } | null} [data] GraphQL data.
  */
 
 /**
  * {@link GraphQLResult.errors GraphQL result error}.
  * @see [GraphQL spec for response errors](https://spec.graphql.org/October2021/#sec-Errors).
- * @template {Record<string, unknown>} [Extensions=Record<string, unknown>]
- *   Extensions to a standard GraphQL error.
+ * @template {{
+ *   [key: string]: unknown
+ * }} [Extensions={ [key: string]: unknown }] Extensions to a standard GraphQL
+ *   error.
  * @typedef {object} GraphQLResultError
  * @prop {string} message Error message.
  * @prop {Array<{ line: number; column: number }>} [locations] GraphQL query
@@ -56,7 +58,8 @@ export {};
  * {@link GraphQLResult GraphQL result} loading error generated on the client,
  * not the GraphQL server.
  * @template {string} Code Error code.
- * @template {Record<string, unknown>} [Extensions={}] Error specific details.
+ * @template {{ [key: string]: unknown }} [Extensions={}] Error specific
+ *   details.
  * @typedef {object} GraphQLResultErrorLoading
  * @prop {string} message Error message.
  * @prop {GraphQLResultErrorLoadingMeta<Code> & Extensions} extensions Error

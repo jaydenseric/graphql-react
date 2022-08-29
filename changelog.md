@@ -12,6 +12,7 @@
 - Updated dev dependencies.
 - Use the `node:` URL scheme for Node.js builtin module imports in tests.
 - Updated ESLint config.
+- Replaced TypeScript `Record` types with index signatures.
 - Added missing readme “Installation” section import map instructions for [`is-plain-obj`](https://npm.im/is-plain-obj).
 - Added [Browserslist](https://browsersl.ist) links to the readme.
 

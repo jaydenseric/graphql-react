@@ -39,7 +39,7 @@ export default function fetchOptionsGraphQL(operation) {
 
     form.set("operations", operationJSON);
 
-    /** @type {Record<string, Array<string>>} */
+    /** @type {{ [formFieldName: string]: Array<string> }} */
     const map = {};
 
     let i = 0;
@@ -60,7 +60,7 @@ export default function fetchOptionsGraphQL(operation) {
 
     fetchOptions.body = form;
   } else {
-    /** @type {Record<string, string>} */ (fetchOptions.headers)[
+    /** @type {{ [headerName: string]: string }} */ (fetchOptions.headers)[
       "Content-Type"
     ] = "application/json";
     fetchOptions.body = operationJSON;

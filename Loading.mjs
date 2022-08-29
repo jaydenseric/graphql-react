@@ -16,7 +16,7 @@ export default class Loading extends EventTarget {
      * Store of loading {@link CacheKey cache keys} and associated
      * {@link LoadingCacheValue loading cache values}. Multiple for the same key
      * are set in the order loading started.
-     * @type {Record<CacheKey, Set<LoadingCacheValue>>}
+     * @type {{ [cacheKey: CacheKey]: Set<LoadingCacheValue> }}
      */
     this.store = {};
   }
