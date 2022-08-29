@@ -4,16 +4,20 @@ if (!("CustomEvent" in globalThis))
   globalThis.CustomEvent =
     /**
      * `CustomEvent` polyfill.
-     * @type {typeof globalThis.CustomEvent}
+     * @template [T=unknown]
+     * @type {globalThis.CustomEvent<T>}
      */
-    class CustomEvent extends globalThis.Event {
+    class CustomEvent extends Event {
       /**
        * @param {string} type Event type.
-       * @param {CustomEventInit} [eventInitDict] Custom event options.
+       * @param {CustomEventInit<T>} [options] Custom event options.
        */
-      constructor(type, { detail, ...eventOptions } = {}) {
+      constructor(type, options = {}) {
+        // Workaround a TypeScript bug:
+        // https://github.com/microsoft/TypeScript/issues/50286
+        const { detail, ...eventOptions } = options;
         super(type, eventOptions);
-        this.detail = detail;
+        if (detail) this.detail = detail;
       }
 
       /** @deprecated */
