@@ -94,9 +94,9 @@
     "./useWaterfallLoad.mjs": "./useWaterfallLoad.mjs"
   },
   "engines": {
-    "node": "^14.17.0 || ^16.0.0 || >= 18.0.0"
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
   },
-  "browserslist": "Node 14.17 - 15 and Node < 15, Node 16 - 17 and Node < 17, Node >= 18, > 0.5%, not OperaMini all, not dead",
+  "browserslist": "Node 18.18 - 19 and Node < 19, Node 20.9 - 21 and Node < 21, Node >= 21.1, > 0.5%, not OperaMini all, not dead",
   "peerDependencies": {
     "react": "16.14 - 18"
   },
