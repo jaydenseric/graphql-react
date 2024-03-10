@@ -11,6 +11,8 @@
 
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v18, v20, v21.
+  - Updated `actions/checkout` to v4.
+  - Updated `actions/setup-node` to v4.
 
 ## 20.0.0
 
