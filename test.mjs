@@ -1,6 +1,7 @@
 // @ts-check
 
-import "./test/polyfills.mjs";
+import "./test/polyfillCustomEvent.mjs";
+import "./test/polyfillFile.mjs";
 
 import TestDirector from "test-director";
 

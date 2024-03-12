@@ -1,7 +1,6 @@
 // @ts-check
 
 import { deepStrictEqual, strictEqual } from "node:assert";
-import { Response } from "node-fetch";
 import revertableGlobals from "revertable-globals";
 
 import fetchGraphQL from "./fetchGraphQL.mjs";

@@ -1,7 +1,6 @@
 // @ts-check
 
 import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
-import { AbortError, Response } from "node-fetch";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 import revertableGlobals from "revertable-globals";
@@ -301,7 +300,7 @@ export default (tests) => {
       async () => {
         const fetchUri = "the-uri";
         const fetchOptions = Object.freeze({ body: "a" });
-        const fetchAbortError = new AbortError("The operation was aborted.");
+        const fetchError = new Error("The operation was aborted.");
         const cacheKey = "a";
 
         /** @type {string | undefined} */
@@ -333,7 +332,7 @@ export default (tests) => {
                 "abort",
                 () => {
                   clearTimeout(timeout);
-                  reject(fetchAbortError);
+                  reject(fetchError);
                 },
                 { once: true }
               );
@@ -373,7 +372,7 @@ export default (tests) => {
                 extensions: {
                   client: true,
                   code: "FETCH_ERROR",
-                  fetchErrorMessage: fetchAbortError.message,
+                  fetchErrorMessage: fetchError.message,
                 },
               },
             ],
@@ -400,7 +399,7 @@ export default (tests) => {
           ...fetchOptionsWithoutSignal,
           signal: abortController.signal,
         });
-        const fetchAbortError = new AbortError("The operation was aborted.");
+        const fetchError = new Error("The operation was aborted.");
         const cacheKey = "a";
 
         /** @type {string | undefined} */
@@ -432,7 +431,7 @@ export default (tests) => {
                 "abort",
                 () => {
                   clearTimeout(timeout);
-                  reject(fetchAbortError);
+                  reject(fetchError);
                 },
                 { once: true }
               );
@@ -472,7 +471,7 @@ export default (tests) => {
                 extensions: {
                   client: true,
                   code: "FETCH_ERROR",
-                  fetchErrorMessage: fetchAbortError.message,
+                  fetchErrorMessage: fetchError.message,
                 },
               },
             ],
@@ -502,7 +501,7 @@ export default (tests) => {
           ...fetchOptionsWithoutSignal,
           signal: abortController.signal,
         });
-        const fetchAbortError = new AbortError("The operation was aborted.");
+        const fetchError = new Error("The operation was aborted.");
         const cacheKey = "a";
 
         /** @type {string | undefined} */
@@ -526,7 +525,7 @@ export default (tests) => {
             assertInstanceOf(options.signal, AbortSignal);
 
             throw options.signal.aborted
-              ? fetchAbortError
+              ? fetchError
               : fail("Abort signal wasn’t already aborted.");
           },
         });
@@ -560,7 +559,7 @@ export default (tests) => {
                 extensions: {
                   client: true,
                   code: "FETCH_ERROR",
-                  fetchErrorMessage: fetchAbortError.message,
+                  fetchErrorMessage: fetchError.message,
                 },
               },
             ],
