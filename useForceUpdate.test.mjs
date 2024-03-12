@@ -1,6 +1,7 @@
 // @ts-check
 
 import { ok, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -9,12 +10,8 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
 
-/**
- * Adds `useForceUpdate` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useForceUpdate` forcing an update.", async () => {
+describe("React hook `useForceUpdate`.", { concurrency: true }, () => {
+  it("Forcing an update.", async () => {
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
     const results = [];
 
@@ -51,4 +48,4 @@ export default (tests) => {
     ok("returned" in results[2]);
     assertTypeOf(results[2].returned, "function");
   });
-};
+});

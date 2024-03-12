@@ -1,6 +1,7 @@
 // @ts-check
 
 import { strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -16,16 +17,12 @@ import assertTypeOf from "./test/assertTypeOf.mjs";
 import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import suppressReactRenderErrorConsoleOutput from "./test/suppressReactRenderErrorConsoleOutput.mjs";
 
-/**
- * Adds `Provider` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`Provider` bundle size.", async () => {
+describe("React component `Provider`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./Provider.mjs", import.meta.url), 500);
   });
 
-  tests.add("`Provider` with prop `cache` missing.", () => {
+  it("Prop `cache` missing.", () => {
     const revertConsole = suppressReactRenderErrorConsoleOutput();
 
     try {
@@ -43,7 +40,7 @@ export default (tests) => {
     }
   });
 
-  tests.add("`Provider` used correctly.", () => {
+  it("Used correctly.", () => {
     /**
      * @type {Array<{
      *   hydrationTimeStampContextValue: number | undefined,
@@ -105,4 +102,4 @@ export default (tests) => {
     strictEqual(results[1].cacheContextValue, results[0].cacheContextValue);
     strictEqual(results[1].loadingContextValue, results[0].loadingContextValue);
   });
-};
+});

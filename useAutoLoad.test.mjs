@@ -1,6 +1,9 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { ok, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -17,16 +20,12 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useAutoLoad from "./useAutoLoad.mjs";
 
-/**
- * Adds `useAutoLoad` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useAutoLoad` bundle size.", async () => {
+describe("React hook `useAutoLoad`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./useAutoLoad.mjs", import.meta.url), 900);
   });
 
-  tests.add("`useAutoLoad` argument 1 `cacheKey` not a string.", () => {
+  it("Argument 1 `cacheKey` not a string.", () => {
     throws(() => {
       useAutoLoad(
         // @ts-expect-error Testing invalid.
@@ -42,7 +41,7 @@ export default (tests) => {
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
 
-  tests.add("`useAutoLoad` argument 2 `load` not a function.", () => {
+  it("Argument 2 `load` not a function.", () => {
     throws(() => {
       useAutoLoad(
         "a",
@@ -52,7 +51,7 @@ export default (tests) => {
     }, new TypeError("Argument 2 `load` must be a function."));
   });
 
-  tests.add("`useAutoLoad` functionality.", async () => {
+  it("Functionality.", async () => {
     const cacheKey = "a";
     const cache = new Cache({
       // Populate the cache entry so it can be deleted.
@@ -173,4 +172,4 @@ export default (tests) => {
       true
     );
   });
-};
+});

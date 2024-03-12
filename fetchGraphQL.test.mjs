@@ -1,96 +1,100 @@
 // @ts-check
 
 import { deepStrictEqual, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import revertableGlobals from "revertable-globals";
 
 import fetchGraphQL from "./fetchGraphQL.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 
-/** @type {ResponseInit} */
-const graphqlResponseOptions = {
-  status: 200,
-  headers: {
-    "Content-Type": "application/graphql+json",
+describe(
+  "Function `fetchGraphQL`.",
+  {
+    // Some of the tests temporarily modify the global `fetch`.
+    concurrency: false,
   },
-};
-
-/**
- * Adds `fetchGraphQL` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`fetchGraphQL` bundle size.", async () => {
-    await assertBundleSize(new URL("./fetchGraphQL.mjs", import.meta.url), 600);
-  });
-
-  tests.add("`fetchGraphQL` with global `fetch` API unavailable.", async () => {
-    const revertGlobals = revertableGlobals({
-      fetch: undefined,
-    });
-
-    try {
-      deepStrictEqual(await fetchGraphQL("http://localhost"), {
-        errors: [
-          {
-            message: "Fetch error.",
-            extensions: {
-              client: true,
-              code: "FETCH_ERROR",
-              fetchErrorMessage: "Global `fetch` API unavailable.",
-            },
-          },
-        ],
-      });
-    } finally {
-      revertGlobals();
-    }
-  });
-
-  tests.add("`fetchGraphQL` with a fetch error.", async () => {
-    let fetchedUri;
-    let fetchedOptions;
-
-    const fetchUri = "http://localhost";
-    const fetchOptions = {};
-    const fetchErrorMessage = "Message.";
-    const revertGlobals = revertableGlobals({
-      /**
-       * @param {string} uri Fetch URI.
-       * @param {RequestInit} options Fetch options.
-       */
-      async fetch(uri, options) {
-        fetchedUri = uri;
-        fetchedOptions = options;
-
-        throw new Error(fetchErrorMessage);
+  () => {
+    /** @type {ResponseInit} */
+    const graphqlResponseOptions = {
+      status: 200,
+      headers: {
+        "Content-Type": "application/graphql+json",
       },
+    };
+
+    it("Bundle size.", async () => {
+      await assertBundleSize(
+        new URL("./fetchGraphQL.mjs", import.meta.url),
+        600
+      );
     });
 
-    try {
-      const result = await fetchGraphQL(fetchUri, fetchOptions);
-
-      strictEqual(fetchedUri, fetchUri);
-      strictEqual(fetchedOptions, fetchOptions);
-      deepStrictEqual(result, {
-        errors: [
-          {
-            message: "Fetch error.",
-            extensions: {
-              client: true,
-              code: "FETCH_ERROR",
-              fetchErrorMessage,
-            },
-          },
-        ],
+    it("Global `fetch` API unavailable.", async () => {
+      const revertGlobals = revertableGlobals({
+        fetch: undefined,
       });
-    } finally {
-      revertGlobals();
-    }
-  });
 
-  tests.add(
-    "`fetchGraphQL` with a response JSON parse error, HTTP status ok.",
-    async () => {
+      try {
+        deepStrictEqual(await fetchGraphQL("http://localhost"), {
+          errors: [
+            {
+              message: "Fetch error.",
+              extensions: {
+                client: true,
+                code: "FETCH_ERROR",
+                fetchErrorMessage: "Global `fetch` API unavailable.",
+              },
+            },
+          ],
+        });
+      } finally {
+        revertGlobals();
+      }
+    });
+
+    it("Fetch error.", async () => {
+      let fetchedUri;
+      let fetchedOptions;
+
+      const fetchUri = "http://localhost";
+      const fetchOptions = {};
+      const fetchErrorMessage = "Message.";
+      const revertGlobals = revertableGlobals({
+        /**
+         * @param {string} uri Fetch URI.
+         * @param {RequestInit} options Fetch options.
+         */
+        async fetch(uri, options) {
+          fetchedUri = uri;
+          fetchedOptions = options;
+
+          throw new Error(fetchErrorMessage);
+        },
+      });
+
+      try {
+        const result = await fetchGraphQL(fetchUri, fetchOptions);
+
+        strictEqual(fetchedUri, fetchUri);
+        strictEqual(fetchedOptions, fetchOptions);
+        deepStrictEqual(result, {
+          errors: [
+            {
+              message: "Fetch error.",
+              extensions: {
+                client: true,
+                code: "FETCH_ERROR",
+                fetchErrorMessage,
+              },
+            },
+          ],
+        });
+      } finally {
+        revertGlobals();
+      }
+    });
+
+    it("Response JSON parse error, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -144,12 +148,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with a response JSON parse error, HTTP status error.",
-    async () => {
+    it("Response JSON parse error, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -216,12 +217,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON not an object, HTTP status ok.",
-    async () => {
+    it("Response JSON not an object, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -265,12 +263,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON not an object, HTTP status error.",
-    async () => {
+    it("Response JSON not an object, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -327,12 +322,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON missing an `errors` or `data` property, HTTP status ok.",
-    async () => {
+    it("Response JSON missing an `errors` or `data` property, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -377,12 +369,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON missing an `errors` or `data` property, HTTP status error.",
-    async () => {
+    it("Response JSON missing an `errors` or `data` property, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -440,12 +429,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property not an array, no `data` property, HTTP status ok.",
-    async () => {
+    it("Response JSON `errors` property not an array, no `data` property, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -492,12 +478,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property not an array, no `data` property, HTTP status error.",
-    async () => {
+    it("Response JSON `errors` property not an array, no `data` property, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -554,12 +537,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with no response JSON `errors` property, `data` property not an object, HTTP status ok.",
-    async () => {
+    it("No response JSON `errors` property, `data` property not an object, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -606,12 +586,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property containing an error, no `data` property, HTTP status ok.",
-    async () => {
+    it("Response JSON `errors` property containing an error, no `data` property, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -649,12 +626,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property containing an error, no `data` property, HTTP status error.",
-    async () => {
+    it("Response JSON `errors` property containing an error, no `data` property, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -706,12 +680,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property containing an error, `data` property populated, HTTP status ok.",
-    async () => {
+    it("Response JSON `errors` property containing an error, `data` property populated, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -755,12 +726,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON `errors` property containing an error, `data` property populated, HTTP status error.",
-    async () => {
+    it("Response JSON `errors` property containing an error, `data` property populated, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -820,12 +788,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON no `errors` property, `data` property not an object or null, HTTP status ok.",
-    async () => {
+    it("Response JSON no `errors` property, `data` property not an object or null, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -872,12 +837,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON no `errors` property, `data` property not an object or null, HTTP status error.",
-    async () => {
+    it("Response JSON no `errors` property, `data` property not an object or null, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -934,12 +896,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON no `error` property, `data` property populated, HTTP status ok.",
-    async () => {
+    it("Response JSON no `error` property, `data` property populated, HTTP status ok.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -977,12 +936,9 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
+    });
 
-  tests.add(
-    "`fetchGraphQL` with response JSON no `error` property, `data` property populated, HTTP status error.",
-    async () => {
+    it("Response JSON no `error` property, `data` property populated, HTTP status error.", async () => {
       let fetchedUri;
       let fetchedOptions;
       let fetchedResponse;
@@ -1034,6 +990,6 @@ export default (tests) => {
       } finally {
         revertGlobals();
       }
-    }
-  );
-};
+    });
+  }
+);

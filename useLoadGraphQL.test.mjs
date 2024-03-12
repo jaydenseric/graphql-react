@@ -1,10 +1,12 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
+import { after, describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 import revertableGlobals from "revertable-globals";
-import TestDirector from "test-director";
 
 import Cache from "./Cache.mjs";
 import CacheContext from "./CacheContext.mjs";
@@ -19,19 +21,15 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useLoadGraphQL from "./useLoadGraphQL.mjs";
 
-/**
- * Adds `useLoadGraphQL` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useLoadGraphQL` bundle size.", async () => {
+describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useLoadGraphQL.mjs", import.meta.url),
       1800
     );
   });
 
-  tests.add("`useLoadGraphQL` with cache context missing.", () => {
+  it("Cache context missing.", () => {
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
     const results = [];
 
@@ -47,36 +45,33 @@ export default (tests) => {
     deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
-  tests.add(
-    "`useLoadGraphQL` with cache context value not a `Cache` instance.",
-    () => {
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
-      const results = [];
+  it("Cache context value not a `Cache` instance.", () => {
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      createReactTestRenderer(
-        React.createElement(
-          CacheContext.Provider,
-          {
-            // @ts-expect-error Testing invalid.
-            value: true,
-          },
-          React.createElement(ReactHookTest, {
-            useHook: useLoadGraphQL,
-            results,
-          })
-        )
-      );
+    createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        {
+          // @ts-expect-error Testing invalid.
+          value: true,
+        },
+        React.createElement(ReactHookTest, {
+          useHook: useLoadGraphQL,
+          results,
+        })
+      )
+    );
 
-      strictEqual(results.length, 1);
-      ok("threw" in results[0]);
-      deepStrictEqual(
-        results[0].threw,
-        new TypeError("Cache context value must be a `Cache` instance.")
-      );
-    }
-  );
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(
+      results[0].threw,
+      new TypeError("Cache context value must be a `Cache` instance.")
+    );
+  });
 
-  tests.add("`useLoadGraphQL` with loading context missing.", () => {
+  it("Loading context missing.", () => {
     const cache = new Cache();
 
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
@@ -101,52 +96,10 @@ export default (tests) => {
     );
   });
 
-  tests.add(
-    "`useLoadGraphQL` with loading context value not a `Loading` instance.",
-    () => {
-      const cache = new Cache();
-
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
-      const results = [];
-
-      createReactTestRenderer(
-        React.createElement(
-          CacheContext.Provider,
-          { value: cache },
-          React.createElement(
-            LoadingContext.Provider,
-            {
-              // @ts-expect-error Testing invalid.
-              value: true,
-            },
-            React.createElement(ReactHookTest, {
-              useHook: useLoadGraphQL,
-              results,
-            })
-          )
-        )
-      );
-
-      strictEqual(results.length, 1);
-      ok("threw" in results[0]);
-      deepStrictEqual(
-        results[0].threw,
-        new TypeError("Loading context value must be a `Loading` instance.")
-      );
-    }
-  );
-
-  tests.add("`useLoadGraphQL` functionality.", async () => {
+  it("Loading context value not a `Loading` instance.", () => {
     const cache = new Cache();
-    const loading = new Loading();
 
-    /**
-     * @type {Array<
-     *   import("./test/ReactHookTest.mjs").ReactHookResult<
-     *     ReturnType<useLoadGraphQL>
-     *   >
-     * >}
-     */
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -155,7 +108,10 @@ export default (tests) => {
         { value: cache },
         React.createElement(
           LoadingContext.Provider,
-          { value: loading },
+          {
+            // @ts-expect-error Testing invalid.
+            value: true,
+          },
           React.createElement(ReactHookTest, {
             useHook: useLoadGraphQL,
             results,
@@ -165,27 +121,70 @@ export default (tests) => {
     );
 
     strictEqual(results.length, 1);
-    ok("returned" in results[0]);
-    assertTypeOf(results[0].returned, "function");
+    ok("threw" in results[0]);
+    deepStrictEqual(
+      results[0].threw,
+      new TypeError("Loading context value must be a `Loading` instance.")
+    );
+  });
 
-    // Test that re-rendering with the same props doesn’t cause the returned
-    // load GraphQL function to change.
-    ReactTestRenderer.act(() => {
-      results[0].rerender();
-    });
+  describe(
+    "Functionality.",
+    {
+      // Some of the tests temporarily modify the global `fetch`.
+      concurrency: false,
+    },
+    async () => {
+      const cache = new Cache();
+      const loading = new Loading();
 
-    strictEqual(results.length, 2);
-    ok("returned" in results[1]);
+      /**
+       * @type {Array<
+       *   import("./test/ReactHookTest.mjs").ReactHookResult<
+       *     ReturnType<useLoadGraphQL>
+       *   >
+       * >}
+       */
+      const results = [];
 
-    const result2Returned = results[1].returned;
+      createReactTestRenderer(
+        React.createElement(
+          CacheContext.Provider,
+          { value: cache },
+          React.createElement(
+            LoadingContext.Provider,
+            { value: loading },
+            React.createElement(ReactHookTest, {
+              useHook: useLoadGraphQL,
+              results,
+            })
+          )
+        )
+      );
 
-    strictEqual(result2Returned, results[0].returned);
+      strictEqual(results.length, 1);
+      ok("returned" in results[0]);
+      assertTypeOf(results[0].returned, "function");
 
-    const loadGraphQLTests = new TestDirector();
+      // Test that re-rendering with the same props doesn’t cause the returned
+      // load GraphQL function to change.
+      ReactTestRenderer.act(() => {
+        results[0].rerender();
+      });
 
-    loadGraphQLTests.add(
-      "Load GraphQL with argument 1 `cacheKey` not a string.",
-      () => {
+      strictEqual(results.length, 2);
+      ok("returned" in results[1]);
+
+      const result2Returned = results[1].returned;
+
+      strictEqual(result2Returned, results[0].returned);
+
+      after(() => {
+        // No re-rendering should have happened.
+        strictEqual(results.length, 2);
+      });
+
+      it("Load GraphQL with argument 1 `cacheKey` not a string.", () => {
         throws(() => {
           result2Returned(
             // @ts-expect-error Testing invalid.
@@ -194,12 +193,9 @@ export default (tests) => {
             {}
           );
         }, new TypeError("Argument 1 `cacheKey` must be a string."));
-      }
-    );
+      });
 
-    loadGraphQLTests.add(
-      "Load GraphQL with argument 2 `fetchUri` not a string.",
-      () => {
+      it("Load GraphQL with argument 2 `fetchUri` not a string.", () => {
         throws(() => {
           result2Returned(
             "a",
@@ -208,12 +204,9 @@ export default (tests) => {
             {}
           );
         }, new TypeError("Argument 2 `fetchUri` must be a string."));
-      }
-    );
+      });
 
-    loadGraphQLTests.add(
-      "Load GraphQL with argument 3 `fetchOptions` not an object.",
-      () => {
+      it("Load GraphQL with argument 3 `fetchOptions` not an object.", () => {
         throws(() => {
           result2Returned(
             "a",
@@ -222,82 +215,79 @@ export default (tests) => {
             null
           );
         }, new TypeError("Argument 3 `fetchOptions` must be an object."));
-      }
-    );
-
-    loadGraphQLTests.add("Load GraphQL without aborting.", async () => {
-      const fetchUri = "the-uri";
-      const fetchOptions = Object.freeze({ body: "a" });
-      const cacheKey = "a";
-      const cacheValue = {
-        data: {
-          a: 1,
-        },
-      };
-
-      /** @type {string | undefined} */
-      let fetchedUri;
-
-      /** @type {RequestInit | undefined} */
-      let fetchedOptions;
-
-      /** @type {LoadingCacheValue | undefined} */
-      let loadGraphQLReturn;
-
-      const revertGlobals = revertableGlobals({
-        /**
-         * @param {string} uri Fetch URI.
-         * @param {RequestInit} options Fetch options.
-         */
-        async fetch(uri, options) {
-          fetchedUri = uri;
-          fetchedOptions = options;
-
-          return new Response(JSON.stringify(cacheValue), {
-            status: 200,
-            headers: {
-              "Content-Type": "application/graphql+json",
-            },
-          });
-        },
       });
 
-      try {
+      it("Load GraphQL without aborting.", async () => {
+        const fetchUri = "the-uri";
+        const fetchOptions = Object.freeze({ body: "a" });
+        const cacheKey = "a";
+        const cacheValue = {
+          data: {
+            a: 1,
+          },
+        };
+
+        /** @type {string | undefined} */
+        let fetchedUri;
+
+        /** @type {RequestInit | undefined} */
+        let fetchedOptions;
+
+        /** @type {LoadingCacheValue | undefined} */
+        let loadGraphQLReturn;
+
+        const revertGlobals = revertableGlobals({
+          /**
+           * @param {string} uri Fetch URI.
+           * @param {RequestInit} options Fetch options.
+           */
+          async fetch(uri, options) {
+            fetchedUri = uri;
+            fetchedOptions = options;
+
+            return new Response(JSON.stringify(cacheValue), {
+              status: 200,
+              headers: {
+                "Content-Type": "application/graphql+json",
+              },
+            });
+          },
+        });
+
         try {
-          ReactTestRenderer.act(() => {
-            loadGraphQLReturn = result2Returned(
-              cacheKey,
-              fetchUri,
-              fetchOptions
-            );
+          try {
+            ReactTestRenderer.act(() => {
+              loadGraphQLReturn = result2Returned(
+                cacheKey,
+                fetchUri,
+                fetchOptions
+              );
+            });
+          } finally {
+            revertGlobals();
+          }
+
+          strictEqual(fetchedUri, fetchUri);
+          assertTypeOf(fetchedOptions, "object");
+
+          const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
+            fetchedOptions;
+
+          assertInstanceOf(fetchedOptionsSignal, AbortSignal);
+          deepStrictEqual(fetchedOptionsRest, fetchOptions);
+
+          assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
+          deepStrictEqual(await loadGraphQLReturn.promise, cacheValue);
+          deepStrictEqual(cache.store, {
+            [cacheKey]: cacheValue,
           });
         } finally {
-          revertGlobals();
+          // Undo any cache changes for future tests.
+          cacheDelete(cache);
         }
+      });
 
-        strictEqual(fetchedUri, fetchUri);
-        assertTypeOf(fetchedOptions, "object");
-
-        const { signal: fetchedOptionsSignal, ...fetchedOptionsRest } =
-          fetchedOptions;
-
-        assertInstanceOf(fetchedOptionsSignal, AbortSignal);
-        deepStrictEqual(fetchedOptionsRest, fetchOptions);
-
-        assertInstanceOf(loadGraphQLReturn, LoadingCacheValue);
-        deepStrictEqual(await loadGraphQLReturn.promise, cacheValue);
-        deepStrictEqual(cache.store, {
-          [cacheKey]: cacheValue,
-        });
-      } finally {
-        // Undo any cache changes for future tests.
-        cacheDelete(cache);
-      }
-    });
-
-    loadGraphQLTests.add(
-      "Load GraphQL aborting, no fetch options `signal`.",
-      async () => {
+      it("Load GraphQL aborting, no fetch options `signal`.", async () => {
         const fetchUri = "the-uri";
         const fetchOptions = Object.freeze({ body: "a" });
         const fetchError = new Error("The operation was aborted.");
@@ -386,12 +376,9 @@ export default (tests) => {
           // Undo any cache changes for future tests.
           cacheDelete(cache);
         }
-      }
-    );
+      });
 
-    loadGraphQLTests.add(
-      "Load GraphQL aborting, fetch options `signal`, not yet aborted.",
-      async () => {
+      it("Load GraphQL aborting, fetch options `signal`, not yet aborted.", async () => {
         const fetchUri = "the-uri";
         const abortController = new AbortController();
         const fetchOptionsWithoutSignal = { body: "a" };
@@ -485,12 +472,9 @@ export default (tests) => {
           // Undo any cache changes for future tests.
           cacheDelete(cache);
         }
-      }
-    );
+      });
 
-    loadGraphQLTests.add(
-      "Load GraphQL aborting, fetch options `signal`, already aborted.",
-      async () => {
+      it("Load GraphQL aborting, fetch options `signal`, already aborted.", async () => {
         const fetchUri = "the-uri";
         const abortController = new AbortController();
 
@@ -573,12 +557,7 @@ export default (tests) => {
           // Undo any cache changes for future tests.
           cacheDelete(cache);
         }
-      }
-    );
-
-    await loadGraphQLTests.run(true);
-
-    // No re-rendering should have happened.
-    strictEqual(results.length, 2);
-  });
-};
+      });
+    }
+  );
+});

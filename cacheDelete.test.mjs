@@ -1,22 +1,21 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import Cache from "./Cache.mjs";
 import cacheDelete from "./cacheDelete.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `cacheDelete` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`cacheDelete` bundle size.", async () => {
+describe("Function `cacheDelete`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./cacheDelete.mjs", import.meta.url), 400);
   });
 
-  tests.add("`cacheDelete` argument 1 `cache` not a `Cache` instance.", () => {
+  it("Argument 1 `cache` not a `Cache` instance.", () => {
     throws(() => {
       cacheDelete(
         // @ts-expect-error Testing invalid.
@@ -25,20 +24,17 @@ export default (tests) => {
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
 
-  tests.add(
-    "`cacheDelete` argument 2 `cacheKeyMatcher` not a function.",
-    () => {
-      throws(() => {
-        cacheDelete(
-          new Cache(),
-          // @ts-expect-error Testing invalid.
-          true
-        );
-      }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
-    }
-  );
+  it("Argument 2 `cacheKeyMatcher` not a function.", () => {
+    throws(() => {
+      cacheDelete(
+        new Cache(),
+        // @ts-expect-error Testing invalid.
+        true
+      );
+    }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
+  });
 
-  tests.add("`cacheDelete` argument 2 `cacheKeyMatcher` unused.", () => {
+  it("Argument 2 `cacheKeyMatcher` unused.", () => {
     const cache = new Cache({ a: 1, b: 2 });
 
     /** @type {Array<Event>} */
@@ -67,7 +63,7 @@ export default (tests) => {
     deepStrictEqual(cache.store, {});
   });
 
-  tests.add("`cacheDelete` argument 2 `cacheKeyMatcher` used.", () => {
+  it("Argument 2 `cacheKeyMatcher` used.", () => {
     const cache = new Cache({ a: 1, b: 2, c: 3 });
 
     /** @type {Array<Event>} */
@@ -96,4 +92,4 @@ export default (tests) => {
 
     deepStrictEqual(cache.store, { b: 2 });
   });
-};
+});

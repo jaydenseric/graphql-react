@@ -1,6 +1,7 @@
 // @ts-check
 
 import { strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 
 import Loading from "./Loading.mjs";
@@ -8,19 +9,15 @@ import LoadingContext from "./LoadingContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 
-/**
- * Adds `LoadingContext` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`LoadingContext` bundle size.", async () => {
+describe("React context `LoadingContext`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./LoadingContext.mjs", import.meta.url),
       120
     );
   });
 
-  tests.add("`LoadingContext` used as a React context.", () => {
+  it("Used as a React context.", () => {
     let contextValue;
 
     function TestComponent() {
@@ -40,4 +37,4 @@ export default (tests) => {
 
     strictEqual(contextValue, value);
   });
-};
+});

@@ -1,22 +1,21 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import Cache from "./Cache.mjs";
 import cacheStale from "./cacheStale.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `cacheStale` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`cacheStale` bundle size.", async () => {
+describe("Function `cacheStale`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./cacheStale.mjs", import.meta.url), 450);
   });
 
-  tests.add("`cacheStale` argument 1 `cache` not a `Cache` instance.", () => {
+  it("Argument 1 `cache` not a `Cache` instance.", () => {
     throws(() => {
       cacheStale(
         // @ts-expect-error Testing invalid.
@@ -25,7 +24,7 @@ export default (tests) => {
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
 
-  tests.add("`cacheStale` argument 2 `cacheKeyMatcher` not a function.", () => {
+  it("Argument 2 `cacheKeyMatcher` not a function.", () => {
     throws(() => {
       cacheStale(
         new Cache(),
@@ -35,7 +34,7 @@ export default (tests) => {
     }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
   });
 
-  tests.add("`cacheStale` argument 2 `cacheKeyMatcher` unused.", () => {
+  it("Argument 2 `cacheKeyMatcher` unused.", () => {
     const initialCacheStore = { a: 1, b: 2 };
     const cache = new Cache({ ...initialCacheStore });
 
@@ -65,7 +64,7 @@ export default (tests) => {
     deepStrictEqual(cache.store, initialCacheStore);
   });
 
-  tests.add("`cacheStale` argument 2 `cacheKeyMatcher` used.", () => {
+  it("Argument 2 `cacheKeyMatcher` used.", () => {
     const initialCacheStore = { a: 1, b: 2, c: 3 };
     const cache = new Cache({ ...initialCacheStore });
 
@@ -95,4 +94,4 @@ export default (tests) => {
 
     deepStrictEqual(cache.store, initialCacheStore);
   });
-};
+});

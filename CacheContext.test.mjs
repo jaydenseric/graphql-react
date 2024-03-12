@@ -1,6 +1,7 @@
 // @ts-check
 
 import { strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 
 import Cache from "./Cache.mjs";
@@ -8,16 +9,12 @@ import CacheContext from "./CacheContext.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 
-/**
- * Adds `CacheContext` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`CacheContext` bundle size.", async () => {
+describe("React context `CacheContext`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./CacheContext.mjs", import.meta.url), 120);
   });
 
-  tests.add("`CacheContext` used as a React context.", () => {
+  it("Used as a React context.", () => {
     let contextValue;
 
     function TestComponent() {
@@ -37,4 +34,4 @@ export default (tests) => {
 
     strictEqual(contextValue, value);
   });
-};
+});

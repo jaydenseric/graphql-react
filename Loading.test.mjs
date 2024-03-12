@@ -1,27 +1,26 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 
 import Loading from "./Loading.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `Loading` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`Loading` bundle size.", async () => {
+describe("Class `Loading`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./Loading.mjs", import.meta.url), 120);
   });
 
-  tests.add("`Loading` constructor.", () => {
+  it("Constructor.", () => {
     const loading = new Loading();
 
     deepStrictEqual(loading.store, {});
   });
 
-  tests.add("`Loading` events.", () => {
+  it("Events.", () => {
     const loading = new Loading();
 
     assertInstanceOf(loading, EventTarget);
@@ -49,4 +48,4 @@ export default (tests) => {
 
     strictEqual(listenedEvent, null);
   });
-};
+});

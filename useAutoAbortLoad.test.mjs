@@ -1,6 +1,9 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { notStrictEqual, ok, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -14,19 +17,15 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 
-/**
- * Adds `useAutoAbortLoad` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useAutoAbortLoad` bundle size.", async () => {
+describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useAutoAbortLoad.mjs", import.meta.url),
       300
     );
   });
 
-  tests.add("`useAutoAbortLoad` argument 1 `load` not a function.", () => {
+  it("Argument 1 `load` not a function.", () => {
     throws(() => {
       useAutoAbortLoad(
         // @ts-expect-error Testing invalid.
@@ -35,7 +34,7 @@ export default (tests) => {
     }, new TypeError("Argument 1 `load` must be a function."));
   });
 
-  tests.add("`useAutoAbortLoad` functionality.", async () => {
+  it("Functionality.", async () => {
     const cache = new Cache();
     const loading = new Loading();
 
@@ -186,4 +185,4 @@ export default (tests) => {
       true
     );
   });
-};
+});

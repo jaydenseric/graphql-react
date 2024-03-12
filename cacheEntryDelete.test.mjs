@@ -1,38 +1,34 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import Cache from "./Cache.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `cacheEntryDelete` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`cacheEntryDelete` bundle size.", async () => {
+describe("Function `cacheEntryDelete`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./cacheEntryDelete.mjs", import.meta.url),
       350
     );
   });
 
-  tests.add(
-    "`cacheEntryDelete` argument 1 `cache` not a `Cache` instance.",
-    () => {
-      throws(() => {
-        cacheEntryDelete(
-          // @ts-expect-error Testing invalid.
-          true,
-          "a"
-        );
-      }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
-    }
-  );
+  it("Argument 1 `cache` not a `Cache` instance.", () => {
+    throws(() => {
+      cacheEntryDelete(
+        // @ts-expect-error Testing invalid.
+        true,
+        "a"
+      );
+    }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
+  });
 
-  tests.add("`cacheEntryDelete` argument 2 `cacheKey` not a string.", () => {
+  it("Argument 2 `cacheKey` not a string.", () => {
     throws(() => {
       cacheEntryDelete(
         new Cache(),
@@ -42,7 +38,7 @@ export default (tests) => {
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
   });
 
-  tests.add("`cacheEntryDelete` with entry not populated.", () => {
+  it("Entry not populated.", () => {
     const cache = new Cache({ a: 1 });
 
     /** @type {Array<Event>} */
@@ -58,7 +54,7 @@ export default (tests) => {
     deepStrictEqual(cache.store, { a: 1 });
   });
 
-  tests.add("`cacheEntryDelete` with entry populated.", () => {
+  it("Entry populated.", () => {
     const deleteCacheKey = "b";
     const cache = new Cache({ a: 1, [deleteCacheKey]: 2 });
 
@@ -79,4 +75,4 @@ export default (tests) => {
 
     deepStrictEqual(cache.store, { a: 1 });
   });
-};
+});

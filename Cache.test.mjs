@@ -1,21 +1,20 @@
 // @ts-check
 
+import "./test/polyfillCustomEvent.mjs";
+
 import { deepStrictEqual, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import Cache from "./Cache.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `Cache` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`Cache` bundle size.", async () => {
+describe("Class `Cache`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./Cache.mjs", import.meta.url), 200);
   });
 
-  tests.add("`Cache` constructor argument 1 `store`, not an object.", () => {
+  it("Constructor argument 1 `store` not an object.", () => {
     throws(() => {
       new Cache(
         // @ts-expect-error Testing invalid.
@@ -24,13 +23,13 @@ export default (tests) => {
     }, new TypeError("Constructor argument 1 `store` must be an object."));
   });
 
-  tests.add("`Cache` constructor argument 1 `store`, missing", () => {
+  it("Constructor argument 1 `store` missing", () => {
     const cache = new Cache();
 
     deepStrictEqual(cache.store, {});
   });
 
-  tests.add("`Cache` constructor argument 1 `store`, object.", () => {
+  it("Constructor argument 1 `store` an object.", () => {
     const initialStore = {
       a: 1,
       b: 2,
@@ -40,7 +39,7 @@ export default (tests) => {
     deepStrictEqual(cache.store, initialStore);
   });
 
-  tests.add("`Cache` events.", () => {
+  it("Events.", () => {
     const cache = new Cache();
 
     assertInstanceOf(cache, EventTarget);
@@ -68,4 +67,4 @@ export default (tests) => {
 
     strictEqual(listenedEvent, null);
   });
-};
+});

@@ -1,24 +1,23 @@
 // @ts-check
 
+import "./test/polyfillFile.mjs";
+
 import { deepStrictEqual, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 
 import fetchOptionsGraphQL from "./fetchOptionsGraphQL.mjs";
 import assertBundleSize from "./test/assertBundleSize.mjs";
 import assertInstanceOf from "./test/assertInstanceOf.mjs";
 
-/**
- * Adds `fetchOptionsGraphQL` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`fetchOptionsGraphQL` bundle size.", async () => {
+describe("Function `fetchOptionsGraphQL`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./fetchOptionsGraphQL.mjs", import.meta.url),
       800
     );
   });
 
-  tests.add("`fetchOptionsGraphQL` without files.", () => {
+  it("Without files.", () => {
     deepStrictEqual(fetchOptionsGraphQL({ query: "" }), {
       method: "POST",
       headers: {
@@ -29,7 +28,7 @@ export default (tests) => {
     });
   });
 
-  tests.add("`fetchOptionsGraphQL` with files.", () => {
+  it("With files.", () => {
     const fileName = "a.txt";
     const options = fetchOptionsGraphQL({
       query: "",
@@ -55,4 +54,4 @@ export default (tests) => {
     assertInstanceOf(formDataEntries[2][1], File);
     strictEqual(formDataEntries[2][1].name, fileName);
   });
-};
+});

@@ -1,6 +1,7 @@
 // @ts-check
 
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -11,16 +12,12 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useLoading from "./useLoading.mjs";
 
-/**
- * Adds `useLoading` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useLoading` bundle size.", async () => {
+describe("React hook `useLoading`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./useLoading.mjs", import.meta.url), 300);
   });
 
-  tests.add("`useLoading` with loading context missing.", () => {
+  it("Loading context missing.", () => {
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
     const results = [];
 
@@ -39,36 +36,33 @@ export default (tests) => {
     );
   });
 
-  tests.add(
-    "`useLoading` with loading context value not a `Loading` instance.",
-    () => {
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
-      const results = [];
+  it("Loading context value not a `Loading` instance.", () => {
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      createReactTestRenderer(
-        React.createElement(
-          LoadingContext.Provider,
-          {
-            // @ts-expect-error Testing invalid.
-            value: true,
-          },
-          React.createElement(ReactHookTest, {
-            useHook: useLoading,
-            results,
-          })
-        )
-      );
+    createReactTestRenderer(
+      React.createElement(
+        LoadingContext.Provider,
+        {
+          // @ts-expect-error Testing invalid.
+          value: true,
+        },
+        React.createElement(ReactHookTest, {
+          useHook: useLoading,
+          results,
+        })
+      )
+    );
 
-      strictEqual(results.length, 1);
-      ok("threw" in results[0]);
-      deepStrictEqual(
-        results[0].threw,
-        new TypeError("Loading context value must be a `Loading` instance.")
-      );
-    }
-  );
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(
+      results[0].threw,
+      new TypeError("Loading context value must be a `Loading` instance.")
+    );
+  });
 
-  tests.add("`useLoading` getting the loading.", () => {
+  it("Getting the loading.", () => {
     const loadingA = new Loading();
 
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
@@ -108,4 +102,4 @@ export default (tests) => {
     ok("returned" in results[1]);
     strictEqual(results[1].returned, loadingB);
   });
-};
+});

@@ -1,6 +1,7 @@
 // @ts-check
 
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -11,16 +12,12 @@ import createReactTestRenderer from "./test/createReactTestRenderer.mjs";
 import ReactHookTest from "./test/ReactHookTest.mjs";
 import useCache from "./useCache.mjs";
 
-/**
- * Adds `useCache` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`useCache` bundle size.", async () => {
+describe("React hook `useCache`.", { concurrency: true }, () => {
+  it("Bundle size.", async () => {
     await assertBundleSize(new URL("./useCache.mjs", import.meta.url), 350);
   });
 
-  tests.add("`useCache` with cache context missing.", () => {
+  it("Cache context missing.", () => {
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
     const results = [];
 
@@ -36,36 +33,33 @@ export default (tests) => {
     deepStrictEqual(results[0].threw, new TypeError("Cache context missing."));
   });
 
-  tests.add(
-    "`useCache` with cache context value not a `Cache` instance.",
-    () => {
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
-      const results = [];
+  it("Cache context value not a `Cache` instance.", () => {
+    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    const results = [];
 
-      createReactTestRenderer(
-        React.createElement(
-          CacheContext.Provider,
-          {
-            // @ts-expect-error Testing invalid.
-            value: true,
-          },
-          React.createElement(ReactHookTest, {
-            useHook: useCache,
-            results,
-          })
-        )
-      );
+    createReactTestRenderer(
+      React.createElement(
+        CacheContext.Provider,
+        {
+          // @ts-expect-error Testing invalid.
+          value: true,
+        },
+        React.createElement(ReactHookTest, {
+          useHook: useCache,
+          results,
+        })
+      )
+    );
 
-      strictEqual(results.length, 1);
-      ok("threw" in results[0]);
-      deepStrictEqual(
-        results[0].threw,
-        new TypeError("Cache context value must be a `Cache` instance.")
-      );
-    }
-  );
+    strictEqual(results.length, 1);
+    ok("threw" in results[0]);
+    deepStrictEqual(
+      results[0].threw,
+      new TypeError("Cache context value must be a `Cache` instance.")
+    );
+  });
 
-  tests.add("`useCache` getting the cache.", () => {
+  it("Getting the cache.", () => {
     const cacheA = new Cache();
 
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
@@ -105,4 +99,4 @@ export default (tests) => {
     ok("returned" in results[1]);
     strictEqual(results[1].returned, cacheB);
   });
-};
+});
