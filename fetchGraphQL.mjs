@@ -53,7 +53,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                 statusCode: response.status,
                 statusText: response.statusText,
               },
-            })
+            }),
           );
 
         return response.json().then(
@@ -71,7 +71,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                     client: true,
                     code: ERROR_CODE_RESPONSE_MALFORMED,
                   },
-                })
+                }),
               );
             else {
               const hasErrors = "errors" in json;
@@ -86,7 +86,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                       client: true,
                       code: ERROR_CODE_RESPONSE_MALFORMED,
                     },
-                  })
+                  }),
                 );
               else {
                 // The `errors` field should be an array, or not set.
@@ -101,7 +101,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                           client: true,
                           code: ERROR_CODE_RESPONSE_MALFORMED,
                         },
-                      })
+                      }),
                     );
                   else resultErrors.push(...json.errors);
 
@@ -121,7 +121,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                           client: true,
                           code: ERROR_CODE_RESPONSE_MALFORMED,
                         },
-                      })
+                      }),
                     );
                   else result.data = json.data;
               }
@@ -138,9 +138,9 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                   code: ERROR_CODE_RESPONSE_JSON_PARSE_ERROR,
                   jsonParseErrorMessage: message,
                 },
-              })
+              }),
             );
-          }
+          },
         );
       },
 
@@ -154,9 +154,9 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
               code: ERROR_CODE_FETCH_ERROR,
               fetchErrorMessage: message,
             },
-          })
+          }),
         );
-      }
+      },
     )
     .then(() => {
       if (resultErrors.length) result.errors = resultErrors;

@@ -19,7 +19,7 @@ describe("Function `cacheStale`.", { concurrency: true }, () => {
     throws(() => {
       cacheStale(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
@@ -29,7 +29,7 @@ describe("Function `cacheStale`.", { concurrency: true }, () => {
       cacheStale(
         new Cache(),
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
   });

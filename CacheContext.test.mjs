@@ -2,6 +2,7 @@
 
 import { strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 
 import Cache from "./Cache.mjs";
@@ -28,8 +29,8 @@ describe("React context `CacheContext`.", { concurrency: true }, () => {
       React.createElement(
         CacheContext.Provider,
         { value },
-        React.createElement(TestComponent)
-      )
+        React.createElement(TestComponent),
+      ),
     );
 
     strictEqual(contextValue, value);

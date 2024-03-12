@@ -8,7 +8,7 @@ import React from "react";
  * @type {React.Context<DOMHighResTimeStamp | undefined>}
  */
 const HydrationTimeStampContext = React.createContext(
-  /** @type {DOMHighResTimeStamp | undefined} */ (undefined)
+  /** @type {DOMHighResTimeStamp | undefined} */ (undefined),
 );
 
 HydrationTimeStampContext.displayName = "HydrationTimeStampContext";

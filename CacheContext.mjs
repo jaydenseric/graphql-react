@@ -10,7 +10,7 @@ import React from "react";
  * @type {React.Context<Cache | undefined>}
  */
 const CacheContext = React.createContext(
-  /** @type {Cache | undefined} */ (undefined)
+  /** @type {Cache | undefined} */ (undefined),
 );
 
 CacheContext.displayName = "CacheContext";

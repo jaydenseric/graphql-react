@@ -2,6 +2,7 @@
 
 import { ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -19,7 +20,7 @@ describe("React hook `useForceUpdate`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: useForceUpdate,
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);

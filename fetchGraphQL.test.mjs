@@ -1,7 +1,8 @@
 // @ts-check
 
-import { deepStrictEqual, strictEqual } from "node:assert";
+import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import revertableGlobals from "revertable-globals";
 
 import fetchGraphQL from "./fetchGraphQL.mjs";
@@ -25,7 +26,7 @@ describe(
     it("Bundle size.", async () => {
       await assertBundleSize(
         new URL("./fetchGraphQL.mjs", import.meta.url),
-        600
+        600,
       );
     });
 
@@ -118,12 +119,17 @@ describe(
         },
       });
 
-      // Don’t hard-code the expected JSON parse error message in case it differs
-      // across environments.
+      /**
+       * The JSON parse error message. It’s not hardcoded in case it differs
+       * across environments.
+       */
+      let jsonParseErrorMessage;
+
       try {
         JSON.parse(responseJson);
-      } catch ({ message }) {
-        var jsonParseErrorMessage = message;
+      } catch (error) {
+        ok(error instanceof Error);
+        jsonParseErrorMessage = error.message;
       }
 
       try {
@@ -178,12 +184,17 @@ describe(
         },
       });
 
-      // Don’t hard-code the expected JSON parse error message in case it
-      // differs across environments.
+      /**
+       * The JSON parse error message. It’s not hardcoded in case it differs
+       * across environments.
+       */
+      let jsonParseErrorMessage;
+
       try {
         JSON.parse(responseJson);
-      } catch ({ message }) {
-        var jsonParseErrorMessage = message;
+      } catch (error) {
+        ok(error instanceof Error);
+        jsonParseErrorMessage = error.message;
       }
 
       try {
@@ -440,7 +451,7 @@ describe(
       const fetchOptions = {};
       const fetchResponse = new Response(
         JSON.stringify({ errors: null }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -548,7 +559,7 @@ describe(
       const fetchOptions = {};
       const fetchResponse = new Response(
         JSON.stringify({ data: true }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -598,7 +609,7 @@ describe(
       const errors = [{ message: "Unauthorized." }];
       const fetchResponse = new Response(
         JSON.stringify({ errors }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -698,7 +709,7 @@ describe(
       const data = { a: true };
       const fetchResponse = new Response(
         JSON.stringify({ errors, data }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -746,7 +757,7 @@ describe(
           ...graphqlResponseOptions,
           status: 400,
           statusText: "Bad Request",
-        }
+        },
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -799,7 +810,7 @@ describe(
       const fetchOptions = {};
       const fetchResponse = new Response(
         JSON.stringify({ data: true }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -908,7 +919,7 @@ describe(
       const data = { a: true };
       const fetchResponse = new Response(
         JSON.stringify({ data }),
-        graphqlResponseOptions
+        graphqlResponseOptions,
       );
       const revertGlobals = revertableGlobals({
         /**
@@ -991,5 +1002,5 @@ describe(
         revertGlobals();
       }
     });
-  }
+  },
 );

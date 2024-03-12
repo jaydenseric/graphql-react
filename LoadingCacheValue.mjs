@@ -41,12 +41,12 @@ export default class LoadingCacheValue {
 
     if (!(loadingResult instanceof Promise))
       throw new TypeError(
-        "Argument 4 `loadingResult` must be a `Promise` instance."
+        "Argument 4 `loadingResult` must be a `Promise` instance.",
       );
 
     if (!(abortController instanceof AbortController))
       throw new TypeError(
-        "Argument 5 `abortController` must be an `AbortController` instance."
+        "Argument 5 `abortController` must be an `AbortController` instance.",
       );
 
     /**
@@ -118,7 +118,7 @@ export default class LoadingCacheValue {
           detail: {
             loadingCacheValue: this,
           },
-        })
+        }),
       );
 
       return result;
@@ -133,7 +133,7 @@ export default class LoadingCacheValue {
         detail: {
           loadingCacheValue: this,
         },
-      })
+      }),
     );
   }
 }

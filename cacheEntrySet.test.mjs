@@ -14,7 +14,7 @@ describe("Function `cacheEntrySet`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./cacheEntrySet.mjs", import.meta.url),
-      350
+      350,
     );
   });
 
@@ -24,7 +24,7 @@ describe("Function `cacheEntrySet`.", { concurrency: true }, () => {
         // @ts-expect-error Testing invalid.
         true,
         "a",
-        {}
+        {},
       );
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
@@ -35,7 +35,7 @@ describe("Function `cacheEntrySet`.", { concurrency: true }, () => {
         new Cache(),
         // @ts-expect-error Testing invalid.
         true,
-        {}
+        {},
       );
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
   });

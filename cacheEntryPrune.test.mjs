@@ -14,7 +14,7 @@ describe("Function `cacheEntryPrune`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./cacheEntryPrune.mjs", import.meta.url),
-      350
+      350,
     );
   });
 
@@ -23,7 +23,7 @@ describe("Function `cacheEntryPrune`.", { concurrency: true }, () => {
       cacheEntryPrune(
         // @ts-expect-error Testing invalid.
         true,
-        "a"
+        "a",
       );
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
@@ -33,7 +33,7 @@ describe("Function `cacheEntryPrune`.", { concurrency: true }, () => {
       cacheEntryPrune(
         new Cache(),
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
   });

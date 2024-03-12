@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -29,13 +30,13 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       new Cache(),
       "a",
       Promise.resolve(),
-      new AbortController()
+      new AbortController(),
     );
 
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useLoadOnMount.mjs", import.meta.url),
-      600
+      600,
     );
   });
 
@@ -44,7 +45,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       useLoadOnMount(
         // @ts-expect-error Testing invalid.
         true,
-        dummyLoader
+        dummyLoader,
       );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
@@ -54,7 +55,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       useLoadOnMount(
         "a",
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
@@ -67,7 +68,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: () => useLoadOnMount("a", dummyLoader),
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -89,15 +90,15 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadOnMount("a", dummyLoader),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -126,17 +127,17 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount("a", dummyLoader),
               results,
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Hydration time stamp context value must be a number.")
+      new TypeError("Hydration time stamp context value must be a number."),
     );
   });
 
@@ -179,8 +180,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadOnMount(cacheKeyA, loadA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -214,8 +215,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyA, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -250,8 +251,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyB, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -286,8 +287,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyB, loadB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -358,8 +359,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadOnMount(cacheKeyA, loadA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -393,8 +394,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyA, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -429,8 +430,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyB, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -465,8 +466,8 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyB, loadB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -536,9 +537,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyA, loadA),
             results,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -575,9 +576,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyA, loadA),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -615,9 +616,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyB, loadA),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -655,9 +656,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyB, loadB),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -732,9 +733,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnMount(cacheKeyA, loadA),
             results,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -764,9 +765,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyA, loadA),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -797,9 +798,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyB, loadA),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -830,9 +831,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyB, loadB),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -866,9 +867,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyB, loadB),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -896,9 +897,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyA, loadB),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 
@@ -926,9 +927,9 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: () => useLoadOnMount(cacheKeyA, loadA),
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
 

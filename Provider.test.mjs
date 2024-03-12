@@ -2,6 +2,7 @@
 
 import { strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -31,8 +32,8 @@ describe("React component `Provider`.", { concurrency: true }, () => {
           React.createElement(
             Provider,
             // @ts-expect-error Testing invalid.
-            {}
-          )
+            {},
+          ),
         );
       }, new TypeError("Prop `cache` must be a `Cache` instance."));
     } finally {
@@ -53,7 +54,7 @@ describe("React component `Provider`.", { concurrency: true }, () => {
     function TestComponent() {
       results.push({
         hydrationTimeStampContextValue: React.useContext(
-          HydrationTimeStampContext
+          HydrationTimeStampContext,
         ),
         cacheContextValue: React.useContext(CacheContext),
         loadingContextValue: React.useContext(LoadingContext),
@@ -66,15 +67,15 @@ describe("React component `Provider`.", { concurrency: true }, () => {
       React.createElement(
         Provider,
         { cache },
-        React.createElement(TestComponent)
-      )
+        React.createElement(TestComponent),
+      ),
     );
 
     strictEqual(results.length, 1);
     assertTypeOf(results[0].hydrationTimeStampContextValue, "number");
     strictEqual(
       performance.now() - results[0].hydrationTimeStampContextValue < 100,
-      true
+      true,
     );
     strictEqual(results[0].cacheContextValue, cache);
     assertInstanceOf(results[0].loadingContextValue, Loading);
@@ -89,15 +90,15 @@ describe("React component `Provider`.", { concurrency: true }, () => {
             a: true,
             cache,
           },
-          React.createElement(TestComponent)
-        )
+          React.createElement(TestComponent),
+        ),
       );
     });
 
     strictEqual(results.length, 2);
     strictEqual(
       results[1].hydrationTimeStampContextValue,
-      results[0].hydrationTimeStampContextValue
+      results[0].hydrationTimeStampContextValue,
     );
     strictEqual(results[1].cacheContextValue, results[0].cacheContextValue);
     strictEqual(results[1].loadingContextValue, results[0].loadingContextValue);

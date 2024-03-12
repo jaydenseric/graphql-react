@@ -13,7 +13,7 @@ export default function createReactTestRenderer(reactRoot) {
   ReactTestRenderer.act(() => {
     testRenderer = ReactTestRenderer.create(
       // @ts-ignore The React types are incorrect.
-      reactRoot
+      reactRoot,
     );
   });
 

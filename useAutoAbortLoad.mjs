@@ -18,7 +18,7 @@ export default function useAutoAbortLoad(load) {
     throw new TypeError("Argument 1 `load` must be a function.");
 
   const lastLoadingCacheValueRef = React.useRef(
-    /** @type {LoadingCacheValue | undefined} */ (undefined)
+    /** @type {LoadingCacheValue | undefined} */ (undefined),
   );
 
   React.useEffect(
@@ -29,7 +29,7 @@ export default function useAutoAbortLoad(load) {
         // unnecessary.
         lastLoadingCacheValueRef.current.abortController.abort();
     },
-    [load]
+    [load],
   );
 
   return React.useCallback(() => {

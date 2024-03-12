@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -20,7 +21,7 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useCacheEntry.mjs", import.meta.url),
-      550
+      550,
     );
   });
 
@@ -28,7 +29,7 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
     throws(() => {
       useCacheEntry(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
@@ -41,7 +42,7 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: () => useCacheEntry("a"),
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -63,15 +64,15 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useCacheEntry("a"),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -89,8 +90,8 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useCacheEntry(cacheKeyA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -125,8 +126,8 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useCacheEntry(cacheKeyB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -173,8 +174,8 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useCacheEntry(cacheKeyA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -207,8 +208,8 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useCacheEntry(cacheKeyB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -252,8 +253,8 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useCacheEntry(cacheKey),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -267,7 +268,7 @@ describe("React hook `useCacheEntry`.", { concurrency: true }, () => {
           detail: {
             cacheValue,
           },
-        })
+        }),
       );
     });
 

@@ -2,6 +2,7 @@
 
 import { strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 
 import HydrationTimeStampContext from "./HydrationTimeStampContext.mjs";
@@ -15,7 +16,7 @@ describe(
     it("Bundle size.", async () => {
       await assertBundleSize(
         new URL("./HydrationTimeStampContext.mjs", import.meta.url),
-        150
+        150,
       );
     });
 
@@ -33,11 +34,11 @@ describe(
         React.createElement(
           HydrationTimeStampContext.Provider,
           { value },
-          React.createElement(TestComponent)
-        )
+          React.createElement(TestComponent),
+        ),
       );
 
       strictEqual(contextValue, value);
     });
-  }
+  },
 );

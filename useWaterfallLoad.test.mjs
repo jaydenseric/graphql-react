@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, rejects, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import waterfallRender from "react-waterfall-render/waterfallRender.mjs";
@@ -29,13 +30,13 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       new Cache(),
       "a",
       Promise.resolve(),
-      new AbortController()
+      new AbortController(),
     );
 
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useWaterfallLoad.mjs", import.meta.url),
-      1000
+      1000,
     );
   });
 
@@ -44,7 +45,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       useWaterfallLoad(
         // @ts-expect-error Testing invalid.
         true,
-        dummyLoader
+        dummyLoader,
       );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
@@ -54,7 +55,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       useWaterfallLoad(
         "a",
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
@@ -67,7 +68,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: () => useWaterfallLoad("a", dummyLoader),
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -89,15 +90,15 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useWaterfallLoad("a", dummyLoader),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -121,8 +122,8 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
               return dummyLoader();
             }),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(didLoad, false);
@@ -139,7 +140,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
         "a",
         () =>
           // @ts-expect-error Testing invalid.
-          true
+          true,
       );
 
       return null;
@@ -150,13 +151,13 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
         React.createElement(
           CacheContext.Provider,
           { value: cache },
-          React.createElement(TestComponent)
+          React.createElement(TestComponent),
         ),
-        ReactDOMServer.renderToStaticMarkup
+        ReactDOMServer.renderToStaticMarkup,
       ),
       new TypeError(
-        "Argument 2 `load` must return a `LoadingCacheValue` instance."
-      )
+        "Argument 2 `load` must return a `LoadingCacheValue` instance.",
+      ),
     );
   });
 
@@ -181,7 +182,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
         cache,
         cacheKey,
         Promise.resolve(cacheValue),
-        new AbortController()
+        new AbortController(),
       );
     }
 
@@ -203,9 +204,9 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       React.createElement(
         CacheContext.Provider,
         { value: cache },
-        React.createElement(TestComponent)
+        React.createElement(TestComponent),
       ),
-      ReactDOMServer.renderToStaticMarkup
+      ReactDOMServer.renderToStaticMarkup,
     );
 
     deepStrictEqual(loadCalls, [false]);
@@ -239,7 +240,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
         cache,
         cacheKey,
         Promise.resolve("c"),
-        new AbortController()
+        new AbortController(),
       );
     }
 
@@ -261,9 +262,9 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
       React.createElement(
         CacheContext.Provider,
         { value: cache },
-        React.createElement(TestComponent)
+        React.createElement(TestComponent),
       ),
-      ReactDOMServer.renderToStaticMarkup
+      ReactDOMServer.renderToStaticMarkup,
     );
 
     deepStrictEqual(loadCalls, []);

@@ -33,14 +33,14 @@ import LoadingContext from "./LoadingContext.mjs";
  */
 export default function Provider({ cache, children }) {
   const hydrationTimeStampRef = React.useRef(
-    /** @type {DOMHighResTimeStamp | undefined} */ (undefined)
+    /** @type {DOMHighResTimeStamp | undefined} */ (undefined),
   );
 
   if (!hydrationTimeStampRef.current)
     hydrationTimeStampRef.current = performance.now();
 
   const loadingRef = React.useRef(
-    /** @type {Loading | undefined} */ (undefined)
+    /** @type {Loading | undefined} */ (undefined),
   );
 
   if (!loadingRef.current) loadingRef.current = new Loading();
@@ -57,9 +57,9 @@ export default function Provider({ cache, children }) {
       React.createElement(
         LoadingContext.Provider,
         { value: loadingRef.current },
-        children
-      )
-    )
+        children,
+      ),
+    ),
   );
 }
 

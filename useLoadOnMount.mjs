@@ -43,7 +43,7 @@ export default function useLoadOnMount(cacheKey, load) {
      *   cacheKey: import("./Cache.mjs").CacheKey,
      *   load: import("./types.mjs").Loader
      * } | undefined}
-     */ (undefined)
+     */ (undefined),
   );
 
   React.useEffect(() => {

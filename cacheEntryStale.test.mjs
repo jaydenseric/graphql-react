@@ -14,7 +14,7 @@ describe("Function `cacheEntryStale`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./cacheEntryStale.mjs", import.meta.url),
-      350
+      350,
     );
   });
 
@@ -23,7 +23,7 @@ describe("Function `cacheEntryStale`.", { concurrency: true }, () => {
       cacheEntryStale(
         // @ts-expect-error Testing invalid.
         true,
-        "a"
+        "a",
       );
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
@@ -33,7 +33,7 @@ describe("Function `cacheEntryStale`.", { concurrency: true }, () => {
       cacheEntryStale(
         new Cache(),
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `cacheKey` must be a string."));
   });
@@ -41,9 +41,12 @@ describe("Function `cacheEntryStale`.", { concurrency: true }, () => {
   it("Entry not populated.", () => {
     const cacheKey = "a";
 
-    throws(() => {
-      cacheEntryStale(new Cache(), cacheKey);
-    }, new Error(`Cache key \`${cacheKey}\` isn’t in the store.`));
+    throws(
+      () => {
+        cacheEntryStale(new Cache(), cacheKey);
+      },
+      new Error(`Cache key \`${cacheKey}\` isn’t in the store.`),
+    );
   });
 
   it("Entry populated.", () => {

@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { notStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -21,7 +22,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useAutoAbortLoad.mjs", import.meta.url),
-      300
+      300,
     );
   });
 
@@ -29,7 +30,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
     throws(() => {
       useAutoAbortLoad(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `load` must be a function."));
   });
@@ -54,7 +55,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
         cache,
         "a",
         Promise.resolve(1),
-        new AbortController()
+        new AbortController(),
       );
 
       loadCalls.push({
@@ -73,7 +74,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
         cache,
         "a",
         Promise.resolve(1),
-        new AbortController()
+        new AbortController(),
       );
 
       loadCalls.push({
@@ -95,8 +96,8 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useAutoAbortLoad(loadA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -120,7 +121,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
     strictEqual(loadCalls[0].hadArgs, false);
     strictEqual(
       loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-      false
+      false,
     );
 
     // Start the second loading, before the first ends. This should abort the
@@ -130,13 +131,13 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
     strictEqual(loadCalls.length, 2);
     strictEqual(
       loadCalls[0].loadingCacheValue.abortController.signal.aborted,
-      true
+      true,
     );
     strictEqual(loadCalls[1].hadArgs, false);
     strictEqual(loadCalls[1].loader, loadA);
     strictEqual(
       loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-      false
+      false,
     );
 
     // Test that changing the loader causes the returned memoized auto abort
@@ -149,8 +150,8 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useAutoAbortLoad(loadB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -161,7 +162,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
     strictEqual(loadCalls.length, 2);
     strictEqual(
       loadCalls[1].loadingCacheValue.abortController.signal.aborted,
-      true
+      true,
     );
 
     // Test that the returned newly memoized abort load function works.
@@ -172,7 +173,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
     strictEqual(loadCalls[2].hadArgs, false);
     strictEqual(
       loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-      false
+      false,
     );
 
     // Test that the last loading is aborted on unmount.
@@ -182,7 +183,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
 
     strictEqual(
       loadCalls[2].loadingCacheValue.abortController.signal.aborted,
-      true
+      true,
     );
   });
 });

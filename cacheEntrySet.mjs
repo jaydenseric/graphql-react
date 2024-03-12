@@ -25,6 +25,6 @@ export default function cacheEntrySet(cache, cacheKey, cacheValue) {
       detail: {
         cacheValue,
       },
-    })
+    }),
   );
 }

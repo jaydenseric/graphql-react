@@ -15,9 +15,9 @@ export default function assertTypeOf(value, expectedType) {
   if (typeof value !== expectedType)
     throw new AssertionError({
       message: `Expected type ${inspect(
-        expectedType
+        expectedType,
       )} but actual type is ${inspect(typeof value)} for value:\n\n${inspect(
-        value
+        value,
       )}\n`,
       stackStartFn: assertTypeOf,
     });

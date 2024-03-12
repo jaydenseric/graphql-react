@@ -2,6 +2,7 @@
 
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -25,14 +26,14 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: useLoading,
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context missing.")
+      new TypeError("Loading context missing."),
     );
   });
 
@@ -50,15 +51,15 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useLoading,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context value must be a `Loading` instance.")
+      new TypeError("Loading context value must be a `Loading` instance."),
     );
   });
 
@@ -75,8 +76,8 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useLoading,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -93,8 +94,8 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: useLoading,
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 

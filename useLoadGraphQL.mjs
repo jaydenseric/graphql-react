@@ -59,7 +59,7 @@ export default function useLoadGraphQL() {
                 // Prevent a memory leak if the existing abort controller is
                 // long lasting, or controls multiple things.
                 once: true,
-              }
+              },
             );
 
       modifiedFetchOptions.signal = abortController.signal;
@@ -69,10 +69,10 @@ export default function useLoadGraphQL() {
         cache,
         cacheKey,
         fetchGraphQL(fetchUri, modifiedFetchOptions),
-        abortController
+        abortController,
       );
     },
-    [cache, loading]
+    [cache, loading],
   );
 }
 

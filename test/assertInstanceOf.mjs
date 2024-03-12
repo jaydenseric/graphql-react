@@ -15,7 +15,7 @@ export default function assertInstanceOf(value, expectedClass) {
   if (!(value instanceof expectedClass))
     throw new AssertionError({
       message: `Expected instance of ${inspect(
-        expectedClass
+        expectedClass,
       )} for value:\n\n${inspect(value)}\n`,
       stackStartFn: assertInstanceOf,
     });

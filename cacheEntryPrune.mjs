@@ -22,7 +22,7 @@ export default function cacheEntryPrune(cache, cacheKey) {
 
   if (cacheKey in cache.store) {
     const notCanceled = cache.dispatchEvent(
-      new CustomEvent(`${cacheKey}/prune`, { cancelable: true })
+      new CustomEvent(`${cacheKey}/prune`, { cancelable: true }),
     );
 
     if (notCanceled) cacheEntryDelete(cache, cacheKey);

@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -22,7 +23,7 @@ describe(
     it("Bundle size.", async () => {
       await assertBundleSize(
         new URL("./useCacheEntryPrunePrevention.mjs", import.meta.url),
-        450
+        450,
       );
     });
 
@@ -30,7 +31,7 @@ describe(
       throws(() => {
         useCacheEntryPrunePrevention(
           // @ts-expect-error Testing invalid.
-          true
+          true,
         );
       }, new TypeError("Argument 1 `cacheKey` must be a string."));
     });
@@ -43,14 +44,14 @@ describe(
         React.createElement(ReactHookTest, {
           useHook: () => useCacheEntryPrunePrevention("a"),
           results,
-        })
+        }),
       );
 
       strictEqual(results.length, 1);
       ok("threw" in results[0]);
       deepStrictEqual(
         results[0].threw,
-        new TypeError("Cache context missing.")
+        new TypeError("Cache context missing."),
       );
     });
 
@@ -68,15 +69,15 @@ describe(
           React.createElement(ReactHookTest, {
             useHook: () => useCacheEntryPrunePrevention("a"),
             results,
-          })
-        )
+          }),
+        ),
       );
 
       strictEqual(results.length, 1);
       ok("threw" in results[0]);
       deepStrictEqual(
         results[0].threw,
-        new TypeError("Cache context value must be a `Cache` instance.")
+        new TypeError("Cache context value must be a `Cache` instance."),
       );
     });
 
@@ -99,8 +100,8 @@ describe(
           React.createElement(ReactHookTest, {
             useHook: () => useCacheEntryPrunePrevention(cacheKeyA),
             results,
-          })
-        )
+          }),
+        ),
       );
 
       strictEqual(results.length, 1);
@@ -124,8 +125,8 @@ describe(
             React.createElement(ReactHookTest, {
               useHook: () => useCacheEntryPrunePrevention(cacheKeyB),
               results,
-            })
-          )
+            }),
+          ),
         );
       });
 
@@ -151,5 +152,5 @@ describe(
 
       strictEqual(results.length, 2);
     });
-  }
+  },
 );

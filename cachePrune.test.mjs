@@ -19,7 +19,7 @@ describe("Function `cachePrune`.", { concurrency: true }, () => {
     throws(() => {
       cachePrune(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `cache` must be a `Cache` instance."));
   });
@@ -29,7 +29,7 @@ describe("Function `cachePrune`.", { concurrency: true }, () => {
       cachePrune(
         new Cache(),
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `cacheKeyMatcher` must be a function."));
   });

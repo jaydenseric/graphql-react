@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
 import { after, describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 import revertableGlobals from "revertable-globals";
@@ -25,7 +26,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useLoadGraphQL.mjs", import.meta.url),
-      1800
+      1800,
     );
   });
 
@@ -37,7 +38,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: useLoadGraphQL,
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -59,15 +60,15 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useLoadGraphQL,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -84,15 +85,15 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useLoadGraphQL,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context missing.")
+      new TypeError("Loading context missing."),
     );
   });
 
@@ -115,16 +116,16 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: useLoadGraphQL,
             results,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context value must be a `Loading` instance.")
+      new TypeError("Loading context value must be a `Loading` instance."),
     );
   });
 
@@ -157,9 +158,9 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
             React.createElement(ReactHookTest, {
               useHook: useLoadGraphQL,
               results,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
 
       strictEqual(results.length, 1);
@@ -190,7 +191,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
             // @ts-expect-error Testing invalid.
             true,
             "",
-            {}
+            {},
           );
         }, new TypeError("Argument 1 `cacheKey` must be a string."));
       });
@@ -201,7 +202,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
             "a",
             // @ts-expect-error Testing invalid.
             true,
-            {}
+            {},
           );
         }, new TypeError("Argument 2 `fetchUri` must be a string."));
       });
@@ -212,7 +213,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
             "a",
             "",
             // @ts-expect-error Testing invalid.
-            null
+            null,
           );
         }, new TypeError("Argument 3 `fetchOptions` must be an object."));
       });
@@ -260,7 +261,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
               loadGraphQLReturn = result2Returned(
                 cacheKey,
                 fetchUri,
-                fetchOptions
+                fetchOptions,
               );
             });
           } finally {
@@ -324,7 +325,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
                   clearTimeout(timeout);
                   reject(fetchError);
                 },
-                { once: true }
+                { once: true },
               );
             });
           },
@@ -336,7 +337,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
               loadGraphQLReturn = result2Returned(
                 cacheKey,
                 fetchUri,
-                fetchOptions
+                fetchOptions,
               );
             });
           } finally {
@@ -370,7 +371,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
           deepStrictEqual(
             cache.store,
             // Cache shouldn’t be affected by aborted loading.
-            {}
+            {},
           );
         } finally {
           // Undo any cache changes for future tests.
@@ -420,7 +421,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
                   clearTimeout(timeout);
                   reject(fetchError);
                 },
-                { once: true }
+                { once: true },
               );
             });
           },
@@ -432,7 +433,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
               loadGraphQLReturn = result2Returned(
                 cacheKey,
                 fetchUri,
-                fetchOptions
+                fetchOptions,
               );
             });
           } finally {
@@ -466,7 +467,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
           deepStrictEqual(
             cache.store,
             // Cache shouldn’t be affected by aborted loading.
-            {}
+            {},
           );
         } finally {
           // Undo any cache changes for future tests.
@@ -520,7 +521,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
               loadGraphQLReturn = result2Returned(
                 cacheKey,
                 fetchUri,
-                fetchOptions
+                fetchOptions,
               );
             });
           } finally {
@@ -551,13 +552,13 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
           deepStrictEqual(
             cache.store,
             // Cache shouldn’t be affected by aborted loading.
-            {}
+            {},
           );
         } finally {
           // Undo any cache changes for future tests.
           cacheDelete(cache);
         }
       });
-    }
+    },
   );
 });

@@ -38,7 +38,7 @@ export default function useWaterfallLoad(cacheKey, load) {
 
     if (!(loadingCacheValue instanceof LoadingCacheValue))
       throw new TypeError(
-        "Argument 2 `load` must return a `LoadingCacheValue` instance."
+        "Argument 2 `load` must return a `LoadingCacheValue` instance.",
       );
 
     declareLoading(loadingCacheValue.promise);

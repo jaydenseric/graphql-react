@@ -18,7 +18,7 @@ describe("Class `Cache`.", { concurrency: true }, () => {
     throws(() => {
       new Cache(
         // @ts-expect-error Testing invalid.
-        null
+        null,
       );
     }, new TypeError("Constructor argument 1 `store` must be an object."));
   });

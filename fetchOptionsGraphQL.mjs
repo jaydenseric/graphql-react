@@ -54,7 +54,7 @@ export default function fetchOptionsGraphQL(operation) {
         `${++i}`,
         file,
         // @ts-ignore It’s ok for `name` to be undefined for a `Blob` instance.
-        file.name
+        file.name,
       );
     });
 

@@ -2,6 +2,7 @@
 
 import { strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 
 import Loading from "./Loading.mjs";
@@ -13,7 +14,7 @@ describe("React context `LoadingContext`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./LoadingContext.mjs", import.meta.url),
-      120
+      120,
     );
   });
 
@@ -31,8 +32,8 @@ describe("React context `LoadingContext`.", { concurrency: true }, () => {
       React.createElement(
         LoadingContext.Provider,
         { value },
-        React.createElement(TestComponent)
-      )
+        React.createElement(TestComponent),
+      ),
     );
 
     strictEqual(contextValue, value);

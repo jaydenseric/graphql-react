@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -28,13 +29,13 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       new Cache(),
       "a",
       Promise.resolve(),
-      new AbortController()
+      new AbortController(),
     );
 
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useLoadOnStale.mjs", import.meta.url),
-      500
+      500,
     );
   });
 
@@ -43,7 +44,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       useLoadOnStale(
         // @ts-expect-error Testing invalid.
         true,
-        dummyLoader
+        dummyLoader,
       );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
@@ -53,7 +54,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       useLoadOnStale(
         "a",
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 2 `load` must be a function."));
   });
@@ -66,7 +67,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: () => useLoadOnStale("a", dummyLoader),
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -88,15 +89,15 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadOnStale("a", dummyLoader),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -146,8 +147,8 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadOnStale(cacheKeyA, loadA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -175,8 +176,8 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnStale(cacheKeyA, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -205,8 +206,8 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnStale(cacheKeyB, loadA),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -235,8 +236,8 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadOnStale(cacheKeyB, loadB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 

@@ -10,7 +10,7 @@ import React from "react";
  * @type {React.Context<Loading | undefined>}
  */
 const LoadingContext = React.createContext(
-  /** @type {Loading | undefined} */ (undefined)
+  /** @type {Loading | undefined} */ (undefined),
 );
 
 LoadingContext.displayName = "LoadingContext";

@@ -17,7 +17,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./LoadingCacheValue.mjs", import.meta.url),
-      650
+      650,
     );
   });
 
@@ -29,7 +29,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         new Cache(),
         "a",
         Promise.resolve(),
-        new AbortController()
+        new AbortController(),
       );
     }, new TypeError("Argument 1 `loading` must be a `Loading` instance."));
   });
@@ -42,7 +42,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         true,
         "a",
         Promise.resolve(),
-        new AbortController()
+        new AbortController(),
       );
     }, new TypeError("Argument 2 `cache` must be a `Cache` instance."));
   });
@@ -55,7 +55,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         // @ts-expect-error Testing invalid.
         true,
         Promise.resolve(),
-        new AbortController()
+        new AbortController(),
       );
     }, new TypeError("Argument 3 `cacheKey` must be a string."));
   });
@@ -68,7 +68,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         "a",
         // @ts-expect-error Testing invalid.
         true,
-        new AbortController()
+        new AbortController(),
       );
     }, new TypeError("Argument 4 `loadingResult` must be a `Promise` instance."));
   });
@@ -81,7 +81,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         "a",
         Promise.resolve(),
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 5 `abortController` must be an `AbortController` instance."));
   });
@@ -115,7 +115,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       loadingResult,
-      abortController
+      abortController,
     );
 
     strictEqual(events.length, 1);
@@ -193,7 +193,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       firstLoadingResult,
-      firstAbortController
+      firstAbortController,
     );
 
     strictEqual(events.length, 1);
@@ -214,7 +214,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
     assertTypeOf(firstLoadingCacheValue.timeStamp, "number");
     strictEqual(
       performance.now() - firstLoadingCacheValue.timeStamp < 50,
-      true
+      true,
     );
     strictEqual(firstLoadingCacheValue.abortController, firstAbortController);
     assertInstanceOf(firstLoadingCacheValue.promise, Promise);
@@ -233,7 +233,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       secondLoadingResult,
-      secondAbortController
+      secondAbortController,
     );
 
     strictEqual(events.length, 1);
@@ -254,11 +254,11 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
     assertTypeOf(secondLoadingCacheValue.timeStamp, "number");
     strictEqual(
       performance.now() - secondLoadingCacheValue.timeStamp < 50,
-      true
+      true,
     );
     strictEqual(
       secondLoadingCacheValue.timeStamp >= firstLoadingCacheValue.timeStamp,
-      true
+      true,
     );
     strictEqual(secondLoadingCacheValue.abortController, secondAbortController);
     assertInstanceOf(secondLoadingCacheValue.promise, Promise);
@@ -353,7 +353,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       firstLoadingResult,
-      firstAbortController
+      firstAbortController,
     );
 
     strictEqual(events.length, 1);
@@ -374,7 +374,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
     assertTypeOf(firstLoadingCacheValue.timeStamp, "number");
     strictEqual(
       performance.now() - firstLoadingCacheValue.timeStamp < 50,
-      true
+      true,
     );
     strictEqual(firstLoadingCacheValue.abortController, firstAbortController);
     assertInstanceOf(firstLoadingCacheValue.promise, Promise);
@@ -393,7 +393,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       secondLoadingResult,
-      secondAbortController
+      secondAbortController,
     );
 
     strictEqual(events.length, 1);
@@ -414,11 +414,11 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
     assertTypeOf(secondLoadingCacheValue.timeStamp, "number");
     strictEqual(
       performance.now() - secondLoadingCacheValue.timeStamp < 50,
-      true
+      true,
     );
     strictEqual(
       secondLoadingCacheValue.timeStamp >= firstLoadingCacheValue.timeStamp,
-      true
+      true,
     );
     strictEqual(secondLoadingCacheValue.abortController, secondAbortController);
     assertInstanceOf(secondLoadingCacheValue.promise, Promise);
@@ -440,7 +440,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         });
         deepStrictEqual(cache.store, { [cacheKey]: firstCacheValue });
         strictEqual(firstResult, firstCacheValue);
-      }
+      },
     );
 
     const secondLoadingCheck = secondLoadingCacheValue.promise.then(
@@ -450,7 +450,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         deepStrictEqual(loading.store, {});
         deepStrictEqual(cache.store, { [cacheKey]: secondCacheValue });
         strictEqual(secondResult, secondCacheValue);
-      }
+      },
     );
 
     secondLoadingResultResolve(secondCacheValue);
@@ -519,7 +519,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
         () => {
           resolve(cacheValue);
         },
-        { once: true }
+        { once: true },
       );
     });
 
@@ -528,7 +528,7 @@ describe("Class `LoadingCacheValue`.", { concurrency: true }, () => {
       cache,
       cacheKey,
       loadingResult,
-      abortController
+      abortController,
     );
 
     strictEqual(events.length, 1);

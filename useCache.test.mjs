@@ -2,6 +2,7 @@
 
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -25,7 +26,7 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: useCache,
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
@@ -47,15 +48,15 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useCache,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Cache context value must be a `Cache` instance.")
+      new TypeError("Cache context value must be a `Cache` instance."),
     );
   });
 
@@ -72,8 +73,8 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: useCache,
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -90,8 +91,8 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: useCache,
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 

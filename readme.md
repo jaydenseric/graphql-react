@@ -110,9 +110,9 @@ export default function GitHubRepoStars({ repoId }) {
               repoId,
             },
           }),
-        }
+        },
       ),
-    [cacheKey, loadGraphQL, repoId]
+    [cacheKey, loadGraphQL, repoId],
   );
 
   // This hook automatically keeps the cache entry loaded from when the
@@ -135,15 +135,15 @@ export default function GitHubRepoStars({ repoId }) {
   return isWaterfallLoading
     ? null
     : cacheValue
-    ? cacheValue.errors
-      ? // Unlike many other GraphQL libraries, detailed loading errors are
-        // cached and can be server side rendered without causing a
-        // server/client HTML mismatch error.
-        "Error!"
-      : cacheValue.data.repo.stargazers.totalCount
-    : // In this situation no cache value implies loading. Use the
-      // `useLoadingEntry` hook to manage loading in detail.
-      "Loading…";
+      ? cacheValue.errors
+        ? // Unlike many other GraphQL libraries, detailed loading errors are
+          // cached and can be server side rendered without causing a
+          // server/client HTML mismatch error.
+          "Error!"
+        : cacheValue.data.repo.stargazers.totalCount
+      : // In this situation no cache value implies loading. Use the
+        // `useLoadingEntry` hook to manage loading in detail.
+        "Loading…";
 }
 ```
 

@@ -4,6 +4,7 @@ import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
+
 import React from "react";
 import ReactTestRenderer from "react-test-renderer";
 
@@ -21,7 +22,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./useLoadingEntry.mjs", import.meta.url),
-      500
+      500,
     );
   });
 
@@ -29,7 +30,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
     throws(() => {
       useLoadingEntry(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `cacheKey` must be a string."));
   });
@@ -42,14 +43,14 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
       React.createElement(ReactHookTest, {
         useHook: () => useLoadingEntry("a"),
         results,
-      })
+      }),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context missing.")
+      new TypeError("Loading context missing."),
     );
   });
 
@@ -67,15 +68,15 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadingEntry("a"),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
     ok("threw" in results[0]);
     deepStrictEqual(
       results[0].threw,
-      new TypeError("Loading context value must be a `Loading` instance.")
+      new TypeError("Loading context value must be a `Loading` instance."),
     );
   });
 
@@ -94,8 +95,8 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadingEntry(cacheKeyA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -115,7 +116,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         cache,
         cacheKeyA,
         loadingA1Result,
-        new AbortController()
+        new AbortController(),
       );
     });
 
@@ -142,8 +143,8 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadingEntry(cacheKeyB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 
@@ -164,7 +165,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         cache,
         cacheKeyB,
         loadingB1Result,
-        new AbortController()
+        new AbortController(),
       );
     });
 
@@ -194,7 +195,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
       cache,
       cacheKeyA,
       loadingA1Result,
-      new AbortController()
+      new AbortController(),
     );
 
     /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
@@ -207,8 +208,8 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         React.createElement(ReactHookTest, {
           useHook: () => useLoadingEntry(cacheKeyA),
           results,
-        })
-      )
+        }),
+      ),
     );
 
     strictEqual(results.length, 1);
@@ -228,7 +229,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
         cache,
         cacheKeyA,
         loadingA2Result,
-        new AbortController()
+        new AbortController(),
       );
     });
 
@@ -236,7 +237,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
     ok("returned" in results[1]);
     deepStrictEqual(
       results[1].returned,
-      new Set([loadingA1CacheValue, loadingA2CacheValue])
+      new Set([loadingA1CacheValue, loadingA2CacheValue]),
     );
 
     await ReactTestRenderer.act(async () => {
@@ -270,7 +271,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
       cache,
       cacheKeyB,
       loadingB1Result,
-      new AbortController()
+      new AbortController(),
     );
 
     ReactTestRenderer.act(() => {
@@ -281,8 +282,8 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
           React.createElement(ReactHookTest, {
             useHook: () => useLoadingEntry(cacheKeyB),
             results,
-          })
-        )
+          }),
+        ),
       );
     });
 

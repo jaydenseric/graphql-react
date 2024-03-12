@@ -10,7 +10,7 @@ describe("Constant `HYDRATION_TIME_MS`.", { concurrency: true }, () => {
   it("Bundle size.", async () => {
     await assertBundleSize(
       new URL("./HYDRATION_TIME_MS.mjs", import.meta.url),
-      65
+      65,
     );
   });
 
