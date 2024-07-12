@@ -10,6 +10,7 @@
 
 ### Patch
 
+- Updated dev dependencies.
 - Updated the `package.json` field `repository` to conform to new npm requirements.
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v18, v20, v22.
