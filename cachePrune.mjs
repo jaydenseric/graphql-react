@@ -1,15 +1,18 @@
 // @ts-check
 
+/**
+ * @import { CacheKey } from "./Cache.mjs"
+ * @import { CacheKeyMatcher } from "./types.mjs"
+ */
+
 import Cache from "./Cache.mjs";
 import cacheEntryPrune from "./cacheEntryPrune.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
 
 /**
  * Prunes {@link Cache.store cache store} entries by using
  * {@linkcode cacheEntryPrune} for each entry. Useful after a mutation.
  * @param {Cache} cache Cache to update.
- * @param {import("./types.mjs").CacheKeyMatcher} [cacheKeyMatcher] Matches
+ * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches
  *   {@link CacheKey cache keys} to prune. By default all are matched.
  */
 export default function cachePrune(cache, cacheKeyMatcher) {

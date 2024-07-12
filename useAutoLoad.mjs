@@ -1,20 +1,23 @@
 // @ts-check
 
+/**
+ * @import { CacheKey } from "./Cache.mjs"
+ * @import { Loader } from "./types.mjs"
+ * @import useWaterfallLoad from "./useWaterfallLoad.mjs"
+ */
+
 import useAutoAbortLoad from "./useAutoAbortLoad.mjs";
 import useCacheEntryPrunePrevention from "./useCacheEntryPrunePrevention.mjs";
 import useLoadOnDelete from "./useLoadOnDelete.mjs";
 import useLoadOnMount from "./useLoadOnMount.mjs";
 import useLoadOnStale from "./useLoadOnStale.mjs";
 
-/** @typedef {import("./useWaterfallLoad.mjs").default} useWaterfallLoad */
-/** @typedef {import("./types.mjs").Loader} Loader */
-
 /**
  * React hook to prevent a {@link Cache.store cache store} entry from being
  * pruned while the component is mounted and automatically keep it loaded.
  * Previous loading that started via this hook aborts when new loading starts
  * via this hook, the hook arguments change, or the component unmounts.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {CacheKey} cacheKey Cache key.
  * @param {Loader} load Memoized function that starts the loading.
  * @returns {Loader} Memoized {@link Loader loader} created from the `load`
  *   argument, that automatically aborts the last loading when the memoized

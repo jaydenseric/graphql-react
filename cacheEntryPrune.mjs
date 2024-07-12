@@ -1,9 +1,9 @@
 // @ts-check
 
+/** @import { CacheEventMap, CacheKey } from "./Cache.mjs" */
+
 import Cache from "./Cache.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
 
 /**
  * Prunes a {@link Cache.store cache store} entry (if present) by dispatching
@@ -11,7 +11,7 @@ import cacheEntryDelete from "./cacheEntryDelete.mjs";
  * listener cancels it via `event.preventDefault()`, using
  * {@linkcode cacheEntryDelete}.
  * @param {Cache} cache Cache to update.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryPrune(cache, cacheKey) {
   if (!(cache instanceof Cache))

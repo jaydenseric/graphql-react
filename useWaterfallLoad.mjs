@@ -1,22 +1,25 @@
 // @ts-check
 
+/**
+ * @import waterfallRender from "react-waterfall-render/waterfallRender.mjs"
+ * @import { CacheKey } from "./Cache.mjs"
+ * @import { Loader } from "./types.mjs"
+ * @import useAutoLoad from "./useAutoLoad.mjs"
+ */
+
 import React from "react";
 import WaterfallRenderContext from "react-waterfall-render/WaterfallRenderContext.mjs";
 
 import LoadingCacheValue from "./LoadingCacheValue.mjs";
 import useCache from "./useCache.mjs";
 
-/** @typedef {import("./useAutoLoad.mjs").default} useAutoLoad */
-/** @typedef {import("react-waterfall-render/waterfallRender.mjs").default} waterfallRender */
-
 /**
  * React hook to load a {@link Cache.store cache store} entry if the
  * {@link WaterfallRenderContext waterfall render context} is populated, i.e.
  * when {@link waterfallRender waterfall rendering} for either a server side
  * render or to preload components in a browser environment.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
- * @param {import("./types.mjs").Loader} load Memoized function that starts the
- *   loading.
+ * @param {CacheKey} cacheKey Cache key.
+ * @param {Loader} load Memoized function that starts the loading.
  * @returns {boolean} Did loading start. If so, it’s efficient for the component
  *   to return `null` since this render will be discarded anyway for a re-render
  *   onces the loading ends.

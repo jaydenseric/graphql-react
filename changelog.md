@@ -7,6 +7,7 @@
 - Updated Node.js support to `^18.18.0 || ^20.9.0 || >=22.0.0`.
 - Use the Node.js test runner API and remove the dev dependency [`test-director`](https://npm.im/test-director).
 - Refactored tests to use the standard `AbortController`, `AbortSignal`, `Event`, `EventTarget`, `File`, `FormData`, and `Response` APIs available in modern Node.js and removed the dev dependencies [`abort-controller`](https://npm.im/abort-controller), [`event-target-shim`](https://npm.im/event-target-shim), and [`node-fetch`](https://npm.im/node-fetch).
+- Use the TypeScript v5.5+ JSDoc tag `@import` to import types in modules.
 
 ### Patch
 

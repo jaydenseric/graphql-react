@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * @import { ReactHookResult } from "./test/ReactHookTest.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
@@ -21,7 +26,7 @@ import useLoadOnStale from "./useLoadOnStale.mjs";
 describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
   /**
    * Dummy loader for testing.
-   * @type {import("./types.mjs").Loader}
+   * @type {Loader}
    */
   const dummyLoader = () =>
     new LoadingCacheValue(
@@ -60,7 +65,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
   });
 
   it("Cache context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -76,7 +81,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
   });
 
   it("Cache context value not a `Cache` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -117,7 +122,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
     /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
@@ -127,7 +132,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
@@ -137,7 +142,7 @@ describe("React hook `useLoadOnStale`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

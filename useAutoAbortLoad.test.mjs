@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * @import { ReactHookResult } from "./test/ReactHookTest.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { notStrictEqual, ok, strictEqual, throws } from "node:assert";
@@ -41,14 +46,14 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
 
     /**
      * @type {Array<{
-     *   loader: import("./types.mjs").Loader,
+     *   loader: Loader,
      *   hadArgs: boolean,
      *   loadingCacheValue: LoadingCacheValue
      * }>}
      */
     const loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -67,7 +72,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
       return loadingCacheValue;
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -86,7 +91,7 @@ describe("React hook `useAutoAbortLoad`.", { concurrency: true }, () => {
       return loadingCacheValue;
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

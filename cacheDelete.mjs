@@ -1,17 +1,19 @@
 // @ts-check
 
+/**
+ * @import { CacheEventMap, CacheKey } from "./Cache.mjs"
+ * @import { CacheKeyMatcher } from "./types.mjs"
+ */
+
 import Cache from "./Cache.mjs";
 import cacheEntryDelete from "./cacheEntryDelete.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
 
 /**
  * Deletes {@link Cache.store cache store} entries, dispatching the
  * {@linkcode Cache} event {@link CacheEventMap.delete `delete`}. Useful after a
  * user logs out.
  * @param {Cache} cache Cache to update.
- * @param {import("./types.mjs").CacheKeyMatcher} [cacheKeyMatcher] Matches
+ * @param {CacheKeyMatcher} [cacheKeyMatcher] Matches
  *   {@link CacheKey cache keys} to delete. By default all are matched.
  */
 export default function cacheDelete(cache, cacheKeyMatcher) {

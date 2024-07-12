@@ -1,7 +1,9 @@
 // @ts-check
 
-/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
-/** @typedef {import("./types.mjs").Loader} Loader */
+/**
+ * @import LoadingCacheValue from "./LoadingCacheValue.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
 
 import React from "react";
 

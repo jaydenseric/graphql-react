@@ -1,9 +1,9 @@
 // @ts-check
 
+/** @import { GraphQLOperation } from "./types.mjs" */
+
 import extractFiles from "extract-files/extractFiles.mjs";
 import isExtractableFile from "extract-files/isExtractableFile.mjs";
-
-/** @typedef {import("./types.mjs").GraphQLOperation} GraphQLOperation */
 
 /**
  * Creates default {@link RequestInit `fetch` options} for a

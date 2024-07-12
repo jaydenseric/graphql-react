@@ -1,19 +1,20 @@
 // @ts-check
 
+/**
+ * @import { CacheEventMap, CacheKey } from "./Cache.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import React from "react";
 
 import useCache from "./useCache.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
 
 /**
  * React hook to load a {@link Cache.store cache store} entry after it’s
  * {@link CacheEventMap.delete deleted}, if there isn’t loading for the
  * {@link CacheKey cache key} that started after.
  * @param {CacheKey} cacheKey Cache key.
- * @param {import("./types.mjs").Loader} load Memoized function that starts the
- *   loading.
+ * @param {Loader} load Memoized function that starts the loading.
  */
 export default function useLoadOnDelete(cacheKey, load) {
   if (typeof cacheKey !== "string")

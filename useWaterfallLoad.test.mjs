@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * @import { ReactHookResult } from "./test/ReactHookTest.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, rejects, strictEqual, throws } from "node:assert";
@@ -22,7 +27,7 @@ import useWaterfallLoad from "./useWaterfallLoad.mjs";
 describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
   /**
    * Dummy loader for testing.
-   * @type {import("./types.mjs").Loader}
+   * @type {Loader}
    */
   const dummyLoader = () =>
     new LoadingCacheValue(
@@ -61,7 +66,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
   });
 
   it("Cache context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -77,7 +82,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
   });
 
   it("Cache context value not a `Cache` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -107,7 +112,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
 
     let didLoad = false;
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -173,7 +178,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
     /** @type {Array<boolean>} */
     const hookReturns = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function load() {
       loadCalls.push(!!arguments.length);
 
@@ -231,7 +236,7 @@ describe("React hook `useWaterfallLoad`.", { concurrency: true }, () => {
     /** @type {Array<boolean>} */
     const hookReturns = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function load() {
       loadCalls.push(!!arguments.length);
 

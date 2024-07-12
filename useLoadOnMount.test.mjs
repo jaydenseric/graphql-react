@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * @import { ReactHookResult } from "./test/ReactHookTest.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
@@ -22,7 +27,7 @@ import useLoadOnMount from "./useLoadOnMount.mjs";
 describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
   /**
    * Dummy loader for testing.
-   * @type {import("./types.mjs").Loader}
+   * @type {Loader}
    */
   const dummyLoader = () =>
     new LoadingCacheValue(
@@ -61,7 +66,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
   });
 
   it("Cache context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -77,7 +82,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
   });
 
   it("Cache context value not a `Cache` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -105,7 +110,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
   it("Hydration time stamp context value not undefined or a number.", () => {
     const cache = new Cache();
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -150,7 +155,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
     /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
@@ -160,7 +165,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
@@ -170,7 +175,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(
@@ -329,7 +334,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
     /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
@@ -339,7 +344,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
@@ -349,7 +354,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(
@@ -504,7 +509,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
     /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
@@ -514,7 +519,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
@@ -524,7 +529,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(
@@ -700,7 +705,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
     /** @type {Array<{ loader: Function, hadArgs: boolean }>} */
     let loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadA() {
       loadCalls.push({
         loader: loadA,
@@ -710,7 +715,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function loadB() {
       loadCalls.push({
         loader: loadB,
@@ -720,7 +725,7 @@ describe("React hook `useLoadOnMount`.", { concurrency: true }, () => {
       return dummyLoader();
     }
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

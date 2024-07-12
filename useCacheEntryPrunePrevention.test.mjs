@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
@@ -37,7 +39,7 @@ describe(
     });
 
     it("Cache context missing.", () => {
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      /** @type {Array<ReactHookResult>} */
       const results = [];
 
       createReactTestRenderer(
@@ -56,7 +58,7 @@ describe(
     });
 
     it("Cache context value not a `Cache` instance.", () => {
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      /** @type {Array<ReactHookResult>} */
       const results = [];
 
       createReactTestRenderer(
@@ -90,7 +92,7 @@ describe(
       };
       const cache = new Cache({ ...initialCacheStore });
 
-      /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+      /** @type {Array<ReactHookResult>} */
       const results = [];
 
       const testRenderer = createReactTestRenderer(

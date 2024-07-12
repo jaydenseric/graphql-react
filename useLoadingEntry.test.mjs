@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, ok, strictEqual, throws } from "node:assert";
@@ -36,7 +38,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
   });
 
   it("Loading context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -55,7 +57,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
   });
 
   it("Loading context value not a `Loading` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -85,7 +87,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
     const cache = new Cache();
     const cacheKeyA = "a";
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(
@@ -198,7 +200,7 @@ describe("React hook `useLoadingEntry`.", { concurrency: true }, () => {
       new AbortController(),
     );
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

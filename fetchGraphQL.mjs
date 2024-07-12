@@ -1,12 +1,21 @@
 // @ts-check
 
+/**
+ * @import { CacheValue } from "./Cache.mjs"
+ * @import {
+ *   GraphQLResult,
+ *   GraphQLResultError,
+ *   GraphQLResultErrorLoadingFetch,
+ *   GraphQLResultErrorResponseHttpStatus,
+ *   GraphQLResultErrorResponseJsonParse,
+ *   GraphQLResultErrorResponseMalformed,
+ * } from "./types.mjs"
+ */
+
 const ERROR_CODE_FETCH_ERROR = "FETCH_ERROR";
 const ERROR_CODE_RESPONSE_HTTP_STATUS = "RESPONSE_HTTP_STATUS";
 const ERROR_CODE_RESPONSE_JSON_PARSE_ERROR = "RESPONSE_JSON_PARSE_ERROR";
 const ERROR_CODE_RESPONSE_MALFORMED = "RESPONSE_MALFORMED";
-
-/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
-/** @typedef {import("./types.mjs").GraphQLResult} GraphQLResult */
 
 /**
  * Fetches a GraphQL operation, always resolving a
@@ -45,7 +54,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
 
         if (!response.ok)
           resultErrors.push(
-            /** @type {import("./types.mjs").GraphQLResultErrorResponseHttpStatus} */ ({
+            /** @type {GraphQLResultErrorResponseHttpStatus} */ ({
               message: `HTTP ${response.status} status.`,
               extensions: {
                 client: true,
@@ -65,7 +74,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
 
             if (typeof json !== "object" || !json || Array.isArray(json))
               resultErrors.push(
-                /** @type {import("./types.mjs").GraphQLResultErrorResponseMalformed}*/ ({
+                /** @type {GraphQLResultErrorResponseMalformed}*/ ({
                   message: "Response JSON isn’t an object.",
                   extensions: {
                     client: true,
@@ -79,7 +88,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
 
               if (!hasErrors && !hasData)
                 resultErrors.push(
-                  /** @type {import("./types.mjs").GraphQLResultErrorResponseMalformed}*/ ({
+                  /** @type {GraphQLResultErrorResponseMalformed}*/ ({
                     message:
                       "Response JSON is missing an `errors` or `data` property.",
                     extensions: {
@@ -94,7 +103,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                 if (hasErrors)
                   if (!Array.isArray(json.errors))
                     resultErrors.push(
-                      /** @type {import("./types.mjs").GraphQLResultErrorResponseMalformed}*/ ({
+                      /** @type {GraphQLResultErrorResponseMalformed}*/ ({
                         message:
                           "Response JSON `errors` property isn’t an array.",
                         extensions: {
@@ -114,7 +123,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
                     Array.isArray(json.data)
                   )
                     resultErrors.push(
-                      /** @type {import("./types.mjs").GraphQLResultErrorResponseMalformed}*/ ({
+                      /** @type {GraphQLResultErrorResponseMalformed}*/ ({
                         message:
                           "Response JSON `data` property isn’t an object or null.",
                         extensions: {
@@ -131,7 +140,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
           // Response JSON parse error.
           ({ message }) => {
             resultErrors.push(
-              /** @type {import("./types.mjs").GraphQLResultErrorResponseJsonParse} */ ({
+              /** @type {GraphQLResultErrorResponseJsonParse} */ ({
                 message: "Response JSON parse error.",
                 extensions: {
                   client: true,
@@ -147,7 +156,7 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
       // Fetch error.
       ({ message }) => {
         resultErrors.push(
-          /** @type {import("./types.mjs").GraphQLResultErrorLoadingFetch} */ ({
+          /** @type {GraphQLResultErrorLoadingFetch} */ ({
             message: "Fetch error.",
             extensions: {
               client: true,
@@ -166,24 +175,21 @@ export default function fetchGraphQL(fetchUri, fetchOptions) {
 
 /**
  * {@linkcode fetchGraphQL} {@link GraphQLResult GraphQL result}.
- * @typedef {import("./types.mjs").GraphQLResult<
- *   FetchGraphQLResultError
- * >} FetchGraphQLResult
+ * @typedef {GraphQLResult<FetchGraphQLResultError>} FetchGraphQLResult
  */
 
 /**
  * {@linkcode fetchGraphQL} {@link GraphQLResult.errors GraphQL result error}.
  * @typedef {FetchGraphQLResultErrorLoading
- *   | import("./types.mjs").GraphQLResultError
- * } FetchGraphQLResultError
+ *   | GraphQLResultError} FetchGraphQLResultError
  */
 
 /**
  * {@linkcode fetchGraphQL} {@link GraphQLResult.errors GraphQL result error}
  * that’s generated on the client, not the GraphQL server.
- * @typedef {import("./types.mjs").GraphQLResultErrorLoadingFetch
- *   | import("./types.mjs").GraphQLResultErrorResponseHttpStatus
- *   | import("./types.mjs").GraphQLResultErrorResponseJsonParse
- *   | import("./types.mjs").GraphQLResultErrorResponseMalformed
+ * @typedef {GraphQLResultErrorLoadingFetch
+ *   | GraphQLResultErrorResponseHttpStatus
+ *   | GraphQLResultErrorResponseJsonParse
+ *   | GraphQLResultErrorResponseMalformed
  * } FetchGraphQLResultErrorLoading
  */

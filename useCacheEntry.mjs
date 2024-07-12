@@ -1,12 +1,11 @@
 // @ts-check
 
+/** @import { CacheKey, CacheValue } from "./Cache.mjs" */
+
 import React from "react";
 
 import useCache from "./useCache.mjs";
 import useForceUpdate from "./useForceUpdate.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
-/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
 
 /**
  * React hook to get a {@link CacheValue cache value} using its

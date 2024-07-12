@@ -1,12 +1,13 @@
 // @ts-check
 
+/**
+ * @import { CacheEventMap, CacheKey, CacheValue } from "./Cache.mjs"
+ * @import { LoadingEventMap } from "./Loading.mjs"
+ */
+
 import Cache from "./Cache.mjs";
 import cacheEntrySet from "./cacheEntrySet.mjs";
 import Loading from "./Loading.mjs";
-
-/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
-/** @typedef {import("./Loading.mjs").LoadingEventMap} LoadingEventMap */
 
 /**
  * Controls loading a {@link CacheValue cache value}. It dispatches this
@@ -20,7 +21,7 @@ export default class LoadingCacheValue {
   /**
    * @param {Loading} loading Loading to update.
    * @param {Cache} cache Cache to update.
-   * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+   * @param {CacheKey} cacheKey Cache key.
    * @param {Promise<CacheValue>} loadingResult Resolves the loading result
    *   (including any loading errors) to be set as the
    *   {@link CacheValue cache value} if loading isn’t aborted. Shouldn’t

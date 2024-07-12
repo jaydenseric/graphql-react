@@ -1,13 +1,18 @@
 // @ts-check
 
+/**
+ * @import { ReactNode } from "react"
+ * @import { ReactTestRenderer as TestRenderer } from "react-test-renderer"
+ */
+
 import ReactTestRenderer from "react-test-renderer";
 
 /**
  * Creates a React test renderer.
- * @param {import("react").ReactNode} reactRoot Root React node to render.
+ * @param {ReactNode} reactRoot Root React node to render.
  */
 export default function createReactTestRenderer(reactRoot) {
-  /** @type {import("react-test-renderer").ReactTestRenderer | undefined} */
+  /** @type {TestRenderer | undefined} */
   let testRenderer;
 
   ReactTestRenderer.act(() => {
@@ -17,7 +22,5 @@ export default function createReactTestRenderer(reactRoot) {
     );
   });
 
-  return /** @type {import("react-test-renderer").ReactTestRenderer} */ (
-    testRenderer
-  );
+  return /** @type {TestRenderer} */ (testRenderer);
 }

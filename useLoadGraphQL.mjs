@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { CacheKey } from "./Cache.mjs" */
+
 import React from "react";
 
 import fetchGraphQL from "./fetchGraphQL.mjs";
@@ -79,8 +81,7 @@ export default function useLoadGraphQL() {
 /**
  * Loads a GraphQL operation, using {@linkcode fetchGraphQL}.
  * @callback LoadGraphQL
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key to store the
- *   loading result under.
+ * @param {CacheKey} cacheKey Cache key to store the loading result under.
  * @param {string} fetchUri [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
  *   URI.
  * @param {RequestInit} fetchOptions [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)

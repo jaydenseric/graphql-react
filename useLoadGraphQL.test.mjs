@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
@@ -31,7 +33,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
   });
 
   it("Cache context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -47,7 +49,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
   });
 
   it("Cache context value not a `Cache` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -75,7 +77,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
   it("Loading context missing.", () => {
     const cache = new Cache();
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -100,7 +102,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
   it("Loading context value not a `Loading` instance.", () => {
     const cache = new Cache();
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -141,7 +143,7 @@ describe("React hook `useLoadGraphQL`.", { concurrency: true }, () => {
 
       /**
        * @type {Array<
-       *   import("./test/ReactHookTest.mjs").ReactHookResult<
+       *   ReactHookResult<
        *     ReturnType<useLoadGraphQL>
        *   >
        * >}

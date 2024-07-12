@@ -1,8 +1,9 @@
 // @ts-check
 
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
-/** @typedef {import("./Cache.mjs").CacheValue} CacheValue */
-/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+/**
+ * @import { CacheKey, CacheValue } from "./Cache.mjs"
+ * @import LoadingCacheValue from "./LoadingCacheValue.mjs"
+ */
 
 /**
  * Loading store.

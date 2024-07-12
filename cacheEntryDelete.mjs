@@ -1,14 +1,14 @@
 // @ts-check
 
-import Cache from "./Cache.mjs";
+/** @import { CacheEventMap, CacheKey } from "./Cache.mjs" */
 
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+import Cache from "./Cache.mjs";
 
 /**
  * Deletes a {@link Cache.store cache store} entry, dispatching the
  * {@linkcode Cache} event {@link CacheEventMap.delete `delete`}.
  * @param {Cache} cache Cache to update.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryDelete(cache, cacheKey) {
   if (!(cache instanceof Cache))

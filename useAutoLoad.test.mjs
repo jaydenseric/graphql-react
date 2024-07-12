@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * @import { ReactHookResult } from "./test/ReactHookTest.mjs"
+ * @import { Loader } from "./types.mjs"
+ */
+
 import "./test/polyfillCustomEvent.mjs";
 
 import { ok, strictEqual, throws } from "node:assert";
@@ -68,7 +73,7 @@ describe("React hook `useAutoLoad`.", { concurrency: true }, () => {
      */
     const loadCalls = [];
 
-    /** @type {import("./types.mjs").Loader} */
+    /** @type {Loader} */
     function load() {
       const loadingCacheValue = new LoadingCacheValue(
         loading,
@@ -88,7 +93,7 @@ describe("React hook `useAutoLoad`.", { concurrency: true }, () => {
 
     // Test load on mount.
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

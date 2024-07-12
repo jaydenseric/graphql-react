@@ -1,8 +1,8 @@
 // @ts-check
 
-import React from "react";
+/** @import Cache from "./Cache.mjs" */
 
-/** @typedef {import("./Cache.mjs").default} Cache */
+import React from "react";
 
 /**
  * [React context](https://reactjs.org/docs/context.html) for a

@@ -1,15 +1,15 @@
 // @ts-check
 
-import Cache from "./Cache.mjs";
+/** @import { CacheEventMap, CacheKey, CacheValue } from "./Cache.mjs" */
 
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+import Cache from "./Cache.mjs";
 
 /**
  * Sets a {@link Cache.store cache store} entry, dispatching the
  * {@linkcode Cache} event {@link CacheEventMap.set `set`}.
  * @param {Cache} cache Cache to update.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
- * @param {import("./Cache.mjs").CacheValue} cacheValue Cache value.
+ * @param {CacheKey} cacheKey Cache key.
+ * @param {CacheValue} cacheValue Cache value.
  */
 export default function cacheEntrySet(cache, cacheKey, cacheValue) {
   if (!(cache instanceof Cache))

@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import { ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
 
@@ -13,7 +15,7 @@ import useForceUpdate from "./useForceUpdate.mjs";
 
 describe("React hook `useForceUpdate`.", { concurrency: true }, () => {
   it("Forcing an update.", async () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(

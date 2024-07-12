@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
 
@@ -19,7 +21,7 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
   });
 
   it("Loading context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -38,7 +40,7 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
   });
 
   it("Loading context value not a `Loading` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -66,7 +68,7 @@ describe("React hook `useLoading`.", { concurrency: true }, () => {
   it("Getting the loading.", () => {
     const loadingA = new Loading();
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ReactHookResult } from "./test/ReactHookTest.mjs" */
+
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { describe, it } from "node:test";
 
@@ -19,7 +21,7 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
   });
 
   it("Cache context missing.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -35,7 +37,7 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
   });
 
   it("Cache context value not a `Cache` instance.", () => {
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     createReactTestRenderer(
@@ -63,7 +65,7 @@ describe("React hook `useCache`.", { concurrency: true }, () => {
   it("Getting the cache.", () => {
     const cacheA = new Cache();
 
-    /** @type {Array<import("./test/ReactHookTest.mjs").ReactHookResult>} */
+    /** @type {Array<ReactHookResult>} */
     const results = [];
 
     const testRenderer = createReactTestRenderer(

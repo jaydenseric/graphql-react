@@ -1,6 +1,6 @@
 // @ts-check
 
-/** @typedef {import("./useAutoLoad.mjs").default} useAutoLoad */
+/** @import useAutoLoad from "./useAutoLoad.mjs" */
 
 /**
  * Number of milliseconds after the first client render that’s considered the

@@ -1,8 +1,9 @@
 // @ts-check
 
-/** @typedef {import("./Cache.mjs").CacheKey} CacheKey */
-/** @typedef {import("./fetchGraphQL.mjs").default} fetchGraphQL */
-/** @typedef {import("./LoadingCacheValue.mjs").default} LoadingCacheValue */
+/**
+ * @import { CacheKey } from "./Cache.mjs"
+ * @import LoadingCacheValue from "./LoadingCacheValue.mjs"
+ */
 
 // Prevent a TypeScript error when importing this module in a JSDoc type.
 export {};

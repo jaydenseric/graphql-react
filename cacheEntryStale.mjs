@@ -1,15 +1,15 @@
 // @ts-check
 
-import Cache from "./Cache.mjs";
+/** @import { CacheEventMap, CacheKey } from "./Cache.mjs" */
 
-/** @typedef {import("./Cache.mjs").CacheEventMap} CacheEventMap */
+import Cache from "./Cache.mjs";
 
 /**
  * Stales a {@link Cache.store cache store} entry (throwing an error if missing)
  * by dispatching the {@linkcode Cache} event
  * {@link CacheEventMap.stale `stale`} to signal it should probably be reloaded.
  * @param {Cache} cache Cache to update.
- * @param {import("./Cache.mjs").CacheKey} cacheKey Cache key.
+ * @param {CacheKey} cacheKey Cache key.
  */
 export default function cacheEntryStale(cache, cacheKey) {
   if (!(cache instanceof Cache))

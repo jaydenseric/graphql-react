@@ -1,8 +1,8 @@
 // @ts-check
 
-import React from "react";
+/** @import Loading from "./Loading.mjs" */
 
-/** @typedef {import("./Loading.mjs").default} Loading */
+import React from "react";
 
 /**
  * [React context](https://reactjs.org/docs/context.html) for a
