@@ -151,7 +151,7 @@ export default function GitHubRepoStars({ repoId }) {
 
 Supported runtime environments:
 
-- [Node.js](https://nodejs.org) versions `^18.18.0 || ^20.9.0 || >=21.1.0`.
+- [Node.js](https://nodejs.org) versions `^18.18.0 || ^20.9.0 || >=22.0.0`.
 - [Deno](https://deno.land), importing from a CDN that might require an import map for dependencies.
 - Browsers matching the [Browserslist](https://browsersl.ist) query [`> 0.5%, not OperaMini all, not dead`](https://browsersl.ist/?q=%3E+0.5%25%2C+not+OperaMini+all%2C+not+dead).
 
